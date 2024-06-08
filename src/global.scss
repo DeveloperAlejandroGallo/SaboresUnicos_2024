@@ -1,0 +1,84 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+.error-message {
+  display: block;
+  color: #ff5c5c;
+  background-color: #fff;
+  border: 1px solid #d52c2c;
+  padding: 5px;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+
+.btn {
+  margin: 2px 2px 2px 2px;
+}
+
+
+.my-title-class {
+  color: #000000;
+}
+
+.my-container-class {
+  color: #000000;
+}
+
+.my-confirm-button-class {
+  color: #ffffff;
+}
+
+.my-cancel-button-class {
+  color: #ffffff;
+}
+
+
+
+
+.custom-spinner{
+  position: fixed; /* Posiciona el spinner en relación con la ventana del navegador */
+  justify-content: center;
+  align-items: center;
+  top: 50%; /* Centra verticalmente */
+  left: 43%; /* Centra horizontalmente */
+  transform: translate(-50%, -50%); /* Ajusta la posición para que el centro del spinner esté en el centro de la pantalla */
+  display: inline-block;
+  animation: spin 2s linear infinite;
+  width: 50px;
+  height: 50px;
+  z-index: 9999; /* Asegura que el spinner esté por encima de otros elementos */
+  pointer-events: none; /* Evita que el spinner interfiera con la interacción del usuario */
+  margin: auto;
+
+ }
+
+ @keyframes spin {
+   0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+ }
+

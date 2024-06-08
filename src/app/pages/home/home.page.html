@@ -1,0 +1,16 @@
+<app-nav-bar [emailUsuario]="usuario.email"></app-nav-bar>
+
+<body class="centrado">
+  <div class="container">
+      <ion-card color="secondary">
+        <ion-card-header>
+          <ion-card-title>Ingreso</ion-card-title>
+          <ion-card-subtitle>Bienvenido</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content
+          >{{usuario.nombre}} {{usuario.apellido}}</ion-card-content
+        >
+      </ion-card>
+  </div>
+</body>

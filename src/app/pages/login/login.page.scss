@@ -1,0 +1,54 @@
+.container {
+
+  text-align: center;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.centrado {
+  width: 100vw;
+  height: 100vh;
+  flex: auto;
+  align-items: center;
+}
+
+body {
+  position: relative;
+  overflow: hidden; // Asegura que el pseudo-elemento no se desborde
+  background: none; // Elimina el fondo del body para que solo se vea el pseudo-elemento
+ }
+
+ body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("../../../assets/img/fondoLogin.webp") no-repeat center center / cover;
+  filter: blur(5px); // Ajusta el valor de blur según la cantidad de desenfoque deseada
+  z-index: -1; // Asegura que el pseudo-elemento esté detrás del contenido
+ }
+
+
+.header-image {
+  width: 60%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.error-message-container {
+  display: block; /* Asegura que el contenedor del mensaje de error se muestre como un bloque */
+  width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
+}
+
+
+
+
+
+ ion-item {
+  --ion-item-background: transparent !important;
+}

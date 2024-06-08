@@ -1,0 +1,134 @@
+<body class="centrado">
+  <div class="container">
+    <ion-card-header style="align-items: center">
+      <img src="../../../assets/img/signup.png" height="50%" width="50%" />
+    </ion-card-header>
+    <ion-card-content>
+      <div class="wrapform">
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmitSignup()">
+          <ion-item>
+            <ion-icon name="person-outline"></ion-icon>
+            <ion-input
+              type="text"
+              name="nombreSignup"
+              id="nombreSignup"
+              placeholder="Nombre"
+              formControlName="nombreSignup"
+            ></ion-input>
+          </ion-item>
+          <ion-note
+            class="error-message"
+            *ngIf="
+          ((signupForm.controls['nombreSignup'].hasError('required'))
+          ||(signupForm.controls['nombreSignup'].hasError('pattern'))
+          )
+          && signupForm.controls['nombreSignup'].touched
+        "
+          >
+            Debe ingresar un nombre válido
+          </ion-note>
+          <ion-item>
+            <ion-icon name="person-outline"></ion-icon>
+            <ion-input
+              type="text"
+              name="apellidoSignup"
+              id="apellidoSignup"
+              placeholder="Apellido"
+              formControlName="apellidoSignup"
+            ></ion-input>
+          </ion-item>
+          <ion-note
+            class="error-message"
+            *ngIf="
+          ((signupForm.controls['apellidoSignup'].hasError('required'))
+          ||(signupForm.controls['apellidoSignup'].hasError('pattern'))
+          )
+          && signupForm.controls['apellidoSignup'].touched
+        "
+          >
+            Debe ingresar un apellido válido
+          </ion-note>
+          <ion-item>
+            <ion-icon name="mail-outline"></ion-icon>
+            <ion-input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Correo Electrónico"
+              formControlName="emailSignup"
+            ></ion-input>
+          </ion-item>
+          <ion-note
+            class="error-message"
+            *ngIf="
+          (signupForm.controls['emailSignup'].hasError('email') ||
+          signupForm.controls['emailSignup'].hasError('required')) &&
+          signupForm.controls['emailSignup'].touched
+        "
+            >Debe ingresar un correo válido
+          </ion-note>
+          <ion-item>
+            <ion-icon name="mail-outline"></ion-icon>
+            <ion-input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Contraseña"
+              formControlName="passwordSignup"
+            ></ion-input>
+          </ion-item>
+          <ion-note
+            class="error-message"
+            *ngIf="
+            (signupForm.controls['passwordSignup'].hasError('required')) &&
+            signupForm.controls['passwordSignup'].touched
+          "
+          >
+            Debe ingresar una contraseña
+          </ion-note>
+          <ion-note
+            class="error-message"
+            *ngIf="
+          (signupForm.controls['passwordSignup'].hasError('min')) &&
+          signupForm.controls['passwordSignup'].touched
+        "
+          >
+            La contraseña debe tener al menos 6 caracteres
+          </ion-note>
+          <!-- <ion-item>
+          <ion-checkbox
+            slot="start"
+            color="primary"
+            ario-label="Admin"
+            formControlName="esAdminSignup"
+          ></ion-checkbox>Administrador
+        </ion-item> -->
+          <!-- <ion-item>
+          <input
+          type="file"
+          name="image"
+          id="image"
+          formControlName="fotoSignup"
+          placeholder="Imagen de perfil"
+          />
+          <ion-label>Imagen de Perfil</ion-label>
+        </ion-item> -->
+          <ion-button
+            type="submit"
+            [disabled]="!signupForm.valid"
+            expand="block"
+            class="btn-Signup"
+            >Registrarse
+          </ion-button>
+          <ion-button
+            type="button"
+            expand="block"
+            color="tertiary"
+            (click)="irALogin()"
+            >Volver
+          </ion-button>
+        </form>
+      </div>
+    </ion-card-content>
+  </div>
+</body>
