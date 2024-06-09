@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'AJG-PruebaApp',
+  appId: 'pps.sabores.unicos.2024',
+  appName: 'Sabores Unicos',
   webDir: 'www',
   server: {
     androidScheme: 'https'
@@ -23,6 +23,14 @@ const config: CapacitorConfig = {
       splashImmersive: true,
       // layoutName: "launch_screen",
       // useDialog: true,
+    },
+    Camera: {
+      cameraRoll: true,
+      photoQuality: "high",
+      correctOrientation: true,
+      saveToPhotoAlbum: true,
+      allowEditing: false,
+      sourceType: ["camera", "library"]
     },
   },
 };
