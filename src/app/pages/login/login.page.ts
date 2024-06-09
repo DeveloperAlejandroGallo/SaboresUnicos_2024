@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { SelectChangeEventDetail } from '@ionic/angular';
 import { IonSelectCustomEvent } from '@ionic/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { ScanService } from 'src/app/services/scan.service';
+
 
 
 
@@ -25,7 +25,6 @@ export class LoginPage implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private scanService: ScanService,
    ) {
       this.isLoading = false;
      }
@@ -74,10 +73,6 @@ export class LoginPage implements OnInit {
 
   save(event: any): any {
     this.onSubmitLogin();
-  }
-
-  public escanearDNI(){
-    this.scanService.scan();
   }
 
 

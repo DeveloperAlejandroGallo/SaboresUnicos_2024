@@ -121,7 +121,24 @@ ion-checkbox {
   .button-71 {
     padding: 16px 48px;
   }
+  .barcode-scanner-modal {
+    --background: transparent;
+    --ion-background-color: transparent;
+  }
 }
+
+// Hide all elements
+body.barcode-scanner-active {
+  visibility: hidden;
+  --background: transparent;
+  --ion-background-color: transparent;
+}
+
+// Show only the barcode scanner modal
+.barcode-scanner-modal {
+  visibility: visible;
+}
+
 
 ion-icon {
   margin-right: 8px; // Ajusta este valor según sea necesario
