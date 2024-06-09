@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-
+import { ScanService } from 'src/app/services/scan.service';
 
 
 
@@ -22,7 +22,9 @@ export class LoginPage implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router) {
+    private router: Router,
+    private scanService: ScanService,
+   ) {
       this.isLoading = false;
      }
 
@@ -72,6 +74,10 @@ export class LoginPage implements OnInit {
     this.onSubmitLogin();
   }
 
+  public escanearDNI(){
+    this.scanService.scan();
+  }
+
 
   loginAutomatico(perfil: string) {
     switch (perfil) {
@@ -107,5 +113,6 @@ export class LoginPage implements OnInit {
         break;
     }
   }
+  
 
 }
