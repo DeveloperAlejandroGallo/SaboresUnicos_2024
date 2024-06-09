@@ -1,5 +1,21 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, collectionChanges, collectionData, CollectionReference, collectionSnapshots, deleteDoc, doc, DocumentData, Firestore, getDoc, getDocs, query, setDoc, updateDoc } from '@angular/fire/firestore';
+import {
+  addDoc,
+  collection,
+  collectionChanges,
+  collectionData,
+  CollectionReference,
+  collectionSnapshots,
+  deleteDoc,
+  doc,
+  DocumentData,
+  Firestore,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+} from '@angular/fire/firestore';
 import { Usuario } from '../models/usuario';
 import { map, Observable } from 'rxjs';
 
@@ -30,11 +46,13 @@ export class UsuarioService {
   public getUsuarios(): Observable<Usuario[]> {
     const refOfUsers = collection(this.firestore, this.colectionName);
     return collectionSnapshots(refOfUsers).pipe(
-      map(res => res.map(data => {
-        const id = data.id;
-        const docData = data.data() as Usuario; // Cast the data to Usuario type
-        return { ...docData, id };
-      }))
+      map((res) =>
+        res.map((data) => {
+          const id = data.id;
+          const docData = data.data() as Usuario; // Cast the data to Usuario type
+          return { ...docData, id };
+        })
+      )
     );
   }
 
@@ -47,7 +65,7 @@ export class UsuarioService {
       this.listadoUsuarios = respuesta as Array<Usuario>;
     });
 
-    this.getUsuarios().subscribe(usuarios => {
+    this.getUsuarios().subscribe((usuarios) => {
       this.listadoUsuarios = usuarios;
     });
   }
@@ -74,8 +92,9 @@ export class UsuarioService {
       apellido: usuario.apellido,
       email: usuario.email,
       clave: usuario.clave,
-
-      esAdmin: true
+      foto: usuario.foto,
+      esAdmin: usuario.esAdmin,
+      dni: usuario.dni,
     });
   }
 
@@ -90,6 +109,9 @@ export class UsuarioService {
       apellido: usuario.apellido,
       email: usuario.email,
       clave: usuario.clave,
+      foto: usuario.foto,
+      esAdmin: usuario.esAdmin,
+      dni: usuario.dni,
     });
   }
 

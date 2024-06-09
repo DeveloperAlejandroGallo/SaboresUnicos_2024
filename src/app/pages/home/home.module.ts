@@ -6,7 +6,6 @@ import { IonicModule } from '@ionic/angular';
 import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
-import { ExploreContainerComponentModule } from 'src/app/components/explore-container/explore-container.module';
 import { NavBarModule } from 'src/app/components/nav-bar/nav-bar.module';
 
 
@@ -15,7 +14,6 @@ import { NavBarModule } from 'src/app/components/nav-bar/nav-bar.module';
     IonicModule,
     CommonModule,
     FormsModule,
-    ExploreContainerComponentModule,
     NavBarModule,
     HomePageRoutingModule
   ],

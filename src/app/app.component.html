@@ -1,3 +1,33 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu side="end" menuId="first" contentId="main" swipeGesture='true' color="primary" class="menu-custom" >
+    <ion-header color="primary">
+      <ion-toolbar color="primary">
+        <ion-title>Menu</ion-title>
+        <ion-icon slot="end" (click)="checkAdmin()"></ion-icon>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list color="primary">
+        <ion-menu-toggle color="primary" >
+          <ion-item color="primary"  (click)="irAUrl('signup')"  >
+            <ion-label>Alta de Usuario</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-item color="primary" (click)="irAUrl('listado')">
+            <ion-label>Listado de Usuarios</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-item color="primary" (click)="logout()">
+            <ion-label>Salir</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="main"></ion-router-outlet>
+  <div class="custom-spinner" *ngIf="isLoading" >
+    <img src="../../../assets/icon-only.png" alt="Spinner">
+  </div>
 </ion-app>

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SelectChangeEventDetail } from '@ionic/angular';
+import { IonSelectCustomEvent } from '@ionic/core';
 import { AuthService } from 'src/app/services/auth.service';
 
 
@@ -73,35 +75,39 @@ export class LoginPage implements OnInit {
   }
 
 
+  handleChange($event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {
+    this.loginAutomatico($event.detail.value);
+    }
+
   loginAutomatico(perfil: string) {
     switch (perfil) {
       case 'admin':
         this.loginForm.setValue({
-          emailLogin: 'admin@admin.com',
+          emailLogin: 'administrador@yopmail.com',
           passwordLogin: '111111',
         });
         break;
       case 'invitado':
         this.loginForm.setValue({
-          emailLogin: 'invitado@invitado.com',
+          emailLogin: 'invitado@yopmail.com',
           passwordLogin: '222222',
         });
         break;
       case 'usuario':
         this.loginForm.setValue({
-          emailLogin: 'usuario@usuario.com',
+          emailLogin: 'usuario@yopmail.com',
           passwordLogin: '333333',
         });
         break;
       case 'anonimo':
         this.loginForm.setValue({
-          emailLogin: 'anonimo@anonimo.com',
+          emailLogin: 'anonimo@yopmail.com',
           passwordLogin: '444444',
         });
         break;
       case 'tester':
         this.loginForm.setValue({
-          emailLogin: 'tester@tester.com',
+          emailLogin: 'tester@yopmail.com',
           passwordLogin: '555555',
         });
         break;
