@@ -1,73 +1,97 @@
 import { Injectable } from '@angular/core';
+import { MensajesService } from './mensajes.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AudioService {
 
-  public inicioSesion!: HTMLAudioElement;
-  public logOut!: HTMLAudioElement;
-  public error!: HTMLAudioElement;
-  public success!: HTMLAudioElement;
-  public warning!: HTMLAudioElement;
-  public info!: HTMLAudioElement;
-  public cambioPagina!: HTMLAudioElement;
+  public inicioSesion!: string;
+  public logOut!: string;
+  public error!: string;
+  public success!: string;
+  public warning!: string;
+  public info!: string;
+  public cambioPagina!: string;
 
-  constructor() {
+
+
+  constructor(private msgSrv: MensajesService) {
     try {
-      this.inicioSesion = new Audio('assets/audios/inicioSesion.wav');
-      this.logOut = new Audio('assets/audios/logOut.wav');
-      this.error = new Audio('assets/audios/error.wav');
-      this.success = new Audio('assets/audios/success.wav');
-      this.warning = new Audio('assets/audios/warning.wav');
-      this.info = new Audio('assets/audios/info.wav');
-      this.cambioPagina = new Audio('assets/audios/load.wav');
+        this.inicioSesion = 'inicioSesion.wav';
+        this.logOut = 'logOut.wav';
+        this.error = 'error.wav';
+        this.success = 'success.wav';
+        this.warning = 'warning.wav';
+        this.info = 'info.wav';
+        this.cambioPagina = 'load.wav';
+
+
+
     } catch (error) {
       console.error(`Error al cargar los audios: ${error}`);
     }
 
   }
 
-  reporoduccionInicioSesion(tiempo: number) {
-    this.reproducirAuidoPorSegundos(this.inicioSesion, tiempo);
+  reporoduccionInicioSesion() {
+    this.reproducirAuido(this.inicioSesion);
   }
 
-  reporoduccionLogOut(tiempo: number) {
-    this.reproducirAuidoPorSegundos(this.logOut, tiempo);
+  reporoduccionLogOut() {
+    this.reproducirAuido(this.logOut);
   }
 
-  reporoduccionError(tiempo: number) {
-    this.reproducirAuidoPorSegundos(this.error, tiempo);
+  reporoduccionError() {
+    this.reproducirAuido(this.error);
   }
 
-  reporoduccionSuccess(tiempo: number) {
-    this.reproducirAuidoPorSegundos(this.success, tiempo);
+  reporoduccionSuccess() {
+    this.reproducirAuido(this.success);
   }
 
-  reporoduccionWarning(tiempo: number) {
-    this.reproducirAuidoPorSegundos(this.warning, tiempo);
+  reporoduccionWarning() {
+    this.reproducirAuido(this.warning);
   }
 
-  reporoduccionInfo(tiempo: number) {
-    this.reproducirAuidoPorSegundos(this.info, tiempo);
+  reporoduccionInfo() {
+    this.reproducirAuido(this.info);
   }
 
-  reporoduccionCambioPagina(tiempo: number) {
-    this.reproducirAuidoPorSegundos(this.cambioPagina, tiempo);
+  reporoduccionCambioPagina() {
+    this.reproducirAuido(this.cambioPagina);
   }
 
-  reproducirAuidoPorSegundos(audio: HTMLAudioElement, segundos: number) {
+  async reproducirAuido(audio: string) {
     try {
-      audio.play();
-      setTimeout(() => {
-        audio.pause();
-        audio.currentTime = 0;
-      }, segundos * 1000);
+      const assetCompleto = `assets/audios/${audio}`;
+
+      console.log('Cargando audio: ', assetCompleto);
+
+      const audioElement = await this.loadAudio(assetCompleto);
+
+      // Comprueba si el audio ya está reproduciendo
+      if (!audioElement.paused) {
+        console.log('El audio ya está reproduciendo.');
+        return;
+      }
+
+      // Intenta reproducir el audio
+      audioElement.play().then(() => {
+        console.log('Audio reproduciendo...');
+      }).catch((error) => {
+        console.error('Error al reproducir el audio:', error);
+      });
     } catch (error) {
-      console.error(`Error al reporducir el sonido: ${error}`);
+      console.error(`Error al cargar el audio: ${error}`);
     }
   }
 
-
-
+  private async loadAudio(url: string): Promise<HTMLAudioElement> {
+    return new Promise((resolve, reject) => {
+      const audio = new Audio(url);
+      audio.addEventListener('canplaythrough', () => resolve(audio));
+      audio.onerror = () => reject(new Error(`Error loading audio: ${url}`));
+    });
+  }
 }

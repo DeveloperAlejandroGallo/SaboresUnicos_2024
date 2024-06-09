@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">SaboresUnicos</string>
     <string name="title_activity_main">SaboresUnicos</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="package_name">pps.sabores.unicos.2024</string>
+    <string name="custom_url_scheme">pps.sabores.unicos.2024</string>
 </resources>

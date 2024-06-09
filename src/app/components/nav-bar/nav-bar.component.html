@@ -1,8 +1,19 @@
- <ion-toolbar color="secondary">
-  <ion-buttons  slot="secondary">
-    <ion-button (click)="logout()">
+<ion-header>
+  <ion-toolbar color="primary">
+		<ion-buttons slot="start">
+			<ion-menu-button menu="first"></ion-menu-button>
+		</ion-buttons>
+    <div style="display: flex; align-items: center;">
+
+      <a *ngIf="usuario">
+        <img class="rounded-image bordered-image" [src]="usuario.foto" width="40" height="40"   alt="Home">
+      </a><span>{{ usuario.nombre }}, {{ usuario.apellido }} {{usuario.esAdmin ? "(Admin)" : ""}}</span>
+    </div>
+    <ion-button (click)="logout()" slot="end" color="tertiary" >
       <ion-icon name="log-out-outline" size="large"></ion-icon>
     </ion-button>
-  </ion-buttons>
-  <ion-title class="capitalize"><strong>{{emailUsuario}}</strong></ion-title>
-</ion-toolbar>
+  </ion-toolbar>
+</ion-header>
+
+
+

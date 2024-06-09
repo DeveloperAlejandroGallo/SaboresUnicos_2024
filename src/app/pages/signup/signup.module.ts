@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { SignupPageRoutingModule } from './signup-routing.module';
 
 import { SignupPage } from './signup.page';
+import { NavBarModule } from 'src/app/components/nav-bar/nav-bar.module';
+import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
 
 @NgModule({
   imports: [
@@ -14,8 +16,9 @@ import { SignupPage } from './signup.page';
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    SignupPageRoutingModule
+    SignupPageRoutingModule,
+    NavBarModule
   ],
-  declarations: [SignupPage]
+  declarations: [SignupPage, BarcodeScanningModalComponent]
 })
 export class SignupPageModule {}

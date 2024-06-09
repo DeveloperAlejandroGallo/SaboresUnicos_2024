@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Usuario } from 'src/app/models/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 
 
@@ -10,13 +11,19 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NavBarComponent{
 
-  @Input() emailUsuario: any; // Asegúrate de pasar el usuario como entrada desde los tabs
+  @Input() titulo: string = '';
+  @Input() volver: Boolean = true;
+  public  usuario!: Usuario;
+  url: string;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private auth: AuthService) {
+    this.url = this.router.url;
+    this.usuario = this.auth.usuarioActual!;
+
+  }
 
   logout() {
       this.authService.cerrarSesion();
       this.router.navigateByUrl('/', { replaceUrl: true });
   }
-
 }

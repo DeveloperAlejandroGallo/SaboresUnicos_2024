@@ -44,14 +44,13 @@ export class AuthService {
     .then((userCredential) => {
       // Signed in
 
-        // if(!userCredential.user.emailVerified){
-        //   this.messageService.Warning("Antes de intentar ingresar debe validar su email");
-        //   this.cerrarSesion();
-        //   return;
-        // }
+        if(!userCredential.user.emailVerified){
+         this.messageService.Warning("Para ingresar, debe validar su email.");
+        //  this.cerrarSesion();
+         return;
+        }
 
-        this.messageService.InfoToast("Bienvenido " + email);
-        this.audioSrv.reporoduccionSuccess(2);
+        // this.messageService.InfoToast("Bienvenido " + email);
         this.router.navigate(['/home']);
 
 
@@ -97,11 +96,12 @@ export class AuthService {
 
       this.usrService.nuevo(usuario);
 
-      //sendEmailVerification(auth.currentUser!);
-      this.messageService.Exito(`Usuario ${usuario.email} registrado correctamente.`);
-      setTimeout(() => {
-        this.router.navigate(['/login']);
-      }, 1500);
+      sendEmailVerification(auth.currentUser!);
+      this.messageService.Exito(`Usuario ${usuario.email} registrado correctamente. \nSe ha enviado un correo de verificación`);
+
+      // setTimeout(() => {
+      //   this.router.navigate(['/login']);
+      // }, 1500);
 
     })
     .catch((error) => {
@@ -141,7 +141,7 @@ export class AuthService {
 
     signOut(auth).then(() => {
       localStorage.removeItem(usuarioLocalStorage);
-      this.audioSrv.reporoduccionLogOut(2);
+      this.audioSrv.reporoduccionLogOut();
       this.messageService.InfoToast('Sesión cerrada');
       this.router.navigate(['/login']);
     }).catch((error) => {
@@ -160,7 +160,7 @@ export class AuthService {
   public logueado() {
     const auth = getAuth();
 
-    return (auth.currentUser != null) && ((this.currentUser() as Usuario).email == auth.currentUser.email);
+    return (auth.currentUser != null) && (this.usuarioActual!.email == auth.currentUser.email);
 
 
   }
@@ -193,4 +193,6 @@ export class AuthService {
       }
     });
   }
+
+
 }

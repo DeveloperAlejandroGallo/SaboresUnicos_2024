@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
 import { Haptics } from '@capacitor/haptics';
+import { ToastController } from '@ionic/angular'; // Importa ToastController
+
+const background = '#f8f8f8d7';
 
 const Toast = Swal.mixin({
   toast: true,
-  position: "top",
+  position: "center",
   showConfirmButton: false,
-  timer: 3000,
+  timer: 1500,
   timerProgressBar: true,
+  background: background,
   didOpen: (toast) => {
     toast.onmouseenter = Swal.stopTimer;
     toast.onmouseleave = Swal.resumeTimer;
@@ -19,7 +23,7 @@ const Toast = Swal.mixin({
 })
 export class MensajesService {
 
-  constructor() { }
+  constructor(private toastController: ToastController) { }
 
   Info(msg: string) {
     Swal.fire({
@@ -27,6 +31,7 @@ export class MensajesService {
       text: msg,
       icon: 'info',
       heightAuto: false,
+      background: background
     });
   }
 
@@ -37,6 +42,7 @@ export class MensajesService {
       text: msg,
       icon: 'success',
       heightAuto: false,
+      background: background
     });
   }
 
@@ -46,16 +52,18 @@ export class MensajesService {
       text: msg,
       icon: 'warning',
       heightAuto: false,
+      background: background
     });
   }
 
   Error(msg: string) {
-    Haptics.vibrate({ duration: 1000 });
+    Haptics.vibrate({ duration: 750 });
     Swal.fire({
       title: 'Error',
       text: msg,
       icon: 'error',
-      heightAuto: false
+      heightAuto: false,
+      background: background
     });
   }
 
@@ -77,7 +85,7 @@ export class MensajesService {
   }
 
   WarningToast(msg: string) {
-    Swal.fire({
+    Toast.fire({
       title: 'Advertencia!',
       text: msg,
       icon: 'warning'
@@ -85,12 +93,54 @@ export class MensajesService {
   }
 
   ErrorToast(msg: string) {
-    Haptics.vibrate({ duration: 1000 });
-    Swal.fire({
+    Haptics.vibrate({ duration: 750 });
+    Toast.fire({
       title: 'Error',
       text: msg,
       icon: 'error'
     });
   }
+
+  async ErrorIonToast(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000, // Opcional: Duración del toast
+      position: 'top', // Posición del toast
+      color: 'danger', // Color que se le aplicará al toast
+    });
+    await toast.present(); // Muestra el toast
+  }
+
+  async ExitoIonToast(message: string, t: number): Promise<void> {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: t * 1000, // Opcional: Duración del toast
+      position: 'top', // Posición del toast
+      color: 'success', // Color que se le aplicará al toast
+    });
+
+    await toast.present(); // Muestra el toast
+  }
+
+  async WarningIonToast(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000, // Opcional: Duración del toast
+      position: 'top', // Posición del toast
+      color: 'warning', // Color que se le aplicará al toast
+    });
+    await toast.present(); // Muestra el toast
+  }
+
+  async InfoIonToast(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000, // Opcional: Duración del toast
+      position: 'top', // Posición del toast
+      color: 'primary', // Color que se le aplicará al toast
+    });
+    await toast.present(); // Muestra el toast
+  }
+
 
 }
