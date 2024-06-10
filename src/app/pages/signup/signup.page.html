@@ -9,7 +9,7 @@
       <ion-note *ngIf="imageTomadaURL === '../../../assets/img/whoAmI.png'">Tomar Foto</ion-note>
       <!-- <ion-icon name="camera-outline" size="large"></ion-icon> -->
     </ion-card-header>
-    <ion-button color="warning" (click)="startScan()">
+    <ion-button color="warning" (click)="scanQR()">
       <ion-icon name="barcode-outline"></ion-icon><b>Escanear DNI</b>
     </ion-button>
     <div class="custom-spinner" *ngIf="isLoading">

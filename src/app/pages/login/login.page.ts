@@ -24,7 +24,8 @@ export class LoginPage implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router) {
+    private router: Router,
+   ) {
       this.isLoading = false;
      }
 
@@ -113,5 +114,6 @@ export class LoginPage implements OnInit {
         break;
     }
   }
+  
 
 }
