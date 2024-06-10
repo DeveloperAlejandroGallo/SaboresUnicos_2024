@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'pps.sabores.unicos.2024',
-  appName: 'Sabores Unicos',
+  appName: 'Sabores Únicos',
   webDir: 'www',
   server: {
     androidScheme: 'https'
