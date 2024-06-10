@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">SaboresUnicos</string>
-    <string name="title_activity_main">SaboresUnicos</string>
+    <string name="app_name">Sabores Únicos</string>
+    <string name="title_activity_main">Sabores Únicos</string>
     <string name="package_name">pps.sabores.unicos</string>
     <string name="custom_url_scheme">pps.sabores.unicos</string>
 </resources>
