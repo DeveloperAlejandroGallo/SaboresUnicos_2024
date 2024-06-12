@@ -3,24 +3,25 @@
 
 /** Ionic CSS Variables **/
 :root {
+  font-family: 'Lucida Sans';
   /** primary **/
-  --ion-color-primary: #3880ff;
+  --ion-color-primary: #BF0000;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #3171e0;
-  --ion-color-primary-tint: #4c8dff;
+  --ion-color-primary-shade: #c94e4e;
+  --ion-color-primary-tint: #BF0000;
 
   /** secondary **/
-  --ion-color-secondary: #3dc2ff;
+  --ion-color-secondary: #2557bc;
   --ion-color-secondary-rgb: 61, 194, 255;
   --ion-color-secondary-contrast: #ffffff;
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #36abe0;
-  --ion-color-secondary-tint: #50c8ff;
+  --ion-color-secondary-shade: #98df56c2;
+  --ion-color-secondary-tint: #98df56c2;
 
   /** tertiary **/
-  --ion-color-tertiary: #5260ff;
+  --ion-color-tertiary: #385ba7;
   --ion-color-tertiary-rgb: 82, 96, 255;
   --ion-color-tertiary-contrast: #ffffff;
   --ion-color-tertiary-contrast-rgb: 255, 255, 255;
@@ -74,6 +75,11 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+}
+
+ion-content,ion-button,ion-card-content,ion-input,ion-note{
+  font-family: 'Lucida Sans' !important;
+
 }
 
 @media (prefers-color-scheme: dark) {

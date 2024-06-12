@@ -1,6 +1,8 @@
 ion-content{
 
-  --background: url('../../../assets/img/fondoSplash.png')  no-repeat center center / cover;
+  // --background: url('../../../assets/img/fondoSplash.png')  no-repeat center center / cover;
+  --background: rgb(230,112,112);
+  --background: linear-gradient(189deg, rgba(230,112,112,1) 0%, rgba(204,59,59,1) 35%, rgba(191,0,0,1) 100%);
 }
 
   #container {
@@ -20,7 +22,7 @@ ion-content{
     position: relative;
     font-size: 50px;
     text-align: center;
-    color: #ff7f16;
+    color: #ffffff;
     animation: myName 7s;
 }
 .miCurso{
@@ -29,7 +31,7 @@ ion-content{
     position: relative;
     font-size: 50px;
     text-align: center;
-    color: #0056BD;
+    color: #000000;
     animation: myCourse 7s;
 }
 

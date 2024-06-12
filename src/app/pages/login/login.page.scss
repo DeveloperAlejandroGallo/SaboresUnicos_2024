@@ -28,14 +28,15 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: url("../../../assets/img/fondoLogin.webp") no-repeat center center / cover;
-  filter: blur(5px); // Ajusta el valor de blur según la cantidad de desenfoque deseada
+  background: url("../../../assets/img/otro-fondo-liso.png") no-repeat center center / cover;
+  // background: url("../../../assets/img/fondoLogin.webp") no-repeat center center / cover;
+  // filter: blur(5px); // Ajusta el valor de blur según la cantidad de desenfoque deseada
   z-index: -1; // Asegura que el pseudo-elemento esté detrás del contenido
  }
 
 
 .header-image {
-  width: 60%;
+  width: 80%;
   height: auto;
   margin-bottom: 20px;
 }
@@ -45,12 +46,48 @@ body {
   width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
 }
 
+.formulario{
+  background-color: #ffffffe0;
+  width: 100%;
+  padding: 20px;
+  border-radius: 20px;
+  h1{
+    color: #BF0000;
+    font-size: 30px;
+    // margin-bottom: 10px;
+  }
+}
 
-
-
-
+form{
+  ion-icon{
+  margin-right: 10px;
+  }
+  
+}
+.btn-login{
+  margin-top: 15px;
+}
  ion-item {
   --ion-item-background: transparent !important;
+  margin-top: 15px;
+}
+.horizontal-line {
+  display: flex;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 15px;
+}
+
+
+.line {
+  flex: 1;
+  border-bottom: 2px solid #555454; /* Estilo de la línea */
+}
+
+.line-text {
+  padding: 0 10px; /* Espaciado alrededor del texto */
+  color: #555454;
+  font-size: 15px;
 }
 
 // Hide all elements

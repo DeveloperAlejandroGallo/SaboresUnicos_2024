@@ -1,69 +1,80 @@
 <body class="centrado">
   <div class="container">
     <ion-card-header style="align-items: center">
-      <img src="../../../assets/img/login.png" class="header-image" />
+      <img src="../../../assets/titulo-login.png" class="header-image" />
     </ion-card-header>
     <ion-card-content>
       <div class="wrapform">
         <div class="custom-spinner" *ngIf="isLoading" >
-          <img src="../../../assets/icon-only.png" alt="Spinner">
+          <img src="../../../assets/icon-red-circle.png" alt="Spinner">
         </div>
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
-          <ion-item>
-            <ion-icon name="mail-outline"></ion-icon>
-            <ion-input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Correo Electrónico"
-              formControlName="emailLogin"
-            ></ion-input>
-          </ion-item>
-          <ion-note
-            class="error-message"
-            *ngIf="(loginForm.controls['emailLogin'].hasError('email') || loginForm.controls['emailLogin'].hasError('required')) && loginForm.controls['emailLogin'].touched"
-          >
-            Debe ingresar un correo válido
-          </ion-note>
-          <ion-item>
-            <ion-icon name="mail-outline"></ion-icon>
-            <ion-input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Contraseña"
-              formControlName="passwordLogin"
-            ></ion-input>
-          </ion-item>
-          <ion-note
-            class="error-message"
-            *ngIf="
-        (loginForm.controls['passwordLogin'].hasError('required')) &&
-        loginForm.controls['passwordLogin'].touched"
-          >
-            Debe ingresar una contraseña
-          </ion-note>
-          <ion-button
-            type="submit"
-            [disabled]="!loginForm.valid"
-            expand="block"
-            class="btn-login"
-            >Ingresar
-          </ion-button>
-          <ion-button
-            type="button"
-            expand="block"
-            color="tertiary"
-            (click)="irARegistrar()"
-            >Registrarse
-          </ion-button>
-        </form>
+        <div class="formulario">
+          <h1>Bienvenido</h1>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
+            <ion-item>
+              <ion-icon name="mail"></ion-icon>
+              <ion-input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Correo Electrónico"
+                formControlName="emailLogin"
+              ></ion-input>
+            </ion-item>
+            <ion-note
+              class="error-message"
+              *ngIf="(loginForm.controls['emailLogin'].hasError('email') || loginForm.controls['emailLogin'].hasError('required')) && loginForm.controls['emailLogin'].touched"
+            >
+              Debe ingresar un correo válido
+            </ion-note>
+            <ion-item>
+              <ion-icon name="key"></ion-icon>
+              <ion-input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Contraseña"
+                formControlName="passwordLogin"
+              ></ion-input>
+            </ion-item>
+            <ion-note
+              class="error-message"
+              *ngIf="
+          (loginForm.controls['passwordLogin'].hasError('required')) &&
+          loginForm.controls['passwordLogin'].touched"
+            >
+              Debe ingresar una contraseña
+            </ion-note>
+            <ion-button
+              type="submit"
+              [disabled]="!loginForm.valid"
+              expand="block"
+              color="secondary"
+              class="btn-login"
+              >Iniciar Sesión
+            </ion-button>
+            
+          </form>
+          <div class="horizontal-line">
+            <div class="line"></div>
+            <div class="line-text">¿Eres nuevo?</div>
+            <div class="line"></div>
+            </div>
+            <ion-button
+                type="button"
+                expand="block"
+                color="tertiary"
+                fill="outline"
+                (click)="irARegistrar()"
+                >Crear cuenta
+              </ion-button>
+        </div>
       </div>
     </ion-card-content>
   </div>
 </body>
 <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-  <ion-fab-button>
+  <ion-fab-button color="secondary">
     <ion-icon name="chevron-up-circle"></ion-icon>
   </ion-fab-button>
   <ion-fab-list side="top">
