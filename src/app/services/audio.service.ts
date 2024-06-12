@@ -14,7 +14,7 @@ export class AudioService {
   public info!: string;
   public cambioPagina!: string;
 
-
+  public sonidoActivo: boolean = true;
 
   constructor(private msgSrv: MensajesService) {
     try {
@@ -64,6 +64,11 @@ export class AudioService {
 
   async reproducirAuido(audio: string) {
     try {
+
+      if (!this.sonidoActivo)
+        return;
+      
+
       const assetCompleto = `assets/audios/${audio}`;
 
       console.log('Cargando audio: ', assetCompleto);

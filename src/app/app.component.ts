@@ -39,9 +39,7 @@ export class AppComponent implements OnInit{
    this.authSrv.cerrarSesion();
   }
 
-  checkAdmin() {
-    this.esAdmin = this.authSrv.usuarioActual?.esAdmin ?? false;
-    }
+
 
 
   irAUrl(url: string) {

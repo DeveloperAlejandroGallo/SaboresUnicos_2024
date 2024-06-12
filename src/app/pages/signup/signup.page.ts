@@ -34,6 +34,7 @@ import { BarcodeFormat, BarcodeScanner, LensFacing } from '@capacitor-mlkit/barc
 import { AudioService } from 'src/app/services/audio.service';
 import { Haptics } from '@capacitor/haptics';
 import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
+import { Perfil } from 'src/app/enums/perfil';
 
 
 @Component({
@@ -88,9 +89,6 @@ export class SignupPage implements OnInit {
     return this.signupForm.get('passwordRep');
   }
 
-  get getEsAdmin() {
-    return this.signupForm.get('esAdmin');
-  }
 
   get getDni() {
     return this.signupForm.get('dni');
@@ -149,7 +147,7 @@ export class SignupPage implements OnInit {
           Validators.minLength(6),
         ]),
         passwordRep: new FormControl('', [Validators.required, CustomValidators.passwordIguales('password', 'passwordRep')]), //, CustomValidators.passwordIguales('password', 'passwordRep')
-        esAdmin: new FormControl(false),
+
       },
       Validators.required
     );
@@ -304,9 +302,13 @@ export class SignupPage implements OnInit {
       apellido: this.getApellido?.value,
       email: this.getEmail?.value,
       clave: this.getPassword?.value,
-      esAdmin: this.getEsAdmin?.value,
+
       dni: this.getDni?.value,
       foto: urlImage,
+      cuil: '',
+      perfil: Perfil.Cliente,
+      tipoEmpleado: undefined,
+      activo: false
     };
 
     this.authService.registrarCuenta(usuario);
@@ -408,7 +410,7 @@ export class SignupPage implements OnInit {
       }
 
       const datosDni = result.barcodes[0].displayValue;
-      
+
       const dni  = datosDni.split('@');
 
       if (dni.length == 8 || dni.length == 9) {
@@ -440,7 +442,7 @@ export class SignupPage implements OnInit {
     //   //cuit[1] = this.sexo === 'Masculino' ? 0 : 7;
     //   for (let i = 0; i < cantCeros; i++)
     //     cuit.push(0);
-  
+
     //   for (let i = 0; i < dni.length; i++) {
     //     if (Number.parseInt(dni[i]) != NaN)
     //       cuit.push(Number.parseInt(dni[i]));
@@ -456,9 +458,9 @@ export class SignupPage implements OnInit {
     //   tot += cuit[7] * 4;
     //   tot += cuit[8] * 3;
     //   tot += cuit[9] * 2;
-  
+
     //   let digVer: number;
-  
+
     //   switch (tot % 11) {
     //     case 0:
     //       digVer = 0;
@@ -473,7 +475,7 @@ export class SignupPage implements OnInit {
     //   }
     //   cuit[10] = digVer;
     //   let ret: string = cuit.join('');
-  
+
     //   return ret.substring(0, 11);
     // }
 
@@ -491,7 +493,7 @@ export class SignupPage implements OnInit {
           },
         });
 
-       
+
         await modal.present();
 
         const { data } = await modal.onWillDismiss();

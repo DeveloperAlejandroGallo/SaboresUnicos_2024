@@ -1,12 +1,17 @@
+import { Perfil } from "../enums/perfil";
+import { TipoEmpleado } from "../enums/tipo-empleado";
 
 
 export interface Usuario {
   id: string,
+  email: string,
   nombre: string,
   apellido: string,
-  email: string,
   clave: string,
-  esAdmin: boolean,
   foto: string,
-  dni: number
+  dni: number,
+  cuil: string,
+  perfil: Perfil,
+  tipoEmpleado?: TipoEmpleado,
+  activo: boolean
 }
