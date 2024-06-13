@@ -29,7 +29,7 @@
   display: block;
   color: #ff5c5c;
   background-color: #fff;
-  border: 1px solid #d52c2c;
+  // border: 1px solid #d52c2c;
   padding: 5px;
   border-radius: 4px;
   margin-top: 5px;
@@ -64,13 +64,13 @@
   position: fixed; /* Posiciona el spinner en relación con la ventana del navegador */
   justify-content: center;
   align-items: center;
-  top: 50%; /* Centra verticalmente */
-  left: 43%; /* Centra horizontalmente */
+  top: 35%; /* Centra verticalmente */
+  left: 32%; /* Centra horizontalmente */
   transform: translate(-50%, -50%); /* Ajusta la posición para que el centro del spinner esté en el centro de la pantalla */
   display: inline-block;
   animation: spin 2s linear infinite;
-  width: 50px;
-  height: 50px;
+  width: 150px;
+  height: 150px;
   z-index: 9999; /* Asegura que el spinner esté por encima de otros elementos */
   pointer-events: none; /* Evita que el spinner interfiera con la interacción del usuario */
   margin: auto;
