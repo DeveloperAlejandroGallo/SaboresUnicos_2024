@@ -71,6 +71,11 @@ export class LoginPage implements OnInit {
     this.router.navigate(['/signup']);
   }
 
+  ingresarComoInvitado(){
+    this.loginForm.reset();
+    //agregar navegacion para ingresar como invitado
+  }
+
   save(event: any): any {
     this.onSubmitLogin();
   }
