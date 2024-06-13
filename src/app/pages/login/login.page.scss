@@ -38,7 +38,7 @@ body {
 .header-image {
   width: 80%;
   height: auto;
-  margin-bottom: 20px;
+  // margin-bottom: 20px;
 }
 
 .error-message-container {
@@ -55,6 +55,9 @@ body {
     color: #BF0000;
     font-size: 30px;
     // margin-bottom: 10px;
+  }
+  ion-icon{
+    margin-right: 6px;
   }
 }
 
