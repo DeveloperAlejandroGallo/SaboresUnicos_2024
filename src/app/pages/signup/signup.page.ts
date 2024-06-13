@@ -7,7 +7,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute  } from '@angular/router';
 import { Usuario } from 'src/app/models/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { MensajesService } from 'src/app/services/mensajes.service';
@@ -52,6 +52,11 @@ export class SignupPage implements OnInit {
   isSupported: boolean = false;
   guardando: boolean = false;
   public isPermissionGranted = false;
+verApellido: any;
+verDni: any;
+verPassword: any;
+verCuil: any;
+verEmail: any;
 
   constructor(
     private authService: AuthService,
@@ -61,8 +66,32 @@ export class SignupPage implements OnInit {
     private toastController: ToastController,
     private platform: Platform,
     private audioSrv: AudioService,
-    private modalController: ModalController
-  ) {}
+    private modalController: ModalController,
+    private route: ActivatedRoute
+  ) {
+
+
+    const perfil = this.route.snapshot.paramMap.get('perfil');
+
+
+    switch (perfil) {
+      case Perfil.Cliente:
+        this.verApellido = true;
+        this.verDni = true;
+        this.verEmail = true;
+        this.verPassword = true;
+        this.verCuil = false;
+        break;
+      case Perfil.Anónimo:
+        this.verApellido = false;
+        this.verDni = false;
+        this.verEmail = false;
+        this.verPassword = false;
+        this.verCuil = false;
+        break;
+    }
+
+  }
 
   //getters
   get getEmail() {

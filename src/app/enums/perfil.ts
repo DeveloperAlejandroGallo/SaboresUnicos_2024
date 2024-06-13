@@ -1,7 +1,7 @@
 export enum Perfil {
-  Dueño,
-  Supervisor,
-  Empleado,
-  Cliente,
-  Anónimo
+  Dueño = "Dueño",
+  Supervisor = "Supervisor",
+  Empleado = "Empleado",
+  Cliente = "Cliente",
+  Anónimo = "Anónimo"
 }
