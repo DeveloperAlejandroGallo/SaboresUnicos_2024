@@ -61,12 +61,20 @@
             <div class="line"></div>
             </div>
             <ion-button
+              type="button"
+              expand="block"
+              color="tertiary"
+              fill="outline"
+              (click)="ingresarComoInvitado()"
+              > <ion-icon name="flame"></ion-icon> Ingresar como Invitado
+            </ion-button>
+            <ion-button
                 type="button"
                 expand="block"
                 color="tertiary"
                 fill="outline"
                 (click)="irARegistrar()"
-                >Crear cuenta
+                > <ion-icon name="person-add"></ion-icon> Crear cuenta
               </ion-button>
         </div>
       </div>
