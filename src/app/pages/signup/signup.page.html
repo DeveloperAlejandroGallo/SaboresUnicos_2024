@@ -1,9 +1,9 @@
-<app-nav-bar  [titulo]="'Alta de Usuarios'" ></app-nav-bar>
+<!-- <app-nav-bar  [titulo]="'Alta de Usuarios'" ></app-nav-bar> -->
 
 <body class="centrado">
   <div class="container">
-    <ion-card-header style="align-items: center; margin-top: 30px; min-width: 0; min-height: 0;">
-      <div (click)="tomarFoto()" class="image-container">
+    <ion-card-header >
+      <div (click)="tomarFoto()" class="header-image">
         <img [src]="imageTomadaURL" alt="Imagen Tomada"/>
       </div>
       <ion-note *ngIf="imageTomadaURL === '../../../assets/img/whoAmI.png'">Tomar Foto</ion-note>
@@ -16,18 +16,8 @@
       <img src="../../../assets/icon-only.png" alt="Spinner" />
     </div>
     <ion-card-content>
-      <div class="wrapform">
+      <div class="formulario">
         <form [formGroup]="signupForm" (ngSubmit)="onSubmitSignup()">
-          <ion-item>
-            <ion-icon name="pencil-outline"></ion-icon>
-            <ion-input
-              type="text"
-              name="apellido"
-              id="apellido"
-              placeholder="Apellido"
-              formControlName="apellido"
-            ></ion-input>
-          </ion-item>
           <ion-item>
             <ion-icon name="pencil-outline"></ion-icon>
             <ion-input
@@ -38,8 +28,21 @@
               formControlName="nombre"
             ></ion-input>
           </ion-item>
+          <div *ngIf="verApellido">
           <ion-item>
-            <ion-icon name="id-card-outline"></ion-icon>
+            <ion-icon name="pencil"></ion-icon>
+            <ion-input
+              type="text"
+              name="apellido"
+              id="apellido"
+              placeholder="Apellido"
+              formControlName="apellido"
+            ></ion-input>
+          </ion-item>
+        </div>
+          <div *ngIf="verDni">
+          <ion-item>
+            <ion-icon name="id-card"></ion-icon>
             <ion-input
               type="text"
               name="dni"
@@ -47,10 +50,23 @@
               placeholder="DNI"
               formControlName="dni"
             ></ion-input>
-
           </ion-item>
+        </div>
+        <div *ngIf="verCuil">
           <ion-item>
-            <ion-icon name="mail-open-outline"></ion-icon>
+            <ion-icon name="id-card"></ion-icon>
+            <ion-input
+              type="text"
+              name="cuil"
+              id="cuil"
+              placeholder="CUIL"
+              formControlName="cuil"
+            ></ion-input>
+          </ion-item>
+        </div>
+        <div *ngIf="verEmail">
+          <ion-item>
+            <ion-icon name="mail-open"></ion-icon>
             <ion-input
               type="email"
               name="email"
@@ -59,8 +75,10 @@
               formControlName="email"
             ></ion-input>
           </ion-item>
+        </div>
+        <div *ngIf="verPassword">
           <ion-item>
-            <ion-icon name="lock-open-outline"></ion-icon>
+            <ion-icon name="lock-open"></ion-icon>
             <ion-input
               type="password"
               name="password"
@@ -69,9 +87,10 @@
               formControlName="password"
             ></ion-input>
           </ion-item>
-
+        </div>
+        <!-- <div *ngIf="verPassword">
           <ion-item>
-            <ion-icon name="lock-closed-outline"></ion-icon>
+            <ion-icon name="lock-closed"></ion-icon>
             <ion-input
               type="password"
               name="passwordRep"
@@ -80,24 +99,15 @@
               formControlName="passwordRep"
             ></ion-input>
           </ion-item>
-
-          <ion-item>
-            <ion-checkbox
-              slot="start"
-              color="primary"
-              ario-label="Admin"
-              formControlName="esAdmin"
-            ></ion-checkbox
-            >Administrador
-          </ion-item>
-          <button
+        </div> -->
+          <ion-button
             type="submit"
-
             expand="block"
-            class="button-71"
+            color="secondary"
+            [innerText]="tituloBoton"
           >
-            Guardar
-          </button>
+
+          </ion-button>
         </form>
         <!-- [disabled]="!signupForm.valid" -->
       </div>

@@ -18,20 +18,21 @@
 body {
   position: relative;
   overflow: hidden; // Asegura que el pseudo-elemento no se desborde
-  background: none; // Elimina el fondo del body para que solo se vea el pseudo-elemento
+  //background: none; // Elimina el fondo del body para que solo se vea el pseudo-elemento
+  background-color: antiquewhite;
  }
 
- body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url("../../../assets/img/fondoLogin.webp") no-repeat center center / cover;
-  filter: blur(5px); // Ajusta el valor de blur según la cantidad de desenfoque deseada
-  z-index: -1; // Asegura que el pseudo-elemento esté detrás del contenido
- }
+//  body::before {
+//   content: "";
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   // background: url("../../../assets/img/otro-fondo-liso.png") no-repeat center center / cover;
+//   filter: blur(5px); // Ajusta el valor de blur según la cantidad de desenfoque deseada
+//   z-index: -1; // Asegura que el pseudo-elemento esté detrás del contenido
+//  }
 
 
 

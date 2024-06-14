@@ -6,6 +6,7 @@ import { Platform } from '@ionic/angular';
 import { App } from '@capacitor/app';
 import Swal from 'sweetalert2';
 import { AuthService } from './services/auth.service';
+import { set } from 'firebase/database';
 
 @Component({
   selector: 'app-root',
@@ -28,8 +29,7 @@ export class AppComponent implements OnInit{
 
 
     this.iniciarApp();
-
-
+    this.usuariosSrv.traer();
   }
   ngOnInit(): void {
     this.usuariosSrv.traer();
@@ -39,9 +39,7 @@ export class AppComponent implements OnInit{
    this.authSrv.cerrarSesion();
   }
 
-  checkAdmin() {
-    this.esAdmin = this.authSrv.usuarioActual?.esAdmin ?? false;
-    }
+
 
 
   irAUrl(url: string) {

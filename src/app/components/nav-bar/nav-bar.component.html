@@ -7,7 +7,7 @@
 
       <a *ngIf="usuario">
         <img class="rounded-image bordered-image" [src]="usuario.foto" width="40" height="40"   alt="Home">
-      </a><span>{{ usuario.nombre }}, {{ usuario.apellido }} {{usuario.esAdmin ? "(Admin)" : ""}}</span>
+      </a><span>{{ usuario.nombre }}, {{ usuario.apellido }} </span>
     </div>
     <ion-button (click)="logout()" slot="end" color="tertiary" >
       <ion-icon name="log-out-outline" size="large"></ion-icon>

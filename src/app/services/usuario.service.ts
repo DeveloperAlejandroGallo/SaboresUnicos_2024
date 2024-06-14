@@ -18,6 +18,7 @@ import {
 } from '@angular/fire/firestore';
 import { Usuario } from '../models/usuario';
 import { map, Observable } from 'rxjs';
+import { Perfil } from '../enums/perfil';
 
 
 
@@ -67,6 +68,7 @@ export class UsuarioService {
 
     this.getUsuarios().subscribe((usuarios) => {
       this.listadoUsuarios = usuarios;
+      console.log(usuarios);
     });
   }
 
@@ -80,22 +82,30 @@ export class UsuarioService {
 
 
 //Usuario
-  nuevo(usuario: Usuario) {
+  nuevo(usuario: Usuario): Usuario {
 
     const docuNuevo = doc(this.coleccionUsuarios);
     // addDoc(coleccion, objeto);
     const nuevoId = docuNuevo.id;
 
+    usuario.id = nuevoId;
+
     setDoc(docuNuevo, {
       id: nuevoId,
+      email: usuario.email,
       nombre: usuario.nombre,
       apellido: usuario.apellido,
-      email: usuario.email,
       clave: usuario.clave,
       foto: usuario.foto,
-      esAdmin: usuario.esAdmin,
+      // esAdmin: usuario.esAdmin,
       dni: usuario.dni,
+      cuil: usuario.cuil,
+      perfil: usuario.perfil,
+      tipoEmpleado: usuario.perfil !== (Perfil.Anónimo && Perfil.Cliente) ? usuario.tipoEmpleado : null,
+      activo: usuario.perfil == Perfil.Anónimo ? true : false
     });
+
+    return usuario;
   }
 
 
@@ -110,8 +120,12 @@ export class UsuarioService {
       email: usuario.email,
       clave: usuario.clave,
       foto: usuario.foto,
-      esAdmin: usuario.esAdmin,
+      // esAdmin: usuario.esAdmin,
       dni: usuario.dni,
+      cuil: usuario.cuil,
+      perfil: usuario.perfil,
+      tipoEmpleado: usuario.tipoEmpleado,
+      activo: usuario.activo
     });
   }
 
@@ -120,7 +134,7 @@ export class UsuarioService {
     const coleccion = collection(this.firestore, this.colectionName);
     const documento = doc(coleccion,usuario.id);
     updateDoc(documento,{
-      cuentaAprobada: true
+      activo: true
     })
   }
 
@@ -129,4 +143,73 @@ export class UsuarioService {
     let usrBuscado = this.listadoUsuarios?.find(x=>x.email == email);
     return usrBuscado != undefined ? true : false ;
   }
+
+
+
+  actualizarCamposNuevos(){
+
+    this.listadoUsuarios.forEach((usuario) => {
+      const coleccion = collection(this.firestore, this.colectionName);
+      const documento = doc(coleccion,usuario.id);
+
+      updateDoc(documento, {
+        cuil: this.calcularCUIT(usuario.dni.toString()),
+        perfil: Perfil.Cliente,
+        tipoEmpleado:  null,
+        activo:  true
+      });
+    });
+
+
+
+  }
+
+
+  calcularCUIT(dni: string): string {
+
+      let cuit: Array<number> = [];
+      let cantCeros = 8 - dni!.length;
+      let result: string;
+      cuit[0] = 2;
+      cuit[1] =  0 ;
+      for (let i = 0; i < cantCeros; i++)
+        cuit.push(0);
+
+      for (let i = 0; i < dni.length; i++) {
+        if (!Number.isNaN(dni[i]))
+          cuit.push(Number.parseInt(dni[i]));
+      }
+      let tot: number = 0;
+      tot += cuit[0] * 5;
+      tot += cuit[1] * 4;
+      tot += cuit[2] * 3;
+      tot += cuit[3] * 2;
+      tot += cuit[4] * 7;
+      tot += cuit[5] * 6;
+      tot += cuit[6] * 5;
+      tot += cuit[7] * 4;
+      tot += cuit[8] * 3;
+      tot += cuit[9] * 2;
+
+      let digVer: number;
+
+      switch (tot % 11) {
+        case 0:
+          digVer = 0;
+          break;
+        case 1:
+          digVer = cuit[1] == 0 ? 9 : 4;
+          cuit[1] = 3;
+          break;
+        default:
+          digVer = 11 - (tot % 11);
+          break;
+      }
+      cuit[10] = digVer;
+      let ret: string = cuit.join('');
+
+      return ret.substring(0, 11);
+    }
+
+
 }

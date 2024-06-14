@@ -7,7 +7,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute  } from '@angular/router';
 import { Usuario } from 'src/app/models/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { MensajesService } from 'src/app/services/mensajes.service';
@@ -34,6 +34,7 @@ import { BarcodeFormat, BarcodeScanner, LensFacing } from '@capacitor-mlkit/barc
 import { AudioService } from 'src/app/services/audio.service';
 import { Haptics } from '@capacitor/haptics';
 import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
+import { Perfil } from 'src/app/enums/perfil';
 
 
 @Component({
@@ -51,6 +52,12 @@ export class SignupPage implements OnInit {
   isSupported: boolean = false;
   guardando: boolean = false;
   public isPermissionGranted = false;
+verApellido: any;
+verDni: any;
+verPassword: any;
+verCuil: any;
+verEmail: any;
+tituloBoton: any;
 
   constructor(
     private authService: AuthService,
@@ -60,8 +67,35 @@ export class SignupPage implements OnInit {
     private toastController: ToastController,
     private platform: Platform,
     private audioSrv: AudioService,
-    private modalController: ModalController
-  ) {}
+    private modalController: ModalController,
+    private route: ActivatedRoute,
+    private usrService: UsuarioService
+  ) {
+
+
+    const perfil = this.route.snapshot.paramMap.get('perfil');
+
+
+    switch (perfil) {
+      case Perfil.Cliente:
+        this.verApellido = true;
+        this.verDni = true;
+        this.verEmail = true;
+        this.verPassword = true;
+        this.verCuil = false;
+        this.tituloBoton = 'Registrarse';
+        break;
+      case Perfil.Anónimo:
+        this.verApellido = false;
+        this.verDni = false;
+        this.verEmail = false;
+        this.verPassword = false;
+        this.verCuil = false;
+        this.tituloBoton = 'Ingresar';
+        break;
+    }
+
+  }
 
   //getters
   get getEmail() {
@@ -88,9 +122,6 @@ export class SignupPage implements OnInit {
     return this.signupForm.get('passwordRep');
   }
 
-  get getEsAdmin() {
-    return this.signupForm.get('esAdmin');
-  }
 
   get getDni() {
     return this.signupForm.get('dni');
@@ -149,7 +180,7 @@ export class SignupPage implements OnInit {
           Validators.minLength(6),
         ]),
         passwordRep: new FormControl('', [Validators.required, CustomValidators.passwordIguales('password', 'passwordRep')]), //, CustomValidators.passwordIguales('password', 'passwordRep')
-        esAdmin: new FormControl(false),
+
       },
       Validators.required
     );
@@ -263,14 +294,15 @@ export class SignupPage implements OnInit {
     this.guardando = true;
     this.isLoading = true;
     console.log('Formulario de registro enviado');
-    this.createUserFireBase();
+    this.createUserRegistrado();
   }
 
   save($event: Event) {
     this.onSubmitSignup();
   }
 
-  async createUserFireBase() {
+  async createUserRegistrado() {
+
     if (this.imageTomadaURL === '../../../assets/img/whoAmI.png') {
       Haptics.vibrate({ duration: 500 });
       this.msgService.ErrorIonToast('Tome una foto para imagen de perfil');
@@ -304,9 +336,13 @@ export class SignupPage implements OnInit {
       apellido: this.getApellido?.value,
       email: this.getEmail?.value,
       clave: this.getPassword?.value,
-      esAdmin: this.getEsAdmin?.value,
+
       dni: this.getDni?.value,
       foto: urlImage,
+      cuil: '',
+      perfil: Perfil.Cliente,
+      tipoEmpleado: undefined,
+      activo: false
     };
 
     this.authService.registrarCuenta(usuario);
@@ -320,6 +356,64 @@ export class SignupPage implements OnInit {
     }, 2000);
 
   }
+
+
+  async createUserAnonimo() {
+
+    if(this.getNombre?.value == '' || this.getNombre?.value == null){
+      Haptics.vibrate({ duration: 500 });
+      this.msgService.ErrorIonToast('Ingrese un nombre');
+      return;
+    }
+
+    if (this.imageTomadaURL === '../../../assets/img/whoAmI.png') {
+      Haptics.vibrate({ duration: 500 });
+      this.msgService.ErrorIonToast('Tome una foto para imagen de perfil');
+      return;
+    }
+
+    const data = this.imagenParaCargar;
+
+    const urlImage = await this.uploadImage(
+      this.dataURLtoBlob(data.dataUrl),
+      data.formato,
+      this.getEmail?.value
+    );
+
+
+    var usuario: Usuario = {
+      id: '',
+      nombre: this.getNombre?.value,
+      apellido: '',
+      email: '',
+      clave: '',
+
+      dni: 0,
+      foto: urlImage,
+      cuil: '',
+      perfil: Perfil.Anónimo,
+      tipoEmpleado: undefined,
+      activo: false
+    };
+
+    this.authService.usuarioActual = this.usrService.nuevo(usuario);
+
+
+    setTimeout(() => {
+      this.isLoading = false;
+      this.audioSrv.reporoduccionSuccess();
+      this.imageTomadaURL = '../../../assets/img/whoAmI.png';
+      this.signupForm.reset();
+      this.guardando = false;
+      this.router.navigate(['/home/Anónimo']);
+      this.msgService.ExitoIonToast('Bienvenid@ a Sabores Únicos!', 3);
+    }, 2000);
+
+  }
+
+
+
+
 
   dataURLtoBlob(dataUrl: string) {
     const arr = dataUrl.split(',');
@@ -408,7 +502,7 @@ export class SignupPage implements OnInit {
       }
 
       const datosDni = result.barcodes[0].displayValue;
-      
+
       const dni  = datosDni.split('@');
 
       if (dni.length == 8 || dni.length == 9) {
@@ -440,7 +534,7 @@ export class SignupPage implements OnInit {
     //   //cuit[1] = this.sexo === 'Masculino' ? 0 : 7;
     //   for (let i = 0; i < cantCeros; i++)
     //     cuit.push(0);
-  
+
     //   for (let i = 0; i < dni.length; i++) {
     //     if (Number.parseInt(dni[i]) != NaN)
     //       cuit.push(Number.parseInt(dni[i]));
@@ -456,9 +550,9 @@ export class SignupPage implements OnInit {
     //   tot += cuit[7] * 4;
     //   tot += cuit[8] * 3;
     //   tot += cuit[9] * 2;
-  
+
     //   let digVer: number;
-  
+
     //   switch (tot % 11) {
     //     case 0:
     //       digVer = 0;
@@ -473,7 +567,7 @@ export class SignupPage implements OnInit {
     //   }
     //   cuit[10] = digVer;
     //   let ret: string = cuit.join('');
-  
+
     //   return ret.substring(0, 11);
     // }
 
@@ -491,7 +585,7 @@ export class SignupPage implements OnInit {
           },
         });
 
-       
+
         await modal.present();
 
         const { data } = await modal.onWillDismiss();

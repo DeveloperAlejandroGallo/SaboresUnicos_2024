@@ -9,13 +9,17 @@
 }
 
 .header-image {
-  width: 60%;
-  height: auto;
-  margin-bottom: 20px;
+  // width: 60%;
+  // height: auto;
+  // margin-bottom: 20px;
+  // align-items: center; margin-top: 30px; min-width: 0; min-height: 0;
+  align-self: center;
+  width: 50%;
+
 }
 
 body {
-  background: url("../../../assets/img/fondoLogin.webp") no-repeat center center / cover;
+  background: url("../../../assets/img/otro-fondo-liso.png") no-repeat center center / cover;
 }
 
 .centrado {
@@ -25,16 +29,7 @@ body {
   align-items: center;
 }
 
-ion-item {
-  --ion-item-background: transparent !important;
-  color: white;
 
-  ion-icon {
-    color: white;
-  }
-
-
-}
 
 .wrapform {
   display: flex;
@@ -45,21 +40,27 @@ ion-item {
   margin-bottom: 20px;
 }
 
+.formulario{
+  background-color: #ffffffe0;
+  width: 100%;
+  padding: 20px;
+  border-radius: 20px;
+  h1{
+    color: #BF0000;
+    font-size: 30px;
+    // margin-bottom: 10px;
+  }
+}
 
 /* Reducir el padding horizontal de ion-item */
 ion-item {
-  --padding-start: 0px; /* Ajusta este valor según tus necesidades */
-  --padding-end: 0px;   /* Ajusta este valor según tus necesidades */
+  --ion-item-background: transparent !important;
 }
 
-/* Reducir el padding vertical de ion-item */
-ion-item {
-  --padding-top: 0px; /* Ajusta este valor según tus necesidades */
-  --padding-bottom: 0px; /* Ajusta este valor según tus necesidades */
+ion-note {
+  --color: white;
+
 }
-
-
-
 
 /* Para el estado marcado */
 ion-checkbox:checked {
@@ -163,4 +164,12 @@ ion-input {
   height: 100%; /* Ajusta la imagen para que llene el contenedor */
   object-fit: cover; /* O 'contain', dependiendo de tus preferencias */
   border-radius: inherit; /* Hereda el border-radius del contenedor */
+}
+
+
+form{
+  ion-icon{
+  margin-right: 10px;
+  }
+
 }
