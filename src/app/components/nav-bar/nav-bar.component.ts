@@ -19,6 +19,7 @@ export class NavBarComponent{
   constructor(private authService: AuthService, private router: Router, private auth: AuthService) {
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
+    console.log(this.usuario);
 
   }
 

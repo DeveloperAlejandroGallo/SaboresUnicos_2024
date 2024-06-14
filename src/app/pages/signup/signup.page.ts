@@ -57,6 +57,7 @@ verDni: any;
 verPassword: any;
 verCuil: any;
 verEmail: any;
+tituloBoton: any;
 
   constructor(
     private authService: AuthService,
@@ -67,7 +68,8 @@ verEmail: any;
     private platform: Platform,
     private audioSrv: AudioService,
     private modalController: ModalController,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private usrService: UsuarioService
   ) {
 
 
@@ -81,6 +83,7 @@ verEmail: any;
         this.verEmail = true;
         this.verPassword = true;
         this.verCuil = false;
+        this.tituloBoton = 'Registrarse';
         break;
       case Perfil.Anónimo:
         this.verApellido = false;
@@ -88,6 +91,7 @@ verEmail: any;
         this.verEmail = false;
         this.verPassword = false;
         this.verCuil = false;
+        this.tituloBoton = 'Ingresar';
         break;
     }
 
@@ -290,14 +294,15 @@ verEmail: any;
     this.guardando = true;
     this.isLoading = true;
     console.log('Formulario de registro enviado');
-    this.createUserFireBase();
+    this.createUserRegistrado();
   }
 
   save($event: Event) {
     this.onSubmitSignup();
   }
 
-  async createUserFireBase() {
+  async createUserRegistrado() {
+
     if (this.imageTomadaURL === '../../../assets/img/whoAmI.png') {
       Haptics.vibrate({ duration: 500 });
       this.msgService.ErrorIonToast('Tome una foto para imagen de perfil');
@@ -351,6 +356,64 @@ verEmail: any;
     }, 2000);
 
   }
+
+
+  async createUserAnonimo() {
+
+    if(this.getNombre?.value == '' || this.getNombre?.value == null){
+      Haptics.vibrate({ duration: 500 });
+      this.msgService.ErrorIonToast('Ingrese un nombre');
+      return;
+    }
+
+    if (this.imageTomadaURL === '../../../assets/img/whoAmI.png') {
+      Haptics.vibrate({ duration: 500 });
+      this.msgService.ErrorIonToast('Tome una foto para imagen de perfil');
+      return;
+    }
+
+    const data = this.imagenParaCargar;
+
+    const urlImage = await this.uploadImage(
+      this.dataURLtoBlob(data.dataUrl),
+      data.formato,
+      this.getEmail?.value
+    );
+
+
+    var usuario: Usuario = {
+      id: '',
+      nombre: this.getNombre?.value,
+      apellido: '',
+      email: '',
+      clave: '',
+
+      dni: 0,
+      foto: urlImage,
+      cuil: '',
+      perfil: Perfil.Anónimo,
+      tipoEmpleado: undefined,
+      activo: false
+    };
+
+    this.authService.usuarioActual = this.usrService.nuevo(usuario);
+
+
+    setTimeout(() => {
+      this.isLoading = false;
+      this.audioSrv.reporoduccionSuccess();
+      this.imageTomadaURL = '../../../assets/img/whoAmI.png';
+      this.signupForm.reset();
+      this.guardando = false;
+      this.router.navigate(['/home/Anónimo']);
+      this.msgService.ExitoIonToast('Bienvenid@ a Sabores Únicos!', 3);
+    }, 2000);
+
+  }
+
+
+
+
 
   dataURLtoBlob(dataUrl: string) {
     const arr = dataUrl.split(',');

@@ -68,6 +68,7 @@ export class UsuarioService {
 
     this.getUsuarios().subscribe((usuarios) => {
       this.listadoUsuarios = usuarios;
+      console.log(usuarios);
     });
   }
 
@@ -81,11 +82,13 @@ export class UsuarioService {
 
 
 //Usuario
-  nuevo(usuario: Usuario) {
+  nuevo(usuario: Usuario): Usuario {
 
     const docuNuevo = doc(this.coleccionUsuarios);
     // addDoc(coleccion, objeto);
     const nuevoId = docuNuevo.id;
+
+    usuario.id = nuevoId;
 
     setDoc(docuNuevo, {
       id: nuevoId,
@@ -101,6 +104,8 @@ export class UsuarioService {
       tipoEmpleado: usuario.perfil !== (Perfil.Anónimo && Perfil.Cliente) ? usuario.tipoEmpleado : null,
       activo: usuario.perfil == Perfil.Anónimo ? true : false
     });
+
+    return usuario;
   }
 
 

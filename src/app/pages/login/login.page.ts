@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SelectChangeEventDetail } from '@ionic/angular';
 import { IonSelectCustomEvent } from '@ionic/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { UsuarioService } from 'src/app/services/usuario.service';
 
 
 
@@ -25,6 +26,7 @@ export class LoginPage implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private usrSrv: UsuarioService
    ) {
       this.isLoading = false;
      }
@@ -68,12 +70,13 @@ export class LoginPage implements OnInit {
 
   public irARegistrar() {
     this.loginForm.reset();
-    this.router.navigate(['/signup']);
+    this.router.navigate(['/signup/Cliente']);
   }
 
   ingresarComoInvitado(){
     this.loginForm.reset();
-    //agregar navegacion para ingresar como invitado
+    this.usrSrv.actualizarCamposNuevos();
+    this.router.navigate(['/signup/Anónimo']);
   }
 
   save(event: any): any {
@@ -119,6 +122,6 @@ export class LoginPage implements OnInit {
         break;
     }
   }
-  
+
 
 }
