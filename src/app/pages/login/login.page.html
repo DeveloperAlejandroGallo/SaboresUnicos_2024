@@ -83,23 +83,18 @@
 </body>
 <ion-fab slot="fixed" vertical="bottom" horizontal="end">
   <ion-fab-button color="secondary">
-    <ion-icon name="chevron-up-circle"></ion-icon>
+    <ion-icon name="mail-open"></ion-icon>
   </ion-fab-button>
-  <ion-fab-list side="top">
+  <ion-fab-list side="start">
     <ion-fab-button (click)="loginAutomatico('admin')">
-      <ion-icon name="settings-outline"></ion-icon>
+      <ion-icon name="glasses"></ion-icon>
     </ion-fab-button>
     <ion-fab-button (click)="loginAutomatico('invitado')">
-      <ion-icon name="man-outline"></ion-icon>
+      <ion-icon name="man"></ion-icon>
     </ion-fab-button>
     <ion-fab-button (click)="loginAutomatico('usuario')">
-      <ion-icon name="person-circle-outline"></ion-icon>
+      <ion-icon name="star"></ion-icon>
     </ion-fab-button>
-    <ion-fab-button (click)="loginAutomatico('anonimo')">
-      <ion-icon name="help-circle-outline"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-button (click)="loginAutomatico('tester')">
-      <ion-icon name="bug-outline"></ion-icon>
-    </ion-fab-button>
+    
   </ion-fab-list>
 </ion-fab>
