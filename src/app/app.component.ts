@@ -7,6 +7,7 @@ import { App } from '@capacitor/app';
 import Swal from 'sweetalert2';
 import { AuthService } from './services/auth.service';
 import { set } from 'firebase/database';
+import { PushNotifService } from './services/push-notif.service';
 
 @Component({
   selector: 'app-root',
@@ -24,12 +25,14 @@ export class AppComponent implements OnInit{
               private audioSrv: AudioService,
               private router: Router,
               private platform: Platform,
-              private authSrv: AuthService) {
+              private authSrv: AuthService,
+              private pushNotif: PushNotifService ) {
 
 
 
     this.iniciarApp();
     this.usuariosSrv.traer();
+    this.pushNotif.initPush();
   }
   ngOnInit(): void {
     this.usuariosSrv.traer();

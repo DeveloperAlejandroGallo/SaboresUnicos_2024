@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "847994126117",
+    "firebase_url": "https://ajg-pps-2024-default-rtdb.firebaseio.com",
+    "project_id": "ajg-pps-2024",
+    "storage_bucket": "ajg-pps-2024.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847994126117:android:c4f9d4d01935d8b55ee4cc",
+        "android_client_info": {
+          "package_name": "pps.sabores.unicos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "847994126117-q409smjghmvri7ovedg078m7817hnb6e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSIkhAsG-L5pC_ZPRFGQ-4zLhIRjynTXc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "847994126117-q409smjghmvri7ovedg078m7817hnb6e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
