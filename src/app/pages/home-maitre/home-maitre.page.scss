@@ -5,3 +5,11 @@ body {
 .mitab{
     background-color: #ffffffe0;
 }
+
+.items{   
+    margin:10px ;
+    background-color: rgba(0, 0, 0, 0);
+    .item{
+        --background: #ffffffcb;
+    }
+}
