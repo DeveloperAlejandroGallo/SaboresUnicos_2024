@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeMaitrePage implements OnInit {
 
+  listaUsuariosPendientes = ["Juan", "Rocio", "Micaela"];
+
   constructor() { }
 
   ngOnInit() {

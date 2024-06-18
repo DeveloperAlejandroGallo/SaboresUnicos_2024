@@ -1,4 +1,15 @@
 <body>
+<ion-header>
+  <ion-title>
+    Yo voy a ser el nav bar
+  </ion-title>
+  
+</ion-header>
+
+  <!-- por cada persona pendiente de la lista de personas pendientes de ingreso al local -->
+  <ion-item *ngFor="let element of listaUsuariosPendientes">
+    <ion-label ><b>Soy una persona pendiente, me llamo {{element}}</b></ion-label>
+  </ion-item>
   <ion-tabs class="miTab">
     <ion-tab-bar slot="bottom">
       <ion-tab-button tab="home" style="color: #BF0000;">
