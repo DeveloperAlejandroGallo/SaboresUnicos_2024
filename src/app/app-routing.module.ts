@@ -27,6 +27,11 @@ const routes: Routes = [
     path: 'alta-persona',
     loadChildren: () => import('./pages/alta-persona/alta-persona.module').then( m => m.AltaPersonaPageModule)
   },
+  {
+    path: 'home-maitre',
+    loadChildren: () => import('./pages/home-maitre/home-maitre.module').then( m => m.HomeMaitrePageModule)
+  },
+
 
 
 
