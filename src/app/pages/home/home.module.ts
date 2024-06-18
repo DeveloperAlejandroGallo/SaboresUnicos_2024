@@ -7,6 +7,12 @@ import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
 import { NavBarModule } from 'src/app/components/nav-bar/nav-bar.module';
+import { ListUsrPendientesPageModule } from '../list-usr-pendientes/list-usr-pendientes.module';
+
+
+
+
+
 
 
 @NgModule({
@@ -15,7 +21,8 @@ import { NavBarModule } from 'src/app/components/nav-bar/nav-bar.module';
     CommonModule,
     FormsModule,
     NavBarModule,
-    HomePageRoutingModule
+    HomePageRoutingModule,
+    ListUsrPendientesPageModule
   ],
   declarations: [HomePage]
 })

@@ -1,19 +1,26 @@
 <!-- <app-nav-bar  [titulo]="'Alta de Usuarios'" ></app-nav-bar> -->
 
 <body class="centrado">
+  <ion-icon
+    class="icon-volver"
+    name="arrow-back-outline"
+    (click)="volver()"
+  ></ion-icon>
   <div class="container">
-    <ion-card-header >
+    <ion-card-header>
       <div (click)="tomarFoto()" class="header-image">
-        <img [src]="imageTomadaURL" alt="Imagen Tomada"/>
+        <img [src]="imageTomadaURL" alt="Imagen Tomada" />
       </div>
-      <ion-note *ngIf="imageTomadaURL === '../../../assets/img/whoAmI.png'">Tomar Foto</ion-note>
+      <ion-note *ngIf="imageTomadaURL === '../../../assets/img/whoAmI.png'"
+        >Tomar Foto</ion-note
+      >
       <!-- <ion-icon name="camera-outline" size="large"></ion-icon> -->
     </ion-card-header>
-    <ion-button color="warning" (click)="scanQR()">
+    <ion-button *ngIf="verScanner" color="warning" (click)="scanQR()">
       <ion-icon name="barcode-outline"></ion-icon><b>Escanear DNI</b>
     </ion-button>
     <div class="custom-spinner" *ngIf="isLoading">
-      <img src="../../../assets/icon-only.png" alt="Spinner" />
+      <img src="../../../assets/spinner.png" alt="Spinner" />
     </div>
     <ion-card-content>
       <div class="formulario">
@@ -28,90 +35,151 @@
               formControlName="nombre"
             ></ion-input>
           </ion-item>
+          <ion-note
+            class="error-message"
+            *ngIf="
+        ((signupForm.controls['nombre'].hasError('required'))
+        ||(signupForm.controls['nombre'].hasError('pattern'))
+        )
+        && signupForm.controls['nombre'].touched"
+          >
+            Debe ingresar un nombre válido
+          </ion-note>
           <div *ngIf="verApellido">
-          <ion-item>
-            <ion-icon name="pencil"></ion-icon>
-            <ion-input
-              type="text"
-              name="apellido"
-              id="apellido"
-              placeholder="Apellido"
-              formControlName="apellido"
-            ></ion-input>
-          </ion-item>
-        </div>
+            <ion-item>
+              <ion-icon name="pencil"></ion-icon>
+              <ion-input
+                type="text"
+                name="apellido"
+                id="apellido"
+                placeholder="Apellido"
+                formControlName="apellido"
+              ></ion-input>
+            </ion-item>
+            <ion-note
+              class="error-message"
+              *ngIf="
+          ((signupForm.controls['apellido'].hasError('required'))
+          ||(signupForm.controls['apellido'].hasError('pattern'))
+          )
+          && signupForm.controls['apellido'].touched
+        "
+            >
+              Debe ingresar un apellido válido
+            </ion-note>
+          </div>
           <div *ngIf="verDni">
-          <ion-item>
-            <ion-icon name="id-card"></ion-icon>
-            <ion-input
-              type="text"
-              name="dni"
-              id="dni"
-              placeholder="DNI"
-              formControlName="dni"
-            ></ion-input>
-          </ion-item>
-        </div>
-        <div *ngIf="verCuil">
-          <ion-item>
-            <ion-icon name="id-card"></ion-icon>
-            <ion-input
-              type="text"
-              name="cuil"
-              id="cuil"
-              placeholder="CUIL"
-              formControlName="cuil"
-            ></ion-input>
-          </ion-item>
-        </div>
-        <div *ngIf="verEmail">
-          <ion-item>
-            <ion-icon name="mail-open"></ion-icon>
-            <ion-input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Correo Electrónico"
-              formControlName="email"
-            ></ion-input>
-          </ion-item>
-        </div>
-        <div *ngIf="verPassword">
-          <ion-item>
-            <ion-icon name="lock-open"></ion-icon>
-            <ion-input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Contraseña"
-              formControlName="password"
-            ></ion-input>
-          </ion-item>
-        </div>
-        <!-- <div *ngIf="verPassword">
-          <ion-item>
-            <ion-icon name="lock-closed"></ion-icon>
-            <ion-input
-              type="password"
-              name="passwordRep"
-              id="passwordRep"
-              placeholder="Repetir Contraseña"
-              formControlName="passwordRep"
-            ></ion-input>
-          </ion-item>
-        </div> -->
+            <ion-item>
+              <ion-icon name="id-card"></ion-icon>
+              <ion-input
+                type="number"
+                name="dni"
+                id="dni"
+                placeholder="DNI"
+                formControlName="dni"
+              ></ion-input>
+            </ion-item>
+            <ion-note
+              class="error-message"
+              *ngIf=" signupForm.controls['dni'].hasError('required') && signupForm.controls['dni'].touched "
+            >
+              Debe ingresar un DNI válido
+            </ion-note>
+            <ion-note
+              class="error-message"
+              *ngIf=" signupForm.controls['dni'].hasError('min') && signupForm.controls['dni'].touched "
+            >
+              El DNI debe tener al menos 7 dígitos
+            </ion-note>
+            <ion-note
+              class="error-message"
+              *ngIf=" signupForm.controls['dni'].hasError('max') && signupForm.controls['dni'].touched "
+            >
+              El DNI debe tener menos de 9 dígitos
+            </ion-note>
+          </div>
+          <div *ngIf="verCuil">
+            <ion-item>
+              <ion-icon name="id-card"></ion-icon>
+              <ion-input
+                type="text"
+                name="cuil"
+                id="cuil"
+                placeholder="CUIL"
+                formControlName="cuil"
+              ></ion-input>
+            </ion-item>
+            <ion-note
+              class="error-message"
+              *ngIf=" signupForm.controls['cuil'].hasError('required') && signupForm.controls['cuil'].touched "
+            >
+              Debe ingresar un CUIL válido
+            </ion-note>
+            <ion-note
+              class="error-message"
+              *ngIf=" signupForm.controls['cuil'].hasError('min') && signupForm.controls['cuil'].touched "
+            >
+              El CUIL debe tener al menos 10 dígitos
+            </ion-note>
+            <ion-note
+              class="error-message"
+              *ngIf=" signupForm.controls['cuil'].hasError('max') && signupForm.controls['cuil'].touched "
+            >
+              El DNI debe tener menos de 12 dígitos
+            </ion-note>
+          </div>
+          <div *ngIf="verEmail">
+            <ion-item>
+              <ion-icon name="mail-open"></ion-icon>
+              <ion-input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Correo Electrónico"
+                formControlName="email"
+              ></ion-input>
+            </ion-item>
+            <ion-note
+              class="error-message"
+              *ngIf="
+          (signupForm.controls['email'].hasError('email') ||
+          signupForm.controls['email'].hasError('required')) &&
+          signupForm.controls['email'].touched
+        "
+              >Debe ingresar un correo válido
+            </ion-note>
+          </div>
+          <div *ngIf="verPassword">
+            <ion-item>
+              <ion-icon name="lock-open"></ion-icon>
+              <ion-input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Contraseña"
+                formControlName="password"
+              ></ion-input>
+            </ion-item>
+            <ion-note
+            class="error-message"
+            *ngIf="
+            (signupForm.controls['password'].hasError('required')) &&
+            signupForm.controls['password'].touched
+          "
+          >
+            Debe ingresar una contraseña
+          </ion-note>
+          </div>
+
           <ion-button
             type="submit"
             expand="block"
             color="secondary"
             [innerText]="tituloBoton"
           >
-
           </ion-button>
         </form>
-        <!-- [disabled]="!signupForm.valid" -->
       </div>
     </ion-card-content>
   </div>
 </body>
-
