@@ -11,5 +11,8 @@ export class HomeTabsPage implements OnInit {
 
   ngOnInit() {
   }
-
+  escanearQR(){
+    console.log("escaneo de qr");
+    
+  }
 }

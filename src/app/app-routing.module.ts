@@ -31,6 +31,10 @@ const routes: Routes = [
     path: 'home-tabs',
     loadChildren: () => import('./template/home-tabs/home-tabs.module').then( m => m.HomeTabsPageModule)
   },
+  {
+    path: 'mi-perfil',
+    loadChildren: () => import('./pages/mi-perfil/mi-perfil.module').then( m => m.MiPerfilPageModule)
+  },
 
 
 

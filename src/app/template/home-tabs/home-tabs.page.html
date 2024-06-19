@@ -8,7 +8,7 @@
     <!-- Boton vacio para colocar el qr -->
     <ion-tab-button class="empty-tab-button"></ion-tab-button>
 
-    <ion-tab-button tab="login">
+    <ion-tab-button tab="mi-perfil">
       <ion-icon name="person"></ion-icon>
       <ion-label>Mi perfil</ion-label>
     </ion-tab-button>
@@ -16,7 +16,7 @@
 </ion-tabs>
 
 <ion-fab slot="fixed" vertical="bottom" horizontal="center">
-  <ion-fab-button>
+  <ion-fab-button (click)="escanearQR()">
     <ion-icon name="qr-code-outline"></ion-icon>
   </ion-fab-button>
 </ion-fab>

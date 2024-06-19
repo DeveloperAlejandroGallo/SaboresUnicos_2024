@@ -24,8 +24,8 @@ import { RouterModule } from '@angular/router';
             loadChildren: ()=> import('../../pages/home/home.module').then(m=>m.HomePageModule)
           },
           {
-            path: 'login',
-            loadChildren: ()=> import('../../pages/login/login.module').then(m=>m.LoginPageModule)
+            path: 'mi-perfil',
+            loadChildren: ()=> import('../../pages/mi-perfil/mi-perfil.module').then(m=>m.MiPerfilPageModule)
           },
           //path: otra pagina
           {
