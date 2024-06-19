@@ -1,15 +1,14 @@
 body {
-    background: url("../../../assets/img/otro-fondo-liso.png") no-repeat center center / cover;
+    background: url("../../../assets/img/fondo-gris.png") no-repeat center center / cover;
   }
 
 .mitab{
     background-color: #ffffffe0;
 }
 
-.items{   
-    margin:10px ;
-    background-color: rgba(0, 0, 0, 0);
-    .item{
-        --background: #ffffffcb;
-    }
+ion-col{
+    background-color: #f5cece9a;
+  border: solid 1px #BF0000;
+  color: black;
+  text-align: center;
 }

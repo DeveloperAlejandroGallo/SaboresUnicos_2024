@@ -7,11 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeMaitrePage implements OnInit {
 
-  listaUsuariosPendientes = ["Juan", "Rocio", "Micaela"];
+  listadoEnEspera = ["Juan", "Rocio", "Micaela"];
 
   constructor() { }
 
   ngOnInit() {
+
+    //aca con un get vamos a obtener la lista de espera
   }
 
 }
