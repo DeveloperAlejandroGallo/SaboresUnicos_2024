@@ -23,7 +23,9 @@ export class HomePage implements OnInit{
 
     this.usuario = this.authSrv.usuarioActual!;
   }
-
+  esc(){
+    console.log("holii000");
+  }
 }
 
 

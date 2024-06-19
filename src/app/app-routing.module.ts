@@ -27,6 +27,10 @@ const routes: Routes = [
     path: 'alta-persona',
     loadChildren: () => import('./pages/alta-persona/alta-persona.module').then( m => m.AltaPersonaPageModule)
   },
+  {
+    path: 'home-tabs',
+    loadChildren: () => import('./template/home-tabs/home-tabs.module').then( m => m.HomeTabsPageModule)
+  },
 
 
 
