@@ -1,0 +1,24 @@
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-avatar>
+        <img [src]="usuario.foto" alt="Profile Picture">
+      </ion-avatar>
+      <ion-button (click)="presentPopover($event)">
+        <ion-label color="light">{{ usuario.nombre }}</ion-label>
+        <ion-icon name="chevron-down-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-popover #popover [isOpen]="isOpen" (didDismiss)="isOpen = false">
+  <ng-template>
+    <ion-button (click)="logout()" class="btn-sesion" expand="block" fill="clear" shape="round">
+      <ion-icon name="close-circle-outline"></ion-icon>
+      Cerrar Sesión
+    </ion-button>
+  </ng-template>
+</ion-popover>

@@ -20,10 +20,8 @@ export class HomePage implements OnInit{
   }
 
   ngOnInit(): void {
-
     this.usuario = this.authSrv.usuarioActual!;
   }
-
 }
 
 
