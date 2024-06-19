@@ -145,23 +145,23 @@ export class UsuarioService {
 
 
 
-  actualizarCamposNuevos(){
+  // actualizarCamposNuevos(){
 
-    this.listadoUsuarios.forEach((usuario) => {
-      const coleccion = collection(this.firestore, this.colectionName);
-      const documento = doc(coleccion,usuario.id);
+  //   this.listadoUsuarios.forEach((usuario) => {
+  //     const coleccion = collection(this.firestore, this.colectionName);
+  //     const documento = doc(coleccion,usuario.id);
 
-      updateDoc(documento, {
-        cuil: this.calcularCUIT(usuario.dni.toString()),
-        perfil: Perfil.Cliente,
-        tipoEmpleado:  null,
-        activo:  true
-      });
-    });
+  //     updateDoc(documento, {
+  //       cuil: this.calcularCUIT(usuario.dni.toString()),
+  //       perfil: Perfil.Cliente,
+  //       tipoEmpleado:  null,
+  //       activo:  true
+  //     });
+  //   });
 
 
 
-  }
+  // }
 
 
   calcularCUIT(dni: string): string {

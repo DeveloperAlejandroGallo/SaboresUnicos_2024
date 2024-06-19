@@ -1,5 +1,14 @@
 <!-- <app-nav-bar  [titulo]="'Alta de Usuarios'" ></app-nav-bar> -->
-
+<ion-header>
+  <ion-toolbar  >
+    <div style="display: flex; align-items: center;">
+      <ion-title style="color: aliceblue;">{{titulo}}</ion-title>
+    </div>
+    <ion-button (click)="back()" slot="end" color="primary" >
+      <ion-icon name="log-out-outline" ></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
 <body class="centrado">
   <ion-icon
     class="icon-volver"
@@ -7,9 +16,9 @@
     (click)="volver()"
   ></ion-icon>
   <div class="container">
-    <ion-card-header>
-      <div (click)="tomarFoto()" class="header-image">
-        <img [src]="imageTomadaURL" alt="Imagen Tomada" />
+    <ion-card-header style="align-items: center; margin-top: 30px; min-width: 0; min-height: 0;">
+      <div (click)="tomarFoto()" class="image-container">
+        <img [src]="imageTomadaURL" alt="Imagen Tomada"/>
       </div>
       <ion-note *ngIf="imageTomadaURL === '../../../assets/img/whoAmI.png'"
         >Tomar Foto</ion-note

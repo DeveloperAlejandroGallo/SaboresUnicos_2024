@@ -46,6 +46,7 @@ import { Perfil } from 'src/app/enums/perfil';
   styleUrls: ['./signup.page.scss'],
 })
 export class SignupPage implements OnInit {
+
   public mensaje: string = '';
   public signupForm!: FormGroup;
 
@@ -86,6 +87,8 @@ export class SignupPage implements OnInit {
         this.verPassword = true;
         this.verCuil = false;
         this.tituloBoton = 'Registrarse';
+        this.titulo += 'Cliente';
+        this.anonimo = false;
         break;
       case Perfil.Anónimo:
         this.verApellido = false;
@@ -94,9 +97,13 @@ export class SignupPage implements OnInit {
         this.verPassword = false;
         this.verCuil = false;
         this.tituloBoton = 'Ingresar';
+        this.titulo += 'Anónimo';
+        this.anonimo = true;
         break;
     }
   }
+
+
 
   //getters
   get getEmail() {
