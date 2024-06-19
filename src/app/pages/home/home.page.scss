@@ -17,7 +17,9 @@
 body {
   position: relative;
   overflow: hidden; // Asegura que el pseudo-elemento no se desborde
-  background: none; // Elimina el fondo del body para que solo se vea el pseudo-elemento
+  //background: none; // Elimina el fondo del body para que solo se vea el pseudo-elemento
+  // background-color: antiquewhite;
+  background: url("../../../assets/img/fondo-gris.png") no-repeat center center / cover;
  }
 
  body::before {

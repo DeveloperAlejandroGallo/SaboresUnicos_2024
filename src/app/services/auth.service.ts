@@ -49,7 +49,8 @@ export class AuthService {
          return;
         }
 
-        this.router.navigate(['/home']);
+        // this.messageService.InfoToast("Bienvenido " + email);
+        this.router.navigate(['/home-tabs']);
 
 
     })

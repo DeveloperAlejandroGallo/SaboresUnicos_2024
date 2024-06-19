@@ -43,7 +43,6 @@ export class HomePage implements OnInit{
     var a = 1;
 
   }
-
 }
 
 
