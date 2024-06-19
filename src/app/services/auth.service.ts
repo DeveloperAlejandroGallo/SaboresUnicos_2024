@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getAuth, sendEmailVerification,createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User, onAuthStateChanged  } from "firebase/auth";
+import { getAuth, sendEmailVerification,createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User, onAuthStateChanged, fetchSignInMethodsForEmail, signInWithPopup, EmailAuthCredential  } from "firebase/auth";
 import { UsuarioService } from './usuario.service';
 import { Router } from '@angular/router';
 import { Usuario } from '../models/usuario';
@@ -45,12 +45,10 @@ export class AuthService {
       // Signed in
 
         if(!userCredential.user.emailVerified){
-         this.messageService.Warning("Para ingresar, debe validar su email.");
-        //  this.cerrarSesion();
+         this.messageService.Warning("Su usuario aún no ha sido aprobado por el administrador.\nPor favor aguarde la confirmación.");
          return;
         }
 
-        // this.messageService.InfoToast("Bienvenido " + email);
         this.router.navigate(['/home']);
 
 
@@ -87,17 +85,15 @@ export class AuthService {
 
   public registrarCuenta(usuario: Usuario) {
 
-
     const auth = getAuth();
-
     createUserWithEmailAndPassword(auth,usuario.email, usuario.clave)
     .then((userCredential) => {
       //Lo guardo en la coleccion:
 
       this.usrService.nuevo(usuario);
 
-      sendEmailVerification(auth.currentUser!);
-      this.messageService.Exito(`Usuario ${usuario.email} registrado correctamente. \nSe ha enviado un correo de verificación`);
+      //sendEmailVerification(auth.currentUser!);
+      this.messageService.Exito(`Usuario ${usuario.nombre} ${usuario.apellido} registrado correctamente.\nDeberá aguardar la autorización de su Usuario.`);
 
       // setTimeout(() => {
       //   this.router.navigate(['/login']);
@@ -164,6 +160,23 @@ export class AuthService {
 
 
   }
+
+  enviarEmailDeVerificacion(usr: Usuario){
+
+    const auth = getAuth();
+    fetchSignInMethodsForEmail(auth, usr.email).then((methods) => {
+      if(methods.length > 0){
+        signInWithPopup(auth,auth.EmailAuthCredential(null,null))
+      }
+    sendEmailVerification(auth.currentUser!)
+    .then(() => {
+      this.messageService.Exito(`Se ha enviado un email de verificación a ${usr.email}`);
+    })
+    .catch((error) => {
+      this.messageService.Error(`Error al enviar email de verificación a ${usr.email}`);
+    });
+  }
+
 
   // public logInfo():Usuario | undefined{
   //   let user: Usuario | undefined;

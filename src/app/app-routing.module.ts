@@ -26,7 +26,15 @@ const routes: Routes = [
   {
     path: 'alta-persona',
     loadChildren: () => import('./pages/alta-persona/alta-persona.module').then( m => m.AltaPersonaPageModule)
+  },  {
+    path: 'list-usr-pendientes',
+    loadChildren: () => import('./pages/list-usr-pendientes/list-usr-pendientes.module').then( m => m.ListUsrPendientesPageModule)
   },
+  {
+    path: 'tab-duenio',
+    loadChildren: () => import('./pages/tab-duenio/tab-duenio.module').then( m => m.TabDuenioPageModule)
+  },
+
 
 
 

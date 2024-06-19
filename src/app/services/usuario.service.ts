@@ -68,7 +68,6 @@ export class UsuarioService {
 
     this.getUsuarios().subscribe((usuarios) => {
       this.listadoUsuarios = usuarios;
-      console.log(usuarios);
     });
   }
 

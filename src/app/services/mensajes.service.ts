@@ -108,6 +108,7 @@ export class MensajesService {
       position: 'top', // Posición del toast
       color: 'danger', // Color que se le aplicará al toast
     });
+    Haptics.vibrate({ duration: 750 });
     await toast.present(); // Muestra el toast
   }
 

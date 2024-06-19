@@ -26,13 +26,11 @@
 @import "@ionic/angular/css/flex-utils.css";
 
 .error-message {
-  display: block;
+
   color: #ff5c5c;
-  background-color: #fff;
-  // border: 1px solid #d52c2c;
-  padding: 5px;
+  background-color: rgba(250, 235, 215, 0.792)  transparent !important;
   border-radius: 4px;
-  margin-top: 5px;
+  font-weight: bold;
 }
 
 
