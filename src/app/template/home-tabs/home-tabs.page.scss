@@ -1,0 +1,18 @@
+ion-fab {
+  border: 5px solid rgba(30, 89, 199, 0.226);
+  border-radius: 50px;
+}
+
+.fab-vertical-bottom {
+  bottom: 3px !important;
+}
+
+.empty-tab-button {
+  pointer-events: none;
+  opacity: 0;
+}
+
+ion-fab-button {
+  width: 55px !important;
+  height: 55px !important;
+}

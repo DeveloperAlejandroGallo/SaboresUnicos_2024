@@ -28,6 +28,13 @@ const routes: Routes = [
     loadChildren: () => import('./pages/alta-persona/alta-persona.module').then( m => m.AltaPersonaPageModule)
   },
   {
+    path: 'home-tabs',
+    loadChildren: () => import('./template/home-tabs/home-tabs.module').then( m => m.HomeTabsPageModule)
+  },
+  {
+    path: 'mi-perfil',
+    loadChildren: () => import('./pages/mi-perfil/mi-perfil.module').then( m => m.MiPerfilPageModule)
+  },
     path: 'home-maitre',
     loadChildren: () => import('./pages/home-maitre/home-maitre.module').then( m => m.HomeMaitrePageModule)
   },

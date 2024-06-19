@@ -1,0 +1,60 @@
+<ion-content>
+  <div class="profile-header">
+    <ion-avatar class="profile-avatar">
+      <img [src]="usuario.foto" alt="Profile Picture">
+    </ion-avatar>
+    <!-- <ion-icon class="edit-icon" name="create-outline"></ion-icon> -->
+    <h2 class="profile-name">{{usuario.nombre}}</h2>
+    <p> {{'(' + usuario.perfil + ')'}}</p>
+  </div>
+
+  <ion-card>
+    <ion-card-content>
+        <!-- <ion-item>
+          <ion-label position="floating">Nombre</ion-label>
+          <ion-input  type="text" placeholder="Ingrese su nombre"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Correo </ion-label>
+          <ion-input type="email" placeholder="Ingrese su correo"></ion-input>
+        </ion-item> -->
+
+        <!-- <ion-item>
+          <ion-label position="floating">Celular</ion-label>
+          <ion-input type="tel" placeholder="Ingrese su número de celular"></ion-input>
+        </ion-item> -->
+        <ion-item>
+          <ion-icon name="person-circle" slot="start"></ion-icon>
+          <ion-label>{{usuario.nombre + ' ' + usuario.apellido}}</ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="at-circle" slot="start"></ion-icon>
+          <ion-label>{{usuario.email}}</ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon *ngIf="sonidoApp" name="volume-high-outline" slot="start"></ion-icon>
+          <ion-icon *ngIf="!sonidoApp" name="volume-mute-outline" slot="start"></ion-icon>
+          <ion-toggle [enableOnOffLabels]="true" [checked]="true" (ionChange)="cambiarEstadoSonido()">
+            <ion-label>Sonidos de la aplicación</ion-label>
+            <!-- <ion-note color="medium">{{ sonidoApp ? 'Activado' : 'Desactivado' }}</ion-note> -->
+          </ion-toggle>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="bag-check" slot="start"></ion-icon>
+          <ion-badge slot="end">{{cantPedidos}}</ion-badge>
+          <ion-label>Pedidos realizados</ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="reader" slot="start"></ion-icon>
+          <ion-badge slot="end">{{cantEncuestas}}</ion-badge>
+          <ion-label>Encuestas realizadas</ion-label>
+        </ion-item>
+        <!-- <ion-button expand="full" color="primary" type="submit">Guardar</ion-button> -->
+    </ion-card-content>
+  </ion-card>
+</ion-content>
