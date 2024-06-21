@@ -43,4 +43,23 @@ Gonzalez, Martín
 - [x] Splash Animado.
 - [x] Agregado de funcionalidad de Lectura de DNI para las pantallas de Registro.
 - [x] Agregado de Sonidos a la apliacion.
+
+ ### Semana 2: Sábado 15/06 al 22/06 💻
+>**Calani, Romina**
+- [x] Diseño de tab Home para toda la app.
+- [x] Diseño de Header para toda la aplicacion.
+- [x] Diseño de sección Mi Perfil.
+- [ ] Desarrollo de Ingreso al Local con lectura de QR.
+
+>**Gallo, Alejandro**
+- [x] Definición de tareas y armado de proyecto kanva en Git Proyects.
+- [x] Desarrollo de pantallas de Registro de Cliente Registrado y Anónimo.
+- [x] Desarrollo de pantalla de Listado de Pendientes para Home Dueño y Supervisor.
+- [x] Desarrollo de activar/desactivar Sonidos.
+- [ ] Investigación e Implementación de envío de correo.
+- [x] Mantención de Readme.md.
+
+>**Gonzalez, Martín**
+- [ ] Investigación y desarrollo de Push Notification.
+- [ ] Creación de Listado de Pendientes de Asignar a Mesa como Home de Maitre.
  
