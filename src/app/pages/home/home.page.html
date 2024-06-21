@@ -1,10 +1,22 @@
 <!-- <app-nav-bar ></app-nav-bar> -->
-<app-header>
-
-</app-header>
-<body >
-    <div *ngIf="esDuenio">
-      <app-list-usuarios></app-list-usuarios>
+<app-header> </app-header>
+<body>
+  <div *ngIf="esDuenio || esSupervisor">
+    <app-list-usuarios></app-list-usuarios>
+  </div>
+  <div *ngIf="esCliente || esAnonimo">
+    <!-- Listado de productos -->
+  </div>
+  <div *ngIf="esBartender">
+    <!-- Listado de pedidos pendientes -->
+  </div>
+  <div *ngIf="esCocinero">
+    <!-- Listado de pedidos pendientes -->
+  </div>
+  <div *ngIf="esMaitre">
+    <!-- Listado de Clientes y Anonimos en lista de espera -->
+  </div>
+  <div *ngIf="esMozo">
+    <!-- Listado de Pedidos a Aprobar -->
   </div>
 </body>
-

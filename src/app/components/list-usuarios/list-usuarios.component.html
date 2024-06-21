@@ -7,10 +7,12 @@
       <ng-container *ngFor="let user of users">
         <ion-accordion value="{{user.id}}">
           <ion-item slot="header">
-            <ion-label>{{ user.apellido + ', ' + user.nombre }}</ion-label>
+            <ion-label>{{ user.apellido + ', ' + user.nombre }}
 
+              <ion-note color="light">{{ user.email }}</ion-note>
+            </ion-label>
             <ion-avatar slot="end">
-              <img class="rounded-image bordered-image" [src]="user.foto" width="80" height="80" />
+              <img class="rounded-image bordered-image" [src]="user.foto"  />
             </ion-avatar>
           </ion-item>
           <ion-list slot="content" >

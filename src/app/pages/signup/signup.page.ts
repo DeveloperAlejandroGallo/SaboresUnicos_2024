@@ -74,6 +74,7 @@ export class SignupPage implements OnInit {
     private route: ActivatedRoute,
     private usrService: UsuarioService
   ) {
+    this.audioSrv.reporoduccionCambioPagina();
     this.perfil = this.route.snapshot.paramMap.get('perfil') as Perfil;
 
     switch (this.perfil) {
@@ -442,71 +443,78 @@ export class SignupPage implements OnInit {
 
       const datosDni = result.barcodes[0].displayValue;
 
+      console.log('Datos' + datosDni);
+      //DNI Viejo:@29637515    @A@1@GALLO@ALEJANDRO JUVENAL@ARGENTINA@31/07/1982@M@23/06/2011@00056192695@7006 @23/06/2026@264@0@ILR:2.01 C:110613.02 (No Cap.)@UNIDAD #20 || S/N: 0040>2008>>00??
+
       const dni = datosDni.split('@');
 
       if (dni.length == 8 || dni.length == 9) {
         this.signupForm.patchValue({ apellido: dni[1] });
         this.signupForm.patchValue({ nombre: dni[2] });
-        //this.signupForm.setValue({sexo: dni[3] == 'M' ? 'Masculino' : 'Femenino' });
+        // this.signupForm.setValue({sexo: dni[3] == 'M' ? 'Masculino' : 'Femenino' });
         this.signupForm.patchValue({ dni: dni[4] });
-        //this.signupForm.setValue({dni: dni[8] != null ? dni[8].substr(0, 2) + dni[4] + dni[8].substr(-1) : this.calcularCUIT()});
+        this.signupForm.setValue({dni: dni[8] != null ? dni[8].substring(0, 2) + dni[4] + dni[8].substring(-1) : this.calcularCUIT(dni[3])});
       } else {
         this.signupForm.patchValue({ apellido: dni[4] });
         this.signupForm.patchValue({ nombre: dni[5] });
-        this.signupForm.patchValue({ dni: dni[1] });
-        //this.signupForm.setValue({sexo: dni[8] == 'M' ? 'Masculino' : 'Femenino' });
-        //this.signupForm.setValue({cuil: this.calcularCUIT()});
+        this.signupForm.patchValue({ dni: dni[1].trim() });
+        // this.signupForm.setValue({sexo: dni[8] == 'M' ? 'Masculino' : 'Femenino' });
+        this.signupForm.setValue({cuil: this.calcularCUIT(dni[8])});
       }
     } catch (error) {
       console.error('Error al escanear: ' + error);
     }
   }
 
-  // calcularCUIT(): string {
-  //   let dni = this.getDni;
-  //   let cuit: Array<number> = [];
-  //   let cantCeros = 8 - dni!.length;
-  //   let result: string;
-  //   cuit[0] = 2;
-  //   //cuit[1] = this.sexo === 'Masculino' ? 0 : 7;
-  //   for (let i = 0; i < cantCeros; i++)
-  //     cuit.push(0);
+  calcularCUIT(sexo: string): string {
+    let dni: string = this.getDni?.value;
+    let cuit: Array<number> = [];
+    let cantCeros = 8 - dni!.length;
+    let result: string;
+    cuit[0] = 2;
+    cuit[1] = sexo === 'M' ? 0 : 7;
+    for (let i = 0; i < cantCeros; i++)
+      cuit.push(0);
 
-  //   for (let i = 0; i < dni.length; i++) {
-  //     if (Number.parseInt(dni[i]) != NaN)
-  //       cuit.push(Number.parseInt(dni[i]));
-  //   }
-  //   let tot: number = 0;
-  //   tot += cuit[0] * 5;
-  //   tot += cuit[1] * 4;
-  //   tot += cuit[2] * 3;
-  //   tot += cuit[3] * 2;
-  //   tot += cuit[4] * 7;
-  //   tot += cuit[5] * 6;
-  //   tot += cuit[6] * 5;
-  //   tot += cuit[7] * 4;
-  //   tot += cuit[8] * 3;
-  //   tot += cuit[9] * 2;
+    for (let i = 0; i < dni.length; i++) {
+      if (!Number.isNaN(dni[i]))
+        cuit.push(Number.parseInt(dni[i]));
+    }
+    let tot: number = 0;
+    tot += cuit[0] * 5;
+    tot += cuit[1] * 4;
+    tot += cuit[2] * 3;
+    tot += cuit[3] * 2;
+    tot += cuit[4] * 7;
+    tot += cuit[5] * 6;
+    tot += cuit[6] * 5;
+    tot += cuit[7] * 4;
+    tot += cuit[8] * 3;
+    tot += cuit[9] * 2;
 
-  //   let digVer: number;
+    let digVer: number;
 
-  //   switch (tot % 11) {
-  //     case 0:
-  //       digVer = 0;
-  //       break;
-  //     case 1:
-  //       digVer = cuit[1] == 0 ? 9 : 4;
-  //       cuit[1] = 3;
-  //       break;
-  //     default:
-  //       digVer = 11 - (tot % 11);
-  //       break;
-  //   }
-  //   cuit[10] = digVer;
-  //   let ret: string = cuit.join('');
+    switch (tot % 11) {
+      case 0:
+        digVer = 0;
+        break;
+      case 1:
+        digVer = cuit[1] == 0 ? 9 : 4;
+        cuit[1] = 3;
+        break;
+      default:
+        digVer = 11 - (tot % 11);
+        break;
+    }
+    cuit[10] = digVer;
+    let ret: string = cuit.join('');
 
-  //   return ret.substring(0, 11);
-  // }
+    result = ret.substring(0, 11);
+
+    console.log('CUIT: ' + result);
+
+    return result;
+  }
 
   async startScan() {
     try {

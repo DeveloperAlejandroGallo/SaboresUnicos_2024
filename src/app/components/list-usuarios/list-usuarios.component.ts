@@ -30,8 +30,16 @@ export class ListUsuariosComponent  {
   }
 
   Rechazar(usr: Usuario) {
-    this.usrService.delete(usr.id);
-    this.msgService.Info("Usuario Rechazado y eliminado.");
+    try{
+      this.usrService.delete(usr.id);
+      this.auth.eliminarUsuario(usr);
+      this.msgService.Info("Usuario Rechazado y eliminado.");
+      
+      }
+      catch(ex){
+        console.error(`Error al eliminar el usuario: ${ex}`)
+        this.msgService.Error("Error al eliminar el usuario.");
+      }
     //envio de mail
     }
 
