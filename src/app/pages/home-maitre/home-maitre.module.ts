@@ -8,6 +8,7 @@ import { HomeMaitrePageRoutingModule } from './home-maitre-routing.module';
 
 import { HomeMaitrePage } from './home-maitre.page';
 import { NavBarModule } from 'src/app/components/nav-bar/nav-bar.module';
+import { HeaderModule } from 'src/app/components/header/header.module';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { NavBarModule } from 'src/app/components/nav-bar/nav-bar.module';
     FormsModule,
     IonicModule,
     NavBarModule,
+    HeaderModule,
     HomeMaitrePageRoutingModule
   ],
   declarations: [HomeMaitrePage]

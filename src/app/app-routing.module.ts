@@ -34,7 +34,9 @@ const routes: Routes = [
   {
     path: 'mi-perfil',
     loadChildren: () => import('./pages/mi-perfil/mi-perfil.module').then( m => m.MiPerfilPageModule)
+
   },
+  {
     path: 'home-maitre',
     loadChildren: () => import('./pages/home-maitre/home-maitre.module').then( m => m.HomeMaitrePageModule)
   },
