@@ -75,7 +75,6 @@ export class LoginPage implements OnInit {
 
   ingresarComoInvitado(){
     this.loginForm.reset();
-    this.usrSrv.actualizarCamposNuevos();
     this.router.navigate(['/signup/Anónimo']);
   }
 
@@ -92,19 +91,19 @@ export class LoginPage implements OnInit {
     switch (perfil) {
       case 'admin':
         this.loginForm.setValue({
-          emailLogin: 'administrador@yopmail.com',
+          emailLogin: 'administrador@yopmail.com', //Dueño
           passwordLogin: '111111',
         });
         break;
       case 'invitado':
         this.loginForm.setValue({
-          emailLogin: 'invitado@yopmail.com',
+          emailLogin: 'invitado@yopmail.com', //Supervisor
           passwordLogin: '222222',
         });
         break;
       case 'usuario':
         this.loginForm.setValue({
-          emailLogin: 'usuario@yopmail.com',
+          emailLogin: 'usuario@yopmail.com', //Cliente
           passwordLogin: '333333',
         });
         break;

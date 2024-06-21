@@ -19,6 +19,7 @@ import {
 import { Usuario } from '../models/usuario';
 import { map, Observable } from 'rxjs';
 import { Perfil } from '../enums/perfil';
+import {User} from '@angular/fire/auth';
 
 
 
@@ -68,7 +69,6 @@ export class UsuarioService {
 
     this.getUsuarios().subscribe((usuarios) => {
       this.listadoUsuarios = usuarios;
-      console.log(usuarios);
     });
   }
 
@@ -101,8 +101,8 @@ export class UsuarioService {
       dni: usuario.dni,
       cuil: usuario.cuil,
       perfil: usuario.perfil,
-      tipoEmpleado: usuario.perfil !== (Perfil.Anónimo && Perfil.Cliente) ? usuario.tipoEmpleado : null,
-      activo: usuario.perfil == Perfil.Anónimo ? true : false
+      tipoEmpleado: usuario.perfil !== (Perfil.Anonimo && Perfil.Cliente) ? usuario.tipoEmpleado : null,
+      activo: usuario.perfil == Perfil.Anonimo ? true : false
     });
 
     return usuario;
@@ -146,23 +146,23 @@ export class UsuarioService {
 
 
 
-  actualizarCamposNuevos(){
+  // actualizarCamposNuevos(){
 
-    this.listadoUsuarios.forEach((usuario) => {
-      const coleccion = collection(this.firestore, this.colectionName);
-      const documento = doc(coleccion,usuario.id);
+  //   this.listadoUsuarios.forEach((usuario) => {
+  //     const coleccion = collection(this.firestore, this.colectionName);
+  //     const documento = doc(coleccion,usuario.id);
 
-      updateDoc(documento, {
-        cuil: this.calcularCUIT(usuario.dni.toString()),
-        perfil: Perfil.Cliente,
-        tipoEmpleado:  null,
-        activo:  true
-      });
-    });
+  //     updateDoc(documento, {
+  //       cuil: this.calcularCUIT(usuario.dni.toString()),
+  //       perfil: Perfil.Cliente,
+  //       tipoEmpleado:  null,
+  //       activo:  true
+  //     });
+  //   });
 
 
 
-  }
+  // }
 
 
   calcularCUIT(dni: string): string {

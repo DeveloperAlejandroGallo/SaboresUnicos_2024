@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
 		<ion-buttons slot="start">
 			<ion-menu-button menu="first"></ion-menu-button>
 		</ion-buttons>
@@ -7,10 +7,10 @@
 
       <a *ngIf="usuario">
         <img class="rounded-image bordered-image" [src]="usuario.foto" width="40" height="40"   alt="Home">
-      </a><span>{{ usuario.nombre }}, {{ usuario.apellido }} </span>
+      </a><span>{{ usuario.nombre }} {{ usuario.apellido }} </span>
     </div>
-    <ion-button (click)="logout()" slot="end" color="tertiary" >
-      <ion-icon name="log-out-outline" size="large"></ion-icon>
+    <ion-button (click)="logout()" slot="end" color="primary" >
+      <ion-icon name="log-out-outline" ></ion-icon>
     </ion-button>
   </ion-toolbar>
 </ion-header>

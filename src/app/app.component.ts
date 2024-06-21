@@ -42,7 +42,7 @@ export class AppComponent implements OnInit{
 
 
 
-
+                                                                                            
   irAUrl(url: string) {
     this.isLoading = true;
 

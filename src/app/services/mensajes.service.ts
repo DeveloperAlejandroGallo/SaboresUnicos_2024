@@ -105,9 +105,10 @@ export class MensajesService {
     const toast = await this.toastController.create({
       message: message,
       duration: 2000, // Opcional: Duración del toast
-      position: 'top', // Posición del toast
+      position: 'bottom', // Posición del toast
       color: 'danger', // Color que se le aplicará al toast
     });
+    Haptics.vibrate({ duration: 750 });
     await toast.present(); // Muestra el toast
   }
 
@@ -115,7 +116,7 @@ export class MensajesService {
     const toast = await this.toastController.create({
       message: message,
       duration: t * 1000, // Opcional: Duración del toast
-      position: 'top', // Posición del toast
+      position: 'bottom', // Posición del toast
       color: 'success', // Color que se le aplicará al toast
     });
 
@@ -126,7 +127,7 @@ export class MensajesService {
     const toast = await this.toastController.create({
       message: message,
       duration: 2000, // Opcional: Duración del toast
-      position: 'top', // Posición del toast
+      position: 'bottom', // Posición del toast
       color: 'warning', // Color que se le aplicará al toast
     });
     await toast.present(); // Muestra el toast
@@ -136,7 +137,7 @@ export class MensajesService {
     const toast = await this.toastController.create({
       message: message,
       duration: 2000, // Opcional: Duración del toast
-      position: 'top', // Posición del toast
+      position: 'bottom', // Posición del toast
       color: 'primary', // Color que se le aplicará al toast
     });
     await toast.present(); // Muestra el toast

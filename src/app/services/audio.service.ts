@@ -24,7 +24,7 @@ export class AudioService {
         this.success = 'success.wav';
         this.warning = 'warning.wav';
         this.info = 'info.wav';
-        this.cambioPagina = 'load.wav';
+        this.cambioPagina = 'cambioPagina.mp3';
 
 
 
@@ -67,7 +67,7 @@ export class AudioService {
 
       if (!this.sonidoActivo)
         return;
-      
+
 
       const assetCompleto = `assets/audios/${audio}`;
 

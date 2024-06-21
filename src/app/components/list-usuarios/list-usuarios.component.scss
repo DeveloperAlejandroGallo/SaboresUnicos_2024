@@ -1,0 +1,54 @@
+.card-list {
+
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+ion-list{
+  background-color: transparent;
+}
+
+
+.custom-ion-list {
+  --ion-background-color-opacity: 0.9!important; /* Ajusta la opacidad según sea necesario */
+  font-weight: bolder;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: medium;
+
+  margin: 20px;
+
+  ion-list-header {
+    text-align: center;
+    font-size: large;
+    color: #bf0000;
+
+  }
+
+  ion-item {
+    color: white;
+    font-size: large;
+  }
+}
+
+.btnAccion {
+  --ion-background-color: #ffffff00 transparent!important;
+}
+
+ion-button {
+  width: 100%; /* Asegura que los botones ocupen todo el ancho disponible */
+  margin: 0; /* Elimina margen interno de los botones */
+}
+
+.rounded-image {
+  border-radius: 50%;
+}
+
+.bordered-image {
+  border: 2px solid #bf0000;
+}
+
+ion-accordion {
+  --ion-background-color:  #b75353bb !important;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}

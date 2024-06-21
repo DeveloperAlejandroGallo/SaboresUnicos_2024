@@ -7,7 +7,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { Router, ActivatedRoute  } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Usuario } from 'src/app/models/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { MensajesService } from 'src/app/services/mensajes.service';
@@ -27,15 +27,16 @@ import {
   ImageOptions,
   Photo,
 } from '@capacitor/camera';
-import { CustomValidators } from 'src/app/comun/CustomValidators';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import { ToastController } from '@ionic/angular'; // Importa ToastController
-import { BarcodeFormat, BarcodeScanner, LensFacing } from '@capacitor-mlkit/barcode-scanning';
+import {
+  BarcodeFormat,
+  BarcodeScanner,
+  LensFacing,
+} from '@capacitor-mlkit/barcode-scanning';
 import { AudioService } from 'src/app/services/audio.service';
 import { Haptics } from '@capacitor/haptics';
 import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
 import { Perfil } from 'src/app/enums/perfil';
-
 
 @Component({
   selector: 'app-signup',
@@ -43,40 +44,40 @@ import { Perfil } from 'src/app/enums/perfil';
   styleUrls: ['./signup.page.scss'],
 })
 export class SignupPage implements OnInit {
+
   public mensaje: string = '';
   public signupForm!: FormGroup;
 
   public imageTomadaURL: string = '../../../assets/img/whoAmI.png';
   public imagenParaCargar!: { dataUrl: string; formato: string }; // Array de URL de imagenes para cargar
-  isLoading: boolean = false;
-  isSupported: boolean = false;
-  guardando: boolean = false;
+  public isLoading: boolean = false;
+  public isSupported: boolean = false;
+  public guardando: boolean = false;
   public isPermissionGranted = false;
-verApellido: any;
-verDni: any;
-verPassword: any;
-verCuil: any;
-verEmail: any;
-tituloBoton: any;
+  public verApellido:  boolean = false;
+  public verDni:  boolean = false;
+  public verPassword:  boolean = false;
+  public verCuil:  boolean = false;
+  public verEmail:  boolean = false;
+  public tituloBoton:  string = "Registrarse";
+  public verScanner:  boolean = false;
+  private perfil: Perfil;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private msgService: MensajesService,
     private usrSrv: UsuarioService,
-    private toastController: ToastController,
     private platform: Platform,
     private audioSrv: AudioService,
     private modalController: ModalController,
     private route: ActivatedRoute,
     private usrService: UsuarioService
   ) {
+    this.audioSrv.reporoduccionCambioPagina();
+    this.perfil = this.route.snapshot.paramMap.get('perfil') as Perfil;
 
-
-    const perfil = this.route.snapshot.paramMap.get('perfil');
-
-
-    switch (perfil) {
+    switch (this.perfil) {
       case Perfil.Cliente:
         this.verApellido = true;
         this.verDni = true;
@@ -84,8 +85,9 @@ tituloBoton: any;
         this.verPassword = true;
         this.verCuil = false;
         this.tituloBoton = 'Registrarse';
+        this.verScanner = true;
         break;
-      case Perfil.Anónimo:
+      case Perfil.Anonimo:
         this.verApellido = false;
         this.verDni = false;
         this.verEmail = false;
@@ -94,8 +96,9 @@ tituloBoton: any;
         this.tituloBoton = 'Ingresar';
         break;
     }
-
   }
+
+
 
   //getters
   get getEmail() {
@@ -118,19 +121,17 @@ tituloBoton: any;
     return this.signupForm.get('imagenPerfil');
   }
 
-  get getPasswordRep() {
-    return this.signupForm.get('passwordRep');
-  }
-
-
   get getDni() {
     return this.signupForm.get('dni');
   }
 
+  get getCuil() {
+    return this.signupForm.get('cuil');
+  }
+
   ngOnInit(): void {
 
-
-    if (this.platform.is('capacitor')) {
+    if (this.platform.is('capacitor') && this.perfil != Perfil.Anonimo) {
       try {
         BarcodeScanner.installGoogleBarcodeScannerModule();
 
@@ -150,13 +151,11 @@ tituloBoton: any;
       } catch (error) {
         console.error('Error al escanear: ' + error);
       }
-    }else{
-      console.warn('La funcionalidad de escaneo no está disponible en el navegador');
+    } else {
+      console.warn(
+        'La funcionalidad de escaneo no está disponible en el navegador'
+      );
     }
-
-
-
-
 
     this.signupForm = new FormGroup(
       {
@@ -175,126 +174,32 @@ tituloBoton: any;
           Validators.minLength(7),
           Validators.maxLength(9),
         ]),
+        cuil: new FormControl('', [
+          Validators.required,
+          Validators.pattern('^[0-9]+$'),
+          Validators.minLength(10),
+          Validators.maxLength(12),
+        ]),
         password: new FormControl('', [
           Validators.required,
           Validators.minLength(6),
         ]),
-        passwordRep: new FormControl('', [Validators.required, CustomValidators.passwordIguales('password', 'passwordRep')]), //, CustomValidators.passwordIguales('password', 'passwordRep')
-
       },
       Validators.required
     );
 
-    this.validateFields();
-
     this.mensaje = '';
   }
-
-  validateFields(): void {
-    Object.keys(this.signupForm.controls).forEach((field) => {
-      const control = this.signupForm.get(field);
-      control!.statusChanges.subscribe(async (value) => {
-        if (control!.invalid && !this.guardando) {
-          setTimeout(async () => {
-            // Necesario para esperar a que se actualice el estado de validación
-            const errors = control!.errors;
-            if (errors) {
-              console.log(`${field} has errors: `, errors);
-              let msg: string = '';
-              switch (field) {
-                case 'email':
-                  if (errors['required']) {
-                    msg += 'Email es requerido';
-                  }
-                  if (errors['email']) {
-                    msg += 'Email no es válido';
-                  }
-                  break;
-                case 'nombre':
-                  if (errors['required']) {
-                    msg += 'Nombre es requerido';
-                  }
-                  if (errors['pattern']) {
-                    msg +=
-                      'Nombre no es válido, deben ser solo letras o espacio';
-                  }
-                  break;
-                case 'apellido':
-                  if (errors['required']) {
-                    msg += 'Apellido es requerido';
-                  }
-                  if (errors['pattern']) {
-                    msg += 'Apellido no es válido, deben ser letras o espacio';
-                  }
-                  break;
-                case 'dni':
-                  if (errors['required']) {
-                    msg += 'DNI es requerido';
-                  }
-                  if (errors['pattern']) {
-                    msg += 'DNI no es válido, deben ser solo números';
-                  }
-                  if (errors['minlength']) {
-                    msg += `Faltan ingresar ${
-                      errors['minlength'].requiredLength -
-                      errors['minlength'].actualLength
-                    } caracteres`;
-                  }
-                  if (errors['maxlength']) {
-                    msg += `Se ingresaron ${
-                      errors['maxlength'].actualLength -
-                      errors['maxlength'].requiredLength
-                    } caracteres de más`;
-                  }
-                  break;
-
-                case 'password':
-                  if (errors['required']) {
-                    msg += 'Contraseña es requerida';
-                  }
-                  if (errors['minlength']) {
-                    msg += `Faltan ingresar al menos ${
-                      errors['minlength'].requiredLength -
-                      errors['minlength'].actualLength
-                    } caracteres mas`;
-                  }
-                  break;
-                // case 'passwordRep':
-                //   if (errors['required']) {
-                //     msg += 'Repetir contraseña es requerido';
-                //   }
-                //   if (errors['passwordIguales']) {
-                //     msg += 'Las contraseñas no coinciden';
-                //   }
-                //   break;
-                default:
-                  break;
-              }
-
-              if (msg !== '') await this.msgService.ErrorIonToast(msg); // Muestra el toast con el mensaje de error
-            } else if(!this.guardando){
-              await this.msgService.ExitoIonToast(`${this.capitalizarPrimeraLetra(field)} válido`,1);
-            }
-          }, 0); // Ejecutar después de la próxima iteración del ciclo de eventos
-        }else if(!this.guardando) {
-          await this.msgService.ExitoIonToast(`${this.capitalizarPrimeraLetra(field)} válido`, 1);
-        }
-      });
-    });
-  }
-
-
-  capitalizarPrimeraLetra(string: string): string {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
 
 
   onSubmitSignup() {
     this.guardando = true;
     this.isLoading = true;
     console.log('Formulario de registro enviado');
-    this.createUserRegistrado();
+    if (this.perfil == Perfil.Anonimo)
+      this.createUserAnonimo();
+    else
+      this.createUserRegistrado();
   }
 
   save($event: Event) {
@@ -302,115 +207,148 @@ tituloBoton: any;
   }
 
   async createUserRegistrado() {
+    try {
 
-    if (this.imageTomadaURL === '../../../assets/img/whoAmI.png') {
-      Haptics.vibrate({ duration: 500 });
-      this.msgService.ErrorIonToast('Tome una foto para imagen de perfil');
-      return;
+      if(!this.camposSonValidos())
+        return;
+
+      const data = this.imagenParaCargar;
+
+
+      const urlImage = await this.uploadImage(
+        this.dataURLtoBlob(data.dataUrl),
+        data.formato,
+        this.getEmail?.value
+      );
+
+      var usuario: Usuario = {
+        id: '',
+        nombre: this.getNombre?.value,
+        apellido: this.getApellido?.value,
+        email: this.getEmail?.value,
+        clave: this.getPassword?.value,
+
+        dni: this.getDni?.value,
+        foto: urlImage,
+        cuil: '',
+        perfil: Perfil.Cliente,
+        tipoEmpleado: undefined,
+        activo: false,
+      };
+
+      this.authService.registrarCuenta(usuario);
+      setTimeout(() => {
+        this.isLoading = false;
+        this.audioSrv.reporoduccionSuccess();
+        this.imageTomadaURL = '../../../assets/img/whoAmI.png';
+        this.signupForm.reset();
+        this.guardando = false;
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+      this.guardando = this.isLoading = false;
     }
-
-    const data = this.imagenParaCargar;
-
-    if (this.getPassword?.value != this.getPasswordRep?.value) {
-      Haptics.vibrate({ duration: 500 });
-      this.msgService.ErrorIonToast('Las contraseñas son distintas ');
-      return;
-    }
-
-    if (this.usrSrv.existeUsuario(this.getEmail?.value)) {
-      Haptics.vibrate({ duration: 500 });
-      this.msgService.ErrorIonToast('El email ya se encuentra registrado');
-      return;
-    }
-
-    const urlImage = await this.uploadImage(
-      this.dataURLtoBlob(data.dataUrl),
-      data.formato,
-      this.getEmail?.value
-    );
-
-
-    var usuario: Usuario = {
-      id: '',
-      nombre: this.getNombre?.value,
-      apellido: this.getApellido?.value,
-      email: this.getEmail?.value,
-      clave: this.getPassword?.value,
-
-      dni: this.getDni?.value,
-      foto: urlImage,
-      cuil: '',
-      perfil: Perfil.Cliente,
-      tipoEmpleado: undefined,
-      activo: false
-    };
-
-    this.authService.registrarCuenta(usuario);
-    setTimeout(() => {
-      this.isLoading = false;
-      this.audioSrv.reporoduccionSuccess();
-      this.msgService.ExitoIonToast('Registro exitoso', 2);
-      this.imageTomadaURL = '../../../assets/img/whoAmI.png';
-      this.signupForm.reset();
-      this.guardando = false;
-    }, 2000);
-
   }
-
 
   async createUserAnonimo() {
+    try {
 
-    if(this.getNombre?.value == '' || this.getNombre?.value == null){
-      Haptics.vibrate({ duration: 500 });
-      this.msgService.ErrorIonToast('Ingrese un nombre');
-      return;
+      if(!this.camposSonValidos())
+        return;
+
+      const data = this.imagenParaCargar;
+
+      const urlImage = await this.uploadImage(
+        this.dataURLtoBlob(data.dataUrl),
+        data.formato,
+        this.getEmail?.value
+      );
+
+      var usuario: Usuario = {
+        id: '',
+        nombre: this.getNombre?.value,
+        apellido: '',
+        email: '',
+        clave: '',
+
+        dni: 0,
+        foto: urlImage,
+        cuil: '',
+        perfil: Perfil.Anonimo,
+        tipoEmpleado: null,
+        activo: true,
+      };
+
+      this.authService.usuarioActual = this.usrService.nuevo(usuario);
+
+      setTimeout(() => {
+        this.isLoading = false;
+        this.audioSrv.reporoduccionSuccess();
+        this.imageTomadaURL = '../../../assets/img/whoAmI.png';
+        this.signupForm.reset();
+        this.guardando = false;
+        this.router.navigate(['/home-tabs']);
+        this.msgService.Exito('Bienvenid@ a Sabores Únicos!');
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+      this.guardando = this.isLoading = false;
     }
-
+  }
+  camposSonValidos():boolean {
     if (this.imageTomadaURL === '../../../assets/img/whoAmI.png') {
-      Haptics.vibrate({ duration: 500 });
-      this.msgService.ErrorIonToast('Tome una foto para imagen de perfil');
-      return;
+      this.mostrarError('Tome una foto para imagen de perfil');
+      return false;
     }
 
-    const data = this.imagenParaCargar;
+    //validar nombre
+    if (this.getNombre?.value === '') {
+      this.mostrarError('Ingrese un nombre válido');
+      return false;
+    }
 
-    const urlImage = await this.uploadImage(
-      this.dataURLtoBlob(data.dataUrl),
-      data.formato,
-      this.getEmail?.value
-    );
-
-
-    var usuario: Usuario = {
-      id: '',
-      nombre: this.getNombre?.value,
-      apellido: '',
-      email: '',
-      clave: '',
-
-      dni: 0,
-      foto: urlImage,
-      cuil: '',
-      perfil: Perfil.Anónimo,
-      tipoEmpleado: undefined,
-      activo: false
-    };
-
-    this.authService.usuarioActual = this.usrService.nuevo(usuario);
+    if(this.perfil == Perfil.Anonimo){
+      return true;
+    }
 
 
-    setTimeout(() => {
-      this.isLoading = false;
-      this.audioSrv.reporoduccionSuccess();
-      this.imageTomadaURL = '../../../assets/img/whoAmI.png';
-      this.signupForm.reset();
-      this.guardando = false;
-      this.router.navigate(['/home/Anónimo']);
-      this.msgService.ExitoIonToast('Bienvenid@ a Sabores Únicos!', 3);
-    }, 2000);
+    //validar apellido
+    if (this.verApellido && this.getApellido?.value === '') {
+      this.mostrarError('Ingrese un apellido válido');
+      return false;
+    }
 
+
+    if (this.verEmail && this.usrSrv.existeUsuario(this.getEmail?.value)) {
+      this.mostrarError('El email ya se encuentra registrado');
+      return false;
+    }
+
+    //validar dni
+    if (this.verDni && (this.getDni?.value === '' || this.getDni?.value.length < 7 || this.getDni?.value.length > 9)) {
+      this.mostrarError('Ingrese un DNI válido');
+      return false;
+    }
+    //validar cuil
+    if (this.verCuil && (this.getCuil?.value === '' || this.getCuil?.value.length < 10 || this.getCuil?.value.length > 12)) {
+      this.mostrarError('Ingrese un CUIL válido');
+      return false;
+    }
+
+    //validar password
+    if (this.verPassword && (this.getPassword?.value === '' || this.getPassword?.value.length < 6)) {
+      this.mostrarError('Ingrese una contraseña válida');
+      return false;
+    }
+
+    return true;
   }
 
+  mostrarError(msg: string){
+    Haptics.vibrate({ duration: 500 });
+    this.msgService.ErrorIonToast(msg);
+    this.guardando = this.isLoading = false;
+  }
 
 
 
@@ -497,113 +435,118 @@ tituloBoton: any;
 
       if (result.barcodes.length === 0) {
         Haptics.vibrate({ duration: 500 });
-        this.msgService.ErrorIonToast('No se ha podido leer el código de barras');
+        this.msgService.ErrorIonToast(
+          'No se ha podido leer el código de barras'
+        );
         return;
       }
 
       const datosDni = result.barcodes[0].displayValue;
 
-      const dni  = datosDni.split('@');
+      console.log('Datos' + datosDni);
+      //DNI Viejo:@29637515    @A@1@GALLO@ALEJANDRO JUVENAL@ARGENTINA@31/07/1982@M@23/06/2011@00056192695@7006 @23/06/2026@264@0@ILR:2.01 C:110613.02 (No Cap.)@UNIDAD #20 || S/N: 0040>2008>>00??
+
+      const dni = datosDni.split('@');
 
       if (dni.length == 8 || dni.length == 9) {
-        this.signupForm.patchValue({apellido: dni[1]});
-        this.signupForm.patchValue({nombre: dni[2]});
-        //this.signupForm.setValue({sexo: dni[3] == 'M' ? 'Masculino' : 'Femenino' });
-        this.signupForm.patchValue({dni: dni[4]});
-        //this.signupForm.setValue({dni: dni[8] != null ? dni[8].substr(0, 2) + dni[4] + dni[8].substr(-1) : this.calcularCUIT()});
-
+        this.signupForm.patchValue({ apellido: dni[1] });
+        this.signupForm.patchValue({ nombre: dni[2] });
+        // this.signupForm.setValue({sexo: dni[3] == 'M' ? 'Masculino' : 'Femenino' });
+        this.signupForm.patchValue({ dni: dni[4] });
+        this.signupForm.setValue({dni: dni[8] != null ? dni[8].substring(0, 2) + dni[4] + dni[8].substring(-1) : this.calcularCUIT(dni[3])});
       } else {
-        this.signupForm.patchValue({apellido: dni[4]});
-        this.signupForm.patchValue({nombre: dni[5]});
-        this.signupForm.patchValue({dni: dni[1]});
-        //this.signupForm.setValue({sexo: dni[8] == 'M' ? 'Masculino' : 'Femenino' });
-        //this.signupForm.setValue({cuil: this.calcularCUIT()});
+        this.signupForm.patchValue({ apellido: dni[4] });
+        this.signupForm.patchValue({ nombre: dni[5] });
+        this.signupForm.patchValue({ dni: dni[1].trim() });
+        // this.signupForm.setValue({sexo: dni[8] == 'M' ? 'Masculino' : 'Femenino' });
+        this.signupForm.setValue({cuil: this.calcularCUIT(dni[8])});
       }
-    }catch (error) {
-        console.error('Error al escanear: ' + error);
-      }
-
+    } catch (error) {
+      console.error('Error al escanear: ' + error);
     }
+  }
 
-    // calcularCUIT(): string {
-    //   let dni = this.getDni;
-    //   let cuit: Array<number> = [];
-    //   let cantCeros = 8 - dni!.length;
-    //   let result: string;
-    //   cuit[0] = 2;
-    //   //cuit[1] = this.sexo === 'Masculino' ? 0 : 7;
-    //   for (let i = 0; i < cantCeros; i++)
-    //     cuit.push(0);
+  calcularCUIT(sexo: string): string {
+    let dni: string = this.getDni?.value;
+    let cuit: Array<number> = [];
+    let cantCeros = 8 - dni!.length;
+    let result: string;
+    cuit[0] = 2;
+    cuit[1] = sexo === 'M' ? 0 : 7;
+    for (let i = 0; i < cantCeros; i++)
+      cuit.push(0);
 
-    //   for (let i = 0; i < dni.length; i++) {
-    //     if (Number.parseInt(dni[i]) != NaN)
-    //       cuit.push(Number.parseInt(dni[i]));
-    //   }
-    //   let tot: number = 0;
-    //   tot += cuit[0] * 5;
-    //   tot += cuit[1] * 4;
-    //   tot += cuit[2] * 3;
-    //   tot += cuit[3] * 2;
-    //   tot += cuit[4] * 7;
-    //   tot += cuit[5] * 6;
-    //   tot += cuit[6] * 5;
-    //   tot += cuit[7] * 4;
-    //   tot += cuit[8] * 3;
-    //   tot += cuit[9] * 2;
-
-    //   let digVer: number;
-
-    //   switch (tot % 11) {
-    //     case 0:
-    //       digVer = 0;
-    //       break;
-    //     case 1:
-    //       digVer = cuit[1] == 0 ? 9 : 4;
-    //       cuit[1] = 3;
-    //       break;
-    //     default:
-    //       digVer = 11 - (tot % 11);
-    //       break;
-    //   }
-    //   cuit[10] = digVer;
-    //   let ret: string = cuit.join('');
-
-    //   return ret.substring(0, 11);
-    // }
-
-
-
-    async startScan() {
-      try {
-        const modal = await this.modalController.create({
-          component: BarcodeScanningModalComponent,
-          cssClass: 'barcode-scanning-modal',
-          showBackdrop: false,
-          componentProps: {
-            formats: [],
-            LensFacing: LensFacing.Back,
-          },
-        });
-
-
-        await modal.present();
-
-        const { data } = await modal.onWillDismiss();
-
-
-        if (data) {
-          console.log('Datita QR:' + data.barcode.displayValue);
-
-          const datosDni = data?.barcode?.displayValue;
-
-          const arrayDatos = datosDni.split('@');
-
-          console.log('Datos' + arrayDatos);
-        }
-      } catch (error) {
-        console.error('Error al escanear: ' + error);
-      }
+    for (let i = 0; i < dni.length; i++) {
+      if (!Number.isNaN(dni[i]))
+        cuit.push(Number.parseInt(dni[i]));
     }
+    let tot: number = 0;
+    tot += cuit[0] * 5;
+    tot += cuit[1] * 4;
+    tot += cuit[2] * 3;
+    tot += cuit[3] * 2;
+    tot += cuit[4] * 7;
+    tot += cuit[5] * 6;
+    tot += cuit[6] * 5;
+    tot += cuit[7] * 4;
+    tot += cuit[8] * 3;
+    tot += cuit[9] * 2;
 
+    let digVer: number;
 
+    switch (tot % 11) {
+      case 0:
+        digVer = 0;
+        break;
+      case 1:
+        digVer = cuit[1] == 0 ? 9 : 4;
+        cuit[1] = 3;
+        break;
+      default:
+        digVer = 11 - (tot % 11);
+        break;
+    }
+    cuit[10] = digVer;
+    let ret: string = cuit.join('');
+
+    result = ret.substring(0, 11);
+
+    console.log('CUIT: ' + result);
+
+    return result;
+  }
+
+  async startScan() {
+    try {
+      const modal = await this.modalController.create({
+        component: BarcodeScanningModalComponent,
+        cssClass: 'barcode-scanning-modal',
+        showBackdrop: false,
+        componentProps: {
+          formats: [],
+          LensFacing: LensFacing.Back,
+        },
+      });
+
+      await modal.present();
+
+      const { data } = await modal.onWillDismiss();
+
+      if (data) {
+        console.log('Datita QR:' + data.barcode.displayValue);
+
+        const datosDni = data?.barcode?.displayValue;
+
+        const arrayDatos = datosDni.split('@');
+
+        console.log('Datos' + arrayDatos);
+      }
+    } catch (error) {
+      console.error('Error al escanear: ' + error);
+    }
+  }
+
+  volver() {
+    this.router.navigate(['/login']);
+  }
 }
