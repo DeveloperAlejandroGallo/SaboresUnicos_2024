@@ -37,6 +37,8 @@ export class HomePage implements OnInit{
     this.esMozo = this.usuario.tipoEmpleado === TipoEmpleado.mozo;
     this.esBartender = this.usuario.tipoEmpleado === TipoEmpleado.bartender;
 
+
+
   }
 
   ngOnInit(): void {

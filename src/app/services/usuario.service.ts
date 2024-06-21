@@ -19,6 +19,7 @@ import {
 import { Usuario } from '../models/usuario';
 import { map, Observable } from 'rxjs';
 import { Perfil } from '../enums/perfil';
+import {User} from '@angular/fire/auth';
 
 
 
@@ -100,8 +101,8 @@ export class UsuarioService {
       dni: usuario.dni,
       cuil: usuario.cuil,
       perfil: usuario.perfil,
-      tipoEmpleado: usuario.perfil !== (Perfil.Anónimo && Perfil.Cliente) ? usuario.tipoEmpleado : null,
-      activo: usuario.perfil == Perfil.Anónimo ? true : false
+      tipoEmpleado: usuario.perfil !== (Perfil.Anonimo && Perfil.Cliente) ? usuario.tipoEmpleado : null,
+      activo: usuario.perfil == Perfil.Anonimo ? true : false
     });
 
     return usuario;

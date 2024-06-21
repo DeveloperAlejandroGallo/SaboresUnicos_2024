@@ -1,0 +1,27 @@
+<div class="card-list">
+  <ion-list class="custom-ion-list">
+    <ion-list-header>
+      <ion-label>Pendientes de Aprobación</ion-label>
+    </ion-list-header>
+    <ion-accordion-group>
+      <ng-container *ngFor="let user of users">
+        <ion-accordion value="{{user.id}}">
+          <ion-item slot="header">
+            <ion-label>{{ user.apellido + ', ' + user.nombre }}</ion-label>
+
+            <ion-avatar slot="end">
+              <img class="rounded-image bordered-image" [src]="user.foto" width="80" height="80" />
+            </ion-avatar>
+          </ion-item>
+          <ion-list slot="content" >
+            <ion-item class="btnAccion">
+              <ion-button expand="full" size="default" color="success" (click)="Aceptar(user)">Aceptar</ion-button>
+              <ion-button expand="full" size="default" color="dark" (click)="Rechazar(user)">Rechazar</ion-button>
+            </ion-item>
+          </ion-list>
+        </ion-accordion>
+      </ng-container>
+    </ion-accordion-group>
+  </ion-list>
+</div>
+

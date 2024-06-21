@@ -27,9 +27,7 @@ import {
   ImageOptions,
   Photo,
 } from '@capacitor/camera';
-import { CustomValidators } from 'src/app/comun/CustomValidators';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import { ToastController } from '@ionic/angular'; // Importa ToastController
 import {
   BarcodeFormat,
   BarcodeScanner,
@@ -70,7 +68,6 @@ export class SignupPage implements OnInit {
     private router: Router,
     private msgService: MensajesService,
     private usrSrv: UsuarioService,
-    private toastController: ToastController,
     private platform: Platform,
     private audioSrv: AudioService,
     private modalController: ModalController,
@@ -87,18 +84,15 @@ export class SignupPage implements OnInit {
         this.verPassword = true;
         this.verCuil = false;
         this.tituloBoton = 'Registrarse';
-        this.titulo += 'Cliente';
-        this.anonimo = false;
+        this.verScanner = true;
         break;
-      case Perfil.Anónimo:
+      case Perfil.Anonimo:
         this.verApellido = false;
         this.verDni = false;
         this.verEmail = false;
         this.verPassword = false;
         this.verCuil = false;
         this.tituloBoton = 'Ingresar';
-        this.titulo += 'Anónimo';
-        this.anonimo = true;
         break;
     }
   }
@@ -136,7 +130,7 @@ export class SignupPage implements OnInit {
 
   ngOnInit(): void {
 
-    if (this.platform.is('capacitor') && this.perfil != Perfil.Anónimo) {
+    if (this.platform.is('capacitor') && this.perfil != Perfil.Anonimo) {
       try {
         BarcodeScanner.installGoogleBarcodeScannerModule();
 
@@ -201,7 +195,7 @@ export class SignupPage implements OnInit {
     this.guardando = true;
     this.isLoading = true;
     console.log('Formulario de registro enviado');
-    if (this.perfil == Perfil.Anónimo)
+    if (this.perfil == Perfil.Anonimo)
       this.createUserAnonimo();
     else
       this.createUserRegistrado();
@@ -245,7 +239,6 @@ export class SignupPage implements OnInit {
       setTimeout(() => {
         this.isLoading = false;
         this.audioSrv.reporoduccionSuccess();
-        this.msgService.ExitoIonToast('Registro exitoso', 2);
         this.imageTomadaURL = '../../../assets/img/whoAmI.png';
         this.signupForm.reset();
         this.guardando = false;
@@ -280,7 +273,7 @@ export class SignupPage implements OnInit {
         dni: 0,
         foto: urlImage,
         cuil: '',
-        perfil: Perfil.Anónimo,
+        perfil: Perfil.Anonimo,
         tipoEmpleado: null,
         activo: true,
       };
@@ -293,8 +286,8 @@ export class SignupPage implements OnInit {
         this.imageTomadaURL = '../../../assets/img/whoAmI.png';
         this.signupForm.reset();
         this.guardando = false;
-        this.router.navigate(['/home']);
-        this.msgService.ExitoIonToast('Bienvenid@ a Sabores Únicos!', 3);
+        this.router.navigate(['/home-tabs']);
+        this.msgService.Exito('Bienvenid@ a Sabores Únicos!');
       }, 2000);
     } catch (error) {
       console.log(error);
@@ -313,7 +306,7 @@ export class SignupPage implements OnInit {
       return false;
     }
 
-    if(this.perfil == Perfil.Anónimo){
+    if(this.perfil == Perfil.Anonimo){
       return true;
     }
 

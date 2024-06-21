@@ -8,6 +8,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 import { NavBarModule } from 'src/app/components/nav-bar/nav-bar.module';
 import { HeaderModule } from 'src/app/components/header/header.module';
+import { ListUsuariosModule } from 'src/app/components/list-usuarios/list-usuarios.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { HeaderModule } from 'src/app/components/header/header.module';
     FormsModule,
     NavBarModule,
     HeaderModule,
-    HomePageRoutingModule
+    HomePageRoutingModule,
+    ListUsuariosModule
   ],
   declarations: [HomePage]
 })

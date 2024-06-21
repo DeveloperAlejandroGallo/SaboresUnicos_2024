@@ -22,31 +22,4 @@ body {
   background: url("../../../assets/img/fondo-gris.png") no-repeat center center / cover;
  }
 
- body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url("../../../assets/img/otro-fondo-liso.png") no-repeat center center / cover;
-  // background: url("../../../assets/img/fondoLogin.webp") no-repeat center center / cover;
-  // filter: blur(5px); // Ajusta el valor de blur según la cantidad de desenfoque deseada
-  z-index: -1; // Asegura que el pseudo-elemento esté detrás del contenido
- }
 
-
-.centered-round-btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 60px; /* Altura fija para el botón redondo */
-}
-
-.qr-reader-btn {
-  width: 40px; /* Ancho del botón */
-  height: 40px; /* Altura del botón */
-  border-radius: 50%; /* Hace el botón redondo */
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); /* Sombra para dar profundidad */
-  font-size: 20px; /* Tamaño de fuente ajustado */
-}

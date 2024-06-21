@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { EstaLogueadoGuard } from './guards/esta-logueado.guard';
 
 const routes: Routes = [
   {
@@ -19,28 +20,29 @@ const routes: Routes = [
     path: 'splash-animado',
     loadChildren: () => import('./pages/splash-animado/splash-animado.module').then( m => m.SplashAnimadoPageModule)
   },
-  {
-    path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
-  },
+  // {
+  //   path: 'home',
+  //   loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
+  // },
   {
     path: 'alta-persona',
-    loadChildren: () => import('./pages/alta-persona/alta-persona.module').then( m => m.AltaPersonaPageModule)
-  },  {
-    path: 'list-usr-pendientes',
-    loadChildren: () => import('./pages/list-usr-pendientes/list-usr-pendientes.module').then( m => m.ListUsrPendientesPageModule)
+    loadChildren: () => import('./pages/alta-persona/alta-persona.module').then( m => m.AltaPersonaPageModule),
+    canActivate: [EstaLogueadoGuard]
   },
   {
     path: 'tab-duenio',
-    loadChildren: () => import('./pages/tab-duenio/tab-duenio.module').then( m => m.TabDuenioPageModule)
+    loadChildren: () => import('./pages/tab-duenio/tab-duenio.module').then( m => m.TabDuenioPageModule),
+    canActivate: [EstaLogueadoGuard]
   },
   {
     path: 'home-tabs',
-    loadChildren: () => import('./template/home-tabs/home-tabs.module').then( m => m.HomeTabsPageModule)
+    loadChildren: () => import('./template/home-tabs/home-tabs.module').then( m => m.HomeTabsPageModule),
+    canActivate: [EstaLogueadoGuard]
   },
   {
     path: 'mi-perfil',
-    loadChildren: () => import('./pages/mi-perfil/mi-perfil.module').then( m => m.MiPerfilPageModule)
+    loadChildren: () => import('./pages/mi-perfil/mi-perfil.module').then( m => m.MiPerfilPageModule),
+    canActivate: [EstaLogueadoGuard]
   },
 
 

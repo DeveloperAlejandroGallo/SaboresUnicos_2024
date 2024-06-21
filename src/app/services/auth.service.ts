@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getAuth, sendEmailVerification,createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User, onAuthStateChanged, fetchSignInMethodsForEmail, signInWithPopup, EmailAuthCredential  } from "firebase/auth";
+import { getAuth, UserCredential ,sendEmailVerification,createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, fetchSignInMethodsForEmail, signInWithPopup, EmailAuthCredential, Auth, signInWithCustomToken  } from "firebase/auth";
 import { UsuarioService } from './usuario.service';
 import { Router } from '@angular/router';
 import { Usuario } from '../models/usuario';
@@ -44,14 +44,16 @@ export class AuthService {
     .then((userCredential) => {
       // Signed in
 
-        if(!userCredential.user.emailVerified){
-         this.messageService.Warning("Su usuario aún no ha sido aprobado por el administrador.\nPor favor aguarde la confirmación.");
-         return;
-        }
+      if(!this.usuarioActual?.activo){
+        this.messageService.Warning("Su usuario aún no ha sido aprobado por el administrador.\nPor favor aguarde el correo de confirmación.");
+        return;
+      }
+      if(!userCredential.user.emailVerified){
+        this.messageService.Warning("Usuario Aprobado. Por favor verifique su correo para continuar.");
+        return;
+      }
 
-        // this.messageService.InfoToast("Bienvenido " + email);
-        this.router.navigate(['/home-tabs']);
-
+      this.router.navigate(['/home-tabs']);
 
     })
     .catch((error) => {
@@ -70,6 +72,7 @@ export class AuthService {
         default:
           msg = error.message;
       }
+      console.log(error);
       this.messageService.Error(`Usuario: ${email} - ${msg}`);
     });
   }
@@ -79,26 +82,35 @@ export class AuthService {
     this.sesionActiva = true;
     localStorage.setItem(usuarioLocalStorage, JSON.stringify(usr));
     //Registro el ingreso:
-
-
-
   }
+
+  async enviarMailDeVerificacion(user: Usuario) {
+    try {
+      const userCredential = await signInWithEmailAndPassword(getAuth(), user.email, user.clave); // Asume que conoces la contraseña
+      await sendEmailVerification(userCredential.user);
+
+      console.log("Correo de verificación enviado");
+
+    } catch (error) {
+
+      console.error("Error al aprobar la cuenta:", error);
+    }
+  }
+
+
+
+
 
   public registrarCuenta(usuario: Usuario) {
 
     const auth = getAuth();
     createUserWithEmailAndPassword(auth,usuario.email, usuario.clave)
-    .then((userCredential) => {
+    .then(() => {
       //Lo guardo en la coleccion:
 
       this.usrService.nuevo(usuario);
 
-      //sendEmailVerification(auth.currentUser!);
-      this.messageService.Exito(`Usuario ${usuario.nombre} ${usuario.apellido} registrado correctamente.\nDeberá aguardar la autorización de su Usuario.`);
-
-      // setTimeout(() => {
-      //   this.router.navigate(['/login']);
-      // }, 1500);
+      this.messageService.Exito(`Usuario ${usuario.nombre} ${usuario.apellido} registrado correctamente.\nRecibirá un correo cuando su cuenta sea aprobada.`);
 
     })
     .catch((error) => {
@@ -126,6 +138,7 @@ export class AuthService {
           msg = 'Error en registro';
       }
       this.messageService.Error(`Usuario: ${usuario.email} - ${msg}`);
+      console.log(error);
       throw error;
     });
   }
@@ -162,23 +175,6 @@ export class AuthService {
 
   }
 
-  enviarEmailDeVerificacion(usr: Usuario){
-
-    const auth = getAuth();
-    fetchSignInMethodsForEmail(auth, usr.email).then((methods) => {
-      if(methods.length > 0){
-        signInWithPopup(auth,auth.EmailAuthCredential(null,null))
-      }
-    sendEmailVerification(auth.currentUser!)
-    .then(() => {
-      this.messageService.Exito(`Se ha enviado un email de verificación a ${usr.email}`);
-    })
-    .catch((error) => {
-      this.messageService.Error(`Error al enviar email de verificación a ${usr.email}`);
-    });
-  }
-
-
   // public logInfo():Usuario | undefined{
   //   let user: Usuario | undefined;
   //   const auth = getAuth();
@@ -210,3 +206,5 @@ export class AuthService {
 
 
 }
+
+

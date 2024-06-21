@@ -2,6 +2,8 @@ import { Perfil } from "../enums/perfil";
 import { TipoEmpleado } from "../enums/tipo-empleado";
 
 
+
+
 export interface Usuario {
   id: string,
   email: string,
