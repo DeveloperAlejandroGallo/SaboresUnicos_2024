@@ -2,6 +2,8 @@ import { Perfil } from "../enums/perfil";
 import { TipoEmpleado } from "../enums/tipo-empleado";
 
 
+
+
 export interface Usuario {
   id: string,
   email: string,
@@ -12,6 +14,6 @@ export interface Usuario {
   dni: number,
   cuil: string,
   perfil: Perfil,
-  tipoEmpleado?: TipoEmpleado,
+  tipoEmpleado?: TipoEmpleado | null,
   activo: boolean
 }

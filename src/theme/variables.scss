@@ -75,6 +75,8 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  --ion-color-app: #4a6fb9;
 }
 
 ion-content,ion-button,ion-card-content,ion-input,ion-note{
@@ -268,4 +270,9 @@ html {
       --background: transparent;
       --ion-background-color: transparent;
     }
+  }
+
+  ion-toolbar {
+    --background: var(--ion-color-app);
+    --ion-background-color: var(--ion-color-app);
   }
