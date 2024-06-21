@@ -12,3 +12,11 @@ ion-col{
   color: black;
   text-align: center;
 }
+
+.center-alert {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
