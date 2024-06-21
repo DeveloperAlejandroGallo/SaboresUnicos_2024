@@ -47,7 +47,8 @@ const routes: Routes = [
   },
   {
     path: 'home-maitre',
-    loadChildren: () => import('./pages/home-maitre/home-maitre.module').then( m => m.HomeMaitrePageModule)
+    loadChildren: () => import('./pages/home-maitre/home-maitre.module').then( m => m.HomeMaitrePageModule),
+    canActivate: [EstaLogueadoGuard]
   },
 
 

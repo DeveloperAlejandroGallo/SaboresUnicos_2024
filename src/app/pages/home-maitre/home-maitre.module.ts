@@ -9,6 +9,8 @@ import { HomeMaitrePageRoutingModule } from './home-maitre-routing.module';
 import { HomeMaitrePage } from './home-maitre.page';
 import { NavBarModule } from 'src/app/components/nav-bar/nav-bar.module';
 import { HeaderModule } from 'src/app/components/header/header.module';
+import { RouterModule } from '@angular/router';
+
 
 @NgModule({
   imports: [
@@ -17,8 +19,9 @@ import { HeaderModule } from 'src/app/components/header/header.module';
     IonicModule,
     NavBarModule,
     HeaderModule,
-    HomeMaitrePageRoutingModule
+    HomeMaitrePageRoutingModule,
   ],
-  declarations: [HomeMaitrePage]
+  declarations: [HomeMaitrePage],
+  exports:[HomeMaitrePage]
 })
 export class HomeMaitrePageModule {}

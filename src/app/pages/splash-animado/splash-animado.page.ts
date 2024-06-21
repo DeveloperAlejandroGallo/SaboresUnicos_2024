@@ -13,8 +13,7 @@ export class SplashAnimadoPage {
 
   ionViewWillEnter() {
     setTimeout(()=>{
-      this.router.navigateByUrl('/home-maitre');
-      //this.router.navigateByUrl('/login');
+      this.router.navigateByUrl('/login');
     }, 4000)
   }
 

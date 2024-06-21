@@ -9,7 +9,28 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class HomeMaitrePage implements OnInit {
 
-  listadoEnEspera = ["Juan", "Rocio", "Micaela"];
+  listadoEnEspera = [
+    "Juan",
+    "María",
+    "Carlos",
+    "Ana",
+    "Pedro",
+    "Laura",
+    "José",
+    "Carmen",
+    "Luis",
+    "Elena",
+    "Miguel",
+    "Marta",
+    "Francisco",
+    "Sofía",
+    "Antonio",
+    "Paula",
+    "David",
+    "Lucía",
+    "Manuel",
+    "Isabel"
+  ];
 
   public usuario!: Usuario;
   url: string;
