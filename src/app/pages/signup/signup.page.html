@@ -87,15 +87,10 @@
             </ion-note>
             <ion-note
               class="error-message"
-              *ngIf=" signupForm.controls['dni'].hasError('min') && signupForm.controls['dni'].touched "
+              *ngIf="(signupForm.controls['dni'].hasError('max') || signupForm.controls['dni'].hasError('min'))
+              && signupForm.controls['dni'].touched "
             >
-              El DNI debe tener al menos 7 dígitos
-            </ion-note>
-            <ion-note
-              class="error-message"
-              *ngIf=" signupForm.controls['dni'].hasError('max') && signupForm.controls['dni'].touched "
-            >
-              El DNI debe tener menos de 9 dígitos
+              El DNI debe tener entre 7 y 8 dígitos
             </ion-note>
           </div>
           <div *ngIf="verCuil">
@@ -169,6 +164,12 @@
           >
             Debe ingresar una contraseña
           </ion-note>
+          <ion-note
+          class="error-message"
+          *ngIf=" signupForm.controls['password'].hasError('minlength') && signupForm.controls['password'].touched "
+        >
+          La contraseña debe tener al menos 6 caracteres
+        </ion-note>
           </div>
 
           <ion-button

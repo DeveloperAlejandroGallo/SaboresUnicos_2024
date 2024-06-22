@@ -171,14 +171,14 @@ export class SignupPage implements OnInit {
         dni: new FormControl('', [
           Validators.required,
           Validators.pattern('^[0-9]+$'),
-          Validators.minLength(7),
-          Validators.maxLength(9),
+          Validators.min(1000000),
+          Validators.max(999999999),
         ]),
         cuil: new FormControl('', [
           Validators.required,
           Validators.pattern('^[0-9]+$'),
-          Validators.minLength(10),
-          Validators.maxLength(12),
+          Validators.min(1000000000),
+          Validators.max(999999999999),
         ]),
         password: new FormControl('', [
           Validators.required,
