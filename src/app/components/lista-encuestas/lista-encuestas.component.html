@@ -1,0 +1,111 @@
+<div class="card-list">
+  <ion-accordion-group class="custom-accordion-container" (ionChange)="verEncuestas($event)">
+    <ion-accordion value="verEncuestas">
+      <ion-item slot="header" color="tertiary" class="custom-accordion-header">
+        <ion-icon name="restaurant" slot="start"></ion-icon>
+        <ion-label>Ver reseñas del lugar</ion-label>
+      </ion-item>
+      <ion-list
+        slot="content"
+        *ngIf="
+          !isLoading && listaEncuestas && listaEncuestas.length > 0;
+          else noEncuestas
+        "
+      >
+        <ion-card *ngFor="let encuesta of listaEncuestas">
+          <ion-card-header>
+            {{ encuesta.cliente }}
+          </ion-card-header>
+          <ion-card-content>
+            <ion-row *ngIf="encuesta.foto">
+              <ion-col>
+                <img [src]="encuesta.foto" alt="Foto del cliente" />
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-icon
+                  *ngFor="let _ of getArray(encuesta.estrellas)"
+                  name="star"
+                  color="warning"
+                  class="icono-grande"
+                ></ion-icon>
+                <ion-icon
+                  *ngFor="let _ of getArray(encuesta.estrellaFaltante)"
+                  name="star-outline"
+                  color="medium"
+                  class="icono-grande"
+                ></ion-icon>
+              </ion-col>
+              <ion-col class="fecha">
+                <p class="fecha-texto">{{ encuesta.fechaFormateada }}</p>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <p class="opinion">{{ encuesta.opinion }}</p>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+      <!-- spinner -->
+      <ion-list slot="content" *ngIf="isLoading">
+        <ion-card>
+          <ion-card-header>
+            <ion-skeleton-text
+              [animated]="true"
+              style="width: 80px"
+            ></ion-skeleton-text>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-row>
+              <ion-col>
+                <ion-thumbnail>
+                  <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                </ion-thumbnail>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-skeleton-text
+                  [animated]="true"
+                  style="width: 80%"
+                ></ion-skeleton-text>
+              </ion-col>
+              <ion-col>
+                <ion-skeleton-text
+                  [animated]="true"
+                  style="width: 50%"
+                ></ion-skeleton-text>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-skeleton-text
+                  [animated]="true"
+                  style="width: 30%"
+                ></ion-skeleton-text>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </ion-accordion>
+  </ion-accordion-group>
+  <ng-template #noEncuestas>
+    <ion-item slot="content" *ngIf="!isLoading">
+      <ion-label color="medium" class="ion-text-center"
+        >Sé el primero en dejarnos una calificación!</ion-label
+      >
+    </ion-item>
+  </ng-template>
+  
+  <div class="image-container">
+    <ion-text color="primary">
+      <h2>Escanea el QR para ingresar a la lista de espera.</h2>
+    </ion-text>
+    <img src="../../../assets/img/escanear.gif" alt="Escanear" />
+  </div>
+</div>
+
