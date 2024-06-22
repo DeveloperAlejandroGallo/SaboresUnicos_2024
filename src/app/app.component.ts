@@ -1,13 +1,12 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { UsuarioService } from './services/usuario.service';
 import { AudioService } from './services/audio.service';
-import { NavigationStart, Router } from '@angular/router';
+import {  Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { App } from '@capacitor/app';
-import Swal from 'sweetalert2';
 import { AuthService } from './services/auth.service';
-import { set } from 'firebase/database';
 import { StatusBar, Style } from '@capacitor/status-bar';
+import { PushNotifications, PushNotificationSchema } from '@capacitor/push-notifications';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +30,37 @@ export class AppComponent implements OnInit{
 
     this.iniciarApp();
     this.usuariosSrv.traer();
+
+    if(this.platform.is("android")){
+      this.addListeners();
+      this.registerNotifications();
+    }
+
+
+  }
+  async registerNotifications() {
+    let permisionStatus = await PushNotifications.checkPermissions();
+
+    if(permisionStatus.receive === "prompt"){
+      permisionStatus = await PushNotifications.requestPermissions();
+    }
+
+    if(permisionStatus.receive !== "granted"){
+      console.log("No se puede recibir notificaciones");
+    }
+
+    PushNotifications.register();
+
+    PushNotifications.addListener('registration', (token: PushNotificationSchema) => {
+      console.log('Token de dispositivo:', token.value);
+      // Aquí puedes enviar el token al servidor para almacenarlo y asociarlo con el usuario
+      // Por ejemplo, puedes hacer una solicitud HTTP POST a tu endpoint "/notify" con el token
+    });
+
+  }
+
+  addListeners() {
+
   }
   ngOnInit(): void {
     this.usuariosSrv.traer();
@@ -42,7 +72,7 @@ export class AppComponent implements OnInit{
 
 
 
-                                                                                            
+
   irAUrl(url: string) {
     this.isLoading = true;
 

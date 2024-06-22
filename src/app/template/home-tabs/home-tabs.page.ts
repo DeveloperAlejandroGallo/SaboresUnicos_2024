@@ -29,34 +29,34 @@ export class HomeTabsPage implements OnInit {
   listaEspera: any[] = [];
   mesasInfo: any[] = [];
   isLoading = false;
-  uidUsuarioActual : any;
+
   estaEnEspera : boolean = false;
   constructor(private mesasSvc: MesasService ,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService) {
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
     console.log(this.usuario);
-  
-    
+
+
   }
   ngOnInit() {
-    this.uidUsuarioActual = getAuth().currentUser?.uid;
+
     console.log(getAuth().currentUser?.uid);
     this.mesasSvc.traerListaEspera().subscribe(data=>{
       this.listaEspera = data;
       console.log(this.listaEspera);
-      
+
     });
     this.mesasSvc.buscarEnListaXuid(this.uidUsuarioActual).subscribe(data=>{
       this.estaEnEspera = data.length > 0;
       console.log(this.estaEnEspera);
-      
+
     });
     this.mesasSvc.traerMesas().subscribe(data=>{
       this.mesasInfo = data;
       console.log(this.mesasInfo);
-      
+
     })
-    
+
     if (this.platform.is('capacitor')) {
       try {
         BarcodeScanner.installGoogleBarcodeScannerModule();
@@ -127,8 +127,8 @@ export class HomeTabsPage implements OnInit {
                 });
               }
             });
-            
-            
+
+
           }
           else{
             this.msgService.Info2("Ya estas en la lista de espera.");
@@ -142,7 +142,7 @@ export class HomeTabsPage implements OnInit {
       }
 
     }
-    
+
 
   }
 }
