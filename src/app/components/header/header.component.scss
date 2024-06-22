@@ -1,0 +1,27 @@
+ion-header {
+  ion-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  ion-avatar {
+    // margin-right: 10px;
+    border: 3px solid rgba(255, 255, 255, 0.747);
+    margin: 5px 10px;
+  }
+
+  ion-button {
+    display: flex;
+    align-items: center;
+    ion-icon {
+      margin-left: 10px;
+    }
+  }
+}
+
+.btn-sesion {
+  ion-icon {
+    margin-right: 10px;
+  }
+}

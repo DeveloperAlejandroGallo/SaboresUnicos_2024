@@ -3,5 +3,5 @@ export enum Perfil {
   Supervisor = "Supervisor",
   Empleado = "Empleado",
   Cliente = "Cliente",
-  Anónimo = "Anónimo"
+  Anonimo = "Anonimo"
 }

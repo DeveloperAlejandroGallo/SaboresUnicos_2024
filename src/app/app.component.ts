@@ -7,6 +7,7 @@ import { App } from '@capacitor/app';
 import Swal from 'sweetalert2';
 import { AuthService } from './services/auth.service';
 import { set } from 'firebase/database';
+import { StatusBar, Style } from '@capacitor/status-bar';
 import { PushNotifService } from './services/push-notif.service';
 
 @Component({
@@ -44,7 +45,7 @@ export class AppComponent implements OnInit{
 
 
 
-
+                                                                                            
   irAUrl(url: string) {
     this.isLoading = true;
 
@@ -61,6 +62,10 @@ export class AppComponent implements OnInit{
       this.audioSrv.reporoduccionInicioSesion();
 
       this.setAndroidBackButtonBehavior();
+
+      //para la barra de notificaciones
+      StatusBar.setBackgroundColor({ color: '#BF0000' });
+      StatusBar.setStyle({ style: Style.Light });
     });
   }
   setAndroidBackButtonBehavior() {
