@@ -1,0 +1,104 @@
+ion-card {
+    margin: 15px 10px;
+  }
+  
+  ion-card-header {
+    font-weight: bold;
+  }
+  
+  .fecha-texto {
+    color: grey;
+    font-style: italic;
+    margin: 0;
+    text-align: end;
+  }
+  
+  .opinion {
+    margin: 0;
+  }
+  .ion-text-center {
+    text-align: center;
+  }
+  ion-list{
+    background: transparent;
+  }
+
+  ion-card-header{
+    font-size: 20px;
+    padding-top: 15px;
+    padding-bottom: 0px;
+  }
+
+  ion-card-content{
+    font-size: medium;
+    padding: 10px;
+  }
+
+  .icono-grande {
+    font-size: 18px;
+  }
+
+  ion-row{
+    align-items: center;
+  }
+  ion-skeleton-text {
+    --border-radius: 9999px;
+    --background: rgba(188, 0, 255, 0.065);
+    --background-rgb: 188, 0, 255;
+  }
+
+  ion-item{
+    --background: transparent;
+    --border-color: #c8c7cc00;
+  }
+
+  .image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    // height: 100vh;
+    flex-direction: column;
+  }
+  
+  .image-container img {
+    max-width: 100%;
+    height: auto;
+    max-height: calc(100vh - 20px);
+    border-radius: 10px;
+  }
+
+  .custom-accordion-container {
+    width: 95%; /* Ancho deseado del acordeón */
+    margin: 13px auto; /* Centra el acordeón horizontalmente */
+
+  }
+
+//   ion-list[slot='content'] {
+//     background: rgba(255, 255, 255, 0.397);
+//   }
+
+ion-accordion{
+    background:#bfbee959;
+    border-radius: 10px;
+}
+
+h2{
+    text-align: center;
+    margin-top: 0;
+    background: #385ba7;
+    border-radius: 10px;
+    color: white;
+    padding: 5px 5px;
+}
+
+.card-list {
+
+    max-height: 84vh;
+    overflow-y: auto;
+  }
+
+  ion-label{
+    font-weight: bold;
+    text-align: center;
+  }
