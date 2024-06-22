@@ -31,7 +31,7 @@ const routes: Routes = [
   },
   {
     path: 'push-notification',
-    loadChildren: () => import('./pages/push-notification/push-notification/push-notification.module').then( m => m.PushNotificationPageModule
+    loadChildren: () => import('./pages/push-notification/push-notification/push-notification.module').then( m => m.PushNotificationPageModule)
 
   },
   {
