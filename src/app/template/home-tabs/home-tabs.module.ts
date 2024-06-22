@@ -8,6 +8,7 @@ import { HomeTabsPageRoutingModule } from './home-tabs-routing.module';
 
 import { HomeTabsPage } from './home-tabs.page';
 import { RouterModule } from '@angular/router';
+import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
 
 @NgModule({
   imports: [
@@ -42,6 +43,6 @@ import { RouterModule } from '@angular/router';
       }
     ])
   ],
-  declarations: [HomeTabsPage]
+  declarations: [HomeTabsPage, BarcodeScanningModalComponent]
 })
 export class HomeTabsPageModule {}
