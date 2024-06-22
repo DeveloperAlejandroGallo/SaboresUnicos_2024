@@ -101,6 +101,35 @@ export class MensajesService {
     });
   }
 
+  Error2(msg: string) {
+    Haptics.vibrate({ duration: 750 });
+    Swal.fire({
+      title: 'Error',
+      text: msg,
+      icon: 'error',
+      color: "#F27474",
+      heightAuto: false,
+      background: "rgb(255 255 255 / 91%)",
+      confirmButtonColor: "#385ba7",
+      width: "20em",
+      
+    });
+  }
+
+  Info2(msg: string) {
+    Haptics.vibrate({ duration: 750 });
+    Swal.fire({
+      title: 'Información',
+      text: msg,
+      icon: 'info',
+      color: "#000000",
+      heightAuto: false,
+      background: "rgb(255 255 255 / 91%)",
+      confirmButtonColor: "#385ba7",
+      width: "20em"
+    });
+  }
+
   async ErrorIonToast(message: string): Promise<void> {
     const toast = await this.toastController.create({
       message: message,
@@ -116,7 +145,7 @@ export class MensajesService {
     const toast = await this.toastController.create({
       message: message,
       duration: t * 1000, // Opcional: Duración del toast
-      position: 'bottom', // Posición del toast
+      position: 'middle', // Posición del toast
       color: 'success', // Color que se le aplicará al toast
     });
 

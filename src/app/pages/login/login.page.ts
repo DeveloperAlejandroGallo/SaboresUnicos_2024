@@ -75,7 +75,7 @@ export class LoginPage implements OnInit {
 
   ingresarComoInvitado(){
     this.loginForm.reset();
-    this.router.navigate(['/signup/Anónimo']);
+    this.router.navigate(['/signup/Anonimo']);
   }
 
   save(event: any): any {

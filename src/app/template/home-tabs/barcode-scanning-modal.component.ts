@@ -15,53 +15,55 @@ import {
   LensFacing,
   StartScanOptions,
 } from '@capacitor-mlkit/barcode-scanning';
-
 import { ModalController } from '@ionic/angular';
 
-const template = `<ion-header class="ion-no-border">
-<ion-toolbar color="primary">
-  <ion-buttons slot="end">
-    <ion-button (click)="closeModal()">
-      <ion-icon name="close"></ion-icon>
-    </ion-button>
-  </ion-buttons>
-</ion-toolbar>
-</ion-header>
-
-<ion-content>
-<div #square class="square"></div>
-<ion-fab
-  *ngIf="isTorchAvailable"
-  slot="fixed"
-  horizontal="end"
-  vertical="bottom"
->
-  <ion-fab-button (click)="toggleTorch()">
-    <ion-icon name="flashlight"></ion-icon>
-  </ion-fab-button>
-</ion-fab>
-</ion-content>`;
-
-const styles = ` ion-content {
-  --background: transparent;
-}
-
-.square {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 16px;
-  width: 200px;
-  height: 200px;
-  border: 6px solid white;
-  box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.3);
-} `;
 
 @Component({
   selector: 'app-barcode-scanning',
-  template: template ,
-  styles: [styles ],
+  template: `
+    <ion-header class="ion-no-border">
+      <ion-toolbar color="primary">
+        <ion-buttons slot="end">
+          <ion-button (click)="closeModal()">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <div #square class="square"></div>
+      <ion-fab
+        *ngIf="isTorchAvailable"
+        slot="fixed"
+        horizontal="end"
+        vertical="bottom"
+      >
+        <ion-fab-button (click)="toggleTorch()">
+          <ion-icon name="flashlight"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </ion-content>
+  `,
+  styles: [
+    `
+      ion-content {
+        --background: transparent;
+      }
+
+      .square {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 10px;
+        width: 200px;
+        height: 200px;
+        border: 3px solid #BF0000;
+        box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.3);
+      }
+    `,
+  ],
 })
 export class BarcodeScanningModalComponent
   implements OnInit, AfterViewInit, OnDestroy {
@@ -93,7 +95,6 @@ export class BarcodeScanningModalComponent
   }
 
   public ngOnDestroy(): void {
-    console.log('ngOnDestroy del Modal');
     this.stopScan();
   }
 

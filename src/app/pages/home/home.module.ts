@@ -10,6 +10,7 @@ import { NavBarModule } from 'src/app/components/nav-bar/nav-bar.module';
 import { HeaderModule } from 'src/app/components/header/header.module';
 import { ListUsuariosModule } from 'src/app/components/list-usuarios/list-usuarios.module';
 import { HomeMaitrePageModule } from 'src/app/pages/home-maitre/home-maitre.module';
+import { ListaEncuestasModule } from 'src/app/components/lista-encuestas/lista-encuestas.module';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { HomeMaitrePageModule } from 'src/app/pages/home-maitre/home-maitre.modu
     HeaderModule,
     HomePageRoutingModule,
     ListUsuariosModule,
-    HomeMaitrePageModule
+    HomeMaitrePageModule,
+    ListaEncuestasModule
   ],
   declarations: [HomePage]
 })
