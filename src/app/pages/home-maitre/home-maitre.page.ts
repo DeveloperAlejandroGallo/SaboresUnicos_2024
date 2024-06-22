@@ -61,202 +61,219 @@ export class HomeMaitrePage implements OnInit {
 
     console.log(this.mesasLibres);
 
-    Swal.fire({
-      title: 'La mesa ' + this.mesasLibres[0].numero + ' se encuentra disponible',
-      //text: 'Tipo de mesa: '+this.mesasLibres[0].tipo + ' hasta '+ this.mesasLibres[0].comensales + ' comensales',
-      showDenyButton: true,
-      confirmButtonText: `Asignar`,
-      denyButtonText: `No gracias`,
-      position: 'center',
-      heightAuto: false,
-      customClass: {
-        popup: 'center-alert'
-      }
-    }).then((result0) => {
-      if (result0.isConfirmed) {
-        this.asignarMesa(cliActual,this.mesasLibres[0]);
-        Swal.fire({
-
-          title:'Mesa ' + this.mesasLibres[0].numero + ' asignada!',
-          icon: "success",
-          confirmButtonText: "OK",
-          position: 'center',
-          heightAuto: false,
-          customClass: {
-            popup: 'center-alert'
-          }
+    if (this.mesasLibres.length == 0) {
+      Swal.fire({
+  
+        title:'No hay más mesas disponibles',
+        icon: "warning",
+        confirmButtonText: "OK",
+        position: 'center',
+        heightAuto: false,
+        customClass: {
+          popup: 'center-alert'
         }
-        )
-        asignada = 1;
-      } else if (result0.isDenied) {
-        if (this.mesasLibres[1]) {
-        Swal.fire({
-          title: 'La mesa ' + this.mesasLibres[1].numero + ' se encuentra disponible',
-          //text: 'Tipo de mesa: '+this.listadoMesasLibres[1].tipo + ' hasta '+ this.listadoMesasLibres[1].comensales + ' comensales',
-          showDenyButton: true,
-          confirmButtonText: `Asignar`,
-          denyButtonText: `No gracias`,
-          position: 'center',
-          heightAuto: false,
-          customClass: {
-            popup: 'center-alert'
-          }
-        }).then((result1) => {
-          if (result1.isConfirmed) {
-            this.asignarMesa(cliActual,this.mesasLibres[1]);
-            Swal.fire({
-
-              title:'Mesa ' + this.mesasLibres[0].numero + ' asignada!',
-              icon: "success",
-              confirmButtonText: "OK",
-              position: 'center',
-              heightAuto: false,
-              customClass: {
-                popup: 'center-alert'
-              }
+      }
+      )
+    } else {
+      Swal.fire({
+        title: 'La mesa ' + this.mesasLibres[0].numero + ' se encuentra disponible',
+        //text: 'Tipo de mesa: '+this.mesasLibres[0].tipo + ' hasta '+ this.mesasLibres[0].comensales + ' comensales',
+        showDenyButton: true,
+        confirmButtonText: `Asignar`,
+        denyButtonText: `No gracias`,
+        position: 'center',
+        heightAuto: false,
+        customClass: {
+          popup: 'center-alert'
+        }
+      }).then((result0) => {
+        if (result0.isConfirmed) {
+          this.asignarMesa(cliActual,this.mesasLibres[0]);
+          Swal.fire({
+  
+            title:'Mesa ' + this.mesasLibres[0].numero + ' asignada!',
+            icon: "success",
+            confirmButtonText: "OK",
+            position: 'center',
+            heightAuto: false,
+            customClass: {
+              popup: 'center-alert'
             }
-            )
-            asignada = 1;
-          } else if (result1.isDenied) {
-
-            if (this.mesasLibres[2]) {
+          }
+          )
+          asignada = 1;
+        } else if (result0.isDenied) {
+          if (this.mesasLibres[1]) {
+          Swal.fire({
+            title: 'La mesa ' + this.mesasLibres[1].numero + ' se encuentra disponible',
+            //text: 'Tipo de mesa: '+this.listadoMesasLibres[1].tipo + ' hasta '+ this.listadoMesasLibres[1].comensales + ' comensales',
+            showDenyButton: true,
+            confirmButtonText: `Asignar`,
+            denyButtonText: `No gracias`,
+            position: 'center',
+            heightAuto: false,
+            customClass: {
+              popup: 'center-alert'
+            }
+          }).then((result1) => {
+            if (result1.isConfirmed) {
+              this.asignarMesa(cliActual,this.mesasLibres[1]);
               Swal.fire({
-                title: 'La mesa ' + this.mesasLibres[2].numero + ' se encuentra disponible',
-                //text: 'Tipo de mesa: '+this.listadoMesasLibres[2].tipo + ' hasta '+ this.listadoMesasLibres[2].comensales + ' comensales',
-                showDenyButton: true,
-                confirmButtonText: `Asignar`,
-                denyButtonText: `No gracias`,
+  
+                title:'Mesa ' + this.mesasLibres[0].numero + ' asignada!',
+                icon: "success",
+                confirmButtonText: "OK",
                 position: 'center',
                 heightAuto: false,
                 customClass: {
                   popup: 'center-alert'
                 }
-              }).then((result2) => {
-                if (result2.isConfirmed) {
-                  this.asignarMesa(cliActual,this.mesasLibres[2]);
-                  Swal.fire({
-
-                    title:'Mesa ' + this.mesasLibres[0].numero + ' asignada!',
-                    icon: "success",
-                    confirmButtonText: "OK",
-                    position: 'center',
-                    heightAuto: false,
-                    customClass: {
-                      popup: 'center-alert'
-                    }
+              }
+              )
+              asignada = 1;
+            } else if (result1.isDenied) {
+  
+              if (this.mesasLibres[2]) {
+                Swal.fire({
+                  title: 'La mesa ' + this.mesasLibres[2].numero + ' se encuentra disponible',
+                  //text: 'Tipo de mesa: '+this.listadoMesasLibres[2].tipo + ' hasta '+ this.listadoMesasLibres[2].comensales + ' comensales',
+                  showDenyButton: true,
+                  confirmButtonText: `Asignar`,
+                  denyButtonText: `No gracias`,
+                  position: 'center',
+                  heightAuto: false,
+                  customClass: {
+                    popup: 'center-alert'
                   }
-                  )
-                  asignada = 2;
-                } else if (result2.isDenied) {
-                  if (this.mesasLibres[3]) {
+                }).then((result2) => {
+                  if (result2.isConfirmed) {
+                    this.asignarMesa(cliActual,this.mesasLibres[2]);
                     Swal.fire({
-                      title: 'La mesa ' + this.mesasLibres[3].numero + ' se encuentra disponible',
-                      //text: 'Tipo de mesa: '+this.listadoMesasLibres[3].tipo + ' hasta '+ this.listadoMesasLibres[3].comensales + ' comensales',
-                      showDenyButton: true,
-                      confirmButtonText: `Asignar`,
-                      denyButtonText: `No gracias`,
+  
+                      title:'Mesa ' + this.mesasLibres[0].numero + ' asignada!',
+                      icon: "success",
+                      confirmButtonText: "OK",
                       position: 'center',
                       heightAuto: false,
                       customClass: {
                         popup: 'center-alert'
                       }
-                    }).then((result3) => {
-                      if (result3.isConfirmed) {
-                        this.asignarMesa(cliActual,this.mesasLibres[3]);
-                        Swal.fire({
-
-                          title:'Mesa ' + this.mesasLibres[0].numero + ' asignada!',
-                          icon: "success",
-                          confirmButtonText: "OK",
-                          position: 'center',
-                          heightAuto: false,
-                          customClass: {
-                            popup: 'center-alert'
-                          }
+                    }
+                    )
+                    asignada = 2;
+                  } else if (result2.isDenied) {
+                    if (this.mesasLibres[3]) {
+                      Swal.fire({
+                        title: 'La mesa ' + this.mesasLibres[3].numero + ' se encuentra disponible',
+                        //text: 'Tipo de mesa: '+this.listadoMesasLibres[3].tipo + ' hasta '+ this.listadoMesasLibres[3].comensales + ' comensales',
+                        showDenyButton: true,
+                        confirmButtonText: `Asignar`,
+                        denyButtonText: `No gracias`,
+                        position: 'center',
+                        heightAuto: false,
+                        customClass: {
+                          popup: 'center-alert'
                         }
-                        )
-                        asignada = 3;
-                      } else if (result3.isDenied) {
-                        if (this.mesasLibres[4]) {
+                      }).then((result3) => {
+                        if (result3.isConfirmed) {
+                          this.asignarMesa(cliActual,this.mesasLibres[3]);
                           Swal.fire({
-                            title: 'La mesa ' + this.mesasLibres[4].numero + ' se encuentra disponible',
-                            //text: 'Tipo de mesa: '+this.listadoMesasLibres[4].tipo + ' hasta '+ this.listadoMesasLibres[4].comensales + ' comensales',
-                            showDenyButton: true,
-                            confirmButtonText: `Asignar`,
-                            denyButtonText: `No gracias`,
+  
+                            title:'Mesa ' + this.mesasLibres[0].numero + ' asignada!',
+                            icon: "success",
+                            confirmButtonText: "OK",
                             position: 'center',
                             heightAuto: false,
                             customClass: {
                               popup: 'center-alert'
                             }
-                          }).then((result4) => {
-                            if (result4.isConfirmed) {
-                              this.asignarMesa(cliActual,this.mesasLibres[4]);
-                              Swal.fire({
-
-                                title:'Mesa ' + this.mesasLibres[0].numero + ' asignada!',
-                                icon: "success",
-                                confirmButtonText: "OK",
-                                position: 'center',
-                                heightAuto: false,
-                                customClass: {
-                                  popup: 'center-alert'
-                                }
+                          }
+                          )
+                          asignada = 3;
+                        } else if (result3.isDenied) {
+                          if (this.mesasLibres[4]) {
+                            Swal.fire({
+                              title: 'La mesa ' + this.mesasLibres[4].numero + ' se encuentra disponible',
+                              //text: 'Tipo de mesa: '+this.listadoMesasLibres[4].tipo + ' hasta '+ this.listadoMesasLibres[4].comensales + ' comensales',
+                              showDenyButton: true,
+                              confirmButtonText: `Asignar`,
+                              denyButtonText: `No gracias`,
+                              position: 'center',
+                              heightAuto: false,
+                              customClass: {
+                                popup: 'center-alert'
                               }
-                              )
-                              asignada = 4;
-                            } else if (result4.isDenied) {
-                              if (this.mesasLibres[5]) {
+                            }).then((result4) => {
+                              if (result4.isConfirmed) {
+                                this.asignarMesa(cliActual,this.mesasLibres[4]);
                                 Swal.fire({
-                                  title: 'La mesa ' + this.mesasLibres[5].numero + ' se encuentra disponible',
-                                  //text: 'Tipo de mesa: '+this.listadoMesasLibres[5].tipo + ' hasta '+ this.listadoMesasLibres[5].comensales + ' comensales',
-                                  showDenyButton: true,
-                                  confirmButtonText: `Asignar`,
-                                  denyButtonText: `No gracias`,
+  
+                                  title:'Mesa ' + this.mesasLibres[0].numero + ' asignada!',
+                                  icon: "success",
+                                  confirmButtonText: "OK",
                                   position: 'center',
                                   heightAuto: false,
                                   customClass: {
                                     popup: 'center-alert'
                                   }
-                                }).then((result5) => {
-                                  if (result5.isConfirmed) {
-                                    this.asignarMesa(cliActual,this.mesasLibres[5]);
-                                    Swal.fire({
-
-                                      title:'Mesa ' + this.mesasLibres[0].numero + ' asignada!',
-                                      icon: "success",
-                                      confirmButtonText: "OK",
-                                      position: 'center',
-                                      heightAuto: false,
-                                      customClass: {
-                                        popup: 'center-alert'
-                                      }
+                                }
+                                )
+                                asignada = 4;
+                              } else if (result4.isDenied) {
+                                if (this.mesasLibres[5]) {
+                                  Swal.fire({
+                                    title: 'La mesa ' + this.mesasLibres[5].numero + ' se encuentra disponible',
+                                    //text: 'Tipo de mesa: '+this.listadoMesasLibres[5].tipo + ' hasta '+ this.listadoMesasLibres[5].comensales + ' comensales',
+                                    showDenyButton: true,
+                                    confirmButtonText: `Asignar`,
+                                    denyButtonText: `No gracias`,
+                                    position: 'center',
+                                    heightAuto: false,
+                                    customClass: {
+                                      popup: 'center-alert'
                                     }
-                                    )
-                                    asignada = 5;
-                                  } else if (result5.isDenied) {
-
-                                  }
-                                })
+                                  }).then((result5) => {
+                                    if (result5.isConfirmed) {
+                                      this.asignarMesa(cliActual,this.mesasLibres[5]);
+                                      Swal.fire({
+  
+                                        title:'Mesa ' + this.mesasLibres[0].numero + ' asignada!',
+                                        icon: "success",
+                                        confirmButtonText: "OK",
+                                        position: 'center',
+                                        heightAuto: false,
+                                        customClass: {
+                                          popup: 'center-alert'
+                                        }
+                                      }
+                                      )
+                                      asignada = 5;
+                                    } else if (result5.isDenied) {
+  
+                                    }
+                                  })
+                                }
                               }
-                            }
-                          })
+                            })
+                          }
                         }
-                      }
-                    })
+                      })
+                    }
                   }
-                }
-              })
-
-
+                })
+  
+  
+              }
             }
-          }
-      
-        });
-        }
         
-      }
-    });
+          });
+          }
+          
+        }
+      });
+    }
+
+    
     
 
 
