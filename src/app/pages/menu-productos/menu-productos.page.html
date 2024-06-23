@@ -1,4 +1,4 @@
-<body>
+<!-- <body>
   
 
  <ion-header><app-header></app-header> </ion-header>
@@ -27,7 +27,7 @@
         </ion-thumbnail>
         <div class="nombre-detalles">
           <h2>{{producto.nombre}}</h2>
-          <!-- <ion-button (click)="openModal(producto)"><ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon></ion-button> -->
+         
         <p><a id="open-modal" (click)="openModal(producto)">Detalles</a></p>
         </div>
          
@@ -59,7 +59,7 @@
         </ion-thumbnail>
           <div class="nombre-detalles">
             <h2>{{producto.nombre}}</h2>
-            <!-- <ion-button (click)="openModal(producto)"><ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon></ion-button> -->
+            
           <p><a (click)="openModal(producto)">Detalles</a></p>
           </div>
         <div class="item-end">
@@ -90,7 +90,7 @@
         </ion-thumbnail>
         <div class="nombre-detalles">
           <h2>{{producto.nombre}}</h2>
-          <!-- <ion-button (click)="openModal(producto)"><ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon></ion-button> -->
+          
         <p><a (click)="openModal(producto)">Detalles</a></p>
         </div>
         <div class="item-end">
@@ -129,143 +129,12 @@
       </ion-card>
     </ion-content>
   </ng-template>
-      <!-- <ng-template>
-        <ion-header>
-          <ion-toolbar>
-            <ion-buttons slot="start">
-              <ion-button (click)="cancel()">Cancel</ion-button>
-            </ion-buttons>
-            <ion-title>Welcome</ion-title>
-            <ion-buttons slot="end">
-              <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content class="ion-padding">
-          <ion-item>
-            <ion-input
-              label="Enter your name"
-              labelPlacement="stacked"
-              type="text"
-              placeholder="Your name"
-              [(ngModel)]="name"
-            ></ion-input>
-          </ion-item>
-        </ion-content>
-      </ng-template> -->
+      
     </ion-modal>
-    <!-- <ion-header>
-      <ion-toolbar>
-        <ion-title>{{ selectedProduct?.nombre }}</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="cancel()">Cerrar</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      <ion-card>
-        <ion-card-content>
-          <p>Precio: {{ selectedProduct?.precio | currency }}</p>
-          <p>Tiempo de preparación: {{ selectedProduct?.tiempo }} minutos</p>
-          <p>{{ selectedProduct?.descripcion }}</p>
-        </ion-card-content>
-      </ion-card>
-    </ion-content> -->
+   
   
 </body>
-    <!-- <ion-container>
-    <ng-container *ngIf="selectedCategory === 'comida'">
-      <ion-card *ngFor="let producto of comida">
-        
-        <swiper-container pager="true">
-          <swiper-slide *ngFor="let imagen of producto.imagenes">
-            <img [src]="imagen" />
-          </swiper-slide>
-        </swiper-container>
-        <ion-card-content>
-          <ion-label>
-            <h2>{{producto.nombre}}</h2>
-          </ion-label>
-          <ion-button (click)="openModal(producto)" class="botonDetalle">Ver Detalles</ion-button>
-          <div class="item-end">
-            <h2>{{producto.precio}}</h2>
-            <div class="quantity-controls">
-              <ion-button fill="clear" size="small" (click)="decrementarCantidad(producto)">
-                <ion-icon name="trash-bin-outline"></ion-icon>
-              </ion-button>
-              <ion-input type="number" value="1" readonly></ion-input>
-              <ion-button fill="clear" size="small" (click)="incrementarCantidad(producto)">
-                <ion-icon name="add-outline"></ion-icon>
-              </ion-button>
-            </div>
-          </div>
-        </ion-card-content>
-      
-      </ion-card>
-    </ng-container>
-  
-    <ng-container *ngIf="selectedCategory === 'bebidas'">
-      <ion-card *ngFor="let producto of bebidas">
-        <swiper-container pager="true">
-          <swiper-slide *ngFor="let imagen of producto.imagenes">
-            <img [src]="imagen" />
-          </swiper-slide>
-        </swiper-container>
-        <ion-card-content>
-          <ion-card-title>{{ producto.nombre }}</ion-card-title>
-          <ion-button (click)="openModal(producto)">Ver Detalles</ion-button>
-          <ion-row>
-            <ion-col>
-              <ion-button (click)="decrementarCantidad(producto)">-</ion-button>
-              <ion-badge>{{ producto.cantidad }}</ion-badge>
-              <ion-button (click)="incrementarCantidad(producto)">+</ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-card-content>
-      </ion-card>
-    </ng-container>
-  
-    <ng-container *ngIf="selectedCategory === 'postres'">
-      <ion-card *ngFor="let producto of postres">
-        <swiper-container pager="true">
-          <swiper-slide *ngFor="let imagen of producto.imagenes">
-            <img [src]="imagen" />
-          </swiper-slide>
-        </swiper-container>
-        <ion-card-content>
-          <ion-card-title>{{ producto.nombre }}</ion-card-title>
-          <ion-button (click)="openModal(producto)">Ver Detalles</ion-button>
-          <ion-row>
-            <ion-col>
-              <ion-button (click)="decrementarCantidad(producto)">-</ion-button>
-              <ion-badge>{{ producto.cantidad }}</ion-badge>
-              <ion-button (click)="incrementarCantidad(producto)">+</ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-card-content>
-      </ion-card>
-    </ng-container>
-  
-    <ion-modal [isOpen]="isModalOpen" (ionModalDidDismiss)="closeModal()">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>{{ selectedProduct?.nombre }}</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="closeModal()">Cerrar</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        <ion-card>
-          <ion-card-content>
-            <p>Precio: {{ selectedProduct?.precio | currency }}</p>
-            <p>Tiempo de preparación: {{ selectedProduct?.tiempo }} minutos</p>
-            <p>{{ selectedProduct?.descripcion }}</p>
-          </ion-card-content>
-        </ion-card>
-      </ion-content>
-    </ion-modal>
-  </ion-container> -->
+   
 
 
-
+ -->

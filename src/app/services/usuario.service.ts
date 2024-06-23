@@ -102,7 +102,8 @@ export class UsuarioService {
       cuil: usuario.cuil,
       perfil: usuario.perfil,
       tipoEmpleado: usuario.perfil !== (Perfil.Anonimo && Perfil.Cliente) ? usuario.tipoEmpleado : null,
-      activo: usuario.perfil == Perfil.Anonimo ? true : false
+      activo: usuario.perfil == Perfil.Anonimo ? true : false,
+      mesaAsignada: 0
     });
 
     return usuario;
@@ -125,7 +126,8 @@ export class UsuarioService {
       cuil: usuario.cuil,
       perfil: usuario.perfil,
       tipoEmpleado: usuario.tipoEmpleado,
-      activo: usuario.activo
+      activo: usuario.activo,
+      mesaAsignada: usuario.mesaAsignada
     });
   }
 

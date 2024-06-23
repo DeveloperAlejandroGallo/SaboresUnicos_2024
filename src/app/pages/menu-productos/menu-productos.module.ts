@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { MenuProductosPageRoutingModule } from './menu-productos-routing.module';
 
 import { MenuProductosPage } from './menu-productos.page';
-import { ListaProductosModule } from 'src/app/components/lista-productos/lista-productos.module';
 import { NavBarModule } from 'src/app/components/nav-bar/nav-bar.module';
 import { HeaderModule } from 'src/app/components/header/header.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -17,7 +16,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     FormsModule,
     IonicModule,
     MenuProductosPageRoutingModule,
-    ListaProductosModule,
     NavBarModule,
     HeaderModule
   ],

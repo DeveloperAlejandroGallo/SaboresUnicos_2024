@@ -51,10 +51,10 @@
       <ion-row *ngFor="let item of listaDeEspera">
 
         <ion-col size="3">
-          <img src="../../../assets/icon-only.png" alt="foto" width="60%">
+          <img src={{item.usuario.foto}} alt="foto" width="60%">
         </ion-col>
         <ion-col size="6">
-         {{item.nombre}}
+         {{item.usuario.nombre}}
         </ion-col>
         <ion-col size="3">
           <div>
