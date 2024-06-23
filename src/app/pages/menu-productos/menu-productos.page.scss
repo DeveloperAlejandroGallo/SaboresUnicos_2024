@@ -1,0 +1,123 @@
+ion-header {
+  ion-toolbar {
+    ion-title {
+      text-align: center;
+    }
+  }
+}
+
+ion-segment {
+  ion-segment-button {
+    ion-label {
+      font-size: 16px;
+    }
+  }
+}
+
+ion-card {
+    margin: 15px;
+    padding: 10px;
+  
+    ion-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  
+      ion-thumbnail {
+        margin-right: 15px;
+  
+        img {
+          width: 100px;
+          height: 100px;
+          object-fit: cover;
+        }
+      }
+  
+      .nombre-detalles {
+        flex: 1;
+  
+        h2 {
+          font-size: 18px;
+          margin: 0 0 5px 0;
+        }
+  
+        p {
+          margin: 0;
+          
+          a {
+            text-decoration: underline;
+            color: var(--ion-color-primary);
+          }
+        }
+      }
+  
+      .item-end {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+  
+        h2 {
+          font-size: 18px;
+          margin: 0 0 10px 0;
+        }
+  
+        .quantity-controls {
+          display: flex;
+          align-items: center;
+          border: black solid 1px;
+          border-radius: 5%;
+          ion-button {
+            padding: 5px;
+            
+            ion-icon {
+              font-size: 20px;
+            }
+          }
+  
+          ion-input {
+            width: 40px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            
+          }
+        }
+      }
+    }
+  }
+
+//   ion-content {
+//     height: 100vh;
+//     ion-card {
+//       margin: 10px;
+//       swiper-container {
+//         height: 200px;
+//         swiper-slide {
+//           display: flex;
+//           justify-content: center;
+//           align-items: center;
+//           img {
+//             max-height: 100%;
+//             max-width: 100%;
+//           }
+//         }
+//       }
+//       ion-card-content {
+//         ion-card-title {
+//           text-align: center;
+//           font-size: 18px;
+//           margin-bottom: 10px;
+//         }
+//         ion-button {
+//           margin: 10px 0;
+//           display: block;
+//           width: 100%;
+//         }
+//         ion-item {
+//           display: flex;
+//           justify-content: space-between;
+//           align-items: center;
+//         }
+//       }
+//     }
+//   }

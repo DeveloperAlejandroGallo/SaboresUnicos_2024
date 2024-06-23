@@ -9,6 +9,9 @@ import { AuthService } from './services/auth.service';
 import { set } from 'firebase/database';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { MesaService } from './services/mesa.service';
+import { register } from 'swiper/element/bundle';
+
+register();
 
 @Component({
   selector: 'app-root',

@@ -10,7 +10,7 @@ import { MenuProductosPage } from './menu-productos.page';
 import { ListaProductosModule } from 'src/app/components/lista-productos/lista-productos.module';
 import { NavBarModule } from 'src/app/components/nav-bar/nav-bar.module';
 import { HeaderModule } from 'src/app/components/header/header.module';
-
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 @NgModule({
   imports: [
     CommonModule,
@@ -21,6 +21,7 @@ import { HeaderModule } from 'src/app/components/header/header.module';
     NavBarModule,
     HeaderModule
   ],
-  declarations: [MenuProductosPage]
+  declarations: [MenuProductosPage],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class MenuProductosPageModule {}

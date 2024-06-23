@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { Producto } from 'src/app/models/productos';
+
+
 
 @Component({
   selector: 'app-lista-productos',
@@ -7,8 +11,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListaProductosComponent  implements OnInit {
 
-  constructor() { }
+  selectedCategory: string = 'comida';
+  isModalOpen = false;
+  selectedProduct: Producto | null = null;
+
+
+  constructor(private modalController: ModalController) { }
 
   ngOnInit() {}
+
+  segmentChanged(event: any) {
+    this.selectedCategory = event.detail.value;
+  }
+
+  openModal(producto: Producto) {
+    this.selectedProduct = producto;
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.selectedProduct = null;
+  }
 
 }
