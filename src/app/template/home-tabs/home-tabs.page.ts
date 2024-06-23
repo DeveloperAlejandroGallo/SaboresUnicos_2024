@@ -15,6 +15,7 @@ import { Timestamp } from 'firebase/firestore';
 import Swal from 'sweetalert2';
 import { ListaEsperaService } from 'src/app/services/lista-espera.service';
 import { MesaService } from 'src/app/services/mesas.service';
+import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
 const background = '#f8f8f8d7';
 @Component({
   selector: 'app-home-tabs',
@@ -25,6 +26,7 @@ const background = '#f8f8f8d7';
 export class HomeTabsPage implements OnInit {
   public usuario!: Usuario;
   esCliente:boolean = true;
+  esMaitre:boolean = false;
   url: string;
   codigoLeido : any;
   public isSupported: boolean = false;
@@ -49,6 +51,9 @@ export class HomeTabsPage implements OnInit {
 
     if(this.usuario.perfil == Perfil.Dueño || this.usuario.perfil == Perfil.Empleado){
       this.esCliente = false;
+      if (this.usuario.tipoEmpleado == TipoEmpleado.maitre) {
+        this.esMaitre = true;
+      }
     }
     
     this.listaSvc.buscarEnListaXid(this.usuario.id).subscribe(data=>{
