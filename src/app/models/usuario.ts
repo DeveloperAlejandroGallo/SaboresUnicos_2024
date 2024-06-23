@@ -16,5 +16,6 @@ export interface Usuario {
   perfil: Perfil,
   tipoEmpleado?: TipoEmpleado | null,
   activo: boolean,
-  mesaAsignada: number | null;
+  mesaAsignada: string | null;
+  tieneReserva: boolean | null;
 }

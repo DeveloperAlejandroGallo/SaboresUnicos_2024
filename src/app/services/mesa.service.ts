@@ -73,5 +73,19 @@ export class MesaService {
     deleteDoc(documento);
   }
 
+  actualizar(mesa: Mesa) {
+
+    const coleccion = collection(this.firestore, this.colectionName);
+    const documento = doc(coleccion,mesa.id);
+
+    updateDoc(documento, {
+      cant_asientos: mesa.cant_asientos,
+      cliente_uid: mesa.cliente_uid,
+      estado: mesa.estado,
+      numero: mesa.numero,
+      nombre_cliente: mesa.nombre_cliente,
+    });
+  }
+
 
 }

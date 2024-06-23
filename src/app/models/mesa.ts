@@ -2,10 +2,12 @@ import { EstadoMesa } from "../enums/estado-mesa";
 
 export interface Mesa {
     id: string,
-    cliente: string | null,
+    cliente_uid: string,
     estado: EstadoMesa,
-    numero: number,
-    consulta: string | null,
+    numero: string,
+    nombre_cliente: string | null,
+    cant_asientos: string
+    //consulta: string | null,
     
   }
   
