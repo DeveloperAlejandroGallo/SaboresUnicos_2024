@@ -10,17 +10,19 @@ import {
   providedIn: 'root'
 })
 export class MesasService {
-  constructor(private firestore: Firestore) { 
-    
+  constructor(private firestore: Firestore) {
+
   }
   traerListaEspera(): Observable<any[]> {
     const queryAll = query(collection(this.firestore, 'lista_espera'), orderBy('fecha_ingreso', 'desc'));
     return collectionData(queryAll);
-    
+
   }
 
   buscarEnListaXuid(uid: string): Observable<any[]> {
-    const queryByUid = query(collection(this.firestore, 'lista_espera'), where('uid', '==', uid));
+    const queryByUid = query(
+      collection(this.firestore, 'lista_espera'),
+      where('uid', '==', uid));
     return collectionData(queryByUid);
   }
   agregarAListaEspera(id: string, nombre_completo: string, fecha_de_ingreso: Timestamp) {
@@ -38,7 +40,7 @@ export class MesasService {
 
   traerListaEspera(): Observable<any[]> {
     return this.firestore.collection('lista_espera', ref => ref.orderBy('fecha_ingreso', 'desc')).valueChanges();
-    
+
   }
   buscarEnListaXuid(uid: string): Observable<any[]> {
     return this.firestore.collection('lista_espera', ref => ref.where('uid', '==', uid)).valueChanges();

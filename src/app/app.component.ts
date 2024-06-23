@@ -25,43 +25,10 @@ export class AppComponent implements OnInit{
               private router: Router,
               private platform: Platform,
               private authSrv: AuthService) {
-
-
-
     this.iniciarApp();
     this.usuariosSrv.traer();
-
-    if(this.platform.is("android")){
-      this.addListeners();
-      this.registerNotifications();
-    }
-
-
-  }
-  async registerNotifications() {
-    let permisionStatus = await PushNotifications.checkPermissions();
-
-    if(permisionStatus.receive === "prompt"){
-      permisionStatus = await PushNotifications.requestPermissions();
-    }
-
-    if(permisionStatus.receive !== "granted"){
-      console.log("No se puede recibir notificaciones");
-    }
-
-    PushNotifications.register();
-
-    PushNotifications.addListener('registration', (token: PushNotificationSchema) => {
-      console.log('Token de dispositivo:', token.value);
-      // Aquí puedes enviar el token al servidor para almacenarlo y asociarlo con el usuario
-      // Por ejemplo, puedes hacer una solicitud HTTP POST a tu endpoint "/notify" con el token
-    });
-
   }
 
-  addListeners() {
-
-  }
   ngOnInit(): void {
     this.usuariosSrv.traer();
   }
@@ -69,7 +36,6 @@ export class AppComponent implements OnInit{
   logout() {
    this.authSrv.cerrarSesion();
   }
-
 
 
 

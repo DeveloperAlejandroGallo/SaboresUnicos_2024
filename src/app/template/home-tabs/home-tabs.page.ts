@@ -13,6 +13,8 @@ import {
 import { MesasService } from 'src/app/services/mesas.service';
 import { Timestamp } from 'firebase/firestore';
 import Swal from 'sweetalert2';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { UsuarioService } from 'src/app/services/usuario.service';
 const background = '#f8f8f8d7';
 @Component({
   selector: 'app-home-tabs',
@@ -31,11 +33,22 @@ export class HomeTabsPage implements OnInit {
   isLoading = false;
 
   estaEnEspera : boolean = false;
-  constructor(private mesasSvc: MesasService ,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService) {
+  constructor(
+    private mesasSvc: MesasService ,
+    private modalController: ModalController,
+    private platform: Platform,
+    private msgService: MensajesService,
+    private router: Router,
+    private auth: AuthService,
+    private usrSrv: UsuarioService) {
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
     console.log(this.usuario);
 
+    if(this.platform.is("android")){
+      this.addListeners();
+      this.registerNotifications();
+    }
 
   }
   ngOnInit() {
@@ -46,7 +59,7 @@ export class HomeTabsPage implements OnInit {
       console.log(this.listaEspera);
 
     });
-    this.mesasSvc.buscarEnListaXuid(this.uidUsuarioActual).subscribe(data=>{
+    this.mesasSvc.buscarEnListaXuid(this.auth.usuarioActual?.id!).subscribe(data=>{
       this.estaEnEspera = data.length > 0;
       console.log(this.estaEnEspera);
 
@@ -118,7 +131,7 @@ export class HomeTabsPage implements OnInit {
                 //   icon: "success"
                 // });
                 this.isLoading = true;
-                this.mesasSvc.agregarAListaEspera(this.uidUsuarioActual,this.usuario.nombre + ' ' + this.usuario.apellido,Timestamp.fromDate(new Date())).then(()=>{
+                this.mesasSvc.agregarAListaEspera(this.auth.usuarioActual?.id!,this.usuario.nombre + ' ' + this.usuario.apellido,Timestamp.fromDate(new Date())).then(()=>{
                   console.log("añadido");
                   this.isLoading = false;
                   this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
@@ -145,4 +158,57 @@ export class HomeTabsPage implements OnInit {
 
 
   }
+
+
+
+/**
+ * Push Notifications
+ * Registra el dispositivo para recibir notificaciones
+ */
+async registerNotifications() {
+  let permisionStatus = await PushNotifications.checkPermissions();
+
+  if(permisionStatus.receive === "prompt"){
+    permisionStatus = await PushNotifications.requestPermissions();
+  }
+
+  if(permisionStatus.receive !== "granted"){
+    console.log("No se puede recibir notificaciones");
+  }
+
+  PushNotifications.register();
+
+}
+
+async addListeners() {
+
+  if(this.usuario.tokenCelularActual !== (null || undefined)) {
+
+    await PushNotifications.addListener('registration', token => {
+      console.info('Token de registro: ', token.value);
+
+      this.usrSrv.actualizarToken(this.usuario.id!,token.value);
+    });
+
+    await PushNotifications.addListener('registrationError', err => {
+      console.error('Error Registro Push: ', err.error);
+    });
+
+
+  }
+  await PushNotifications.addListener('pushNotificationReceived', notification => {
+    console.log('Notificación Recibida: ', notification);
+  });
+
+  await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+    console.log('Push notification action performed', notification.actionId, notification.inputValue);
+  });
+
+
+}
+
+
+
+
+
 }

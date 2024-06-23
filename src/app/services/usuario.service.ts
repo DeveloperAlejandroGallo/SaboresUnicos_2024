@@ -36,11 +36,11 @@ export class UsuarioService {
     this.coleccionUsuarios = collection(this.firestore, this.colectionName);
    }
 
-  public listadoUsuarios!: Array< Usuario>;
+   public listadoUsuarios!: Array< Usuario>;
 
 
-  get allUsers$(): Observable<Usuario[]> {
-    const ref = collection(this.firestore, 'usuarios');
+   get allUsers$(): Observable<Usuario[]> {
+     const ref = collection(this.firestore, 'usuarios');
     const queryAll = query(ref);
     return collectionData(queryAll) as Observable<Usuario[]>;
   }
@@ -58,6 +58,13 @@ export class UsuarioService {
     );
   }
 
+  actualizarToken(id: string, token: string) {
+    const coleccion = collection(this.firestore, this.colectionName);
+    const documento = doc(coleccion, id);
+    updateDoc(documento,{
+      tokenCelularActual: token
+    })
+  }
 //Genericos
   traer(){
     const coleccion = collection(this.firestore, this.colectionName);
