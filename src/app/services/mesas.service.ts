@@ -1,53 +1,107 @@
 import { Injectable } from '@angular/core';
-// import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Timestamp, orderBy, where } from 'firebase/firestore';
-import { Observable } from 'rxjs';
 import {
-  Firestore, collection, query, collectionData, CollectionReference,
-  DocumentData,setDoc,doc
+  addDoc,
+  collection,
+  collectionChanges,
+  collectionData,
+  CollectionReference,
+  collectionSnapshots,
+  deleteDoc,
+  doc,
+  DocumentData,
+  Firestore,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  Timestamp,
+  updateDoc,
 } from '@angular/fire/firestore';
+import { map, Observable } from 'rxjs';
+import { Mesa } from '../models/mesa';
+
+
+
+
 @Injectable({
   providedIn: 'root'
 })
-export class MesasService {
-  constructor(private firestore: Firestore) { 
-    
-  }
-  traerListaEspera(): Observable<any[]> {
-    const queryAll = query(collection(this.firestore, 'lista_espera'), orderBy('fecha_ingreso', 'desc'));
-    return collectionData(queryAll);
-    
+export class MesaService {
+
+
+  private colectionName: string = 'mesas';
+  private coleccionMesa: CollectionReference<DocumentData>;
+
+  constructor(private firestore: Firestore) {
+    this.coleccionMesa = collection(this.firestore, this.colectionName);
+   }
+
+  public listadoMesa!: Array<Mesa>;
+
+
+  get allUsers$(): Observable<Mesa[]> {
+    const ref = collection(this.firestore, 'mesas');
+    const queryAll = query(ref);
+    return collectionData(queryAll) as Observable<Mesa[]>;
   }
 
-  buscarEnListaXuid(uid: string): Observable<any[]> {
-    const queryByUid = query(collection(this.firestore, 'lista_espera'), where('uid', '==', uid));
-    return collectionData(queryByUid);
+  public getMesa(): Observable<Mesa[]> {
+    const refOfUsers = collection(this.firestore, this.colectionName);
+    return collectionSnapshots(refOfUsers).pipe(
+      map((res) =>
+        res.map((data) => {
+          const id = data.id;
+          const docData = data.data() as Mesa; // Cast the data to Usuario type
+          return { ...docData, id };
+        })
+      )
+    );
   }
-  agregarAListaEspera(id: string, nombre_completo: string, fecha_de_ingreso: Timestamp) {
-    return setDoc(doc(collection(this.firestore, 'lista_espera')),{
-      uid: id,
-      nombre: nombre_completo,
-      fecha_ingreso: fecha_de_ingreso
+
+//Genericos
+  traer(){
+    const coleccion = collection(this.firestore, this.colectionName);
+    const observable = collectionData(coleccion);
+
+    observable.subscribe((respuesta)=>{
+      this.listadoMesa = respuesta as Array<Mesa>;
+    });
+
+    this.getMesa().subscribe((espera) => {
+      this.listadoMesa = espera;
     });
   }
-  traerMesas(): Observable<any[]> {
-    const queryAll = query(collection(this.firestore, 'mesas'));
-    return collectionData(queryAll);
-  }
-/*
 
-  traerListaEspera(): Observable<any[]> {
-    return this.firestore.collection('lista_espera', ref => ref.orderBy('fecha_ingreso', 'desc')).valueChanges();
-    
+
+
+  delete(id: string){
+    const coleccion = collection(this.firestore, this.colectionName);
+    const documento = doc(coleccion,id);
+    deleteDoc(documento);
   }
-  buscarEnListaXuid(uid: string): Observable<any[]> {
-    return this.firestore.collection('lista_espera', ref => ref.where('uid', '==', uid)).valueChanges();
+
+
+//Mesa
+  nuevo(mesa: Mesa): Promise<void>{
+
+    const docuNuevo = doc(this.coleccionMesa);
+    // addDoc(coleccion, objeto);
+    const nuevoId = docuNuevo.id;
+
+    mesa.id = nuevoId;
+
+    return setDoc(docuNuevo, {
+      id: mesa.id,
+      asientos: mesa.asientos,
+      estado: mesa.estado,
+      numero: mesa.numero
+    });
+
+
   }
-  agregarAListaEspera(uid: string, nombre: string, fecha_ingreso: Timestamp): Promise<void> {
-    const id = this.firestore.createId();
-    return this.firestore.collection('lista_espera').doc(id).set({ uid, nombre, fecha_ingreso });
-  }
-  traerMesas(): Observable<any[]> {
-    return this.firestore.collection('mesas').valueChanges();
-  }*/
+
+
+
+
+
 }
