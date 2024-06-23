@@ -32,7 +32,13 @@ export class HomeTabsPage implements OnInit {
   listaEspera: any[] = [];
   mesasInfo: any[] = [];
   isLoading = false;
+  //para ocultar/ver distintos TABS -->
+  verJuegos : boolean = false;
+  verChat : boolean = false;
+  verChatFlotante: boolean = false;
+  verMiPedido : boolean = false;
   estaEnEspera : boolean = false;
+  //-------------------------
   constructor(private mesasSvc: MesaService, private listaSvc: ListaEsperaService,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService) {
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
