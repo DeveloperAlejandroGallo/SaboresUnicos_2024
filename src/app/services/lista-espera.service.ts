@@ -22,6 +22,7 @@ import { map, Observable } from 'rxjs';
 import { Perfil } from '../enums/perfil';
 import {User} from '@angular/fire/auth';
 import { ListaEspera } from '../models/lista-espera';
+import { orderBy, where } from 'firebase/firestore';
 
 
 
@@ -41,9 +42,9 @@ export class ListaEsperaService {
   public listadoListaEspera!: Array<ListaEspera>;
 
 
-  get allUsers$(): Observable<ListaEspera[]> {
+  get allListaEspera$(): Observable<ListaEspera[]> {
     const ref = collection(this.firestore, 'lista_espera');
-    const queryAll = query(ref);
+    const queryAll = query(ref, orderBy('fecha_ingreso', 'asc'));
     return collectionData(queryAll) as Observable<ListaEspera[]>;
   }
 
@@ -90,8 +91,6 @@ export class ListaEsperaService {
     // addDoc(coleccion, objeto);
     const nuevoId = docuNuevo.id;
 
-    usuario.id = nuevoId;
-
     return setDoc(docuNuevo, {
       id: nuevoId,
       usuario: usuario,
@@ -101,7 +100,11 @@ export class ListaEsperaService {
   }
 
 
-
+  buscarEnListaXid(idClient:string){
+    const ref = collection(this.firestore, this.colectionName);
+    const queryAll = query(ref, where('usuario.id','==',idClient));
+    return collectionData(queryAll) as Observable<ListaEspera[]>;
+  }
 
 
 

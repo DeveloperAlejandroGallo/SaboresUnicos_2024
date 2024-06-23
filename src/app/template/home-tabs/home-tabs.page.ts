@@ -10,9 +10,11 @@ import { BarcodeScanningModalComponent } from './barcode-scanning-modal.componen
 import {
   getAuth,
 } from 'firebase/auth';
-import { MesasService } from 'src/app/services/mesas.service';
+
 import { Timestamp } from 'firebase/firestore';
 import Swal from 'sweetalert2';
+import { ListaEsperaService } from 'src/app/services/lista-espera.service';
+import { MesaService } from 'src/app/services/mesas.service';
 const background = '#f8f8f8d7';
 @Component({
   selector: 'app-home-tabs',
@@ -31,7 +33,7 @@ export class HomeTabsPage implements OnInit {
   mesasInfo: any[] = [];
   isLoading = false;
   estaEnEspera : boolean = false;
-  constructor(private mesasSvc: MesasService ,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService) {
+  constructor(private mesasSvc: MesaService, private listaSvc: ListaEsperaService,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService) {
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
     console.log(this.usuario);
@@ -42,21 +44,12 @@ export class HomeTabsPage implements OnInit {
     if(this.usuario.perfil == Perfil.Dueño || this.usuario.perfil == Perfil.Empleado){
       this.esCliente = false;
     }
-    // this.mesasSvc.traerListaEspera().subscribe(data=>{
-    //   this.listaEspera = data;
-    //   console.log(this.listaEspera);
+    
+    this.listaSvc.buscarEnListaXid(this.usuario.id).subscribe(data=>{
+      this.estaEnEspera = data.length > 0;
+      console.log(this.estaEnEspera);
       
-    // });
-    // this.mesasSvc.buscarEnListaXid(this.uidUsuarioActual).subscribe(data=>{
-    //   this.estaEnEspera = data.length > 0;
-    //   console.log(this.estaEnEspera);
-      
-    // });
-    // this.mesasSvc.traerMesas().subscribe(data=>{
-    //   this.mesasInfo = data;
-    //   console.log(this.mesasInfo);
-      
-    // })
+    });
     
     if (this.platform.is('capacitor')) {
       try {
@@ -80,10 +73,8 @@ export class HomeTabsPage implements OnInit {
       }
     }
   }
-// GFM1cQ6jVj9P66SiEeNg ID LAURA
 
   async escanearQR() {
-
     const modal = await this.modalController.create({
       component: BarcodeScanningModalComponent,
       cssClass: 'barcode-scanning-modal',
@@ -99,8 +90,6 @@ export class HomeTabsPage implements OnInit {
     if(data){
       this.codigoLeido = data?.barcode?.displayValue;
       const datos = this.codigoLeido.split('/');
-      console.log(datos);
-  
       switch(this.usuario.perfil){
         case Perfil.Cliente:
         case Perfil.Anonimo:
@@ -109,16 +98,14 @@ export class HomeTabsPage implements OnInit {
               this.ingresarAListaEspera();
               break;
             case "Mesa":
+              const nroMesa = datos[1];
+              //validar que haya pasado por lista de espera y que el qr de mesa escaneado sea el que se le fue asignado
               break;
             case "Propinas":
+
               break;
           }
           break;
-        case Perfil.Dueño:
-          break;
-        case Perfil.Empleado:
-          break;
-  
         default:
           this.msgService.Error("No se identifico el tipo de perfil.");
           break;
@@ -145,17 +132,17 @@ export class HomeTabsPage implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
           this.isLoading = true;
-          this.mesasSvc.agregarAListaEspera(this.usuario,Timestamp.fromDate(new Date())).then(()=>{
+          this.listaSvc.nuevo(this.usuario).then(()=>{
             this.isLoading = false;
             this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
-          }).catch(error=>{
-            console.log(error);
-          });
+          }).catch(err=>{
+            this.msgService.Error(err);
+          })
         }
       });
     }
     else{
-      this.msgService.Info2("Ya estas en la lista de espera.");
+      this.msgService.Info("Ya estas en la lista de espera.");
     }
   }
 

@@ -30,11 +30,13 @@ export class MensajesService {
       title: 'Información',
       text: msg,
       icon: 'info',
+      color: "#000000",
       heightAuto: false,
-      background: background
+      background: background,
+      confirmButtonColor: "#385ba7",
+      width: "20em"
     });
   }
-
 
   Exito(msg: string) {
     Swal.fire({
@@ -106,19 +108,6 @@ export class MensajesService {
 
 
 
-  Info2(msg: string) {
-    Haptics.vibrate({ duration: 750 });
-    Swal.fire({
-      title: 'Información',
-      text: msg,
-      icon: 'info',
-      color: "#000000",
-      heightAuto: false,
-      background: "rgb(255 255 255 / 91%)",
-      confirmButtonColor: "#385ba7",
-      width: "20em"
-    });
-  }
 
   async ErrorIonToast(message: string): Promise<void> {
     const toast = await this.toastController.create({
