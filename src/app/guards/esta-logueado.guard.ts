@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { Router} from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { MensajesService } from '../services/mensajes.service';
+import { Perfil } from '../enums/perfil';
 
 export const EstaLogueadoGuard = () => {
   const authService = inject(AuthService);
@@ -9,7 +10,8 @@ export const EstaLogueadoGuard = () => {
   const mensajes = inject(MensajesService);
 
 
-  if (authService.logueado()) {
+
+  if (authService.logueado() || authService.usuarioActual?.perfil == Perfil.Anonimo) {
     return true;
   }
 
