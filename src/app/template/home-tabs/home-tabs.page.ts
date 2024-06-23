@@ -22,40 +22,41 @@ const background = '#f8f8f8d7';
 
 export class HomeTabsPage implements OnInit {
   public usuario!: Usuario;
+  esCliente:boolean = true;
   url: string;
-  codigoLeido = '';
+  codigoLeido : any;
   public isSupported: boolean = false;
   public isPermissionGranted = false;
   listaEspera: any[] = [];
   mesasInfo: any[] = [];
   isLoading = false;
-  uidUsuarioActual : any;
   estaEnEspera : boolean = false;
   constructor(private mesasSvc: MesasService ,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService) {
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
     console.log(this.usuario);
-  
-    
   }
+
   ngOnInit() {
-    this.uidUsuarioActual = getAuth().currentUser?.uid;
-    console.log(getAuth().currentUser?.uid);
-    this.mesasSvc.traerListaEspera().subscribe(data=>{
-      this.listaEspera = data;
-      console.log(this.listaEspera);
+
+    if(this.usuario.perfil == Perfil.Dueño || this.usuario.perfil == Perfil.Empleado){
+      this.esCliente = false;
+    }
+    // this.mesasSvc.traerListaEspera().subscribe(data=>{
+    //   this.listaEspera = data;
+    //   console.log(this.listaEspera);
       
-    });
-    this.mesasSvc.buscarEnListaXuid(this.uidUsuarioActual).subscribe(data=>{
-      this.estaEnEspera = data.length > 0;
-      console.log(this.estaEnEspera);
+    // });
+    // this.mesasSvc.buscarEnListaXid(this.uidUsuarioActual).subscribe(data=>{
+    //   this.estaEnEspera = data.length > 0;
+    //   console.log(this.estaEnEspera);
       
-    });
-    this.mesasSvc.traerMesas().subscribe(data=>{
-      this.mesasInfo = data;
-      console.log(this.mesasInfo);
+    // });
+    // this.mesasSvc.traerMesas().subscribe(data=>{
+    //   this.mesasInfo = data;
+    //   console.log(this.mesasInfo);
       
-    })
+    // })
     
     if (this.platform.is('capacitor')) {
       try {
@@ -82,67 +83,83 @@ export class HomeTabsPage implements OnInit {
 // GFM1cQ6jVj9P66SiEeNg ID LAURA
 
   async escanearQR() {
-    if (this.usuario.perfil == Perfil.Cliente) {
-      const modal = await this.modalController.create({
-        component: BarcodeScanningModalComponent,
-        cssClass: 'barcode-scanning-modal',
-        showBackdrop: false,
-        componentProps: {
-          formats: [],
-          LensFacing: LensFacing.Back
-        }
-      });
-      await modal.present();
-      const { data } = await modal.onWillDismiss();
-      if (data) {
-        this.codigoLeido = data?.barcode?.displayValue;
 
-        if(this.codigoLeido == 'IngresoLocal'){
-          if(!this.estaEnEspera){
-            console.log("añadido");
-            Swal.fire({
-              title: "¿Quieres entrar a la lista de espera?",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#0EA06F",
-              cancelButtonColor: "#d33",
-              cancelButtonText: "Cancelar",
-              confirmButtonText: "Entrar",
-              heightAuto: false,
-              background: background
-            }).then((result) => {
-              if (result.isConfirmed) {
-                // Swal.fire({
-                //   title: "Deleted!",
-                //   text: "Your file has been deleted.",
-                //   icon: "success"
-                // });
-                this.isLoading = true;
-                this.mesasSvc.agregarAListaEspera(this.uidUsuarioActual,this.usuario.nombre + ' ' + this.usuario.apellido,Timestamp.fromDate(new Date())).then(()=>{
-                  console.log("añadido");
-                  this.isLoading = false;
-                  this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
-                }).catch(error=>{
-                  console.log(error);
-                });
-              }
-            });
-            
-            
-          }
-          else{
-            this.msgService.Info2("Ya estas en la lista de espera.");
-          }
+    const modal = await this.modalController.create({
+      component: BarcodeScanningModalComponent,
+      cssClass: 'barcode-scanning-modal',
+      showBackdrop: false,
+      componentProps: {
+        formats: [],
+        LensFacing: LensFacing.Back
+      }
+    });
+    await modal.present();
+    const { data } = await modal.onWillDismiss();
 
-        }
-        else if(this.codigoLeido == 'MESA1' && !this.estaEnEspera){
-            this.msgService.Error2("Primero debes anotarte en la lista de espera, usando el QR de ingreso al restaurante.");
-        }
-        console.log("escaneo de qr: " + this.codigoLeido);
+    if(data){
+      this.codigoLeido = data?.barcode?.displayValue;
+      const datos = this.codigoLeido.split('/');
+      console.log(datos);
+  
+      switch(this.usuario.perfil){
+        case Perfil.Cliente:
+        case Perfil.Anonimo:
+          switch(datos[0]){
+            case "IngresoLocal":
+              this.ingresarAListaEspera();
+              break;
+            case "Mesa":
+              break;
+            case "Propinas":
+              break;
+          }
+          break;
+        case Perfil.Dueño:
+          break;
+        case Perfil.Empleado:
+          break;
+  
+        default:
+          this.msgService.Error("No se identifico el tipo de perfil.");
+          break;
       }
 
-    }
-    
+    }   
 
   }
+
+
+
+  ingresarAListaEspera(){
+    if(!this.estaEnEspera){
+      Swal.fire({
+        title: "¿Quieres entrar a la lista de espera?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#0EA06F",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Cancelar",
+        confirmButtonText: "Entrar",
+        heightAuto: false,
+        background: background
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.isLoading = true;
+          this.mesasSvc.agregarAListaEspera(this.usuario,Timestamp.fromDate(new Date())).then(()=>{
+            this.isLoading = false;
+            this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
+          }).catch(error=>{
+            console.log(error);
+          });
+        }
+      });
+    }
+    else{
+      this.msgService.Info2("Ya estas en la lista de espera.");
+    }
+  }
+
+
+
+
 }

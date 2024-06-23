@@ -6,7 +6,7 @@
     </ion-tab-button>
 
     <!-- Boton vacio para colocar el qr -->
-    <ion-tab-button class="empty-tab-button"></ion-tab-button>
+    <ion-tab-button *ngIf="esCliente" class="empty-tab-button"></ion-tab-button>
 
     <ion-tab-button tab="mi-perfil">
       <ion-icon name="person"></ion-icon>
@@ -15,7 +15,7 @@
   </ion-tab-bar>
 </ion-tabs>
 
-<ion-fab slot="fixed" vertical="bottom" horizontal="center">
+<ion-fab *ngIf="esCliente" slot="fixed" vertical="bottom" horizontal="center">
   <ion-fab-button (click)="escanearQR()">
     <ion-icon name="qr-code-outline"></ion-icon>
   </ion-fab-button>

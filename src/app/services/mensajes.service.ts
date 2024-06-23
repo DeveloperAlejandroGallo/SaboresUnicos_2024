@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 import { Haptics } from '@capacitor/haptics';
 import { ToastController } from '@ionic/angular'; // Importa ToastController
 
-const background = '#f8f8f8d7';
+const background = 'rgb(255 255 255 / 91%)';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -62,11 +62,14 @@ export class MensajesService {
       title: 'Error',
       text: msg,
       icon: 'error',
+      color: "#F27474",
       heightAuto: false,
-      background: background
+      background: background,
+      confirmButtonColor: "#385ba7",
+      width: "20em",
     });
   }
-
+  
   InfoToast(msg: string) {
     Toast.fire({
       title: 'Información',
@@ -101,20 +104,7 @@ export class MensajesService {
     });
   }
 
-  Error2(msg: string) {
-    Haptics.vibrate({ duration: 750 });
-    Swal.fire({
-      title: 'Error',
-      text: msg,
-      icon: 'error',
-      color: "#F27474",
-      heightAuto: false,
-      background: "rgb(255 255 255 / 91%)",
-      confirmButtonColor: "#385ba7",
-      width: "20em",
-      
-    });
-  }
+
 
   Info2(msg: string) {
     Haptics.vibrate({ duration: 750 });

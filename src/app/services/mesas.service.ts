@@ -6,6 +6,7 @@ import {
   Firestore, collection, query, collectionData, CollectionReference,
   DocumentData,setDoc,doc
 } from '@angular/fire/firestore';
+import { Usuario } from '../models/usuario';
 @Injectable({
   providedIn: 'root'
 })
@@ -19,35 +20,23 @@ export class MesasService {
     
   }
 
-  buscarEnListaXuid(uid: string): Observable<any[]> {
-    const queryByUid = query(collection(this.firestore, 'lista_espera'), where('uid', '==', uid));
+  buscarEnListaXid(id: string): Observable<any[]> {
+    const queryByUid = query(collection(this.firestore, 'lista_espera'), where('id', '==', id));
     return collectionData(queryByUid);
   }
-  agregarAListaEspera(id: string, nombre_completo: string, fecha_de_ingreso: Timestamp) {
+
+  agregarAListaEspera(usuario: Usuario, fecha_de_ingreso: Timestamp) {
+    const docNuevo = doc(collection(this.firestore,'lista_espera'));
+    const idNuevo = docNuevo.id;
     return setDoc(doc(collection(this.firestore, 'lista_espera')),{
-      uid: id,
-      nombre: nombre_completo,
+      id: idNuevo,
+      cliente: usuario,
       fecha_ingreso: fecha_de_ingreso
     });
   }
+  
   traerMesas(): Observable<any[]> {
     const queryAll = query(collection(this.firestore, 'mesas'));
     return collectionData(queryAll);
   }
-/*
-
-  traerListaEspera(): Observable<any[]> {
-    return this.firestore.collection('lista_espera', ref => ref.orderBy('fecha_ingreso', 'desc')).valueChanges();
-    
-  }
-  buscarEnListaXuid(uid: string): Observable<any[]> {
-    return this.firestore.collection('lista_espera', ref => ref.where('uid', '==', uid)).valueChanges();
-  }
-  agregarAListaEspera(uid: string, nombre: string, fecha_ingreso: Timestamp): Promise<void> {
-    const id = this.firestore.createId();
-    return this.firestore.collection('lista_espera').doc(id).set({ uid, nombre, fecha_ingreso });
-  }
-  traerMesas(): Observable<any[]> {
-    return this.firestore.collection('mesas').valueChanges();
-  }*/
 }
