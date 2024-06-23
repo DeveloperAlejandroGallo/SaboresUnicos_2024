@@ -1,25 +1,33 @@
+body {
+    background: url("../../../assets/img/fondo-gris.png") no-repeat center center / cover;
+  }
+
+
 ion-header {
   ion-toolbar {
     ion-title {
       text-align: center;
+     
     }
   }
 }
 
 ion-segment {
+    border: black solid 1px;
+    background-color: white;
   ion-segment-button {
+    border: black solid 1px;
     ion-label {
       font-size: 16px;
+      font-weight: 300;
     }
   }
 }
 
 ion-card {
-    margin: 15px;
-    padding: 10px;
-  
+   
     ion-item {
-      display: flex;
+      //display: flex;
       align-items: center;
       justify-content: space-between;
   
@@ -27,8 +35,8 @@ ion-card {
         margin-right: 15px;
   
         img {
-          width: 100px;
-          height: 100px;
+          width: 150px;
+          height: 75px;
           object-fit: cover;
         }
       }
@@ -66,6 +74,7 @@ ion-card {
           align-items: center;
           border: black solid 1px;
           border-radius: 5%;
+          height: 35px;
           ion-button {
             padding: 5px;
             
@@ -77,14 +86,34 @@ ion-card {
           ion-input {
             width: 40px;
             text-align: center;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            // border: 1px solid #ccc;
+            // border-radius: 5px;
+            height: 40px;
             
           }
         }
       }
     }
   }
+
+  ion-content{
+    --background: url("../../../assets/img/fondo-gris.png") no-repeat center center / cover;
+}
+
+ion-modal{
+    ion-toolbar{
+        --background: #BF0000;
+    }
+    ion-button{
+        border: black solid 1px;
+        border-radius: 10%;
+        background-color: whitesmoke;
+    }
+    ion-card{
+        --background: #92343463;
+        --color: #000000;
+    }
+}
 
 //   ion-content {
 //     height: 100vh;

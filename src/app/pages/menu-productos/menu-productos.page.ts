@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild  } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Producto } from 'src/app/models/productos';
+import { IonModal } from '@ionic/angular';
 
 @Component({
   selector: 'app-menu-productos',
@@ -9,16 +10,19 @@ import { Producto } from 'src/app/models/productos';
 })
 export class MenuProductosPage implements OnInit {
 
+  @ViewChild(IonModal) modal: IonModal | undefined;
+
+
   selectedCategory: string = 'comida';
   isModalOpen = false;
   selectedProduct: Producto | null = null;
-
+  name: string | undefined;
 
 
   comida: Producto[] = [
     {
       id: '1',
-      nombre: 'Pizza',
+      nombre: 'Pizza de muzzarela con tomates',
       imagenes: ['../../../assets/img/fondo-gris.png', '../../../assets/img/fondoLogin.png', '../../../assets/img/fondoSplash.jpg'],
       cantidad: 1,
       precio: 10.99,
@@ -89,6 +93,19 @@ export class MenuProductosPage implements OnInit {
     this.isModalOpen = false;
     this.selectedProduct = null;
   }
+
+  cancel() {
+    this.modal?.dismiss(null, 'cerrar');
+  }
+
+  confirm() {
+    this.modal?.dismiss(this.name, 'confirm');
+  }
+
+  onWillDismiss(event: Event) {
+    
+  }
+
 
   incrementarCantidad(producto: any) {
     producto.cantidad++;
