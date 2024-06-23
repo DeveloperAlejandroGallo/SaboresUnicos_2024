@@ -19,7 +19,7 @@ import { ModalController } from '@ionic/angular';
 
 
 @Component({
-  selector: 'app-barcode-scanning',
+  selector: 'barcode-scanning-home',
   template: `
     <ion-header class="ion-no-border">
       <ion-toolbar color="primary">
