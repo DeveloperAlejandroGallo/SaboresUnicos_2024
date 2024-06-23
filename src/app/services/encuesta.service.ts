@@ -19,6 +19,7 @@ import {
 } from '@angular/fire/firestore';
 import { map, Observable } from 'rxjs';
 import { Encuesta } from '../models/encuesta';
+import { orderBy } from 'firebase/firestore';
 
 
 
@@ -39,9 +40,9 @@ export class EncuestaService {
   public listadoEncuesta!: Array<Encuesta>;
 
 
-  get allUsers$(): Observable<Encuesta[]> {
+  get allEncuestas$(): Observable<Encuesta[]> {
     const ref = collection(this.firestore, 'encuestas');
-    const queryAll = query(ref);
+    const queryAll = query(ref, orderBy('fecha', 'desc'));
     return collectionData(queryAll) as Observable<Encuesta[]>;
   }
 

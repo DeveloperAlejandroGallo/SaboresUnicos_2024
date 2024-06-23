@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonAccordion } from '@ionic/angular';
-import { EncuestasService } from 'src/app/services/encuestas.service';
+import { Component, OnInit } from '@angular/core';
+import { Encuesta } from 'src/app/models/encuesta';
+import { EncuestaService } from 'src/app/services/encuesta.service';
 
 @Component({
   selector: 'app-lista-encuestas',
@@ -9,9 +9,10 @@ import { EncuestasService } from 'src/app/services/encuestas.service';
   styleUrls: ['./lista-encuestas.component.scss'],
 })
 export class ListaEncuestasComponent  implements OnInit {
-  listaEncuestas: any[] = [];
+  listaEncuestas: any[]= [];
   isLoading = false;
-  constructor(private encuestasSvc : EncuestasService) { }
+  textoHome = "Escanea el QR para ingresar a la lista de espera.";
+  constructor(private encuestasSvc : EncuestaService) { }
 
   ngOnInit() {
     
@@ -21,11 +22,11 @@ export class ListaEncuestasComponent  implements OnInit {
     if(accordionValue === 'verEncuestas' ){
       this.isLoading = true;
       if(this.listaEncuestas.length === 0){
-        this.encuestasSvc.traerListaEncuestas().subscribe(data=>{
+        this.encuestasSvc.allEncuestas$.subscribe(data=>{
           this.listaEncuestas = data.map(encuesta=>({
             ...encuesta,
             fechaFormateada: this.formatearFecha(encuesta.fecha),
-            estrellaFaltante: 5 - encuesta.estrellas
+            estrellaFaltante: 5 - encuesta.cantidadEstrellas
           }));
           this.isLoading = false;
         });
@@ -34,7 +35,7 @@ export class ListaEncuestasComponent  implements OnInit {
     }
   }
   formatearFecha(timestamp: any): string {
-    const fecha = new Date(timestamp.seconds * 1000); // Convertir timestamp de Firebase a Date
+    const fecha = new Date(timestamp.seconds * 1000);
     return formatDate(fecha, 'HH:mm dd-MM-yyyy', 'en-US');
   }
   getArray(num: number): number[] {

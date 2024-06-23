@@ -19,6 +19,7 @@ import {
 } from '@angular/fire/firestore';
 import { map, Observable } from 'rxjs';
 import { Mesa } from '../models/mesa';
+import { where } from 'firebase/firestore';
 
 
 
@@ -99,9 +100,5 @@ export class MesaService {
 
 
   }
-
-
-
-
 
 }
