@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'pps.sabores.unicos.2024',
+  appId: 'pps.sabores.unicos',
   appName: 'Sabores Únicos',
   webDir: 'www',
   server: {
