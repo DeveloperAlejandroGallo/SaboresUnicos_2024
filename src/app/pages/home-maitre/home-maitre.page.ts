@@ -6,6 +6,7 @@ import { Mesa } from 'src/app/models/mesa';
 import { MesaService } from 'src/app/services/mesas.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { ListaEsperaService } from 'src/app/services/lista-espera.service'
+import { MensajesService } from 'src/app/services/mensajes.service';
 import Swal from 'sweetalert2';
 import { map, Observable } from 'rxjs';
 import {
@@ -25,6 +26,8 @@ import {
   setDoc,
   updateDoc,
 } from '@angular/fire/firestore';
+import { EstadoMesa } from 'src/app/enums/estado-mesa';
+import { ListaEspera } from 'src/app/models/lista-espera';
 
 @Component({
   selector: 'app-home-maitre',
@@ -37,14 +40,15 @@ export class HomeMaitrePage implements OnInit {
   url: string;
   public mesasLibres: Array<Mesa> = new Array<Mesa>;
   public listaDeEspera : any[] = [];
-
+  public options: string[] = [];
   constructor(
             private router: Router, 
             private auth: AuthService, 
             private mesaService: MesaService,
             private usrService: UsuarioService,
             private firestore: Firestore,
-            private listEsperaService: ListaEsperaService) {
+            private listEsperaService: ListaEsperaService,
+            private mensajeService: MensajesService) {
 
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
@@ -72,13 +76,13 @@ export class HomeMaitrePage implements OnInit {
 
   }
 
-   async ofrecerMesas(cliActual: any) {
+   async ofrecerMesas(elementoEspera: ListaEspera) {
     let asignada = 0;
 
     console.log(this.mesasLibres);
 
-    var options = [];
-      options = this.mesasLibres.map(mesa => 'Mesa ' + mesa.numero)
+    
+      this.options = this.mesasLibres.map(mesa => 'Mesa ' + mesa.numero)
 
     if (this.mesasLibres.length == 0) {
       Swal.fire({
@@ -102,7 +106,7 @@ export class HomeMaitrePage implements OnInit {
         customClass: {
           popup: 'center-alert'
         },
-        inputOptions: options,
+        inputOptions: this.options,
         inputPlaceholder: "Seleccione una mesa",
         showCancelButton: true,
         cancelButtonText:'Cancelar',
@@ -110,26 +114,42 @@ export class HomeMaitrePage implements OnInit {
         confirmButtonColor: '#00ff00',
         inputValidator: (value) => {
           return new Promise((resolve: any) => {
+            console.log('Valor value ' + value);
+            
             if (value) {
+              
+              
               resolve();
             }
           });
         }
       });
       if (mesa) {
+        let indice = Number(mesa);
+        let mesaTexto = this.options[indice]
+
+        console.log('Valor value transformado ' + mesaTexto);
+
+        if (mesaTexto == ("" || undefined || null)) {
+          this.mensajeService.Error('La mesa ya fue asignada');
+        }
+        let numeroDeMesa: number = Number(mesaTexto.split(" ")[1]);
+        console.log('Numero de mesa ' +numeroDeMesa);
         
-        const seleccionada = this.mesasLibres.filter((_, index)=> index == mesa);
+        const mesasSeleccionadas = this.mesasLibres.filter(x => x.numero === numeroDeMesa);
+        console.log('Mesa seleccionada ' + mesasSeleccionadas);
+        
         //console.log(seleccionada);
-        let objetoSeleccionado
-        if (seleccionada.length > 0) {
-          objetoSeleccionado = seleccionada[0];
+        let mesaAAsignar: Mesa;
+        if (mesasSeleccionadas.length == 0) {
+          this.mensajeService.Warning('La mesa ya fue asignada a otro cliente');
           //console.log(objetoSeleccionado); 
         }
-        console.log(cliActual);
+        mesaAAsignar = mesasSeleccionadas[0];
         
-        this.asignarMesa(cliActual,objetoSeleccionado);
+        this.asignarMesa(elementoEspera,mesaAAsignar);
         Swal.fire({
-          title:`Seleccionó la mesa número: ` + objetoSeleccionado?.numero,
+          title:`Seleccionó la mesa número: ` + mesaAAsignar?.numero,
           position: 'center',
           heightAuto: false,
           customClass: {
@@ -143,28 +163,22 @@ export class HomeMaitrePage implements OnInit {
   }
 
 
-  asignarMesa(cliente: any,mesa: Mesa | any){
+  asignarMesa(elementoEspera: ListaEspera,mesa: Mesa){
 
+    console.log(mesa.id);
+    console.log(elementoEspera.usuario.id);
+    
+    
    
     // TO DO: MANDAR NOTIFICACIÓN AL CLIENTE DE LA MESA ASIGNADA CON SU QR. 
-    
-    const coleccion = collection(this.firestore, 'mesas');
-    const documento = doc(coleccion,mesa.id);
-    //console.log(cliente.nombre);
-    //console.log(cliente.uid);
-    updateDoc(documento,{
-      estado: 'ocupada'
-    })
+    this.mesaService.cambiarEstadoDeNesa(EstadoMesa.ocupada, mesa.id);
 
-    const colleccionClientes = collection(this.firestore, 'usuarios');
-    const documentoClientes = doc(colleccionClientes,cliente.usuario.id);
-    updateDoc(documentoClientes,{
-     mesaAsignada: mesa.numero,
-   })
+    this.usrService.asignarMesa(mesa.numero, elementoEspera.usuario.id);
 
-     const coleccionClientesEspera = collection(this.firestore, 'lista_espera');
-     const documentoClientesEspera = doc(coleccionClientesEspera,cliente.id);
-     deleteDoc(documentoClientesEspera);
+
+    this.listEsperaService.delete(elementoEspera.id);
+
+     
      
 
     

@@ -234,8 +234,8 @@ export class SignupPage implements OnInit {
         perfil: Perfil.Cliente,
         tipoEmpleado: undefined,
         activo: false,
-        mesaAsignada: null,
-        tieneReserva: null
+        mesaAsignada: 0,
+        tieneReserva: false
       };
 
       this.authService.registrarCuenta(usuario);
@@ -279,8 +279,8 @@ export class SignupPage implements OnInit {
         perfil: Perfil.Anonimo,
         tipoEmpleado: null,
         activo: true,
-        mesaAsignada: null,
-        tieneReserva: null
+        mesaAsignada: 0,
+        tieneReserva: false
       };
 
       this.authService.usuarioActual = this.usrService.nuevo(usuario);

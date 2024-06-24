@@ -48,13 +48,13 @@
 
 
 
-      <ion-row *ngFor="let item of listaDeEspera">
+      <ion-row *ngFor="let espera of listaDeEspera">
 
         <ion-col size="3">
-          <img src={{item.usuario.foto}} alt="foto" width="60%">
+          <img src={{espera.usuario.foto}} alt="foto" width="60%">
         </ion-col>
         <ion-col size="6">
-         {{item.usuario.nombre}}
+         {{espera.usuario.nombre}}
         </ion-col>
         <ion-col size="3">
           <div>
@@ -65,7 +65,7 @@
               </ion-select>
             </ion-item> -->
 
-              <ion-button color="danger" size="small" (click)="ofrecerMesas(item)">
+              <ion-button color="danger" size="small" (click)="ofrecerMesas(espera)">
                 <ion-icon name="wine"></ion-icon>
               </ion-button>
 

@@ -103,7 +103,8 @@ export class UsuarioService {
       perfil: usuario.perfil,
       tipoEmpleado: usuario.perfil !== (Perfil.Anonimo && Perfil.Cliente) ? usuario.tipoEmpleado : null,
       activo: usuario.perfil == Perfil.Anonimo ? true : false,
-      mesaAsignada: 0
+      mesaAsignada: 0,
+      tieneReserva: false
     });
 
     return usuario;
@@ -127,7 +128,8 @@ export class UsuarioService {
       perfil: usuario.perfil,
       tipoEmpleado: usuario.tipoEmpleado,
       activo: usuario.activo,
-      mesaAsignada: usuario.mesaAsignada
+      mesaAsignada: usuario.mesaAsignada,
+      tieneReserva: usuario.tieneReserva
     });
   }
 
@@ -213,5 +215,12 @@ export class UsuarioService {
       return ret.substring(0, 11);
     }
 
+    asignarMesa(mesaNumero : number, id: string){
+      const colleccionClientes = collection(this.firestore, this.colectionName);
+      const documentoClientes = doc(colleccionClientes,id);
+      updateDoc(documentoClientes,{
+        mesaAsignada: mesaNumero,
+      })
+    }
 
 }
