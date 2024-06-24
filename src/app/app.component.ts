@@ -8,6 +8,10 @@ import Swal from 'sweetalert2';
 import { AuthService } from './services/auth.service';
 import { set } from 'firebase/database';
 import { StatusBar, Style } from '@capacitor/status-bar';
+import { MesaService } from './services/mesas.service';
+import { register } from 'swiper/element/bundle';
+
+register();
 
 @Component({
   selector: 'app-root',
@@ -25,15 +29,20 @@ export class AppComponent implements OnInit{
               private audioSrv: AudioService,
               private router: Router,
               private platform: Platform,
-              private authSrv: AuthService) {
+              private authSrv: AuthService,
+              private mesasSrv: MesaService) {
 
 
 
     this.iniciarApp();
+    this.mesasSrv.traer();
     this.usuariosSrv.traer();
+   
   }
   ngOnInit(): void {
+    this.mesasSrv.traer();
     this.usuariosSrv.traer();
+    
   }
 
   logout() {
@@ -99,3 +108,4 @@ export class AppComponent implements OnInit{
     // this.audioSrv.reporoduccionInicioSesion(5);
  }
 }
+

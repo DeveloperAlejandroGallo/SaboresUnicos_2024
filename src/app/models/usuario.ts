@@ -15,5 +15,7 @@ export interface Usuario {
   cuil: string,
   perfil: Perfil,
   tipoEmpleado?: TipoEmpleado | null,
-  activo: boolean
+  activo: boolean,
+  mesaAsignada: number,
+  tieneReserva: boolean,
 }

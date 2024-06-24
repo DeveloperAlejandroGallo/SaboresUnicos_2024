@@ -20,6 +20,7 @@ import {
 import { map, Observable } from 'rxjs';
 import { Mesa } from '../models/mesa';
 import { where } from 'firebase/firestore';
+import { EstadoMesa } from '../enums/estado-mesa';
 
 
 
@@ -100,5 +101,18 @@ export class MesaService {
 
 
   }
+
+  cambiarEstadoDeNesa(estado: EstadoMesa, id : string){
+    const coleccion = collection(this.firestore, this.colectionName);
+    const documento = doc(coleccion,id);
+    //console.log(cliente.nombre);
+    //console.log(cliente.uid);
+    updateDoc(documento,{
+      estado: estado
+    })
+  }
+
+  
+
 
 }

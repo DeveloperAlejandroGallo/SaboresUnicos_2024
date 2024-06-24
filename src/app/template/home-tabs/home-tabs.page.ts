@@ -15,6 +15,7 @@ import { Timestamp } from 'firebase/firestore';
 import Swal from 'sweetalert2';
 import { ListaEsperaService } from 'src/app/services/lista-espera.service';
 import { MesaService } from 'src/app/services/mesas.service';
+import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
 const background = '#f8f8f8d7';
 @Component({
   selector: 'app-home-tabs',
@@ -25,6 +26,7 @@ const background = '#f8f8f8d7';
 export class HomeTabsPage implements OnInit {
   public usuario!: Usuario;
   esCliente:boolean = true;
+  esMaitre:boolean = false;
   url: string;
   codigoLeido : any;
   public isSupported: boolean = false;
@@ -38,6 +40,7 @@ export class HomeTabsPage implements OnInit {
   verChatFlotante: boolean = false;
   verMiPedido : boolean = false;
   estaEnEspera : boolean = false;
+  tieneMesaAsignada : boolean = false;
   //-------------------------
   constructor(private mesasSvc: MesaService, private listaSvc: ListaEsperaService,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService) {
     this.url = this.router.url;
@@ -49,6 +52,9 @@ export class HomeTabsPage implements OnInit {
 
     if(this.usuario.perfil == Perfil.Dueño || this.usuario.perfil == Perfil.Empleado){
       this.esCliente = false;
+      if (this.usuario.tipoEmpleado == TipoEmpleado.maitre) {
+        this.esMaitre = true;
+      }
     }
     
     this.listaSvc.buscarEnListaXid(this.usuario.id).subscribe(data=>{
@@ -105,6 +111,7 @@ export class HomeTabsPage implements OnInit {
               break;
             case "Mesa":
               const nroMesa = datos[1];
+              //this.tieneMesaAsignada = true;
               //validar que haya pasado por lista de espera y que el qr de mesa escaneado sea el que se le fue asignado
               break;
             case "Propinas":
@@ -124,7 +131,7 @@ export class HomeTabsPage implements OnInit {
 
 
   ingresarAListaEspera(){
-    if(!this.estaEnEspera){
+    if(!this.estaEnEspera && this.usuario.mesaAsignada == 0){
       Swal.fire({
         title: "¿Quieres entrar a la lista de espera?",
         icon: "warning",
@@ -146,6 +153,8 @@ export class HomeTabsPage implements OnInit {
           })
         }
       });
+    } else if(this.usuario.mesaAsignada != 0){
+      this.msgService.Info("Ya te asignaron una mesa.");
     }
     else{
       this.msgService.Info("Ya estas en la lista de espera.");
