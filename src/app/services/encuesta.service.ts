@@ -20,6 +20,9 @@ import {
 import { map, Observable } from 'rxjs';
 import { Encuesta } from '../models/encuesta';
 import { orderBy } from 'firebase/firestore';
+import { Usuario } from '../models/usuario';
+import { Producto } from '../models/producto';
+import { TipoProducto } from '../enums/tipo-producto';
 
 
 
@@ -33,9 +36,10 @@ export class EncuestaService {
   private colectionName: string = 'encuestas';
   private coleccionEncuesta: CollectionReference<DocumentData>;
 
+
   constructor(private firestore: Firestore) {
     this.coleccionEncuesta = collection(this.firestore, this.colectionName);
-   }
+  }
 
   public listadoEncuesta!: Array<Encuesta>;
 
@@ -59,12 +63,12 @@ export class EncuestaService {
     );
   }
 
-//Genericos
-  traer(){
+  //Genericos
+  traer() {
     const coleccion = collection(this.firestore, this.colectionName);
     const observable = collectionData(coleccion);
 
-    observable.subscribe((respuesta)=>{
+    observable.subscribe((respuesta) => {
       this.listadoEncuesta = respuesta as Array<Encuesta>;
     });
 
@@ -75,14 +79,14 @@ export class EncuestaService {
 
 
 
-  delete(id: string){
+  delete(id: string) {
     const coleccion = collection(this.firestore, this.colectionName);
-    const documento = doc(coleccion,id);
+    const documento = doc(coleccion, id);
     deleteDoc(documento);
   }
 
 
-//Usuario
+  //Usuario
   nuevo(encuesta: Encuesta): Promise<void> {
 
     const docuNuevo = doc(this.coleccionEncuesta);
