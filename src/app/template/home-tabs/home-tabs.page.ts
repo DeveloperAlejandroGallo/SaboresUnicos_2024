@@ -40,6 +40,7 @@ export class HomeTabsPage implements OnInit {
   verChatFlotante: boolean = false;
   verMiPedido : boolean = false;
   estaEnEspera : boolean = false;
+  tieneMesaAsignada : boolean = false;
   //-------------------------
   constructor(private mesasSvc: MesaService, private listaSvc: ListaEsperaService,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService) {
     this.url = this.router.url;
@@ -110,6 +111,7 @@ export class HomeTabsPage implements OnInit {
               break;
             case "Mesa":
               const nroMesa = datos[1];
+              //this.tieneMesaAsignada = true;
               //validar que haya pasado por lista de espera y que el qr de mesa escaneado sea el que se le fue asignado
               break;
             case "Propinas":
@@ -129,7 +131,7 @@ export class HomeTabsPage implements OnInit {
 
 
   ingresarAListaEspera(){
-    if(!this.estaEnEspera){
+    if(!this.estaEnEspera && this.usuario.mesaAsignada == 0){
       Swal.fire({
         title: "¿Quieres entrar a la lista de espera?",
         icon: "warning",
@@ -151,6 +153,8 @@ export class HomeTabsPage implements OnInit {
           })
         }
       });
+    } else if(this.usuario.mesaAsignada != 0){
+      this.msgService.Info("Ya te asignaron una mesa.");
     }
     else{
       this.msgService.Info("Ya estas en la lista de espera.");
