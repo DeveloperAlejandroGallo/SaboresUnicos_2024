@@ -1,27 +1,22 @@
-<div class="card-list">
-  <ion-accordion-group class="custom-accordion-container" (ionChange)="verEncuestas($event)">
-    <ion-accordion value="verEncuestas">
-      <ion-item slot="header" color="tertiary" class="custom-accordion-header">
-        <ion-icon name="restaurant" slot="start"></ion-icon>
-        <ion-label>Ver reseñas del lugar</ion-label>
-      </ion-item>
+<ion-title>Reseñas del lugar</ion-title>
+
       <ion-list
-        slot="content"
         *ngIf="
           !isLoading && listaEncuestas && listaEncuestas.length > 0;
           else noEncuestas
         "
+        class="card-list"
       >
         <ion-card *ngFor="let encuesta of listaEncuestas">
           <ion-card-header>
-            {{ encuesta.cliente.nombre + ' ' + encuesta.cliente.apellido }}
+            <ion-chip>
+              <ion-avatar>
+                <img [src]="encuesta.cliente.foto" alt="foto del cliente">
+              </ion-avatar>
+              <ion-label>{{ encuesta.cliente.nombre + ' ' + encuesta.cliente.apellido }}</ion-label>
+            </ion-chip>
           </ion-card-header>
           <ion-card-content>
-            <ion-row *ngIf="encuesta.fotos[0]">
-              <ion-col>
-                <img [src]="encuesta.fotos[0]" alt="Foto del cliente" />
-              </ion-col>
-            </ion-row>
             <ion-row>
               <ion-col>
                 <ion-icon
@@ -31,7 +26,7 @@
                   class="icono-grande"
                 ></ion-icon>
                 <ion-icon
-                  *ngFor="let _ of getArray(encuesta.cantidadEstrellas)"
+                  *ngFor="let _ of getArray(encuesta.estrellaFaltante)"
                   name="star-outline"
                   color="medium"
                   class="icono-grande"
@@ -46,11 +41,18 @@
                 <p class="opinion">{{ encuesta.comentario }}</p>
               </ion-col>
             </ion-row>
+            <ion-row>
+              <img *ngIf="encuesta.fotos[0]" [src]="encuesta.fotos[0]" alt="Foto de la encuesta" />
+            </ion-row>
           </ion-card-content>
         </ion-card>
       </ion-list>
+
+
+
       <!-- spinner -->
-      <ion-list slot="content" *ngIf="isLoading">
+
+      <ion-list *ngIf="isLoading">
         <ion-card>
           <ion-card-header>
             <ion-skeleton-text
@@ -91,8 +93,7 @@
           </ion-card-content>
         </ion-card>
       </ion-list>
-    </ion-accordion>
-  </ion-accordion-group>
+  
   <ng-template #noEncuestas>
     <ion-item slot="content" *ngIf="!isLoading">
       <ion-label color="medium" class="ion-text-center"
@@ -101,11 +102,10 @@
     </ion-item>
   </ng-template>
   
-  <div class="image-container">
+  <!-- <div class="image-container">
     <ion-text color="primary">
       <h2>{{textoHome}}</h2>
     </ion-text>
     <img src="../../../assets/img/escanear.gif" alt="Escanear" />
-  </div>
-</div>
+  </div> -->
 

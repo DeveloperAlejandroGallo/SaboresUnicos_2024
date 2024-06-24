@@ -12,6 +12,6 @@ export interface Encuesta {
   SaborDeLaComida: number; //Range de 1 a 10 - Sabor de la comida.
   RecomendariasElLugar: boolean; //Radio Button - Si o No - Volverias a visitarnos.
   QueCosasAgradaron: Array<{cosa: string; si: boolean}>; //Checkbox - Que cosas te agradaron. [comida; tragos; atencion; lugar; precio; otros]
-  MejorComida: Array<Producto>; //Select - Con nombre de producto tipo comida.
+  MejorComida: Producto; //Select - Con nombre de producto tipo comida.
 
 }
