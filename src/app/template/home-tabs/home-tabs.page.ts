@@ -53,7 +53,7 @@ export class HomeTabsPage implements OnInit {
 
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
-    console.log(this.usuario);
+    // console.log(this.usuario);
 
 
   }
@@ -195,7 +195,7 @@ async registerNotifications() {
 
 async addListeners() {
 
-  if(this.usuario.tokenCelularActual !== (null || undefined)) {
+  if(this.usuario.token !== (null || undefined)) {
 
     await PushNotifications.addListener('registration', token => {
       console.info('Token de registro: ', token.value);

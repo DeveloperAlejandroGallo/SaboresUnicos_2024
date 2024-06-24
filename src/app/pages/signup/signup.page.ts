@@ -236,7 +236,7 @@ export class SignupPage implements OnInit {
         activo: false,
         mesaAsignada: 0,
         tieneReserva: false,
-        tokenCelularActual: '',
+        token: '',
       };
 
       this.authService.registrarCuenta(usuario);
@@ -282,7 +282,7 @@ export class SignupPage implements OnInit {
         activo: true,
         mesaAsignada: 0,
         tieneReserva: false,
-        tokenCelularActual: '',
+        token: '',
       };
 
       this.authService.usuarioActual = this.usrService.nuevo(usuario);

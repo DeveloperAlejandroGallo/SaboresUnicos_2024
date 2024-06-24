@@ -18,5 +18,5 @@ export interface Usuario {
   activo: boolean,
   mesaAsignada: number,
   tieneReserva: boolean,
-  tokenCelularActual: string
+  token: string
 }
