@@ -7,14 +7,15 @@ import { Barcode, BarcodeScanner, LensFacing } from '@capacitor-mlkit/barcode-sc
 import { MensajesService } from 'src/app/services/mensajes.service';
 import { ModalController, Platform } from '@ionic/angular';
 import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
-import {
-  getAuth,
-} from 'firebase/auth';
-import { MesasService } from 'src/app/services/mesas.service';
-import { Timestamp } from 'firebase/firestore';
 import Swal from 'sweetalert2';
+import { ListaEsperaService } from 'src/app/services/lista-espera.service';
+import { MesaService } from 'src/app/services/mesas.service';
+import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { UsuarioService } from 'src/app/services/usuario.service';
+
+
+
 const background = '#f8f8f8d7';
 @Component({
   selector: 'app-home-tabs',
@@ -24,51 +25,53 @@ const background = '#f8f8f8d7';
 
 export class HomeTabsPage implements OnInit {
   public usuario!: Usuario;
-  url: string;
-  codigoLeido = '';
+  public esCliente:boolean = true;
+  public esMaitre:boolean = false;
+  public url: string;
+  public codigoLeido : string = "";
   public isSupported: boolean = false;
   public isPermissionGranted = false;
-  listaEspera: any[] = [];
-  mesasInfo: any[] = [];
-  isLoading = false;
 
+  isLoading = false;
+  //para ocultar/ver distintos TABS -->
+  verJuegos : boolean = false;
+  verChat : boolean = false;
+  verChatFlotante: boolean = false;
+  verMiPedido : boolean = false;
   estaEnEspera : boolean = false;
+  tieneMesaAsignada : boolean = false;
+  //-------------------------
   constructor(
-    private mesasSvc: MesasService ,
+    private mesasSvc: MesaService,
+    private listaSvc: ListaEsperaService,
     private modalController: ModalController,
     private platform: Platform,
     private msgService: MensajesService,
     private router: Router,
     private auth: AuthService,
     private usrSrv: UsuarioService) {
+
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
     console.log(this.usuario);
 
-    if(this.platform.is("android")){
-      this.addListeners();
-      this.registerNotifications();
-    }
 
   }
+
   ngOnInit() {
 
-    console.log(getAuth().currentUser?.uid);
-    this.mesasSvc.traerListaEspera().subscribe(data=>{
-      this.listaEspera = data;
-      console.log(this.listaEspera);
+    if(this.usuario.perfil == Perfil.Dueño || this.usuario.perfil == Perfil.Empleado){
+      this.esCliente = false;
+      if (this.usuario.tipoEmpleado == TipoEmpleado.maitre) {
+        this.esMaitre = true;
+      }
+    }
 
-    });
-    this.mesasSvc.buscarEnListaXuid(this.auth.usuarioActual?.id!).subscribe(data=>{
+    this.listaSvc.buscarEnListaXid(this.usuario.id).subscribe(data=>{
       this.estaEnEspera = data.length > 0;
       console.log(this.estaEnEspera);
 
     });
-    this.mesasSvc.traerMesas().subscribe(data=>{
-      this.mesasInfo = data;
-      console.log(this.mesasInfo);
-
-    })
 
     if (this.platform.is('capacitor')) {
       try {
@@ -92,76 +95,86 @@ export class HomeTabsPage implements OnInit {
       }
     }
   }
-// GFM1cQ6jVj9P66SiEeNg ID LAURA
 
   async escanearQR() {
-    if (this.usuario.perfil == Perfil.Cliente) {
-      const modal = await this.modalController.create({
-        component: BarcodeScanningModalComponent,
-        cssClass: 'barcode-scanning-modal',
-        showBackdrop: false,
-        componentProps: {
-          formats: [],
-          LensFacing: LensFacing.Back
-        }
-      });
-      await modal.present();
-      const { data } = await modal.onWillDismiss();
-      if (data) {
-        this.codigoLeido = data?.barcode?.displayValue;
+    const modal = await this.modalController.create({
+      component: BarcodeScanningModalComponent,
+      cssClass: 'barcode-scanning-modal',
+      showBackdrop: false,
+      componentProps: {
+        formats: [],
+        LensFacing: LensFacing.Back
+      }
+    });
+    await modal.present();
+    const { data } = await modal.onWillDismiss();
 
-        if(this.codigoLeido == 'IngresoLocal'){
-          if(!this.estaEnEspera){
-            console.log("añadido");
-            Swal.fire({
-              title: "¿Quieres entrar a la lista de espera?",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#0EA06F",
-              cancelButtonColor: "#d33",
-              cancelButtonText: "Cancelar",
-              confirmButtonText: "Entrar",
-              heightAuto: false,
-              background: background
-            }).then((result) => {
-              if (result.isConfirmed) {
-                // Swal.fire({
-                //   title: "Deleted!",
-                //   text: "Your file has been deleted.",
-                //   icon: "success"
-                // });
-                this.isLoading = true;
-                this.mesasSvc.agregarAListaEspera(this.auth.usuarioActual?.id!,this.usuario.nombre + ' ' + this.usuario.apellido,Timestamp.fromDate(new Date())).then(()=>{
-                  console.log("añadido");
-                  this.isLoading = false;
-                  this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
-                }).catch(error=>{
-                  console.log(error);
-                });
-              }
-            });
+    if(data){
+      this.codigoLeido = data?.barcode?.displayValue;
+      const datos = this.codigoLeido.split('/');
 
+      switch(this.usuario.perfil){
+        case Perfil.Cliente:
+        case Perfil.Anonimo:
+          switch(datos[0]){
+            case "IngresoLocal":
+              this.ingresarAListaEspera();
+              break;
+            case "Mesa":
+              const nroMesa = datos[1];
+              //this.tieneMesaAsignada = true;
+              //validar que haya pasado por lista de espera y que el qr de mesa escaneado sea el que se le fue asignado
+              break;
+            case "Propinas":
 
+              break;
           }
-          else{
-            this.msgService.Info2("Ya estas en la lista de espera.");
-          }
-
-        }
-        else if(this.codigoLeido == 'MESA1' && !this.estaEnEspera){
-            this.msgService.Error2("Primero debes anotarte en la lista de espera, usando el QR de ingreso al restaurante.");
-        }
-        console.log("escaneo de qr: " + this.codigoLeido);
+          break;
+        default:
+          this.msgService.Error("No se identifico el tipo de perfil.");
+          break;
       }
 
     }
-
 
   }
 
 
 
-/**
+  ingresarAListaEspera(){
+    if(!this.estaEnEspera && this.usuario.mesaAsignada == 0){
+      Swal.fire({
+        title: "¿Quieres entrar a la lista de espera?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#0EA06F",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Cancelar",
+        confirmButtonText: "Entrar",
+        heightAuto: false,
+        background: background
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.isLoading = true;
+          this.listaSvc.nuevo(this.usuario).then(()=>{
+            this.isLoading = false;
+            this.msgService.ExitoIonToast("Estás en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
+          }).catch(err=>{
+            this.msgService.Error(err);
+          })
+        }
+      });
+    } else if(this.usuario.mesaAsignada != 0){
+      this.msgService.Info(`Ya le fue asignada una mesa. Por favor escanee el código de la mesa ${this.usuario.mesaAsignada} para comenzar su atención.`);
+    }
+    else{
+      this.msgService.Info("Usted ya se encuentra en la lista de espera. Por favor aguarde a que le asignen una mesa.");
+    }
+  }
+
+
+
+  /**
  * Push Notifications
  * Registra el dispositivo para recibir notificaciones
  */
@@ -206,8 +219,6 @@ async addListeners() {
 
 
 }
-
-
 
 
 

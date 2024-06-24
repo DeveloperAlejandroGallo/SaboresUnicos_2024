@@ -234,6 +234,8 @@ export class SignupPage implements OnInit {
         perfil: Perfil.Cliente,
         tipoEmpleado: undefined,
         activo: false,
+        mesaAsignada: 0,
+        tieneReserva: false,
         tokenCelularActual: '',
       };
 
@@ -278,6 +280,8 @@ export class SignupPage implements OnInit {
         perfil: Perfil.Anonimo,
         tipoEmpleado: null,
         activo: true,
+        mesaAsignada: 0,
+        tieneReserva: false,
         tokenCelularActual: '',
       };
 

@@ -16,5 +16,7 @@ export interface Usuario {
   perfil: Perfil,
   tipoEmpleado?: TipoEmpleado | null,
   activo: boolean,
+  mesaAsignada: number,
+  tieneReserva: boolean,
   tokenCelularActual: string
 }

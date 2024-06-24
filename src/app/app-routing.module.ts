@@ -49,7 +49,11 @@ const routes: Routes = [
     path: 'home-maitre',
     loadChildren: () => import('./pages/home-maitre/home-maitre.module').then( m => m.HomeMaitrePageModule),
     canActivate: [EstaLogueadoGuard]
+  },  {
+    path: 'menu-productos',
+    loadChildren: () => import('./pages/menu-productos/menu-productos.module').then( m => m.MenuProductosPageModule)
   },
+
 
 
 

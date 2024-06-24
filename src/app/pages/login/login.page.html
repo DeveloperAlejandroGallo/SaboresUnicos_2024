@@ -12,7 +12,7 @@
           <h1>Bienvenido</h1>
           <form [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
             <ion-item>
-              <ion-icon name="mail"></ion-icon>
+              <ion-icon name="mail" color="dark"></ion-icon>
               <ion-input
                 type="email"
                 name="email"
@@ -28,7 +28,7 @@
               Debe ingresar un correo válido
             </ion-note>
             <ion-item>
-              <ion-icon name="key"></ion-icon>
+              <ion-icon name="key" color="dark"></ion-icon>
               <ion-input
                 type="password"
                 name="password"
@@ -87,13 +87,13 @@
   </ion-fab-button>
   <ion-fab-list side="start">
     <ion-fab-button (click)="loginAutomatico('admin')">
-      <ion-icon name="glasses"></ion-icon>
+      <ion-icon name="glasses" color="dark"></ion-icon>
     </ion-fab-button>
     <ion-fab-button (click)="loginAutomatico('invitado')">
-      <ion-icon name="man"></ion-icon>
+      <ion-icon name="man" color="dark"></ion-icon>
     </ion-fab-button>
     <ion-fab-button (click)="loginAutomatico('usuario')">
-      <ion-icon name="star"></ion-icon>
+      <ion-icon name="star" color="dark"></ion-icon>
     </ion-fab-button>
 
   </ion-fab-list>
