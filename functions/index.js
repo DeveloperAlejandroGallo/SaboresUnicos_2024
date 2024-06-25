@@ -8,13 +8,14 @@
  */
 
 const express = require("express");
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const admin = require("firebase-admin");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 const cors = require('cors')({ origin: true });
-const {onRequest} = require("firebase-functions/v2/https");
-const logger = require("firebase-functions/logger");
+const functions = require('firebase-functions');
+// const {onRequest} = require("firebase-functions/v2/https");
+// const logger = require("firebase-functions/logger");
 
 dotenv.config();
 
@@ -35,7 +36,9 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-app.use(bodyParser.json());
+app.use(cors);
+
+app.use(express.json());
 
 // Endpoint para enviar una notificación a un usuario específico
 app.post("/notificar", async (req, res) => {
@@ -131,11 +134,14 @@ app.post("/enviar-email", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`End Points:`);
-  console.log(`- /notificar`);
-  console.log(`- /notificar-tipoEmpleado`);
-  console.log(`- /enviar-email`);
+// Exportar la instancia de Express como una función de Firebase
+exports.app = functions.https.onRequest(app);
 
-});
+// app.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+//   console.log(`End Points:`);
+//   console.log(`- /notificar`);
+//   console.log(`- /notificar-tipoEmpleado`);
+//   console.log(`- /enviar-email`);
+
+// });
