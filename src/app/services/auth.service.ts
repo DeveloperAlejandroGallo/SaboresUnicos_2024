@@ -51,7 +51,7 @@ export class AuthService {
       (x) => x.email == email
     )!;
 
-    console.log(this.usuarioActual);
+    // console.log(this.usuarioActual);
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -82,7 +82,7 @@ export class AuthService {
           default:
             msg = error.message;
         }
-        console.log(error);
+        console.error(error);
         this.messageService.Error(`Usuario: ${email} - ${msg}`);
       });
   }

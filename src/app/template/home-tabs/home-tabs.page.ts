@@ -7,15 +7,15 @@ import { Barcode, BarcodeScanner, LensFacing } from '@capacitor-mlkit/barcode-sc
 import { MensajesService } from 'src/app/services/mensajes.service';
 import { ModalController, Platform } from '@ionic/angular';
 import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
-import {
-  getAuth,
-} from 'firebase/auth';
-
-import { Timestamp } from 'firebase/firestore';
 import Swal from 'sweetalert2';
 import { ListaEsperaService } from 'src/app/services/lista-espera.service';
 import { MesaService } from 'src/app/services/mesas.service';
 import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { UsuarioService } from 'src/app/services/usuario.service';
+
+
+
 const background = '#f8f8f8d7';
 @Component({
   selector: 'app-home-tabs',
@@ -25,14 +25,13 @@ const background = '#f8f8f8d7';
 
 export class HomeTabsPage implements OnInit {
   public usuario!: Usuario;
-  esCliente:boolean = true;
-  esMaitre:boolean = false;
-  url: string;
-  codigoLeido : any;
+  public esCliente:boolean = true;
+  public esMaitre:boolean = false;
+  public url: string;
+  public codigoLeido : string = "";
   public isSupported: boolean = false;
   public isPermissionGranted = false;
-  listaEspera: any[] = [];
-  mesasInfo: any[] = [];
+
   isLoading = false;
   //para ocultar/ver distintos TABS -->
   verJuegos : boolean = false;
@@ -42,10 +41,21 @@ export class HomeTabsPage implements OnInit {
   estaEnEspera : boolean = false;
   tieneMesaAsignada : boolean = false;
   //-------------------------
-  constructor(private mesasSvc: MesaService, private listaSvc: ListaEsperaService,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService) {
+  constructor(
+    private mesasSvc: MesaService,
+    private listaSvc: ListaEsperaService,
+    private modalController: ModalController,
+    private platform: Platform,
+    private msgService: MensajesService,
+    private router: Router,
+    private auth: AuthService,
+    private usrSrv: UsuarioService) {
+
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
-    console.log(this.usuario);
+    // console.log(this.usuario);
+
+
   }
 
   ngOnInit() {
@@ -56,13 +66,13 @@ export class HomeTabsPage implements OnInit {
         this.esMaitre = true;
       }
     }
-    
+
     this.listaSvc.buscarEnListaXid(this.usuario.id).subscribe(data=>{
       this.estaEnEspera = data.length > 0;
       console.log(this.estaEnEspera);
-      
+
     });
-    
+
     if (this.platform.is('capacitor')) {
       try {
         BarcodeScanner.installGoogleBarcodeScannerModule();
@@ -102,6 +112,7 @@ export class HomeTabsPage implements OnInit {
     if(data){
       this.codigoLeido = data?.barcode?.displayValue;
       const datos = this.codigoLeido.split('/');
+
       switch(this.usuario.perfil){
         case Perfil.Cliente:
         case Perfil.Anonimo:
@@ -124,7 +135,7 @@ export class HomeTabsPage implements OnInit {
           break;
       }
 
-    }   
+    }
 
   }
 
@@ -147,20 +158,67 @@ export class HomeTabsPage implements OnInit {
           this.isLoading = true;
           this.listaSvc.nuevo(this.usuario).then(()=>{
             this.isLoading = false;
-            this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
+            this.msgService.ExitoIonToast("Estás en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
           }).catch(err=>{
             this.msgService.Error(err);
           })
         }
       });
     } else if(this.usuario.mesaAsignada != 0){
-      this.msgService.Info("Ya te asignaron una mesa.");
+      this.msgService.Info(`Ya le fue asignada una mesa. Por favor escanee el código de la mesa ${this.usuario.mesaAsignada} para comenzar su atención.`);
     }
     else{
-      this.msgService.Info("Ya estas en la lista de espera.");
+      this.msgService.Info("Usted ya se encuentra en la lista de espera. Por favor aguarde a que le asignen una mesa.");
     }
   }
 
+
+
+  /**
+ * Push Notifications
+ * Registra el dispositivo para recibir notificaciones
+ */
+async registerNotifications() {
+  let permisionStatus = await PushNotifications.checkPermissions();
+
+  if(permisionStatus.receive === "prompt"){
+    permisionStatus = await PushNotifications.requestPermissions();
+  }
+
+  if(permisionStatus.receive !== "granted"){
+    console.log("No se puede recibir notificaciones");
+  }
+
+  PushNotifications.register();
+
+}
+
+async addListeners() {
+
+  if(this.usuario.token !== (null || undefined)) {
+
+    await PushNotifications.addListener('registration', token => {
+      console.info('Token de registro: ', token.value);
+
+      this.usrSrv.actualizarToken(this.usuario.id!,token.value);
+    });
+
+    await PushNotifications.addListener('registrationError', err => {
+      console.error('Error Registro Push: ', err.error);
+    });
+
+
+  }
+  await PushNotifications.addListener('pushNotificationReceived', notification => {
+    console.log('Notificación Recibida: ', notification);
+  });
+
+  await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+    console.log('Push notification action performed', notification.actionId, notification.inputValue);
+  });
+
+
+}
 
 
 

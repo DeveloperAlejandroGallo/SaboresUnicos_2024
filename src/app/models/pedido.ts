@@ -17,4 +17,5 @@ export interface Pedido {
   descuentoPorJuego: number;
   tiempoEstimado: number;
   fechaDePedidoAceptado: Timestamp; //Con este calculamos el tiempo de espera
+  mozo: Usuario;
 }

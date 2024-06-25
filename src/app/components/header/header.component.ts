@@ -9,16 +9,21 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent  {
   public usuario!: Usuario;
   url: string;
   @ViewChild('popover') popover: any;
   isOpen = false;
 
-  constructor(private authService: AuthService, private router: Router, private auth: AuthService, private popoverController: PopoverController) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private auth: AuthService,
+    private popoverController: PopoverController
+  ) {
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
-    console.log(this.usuario);
+    // console.log(this.usuario);
   }
 
   logout() {
@@ -27,7 +32,6 @@ export class HeaderComponent implements OnInit {
     this.authService.cerrarSesion();
     // this.router.navigateByUrl('/', { replaceUrl: true });
   }
-  ngOnInit() { }
 
   presentPopover(e: Event) {
     this.popover.event = e;
