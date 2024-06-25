@@ -27,6 +27,13 @@ export class HomeTabsPage implements OnInit {
   public usuario!: Usuario;
   public esCliente:boolean = true;
   public esMaitre:boolean = false;
+  public esDuenio: boolean = false;
+  public esSupervisor: boolean = false;
+  public esEmpleado: boolean = false;
+  public esCocinero: boolean = false;
+  public esMozo: boolean = false;
+  public esBartender: boolean = false;
+  public esAnonimo: boolean = false;
   public url: string;
   public codigoLeido : string = "";
   public isSupported: boolean = false;
@@ -41,7 +48,16 @@ export class HomeTabsPage implements OnInit {
   estaEnEspera : boolean = false;
   tieneMesaAsignada : boolean = false;
   //-------------------------
-  constructor(private mesasSvc: MesaService, private listaSvc: ListaEsperaService,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService, private usrService: UsuarioService) {
+  constructor(
+    private mesasSvc: MesaService,
+    private listaSvc: ListaEsperaService,
+    private modalController: ModalController,
+    private platform: Platform,
+    private msgService: MensajesService,
+    private router: Router,
+    private auth: AuthService,
+    private usrService: UsuarioService) {
+
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
     this.usrService.allUsers$.subscribe(data =>{
@@ -52,12 +68,13 @@ export class HomeTabsPage implements OnInit {
 
   ngOnInit() {
 
-    if(this.usuario.perfil == Perfil.Dueño || this.usuario.perfil == Perfil.Empleado){
-      this.esCliente = false;
-      if (this.usuario.tipoEmpleado == TipoEmpleado.maitre) {
-        this.esMaitre = true;
-      }
+    if(this.platform.is('android')) {
+      this.addListeners();
+      this.registerNotifications();
     }
+    this.tiposEntidades();
+
+
 
     this.listaSvc.buscarEnListaXid(this.usuario.id).subscribe(data=>{
       this.estaEnEspera = data.length > 0;
@@ -86,6 +103,23 @@ export class HomeTabsPage implements OnInit {
         console.error('Error al escanear: ' + error);
       }
     }
+  }
+
+
+  tiposEntidades() {
+
+    this.esCliente = true;
+
+    if(this.usuario.perfil == Perfil.Empleado){
+      this.esCliente = false;
+      this.esDuenio = this.usuario.tipoEmpleado === TipoEmpleado.Dueño;
+      this.esSupervisor = this.usuario.tipoEmpleado === TipoEmpleado.Supervisor;
+      this.esMaitre = this.usuario.tipoEmpleado === TipoEmpleado.Maitre;
+      this.esCocinero = this.usuario.tipoEmpleado === TipoEmpleado.Cocinero;
+      this.esMozo = this.usuario.tipoEmpleado === TipoEmpleado.Mozo;
+      this.esBartender = this.usuario.tipoEmpleado === TipoEmpleado.Bartender;
+    }
+
   }
 
   async escanearQR() {

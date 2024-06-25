@@ -38,6 +38,8 @@ import { Haptics } from '@capacitor/haptics';
 import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
 import { Perfil } from 'src/app/enums/perfil';
 import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
+import { EstadoCliente } from 'src/app/enums/estado-cliente';
+import { PushNotificationService } from 'src/app/services/push-notification.service';
 
 @Component({
   selector: 'app-signup',
@@ -76,7 +78,8 @@ export class SignupPage implements OnInit {
     private modalController: ModalController,
     private route: ActivatedRoute,
     private usrService: UsuarioService,
-    private auth: AuthService
+    private auth: AuthService,
+    private pushSrv: PushNotificationService
   ) {
     this.audioSrv.reporoduccionCambioPagina();
     this.perfil = this.route.snapshot.paramMap.get('perfil') as Perfil;
@@ -134,7 +137,7 @@ export class SignupPage implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
 
     if (this.platform.is('capacitor') && this.perfil != Perfil.Anonimo) {
       try {
@@ -164,12 +167,12 @@ export class SignupPage implements OnInit {
 
     if (this.usuario) {
       console.log('Hay usuario: '+ this.usuario);
-      
-      if (this.usuario.tipoEmpleado == TipoEmpleado.maitre) {
+
+      if (this.usuario.tipoEmpleado == TipoEmpleado.Maitre) {
           this.esMaitre = true;
         }
     }
-    
+
 
     this.signupForm = new FormGroup(
       {
@@ -247,13 +250,15 @@ export class SignupPage implements OnInit {
         cuil: '',
         perfil: Perfil.Cliente,
         tipoEmpleado: undefined,
-        activo: false,
+        estado: EstadoCliente.Pendiente,
         mesaAsignada: 0,
         tieneReserva: false,
         token: '',
       };
 
       this.authService.registrarCuenta(usuario);
+      this.pushSrv.notificarAltaCliente(usuario, TipoEmpleado.Dueño);
+      this.pushSrv.notificarAltaCliente(usuario, TipoEmpleado.Supervisor);
       setTimeout(() => {
         this.isLoading = false;
         this.audioSrv.reporoduccionSuccess();
@@ -293,7 +298,7 @@ export class SignupPage implements OnInit {
         cuil: '',
         perfil: Perfil.Anonimo,
         tipoEmpleado: null,
-        activo: true,
+        estado: EstadoCliente.Activo,
         mesaAsignada: 0,
         tieneReserva: false,
         token: '',

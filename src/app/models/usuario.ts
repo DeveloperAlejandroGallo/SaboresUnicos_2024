@@ -1,3 +1,4 @@
+import { EstadoCliente } from "../enums/estado-cliente";
 import { Perfil } from "../enums/perfil";
 import { TipoEmpleado } from "../enums/tipo-empleado";
 
@@ -15,7 +16,7 @@ export interface Usuario {
   cuil: string,
   perfil: Perfil,
   tipoEmpleado?: TipoEmpleado | null,
-  activo: boolean,
+  estado: EstadoCliente,
   mesaAsignada: number,
   tieneReserva: boolean,
   token: string

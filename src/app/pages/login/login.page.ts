@@ -69,6 +69,7 @@ export class LoginPage implements OnInit {
 
 
   public irARegistrar() {
+    // this.usrSrv.actualizarCamposNuevos();
     this.loginForm.reset();
     this.router.navigate(['/signup/Cliente']);
   }

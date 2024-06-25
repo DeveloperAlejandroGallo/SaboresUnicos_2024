@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TipoEmpleado } from '../enums/tipo-empleado';
 import { Usuario } from '../models/usuario';
-import { Mesa } from '../models/mesa';
 import { Pedido } from '../models/pedido';
 
 @Injectable({
@@ -17,6 +16,12 @@ export class PushNotificationService {
   constructor(private http: HttpClient) { }
 
 
+  notificarAltaCliente(usuario: Usuario, role: TipoEmpleado): Observable<any> {
+    let title = 'Nuevo Cliente Registrado';
+    let body = `Se ha registrado el Cliente ${usuario.nombre} ${usuario.apellido} con el email: ${usuario.email}.`;
+    return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
+  }
+
   notificarMesaAsignada(usuario: Usuario, mesaNro: number): Observable<any> {
     let token = usuario.token;
     let title = 'Mesa Asignada';
@@ -25,23 +30,23 @@ export class PushNotificationService {
   }
 
   notificarChatMozos(mesaNumero: number): Observable<any> {
-    let role = TipoEmpleado.mozo;
     let title = `Nuevo mensaje de Mesa ${mesaNumero}`;
     let body = `Nuevo pedido de comida de Mesa ${mesaNumero}. Por favor revisar la lista de pedidos.`;
+    let role = TipoEmpleado.Mozo;
     return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
   }
 
   notificarCocinerosNuevoPedido(mesaNumero: number): Observable<any> {
     let title: string = 'Nuevo pedido de Comida';
-    let role = TipoEmpleado.cocinero;
     let body = `Nuevo pedido de comida de Mesa ${mesaNumero}. Por favor revisar la lista de pedidos.`;
+    let role = TipoEmpleado.Cocinero;
     return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
   }
 
   notificarBartendersNuevoPedido(mesaNumero: number): Observable<any> {
     let title = 'Nuevo pedido de Bebida';
-    let role = TipoEmpleado.bartender;
     let body = `Nuevo pedido de bebidas de Mesa ${mesaNumero}. Por favor revisar la lista de pedidos.`;
+    let role = TipoEmpleado.Bartender;
       return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
   }
 

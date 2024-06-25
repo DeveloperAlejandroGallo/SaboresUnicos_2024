@@ -8,47 +8,31 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { ListaEsperaService } from 'src/app/services/lista-espera.service'
 import { MensajesService } from 'src/app/services/mensajes.service';
 import Swal from 'sweetalert2';
-import { map, Observable } from 'rxjs';
-import {
-  addDoc,
-  collection,
-  collectionChanges,
-  collectionData,
-  CollectionReference,
-  collectionSnapshots,
-  deleteDoc,
-  doc,
-  DocumentData,
-  Firestore,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  updateDoc,
-} from '@angular/fire/firestore';
 import { EstadoMesa } from 'src/app/enums/estado-mesa';
 import { ListaEspera } from 'src/app/models/lista-espera';
+import { PushNotificationService } from 'src/app/services/push-notification.service';
 
 @Component({
   selector: 'app-home-maitre',
   templateUrl: './home-maitre.page.html',
   styleUrls: ['./home-maitre.page.scss'],
 })
-export class HomeMaitrePage implements OnInit {
+export class HomeMaitrePage  {
 
   public usuario!: Usuario;
   url: string;
   public mesasLibres: Array<Mesa> = new Array<Mesa>;
   public listaDeEspera : any[] = [];
   public options: string[] = [];
+  public isLoading: boolean = false;
   constructor(
-            private router: Router, 
-            private auth: AuthService, 
+            private router: Router,
+            private auth: AuthService,
             private mesaService: MesaService,
             private usrService: UsuarioService,
-            private firestore: Firestore,
             private listEsperaService: ListaEsperaService,
-            private mensajeService: MensajesService) {
+            private mensajeService: MensajesService,
+            private pushService: PushNotificationService) {
 
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
@@ -63,30 +47,28 @@ export class HomeMaitrePage implements OnInit {
     this.listEsperaService.allListaEspera$.subscribe((usuarios) =>{
       this.listaDeEspera = usuarios.filter(x => x.usuario.mesaAsignada == 0);
       console.log(this.listaDeEspera);
-      
+
     })
 
     // this.mesaService.traerListaEspera().subscribe((usuarios) =>{
     //   this.listaDeEspera = usuarios;
     // })
-    
-  }
-
-  ngOnInit() {
 
   }
+
+
 
    async ofrecerMesas(elementoEspera: ListaEspera) {
     let asignada = 0;
 
     console.log(this.mesasLibres);
 
-    
+
       this.options = this.mesasLibres.map(mesa => 'Mesa ' + mesa.numero)
 
     if (this.mesasLibres.length == 0) {
       Swal.fire({
-  
+
         title:'No hay más mesas disponibles',
         icon: "warning",
         confirmButtonText: "OK",
@@ -115,10 +97,10 @@ export class HomeMaitrePage implements OnInit {
         inputValidator: (value) => {
           return new Promise((resolve: any) => {
             console.log('Valor value ' + value);
-            
+
             if (value) {
-              
-              
+
+
               resolve();
             }
           });
@@ -135,19 +117,20 @@ export class HomeMaitrePage implements OnInit {
         }
         let numeroDeMesa: number = Number(mesaTexto.split(" ")[1]);
         console.log('Numero de mesa ' +numeroDeMesa);
-        
+
         const mesasSeleccionadas = this.mesasLibres.filter(x => x.numero === numeroDeMesa);
         console.log('Mesa seleccionada ' + mesasSeleccionadas);
-        
+
         //console.log(seleccionada);
         let mesaAAsignar: Mesa;
         if (mesasSeleccionadas.length == 0) {
           this.mensajeService.Warning('La mesa ya fue asignada a otro cliente');
-          //console.log(objetoSeleccionado); 
+          //console.log(objetoSeleccionado);
         }
         mesaAAsignar = mesasSeleccionadas[0];
-        
+
         this.asignarMesa(elementoEspera,mesaAAsignar);
+        this.isLoading = false;
         Swal.fire({
           title:`Seleccionó la mesa número: ` + mesaAAsignar?.numero,
           position: 'center',
@@ -164,26 +147,32 @@ export class HomeMaitrePage implements OnInit {
 
 
   asignarMesa(elementoEspera: ListaEspera,mesa: Mesa){
+    this.isLoading = true;
+    try{
+      console.log(mesa.id);
+      console.log(elementoEspera.usuario.id);
 
-    console.log(mesa.id);
-    console.log(elementoEspera.usuario.id);
-    
-    
-   
-    // TO DO: MANDAR NOTIFICACIÓN AL CLIENTE DE LA MESA ASIGNADA CON SU QR. 
-    this.mesaService.cambiarEstadoDeNesa(EstadoMesa.ocupada, mesa.id);
+      // TO DO: MANDAR NOTIFICACIÓN AL CLIENTE DE LA MESA ASIGNADA CON SU QR.
+      this.mesaService.cambiarEstadoDeNesa(EstadoMesa.ocupada, mesa.id);
 
-    this.usrService.asignarMesa(mesa.numero, elementoEspera.usuario.id);
+      this.usrService.asignarMesa(mesa.numero, elementoEspera.usuario.id);
+      this.listEsperaService.delete(elementoEspera.id);
+
+      this.pushService.notificarMesaAsignada(elementoEspera.usuario, mesa.numero).subscribe((data) => {
+        console.log('Respuesta Push: '  + data);
+      });
+    }catch(ex){
+
+      console.error(ex);
+    }
 
 
-    this.listEsperaService.delete(elementoEspera.id);
 
-     
-     
 
-    
 
-   
+
+
+
 
   }
 

@@ -20,6 +20,7 @@ import { Usuario } from '../models/usuario';
 import { MensajesService } from './mensajes.service';
 import { usuarioLocalStorage } from '../models/constantes';
 import { AudioService } from './audio.service';
+import { EstadoCliente } from '../enums/estado-cliente';
 
 @Injectable({
   providedIn: 'root',
@@ -51,19 +52,28 @@ export class AuthService {
       (x) => x.email == email
     )!;
 
+
+
     // console.log(this.usuarioActual);
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
 
-        if (!this.usuarioActual?.activo) {
+        if (this.usuarioActual?.estado === EstadoCliente.Pendiente) {
           this.messageService.Warning(
             'Su usuario aún no ha sido aprobado por el administrador.\nPor favor aguarde el correo de confirmación.'
           );
           return;
         }
 
+        if (this.usuarioActual?.estado === EstadoCliente.Rechazado) {
+          this.messageService.Warning(
+            'Disculpe, pero su usuario ha sido rechazado por el administrador.'
+          );
+          return;
+        }
+        this.usrService.escucharUsuario(this.usuarioActual!.id);
         this.router.navigate(['/home-tabs']);
       })
       .catch((error) => {
@@ -158,6 +168,7 @@ export class AuthService {
     signOut(auth)
       .then(() => {
         localStorage.removeItem(usuarioLocalStorage);
+        this.usuarioActual = undefined;
         this.audioSrv.reporoduccionLogOut();
         this.messageService.InfoToast('Sesión cerrada');
         this.router.navigate(['/login']);
