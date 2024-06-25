@@ -1,7 +1,8 @@
 <!-- <app-nav-bar  [titulo]="'Alta de Usuarios'" ></app-nav-bar> -->
 
+<app-header *ngIf="esMaitre"></app-header>
 <body class="centrado">
-  <ion-icon
+  <ion-icon *ngIf="!esMaitre"
     class="icon-volver"
     name="arrow-back-outline"
     (click)="volver()"
