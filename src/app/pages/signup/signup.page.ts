@@ -38,6 +38,7 @@ import { Haptics } from '@capacitor/haptics';
 import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
 import { Perfil } from 'src/app/enums/perfil';
 import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
+import { EstadoCliente } from 'src/app/enums/estado-cliente';
 
 @Component({
   selector: 'app-signup',
@@ -134,7 +135,7 @@ export class SignupPage implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
 
     if (this.platform.is('capacitor') && this.perfil != Perfil.Anonimo) {
       try {
@@ -164,12 +165,12 @@ export class SignupPage implements OnInit {
 
     if (this.usuario) {
       console.log('Hay usuario: '+ this.usuario);
-      
+
       if (this.usuario.tipoEmpleado == TipoEmpleado.maitre) {
           this.esMaitre = true;
         }
     }
-    
+
 
     this.signupForm = new FormGroup(
       {
@@ -247,7 +248,7 @@ export class SignupPage implements OnInit {
         cuil: '',
         perfil: Perfil.Cliente,
         tipoEmpleado: undefined,
-        activo: false,
+        estado: EstadoCliente.Pendiente,
         mesaAsignada: 0,
         tieneReserva: false,
         token: '',
@@ -293,7 +294,7 @@ export class SignupPage implements OnInit {
         cuil: '',
         perfil: Perfil.Anonimo,
         tipoEmpleado: null,
-        activo: true,
+        estado: EstadoCliente.Activo,
         mesaAsignada: 0,
         tieneReserva: false,
         token: '',
