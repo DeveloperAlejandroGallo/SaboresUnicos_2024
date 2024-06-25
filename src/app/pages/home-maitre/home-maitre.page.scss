@@ -5,20 +5,39 @@ body {
 
 
 .mitab{
-    background-color: #ffffffe0;
+    background-color: rgb(231 144 144 / 64%);
 }
 
 ion-col{
-    background-color: #f5cece9a;
-  border: solid 1px #BF0000;
+    background-color: rgb(231 144 144 / 64%);
+  //border: solid 1px #BF0000;
+  //border-bottom: solid 1px #BF0000;
   color: black;
   text-align: center;
+  margin-top: 10px;
 }
 
 .center-alert {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  margin: 0;
+}
+
+.center-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rounded-image {
+  border-radius: 50%;
+}
+
+.bordered-image {
+  border: 2px solid #bf0000;
+}
+
+.grilla {
+  border-radius: 40px; /* Cambia este valor al que prefieras */
+  overflow: hidden; /* Asegura que el contenido no se desborde de las esquinas redondeadas */
 }

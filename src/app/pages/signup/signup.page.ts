@@ -37,6 +37,7 @@ import { AudioService } from 'src/app/services/audio.service';
 import { Haptics } from '@capacitor/haptics';
 import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
 import { Perfil } from 'src/app/enums/perfil';
+import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
 
 @Component({
   selector: 'app-signup',
@@ -62,6 +63,8 @@ export class SignupPage implements OnInit {
   public tituloBoton:  string = "Registrarse";
   public verScanner:  boolean = false;
   private perfil: Perfil;
+  esMaitre:boolean = false;
+  public usuario!: Usuario;
 
   constructor(
     private authService: AuthService,
@@ -72,11 +75,12 @@ export class SignupPage implements OnInit {
     private audioSrv: AudioService,
     private modalController: ModalController,
     private route: ActivatedRoute,
-    private usrService: UsuarioService
+    private usrService: UsuarioService,
+    private auth: AuthService
   ) {
     this.audioSrv.reporoduccionCambioPagina();
     this.perfil = this.route.snapshot.paramMap.get('perfil') as Perfil;
-
+    this.usuario = this.auth.usuarioActual!;
     switch (this.perfil) {
       case Perfil.Cliente:
         this.verApellido = true;
@@ -130,6 +134,7 @@ export class SignupPage implements OnInit {
   }
 
   ngOnInit(): void {
+    
 
     if (this.platform.is('capacitor') && this.perfil != Perfil.Anonimo) {
       try {
@@ -156,6 +161,15 @@ export class SignupPage implements OnInit {
         'La funcionalidad de escaneo no está disponible en el navegador'
       );
     }
+
+    if (this.usuario) {
+      console.log('Hay usuario: '+ this.usuario);
+      
+      if (this.usuario.tipoEmpleado == TipoEmpleado.maitre) {
+          this.esMaitre = true;
+        }
+    }
+    
 
     this.signupForm = new FormGroup(
       {

@@ -41,21 +41,13 @@ export class HomeTabsPage implements OnInit {
   estaEnEspera : boolean = false;
   tieneMesaAsignada : boolean = false;
   //-------------------------
-  constructor(
-    private mesasSvc: MesaService,
-    private listaSvc: ListaEsperaService,
-    private modalController: ModalController,
-    private platform: Platform,
-    private msgService: MensajesService,
-    private router: Router,
-    private auth: AuthService,
-    private usrSrv: UsuarioService) {
-
+  constructor(private mesasSvc: MesaService, private listaSvc: ListaEsperaService,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService, private usrService: UsuarioService) {
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
-    // console.log(this.usuario);
-
-
+    this.usrService.allUsers$.subscribe(data =>{
+      this.usuario = data.filter(x => x.id === this.auth.usuarioActual?.id)[0];
+    });
+    console.log(this.usuario);
   }
 
   ngOnInit() {
@@ -141,35 +133,45 @@ export class HomeTabsPage implements OnInit {
 
 
 
-  ingresarAListaEspera(){
-    if(!this.estaEnEspera && this.usuario.mesaAsignada == 0){
-      Swal.fire({
-        title: "¿Quieres entrar a la lista de espera?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#0EA06F",
-        cancelButtonColor: "#d33",
-        cancelButtonText: "Cancelar",
-        confirmButtonText: "Entrar",
-        heightAuto: false,
-        background: background
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.isLoading = true;
-          this.listaSvc.nuevo(this.usuario).then(()=>{
-            this.isLoading = false;
-            this.msgService.ExitoIonToast("Estás en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
-          }).catch(err=>{
-            this.msgService.Error(err);
-          })
-        }
-      });
-    } else if(this.usuario.mesaAsignada != 0){
-      this.msgService.Info(`Ya le fue asignada una mesa. Por favor escanee el código de la mesa ${this.usuario.mesaAsignada} para comenzar su atención.`);
+  ingresarAListaEspera(){    
+    console.log(this.usuario);
+
+    this.msgService.Info(this.usuario.mesaAsignada.toString());
+
+    if (this.usuario.mesaAsignada == 0) {
+      if(!this.estaEnEspera){
+        Swal.fire({
+          title: "¿Quieres entrar a la lista de espera?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#0EA06F",
+          cancelButtonColor: "#d33",
+          cancelButtonText: "Cancelar",
+          confirmButtonText: "Entrar",
+          heightAuto: false,
+          background: background
+        }).then((result) => {
+          if (result.isConfirmed) {
+            
+            this.isLoading = true;
+            //this.usuario.estaEnListaEspera = true;
+            //this.usrService.actualizar(this.usuario); 
+            this.listaSvc.nuevo(this.usuario).then(()=>{
+              this.isLoading = false;
+              this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
+            }).catch(err=>{
+              this.msgService.Error(err);
+            })
+          }
+        });
+      } 
+      else{
+        this.msgService.Info("Ya estas en la lista de espera.");
+      }
+    }else{ 
+      this.msgService.Info("Ya te asignaron una mesa, tu número de mesa es: " + this.usuario.mesaAsignada); 
     }
-    else{
-      this.msgService.Info("Usted ya se encuentra en la lista de espera. Por favor aguarde a que le asignen una mesa.");
-    }
+   
   }
 
 
