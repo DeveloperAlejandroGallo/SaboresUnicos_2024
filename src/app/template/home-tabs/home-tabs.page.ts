@@ -46,6 +46,9 @@ export class HomeTabsPage implements OnInit {
   constructor(private mesasSvc: MesaService, private listaSvc: ListaEsperaService,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService, private usrService: UsuarioService) {
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
+    this.usrService.allUsers$.subscribe(data =>{
+      this.usuario = data.filter(x => x.id === this.auth.usuarioActual?.id)[0];
+    });
     console.log(this.usuario);
   }
 
@@ -64,8 +67,8 @@ export class HomeTabsPage implements OnInit {
       
     });
     
-    console.log('Esta en lista de espera ' + this.usuario.estaEnListaEspera);
-    console.log('Tiene mesa asignada '+ this.usuario.mesaAsignada);
+    //console.log('Esta en lista de espera ' + this.usuario.estaEnListaEspera);
+    //console.log('Tiene mesa asignada '+ this.usuario.mesaAsignada);
     
     
     if (this.platform.is('capacitor')) {
@@ -136,8 +139,12 @@ export class HomeTabsPage implements OnInit {
 
 
   ingresarAListaEspera(){    
+    console.log(this.usuario);
+
+    this.msgService.Info(this.usuario.mesaAsignada.toString());
+
     if (this.usuario.mesaAsignada == 0) {
-      if(!this.usuario.estaEnListaEspera){
+      if(!this.estaEnEspera){
         Swal.fire({
           title: "¿Quieres entrar a la lista de espera?",
           icon: "warning",
@@ -152,8 +159,8 @@ export class HomeTabsPage implements OnInit {
           if (result.isConfirmed) {
             
             this.isLoading = true;
-            this.usuario.estaEnListaEspera = true;
-            this.usrService.actualizar(this.usuario); 
+            //this.usuario.estaEnListaEspera = true;
+            //this.usrService.actualizar(this.usuario); 
             this.listaSvc.nuevo(this.usuario).then(()=>{
               this.isLoading = false;
               this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);

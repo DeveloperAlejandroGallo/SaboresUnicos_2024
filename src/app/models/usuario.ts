@@ -18,5 +18,5 @@ export interface Usuario {
   activo: boolean,
   mesaAsignada: number,
   tieneReserva: boolean,
-  estaEnListaEspera: boolean
+  //estaEnListaEspera: boolean
 }

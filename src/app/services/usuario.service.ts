@@ -105,7 +105,7 @@ export class UsuarioService {
       activo: usuario.perfil == Perfil.Anonimo ? true : false,
       mesaAsignada: 0,
       tieneReserva: false,
-      estaEnListaEspera: false
+      //estaEnListaEspera: false
     });
 
     return usuario;
@@ -131,7 +131,7 @@ export class UsuarioService {
       activo: usuario.activo,
       mesaAsignada: usuario.mesaAsignada,
       tieneReserva: usuario.tieneReserva,
-      estaEnListaEspera: usuario.estaEnListaEspera
+      //estaEnListaEspera: usuario.estaEnListaEspera
     });
   }
 
@@ -222,7 +222,7 @@ export class UsuarioService {
       const documentoClientes = doc(colleccionClientes,id);
       updateDoc(documentoClientes,{
         mesaAsignada: mesaNumero,
-        estaEnListaEspera: false
+        //estaEnListaEspera: false
       })
     }
 
