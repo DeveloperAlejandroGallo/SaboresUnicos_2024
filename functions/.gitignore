@@ -131,3 +131,6 @@ dist
 
 # ignore firebase sdk
 *adminsdk*
+
+#vsCode
+.vscode

@@ -1,8 +1,11 @@
+// Servidor de Mail y Push Notifications
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const admin = require("firebase-admin");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
+const cors = require('cors')({ origin: true });
 
 dotenv.config();
 
@@ -10,6 +13,7 @@ const serviceAccount = require(process.env.SERVICE_ACCOUNT);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -21,7 +25,7 @@ const db = admin.firestore();
 app.use(bodyParser.json());
 
 // Endpoint para enviar una notificación a un usuario específico
-app.post("/notify", async (req, res) => {
+app.post("/notificar", async (req, res) => {
   const { token, title, body } = req.body;
 
   const message = {
@@ -41,7 +45,7 @@ app.post("/notify", async (req, res) => {
 });
 
 // Endpoint para enviar notificación a todos los empleados de un rol
-app.post("/notify-role", async (req, res) => {
+app.post("/notificar-tipoEmpleado", async (req, res) => {
   const { title, body, role } = req.body;
 
   try {
@@ -79,7 +83,7 @@ app.post("/notify-role", async (req, res) => {
 });
 
 // Endpoint para enviar un mail a un usuario
-app.post("/send-mail", async (req, res) => {
+app.post("/enviar-email", async (req, res) => {
   try {
     const { aceptacion, nombreUsuario, mail } = req.body;
     const transporter = nodemailer.createTransport({
@@ -97,17 +101,18 @@ app.post("/send-mail", async (req, res) => {
       to: mail,
       subject: aceptacion
         ? "Felicitaciones su cuenta fue aceptada"
-        : "Disculpe pero hemos bloqueado su cuenta",
+        : "Disculpe pero hemos rechazado su cuenta.",
       html: `
       <h1>${aceptacion ? "Felicitaciones " : "Disculpe "} ${nombreUsuario}</h1>
       <p>Su cuenta fue ${aceptacion ? "aceptada" : "rechazada"}</p>
-      <p>Saludos, el equipo de Sabores Únicos</p>
-      <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Fspinner.png?alt=media&token=a0e8799e-82bf-44e2-ac73-1db68f12c51e" ></img>`,
+      ${aceptacion ? "<p>Ya puede ingresar a la aplicación</p>" : ""}<br>
+      <p>Saludos, el equipo de Sabores Únicos</p><br>
+      <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Fspinner.png?alt=media&token=a0e8799e-82bf-44e2-ac73-1db68f12c51e" alt="Sabores Únicos" width="300" height="300" ></img>`,
     });
     res.json({ ...resultado, seEnvio: true });
   } catch (e) {
     res.json({
-      mensaje: "No se pudo enviar el mail",
+      mensaje: `No se pudo enviar el mail. ${e.message}` ,
       seEnvio: false,
     });
   }
@@ -115,4 +120,9 @@ app.post("/send-mail", async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`End Points:`);
+  console.log(`- /notificar`);
+  console.log(`- /notificar-tipoEmpleado`);
+  console.log(`- /enviar-email`);
+
 });
