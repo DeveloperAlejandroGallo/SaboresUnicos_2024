@@ -101,9 +101,9 @@ ion-card {
 }
 
 ion-modal{
-    ion-toolbar{
-        --background: #BF0000;
-    }
+  --height: 20%;
+  --border-radius: 16px;
+  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     ion-button{
         border: black solid 1px;
         border-radius: 10%;
@@ -113,6 +113,21 @@ ion-modal{
         --background: #92343463;
         --color: #000000;
     }
+
+    p{
+      font-size: 16px;
+      color: #000000;
+    }
+}
+
+ion-modal::part(backdrop) {
+  background: rgba(209, 213, 219);
+  opacity: 1;
+}
+
+ion-modal ion-toolbar {
+  --background: #BF0000;
+  --color: rgb(0, 0, 0);
 }
 
 //   ion-content {

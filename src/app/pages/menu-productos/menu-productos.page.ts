@@ -2,6 +2,9 @@ import { Component, OnInit, ViewChild  } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Producto } from 'src/app/models/producto';
 import { IonModal } from '@ionic/angular';
+import { TipoProducto } from 'src/app/enums/tipo-producto';
+import { Usuario } from 'src/app/models/usuario';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-menu-productos',
@@ -17,62 +20,52 @@ export class MenuProductosPage implements OnInit {
   isModalOpen = false;
   selectedProduct: Producto | null = null;
   name: string | undefined;
+  cantidadProducto: number = 0;
+  public usuario!: Usuario;
 
+  comida: Producto[] = [
+    {
+      id: '1',
+      nombre: 'Pizza de muzzarela con tomates',
+      fotos: ['../../../assets/img/fondo-gris.png', '../../../assets/img/fondoLogin.png', '../../../assets/img/fondoSplash.jpg'],
+      precio: 10.99,
+      tiempoPreparacionEnMinutos: 20,
+      descripcion: 'Deliciosa pizza con ingredientes frescos.',
+      tipo: TipoProducto.Comida
+    },
+    // Otros productos...
+  ];
 
-  // comida: Producto[] = [
-  //   {
-  //     id: '1',
-  //     nombre: 'Pizza de muzzarela con tomates',
-  //     fotos: ['../../../assets/img/fondo-gris.png', '../../../assets/img/fondoLogin.png', '../../../assets/img/fondoSplash.jpg'],
-  //     precio: 10.99,
-  //     tiempoPreparacionEnMinutos: 20,
-  //     descripcion: 'Deliciosa pizza con ingredientes frescos.',
-  //     tipo: Comida
-  //   },
-  //   {
-  //     id: '2',
-  //     nombre: 'Pizza',
-  //     fotos: ['../../../assets/img/fondo-gris.png', '../../../assets/img/fondoLogin.png', '../../../assets/img/fondoSplash.jpg'],
-  //     precio: 10.99,
-  //     tiempoPreparacionEnMinutos: 20,
-  //     descripcion: 'Deliciosa pizza con ingredientes frescos.'
-  //   },
-  //    {
-  //     id: '3',
-  //     nombre: 'Pizza',
-  //     fotos: ['../../../assets/img/fondo-gris.png', '../../../assets/img/fondoLogin.png', '../../../assets/img/fondoSplash.jpg'],
-  //     precio: 10.99,
-  //     tiempo: 20,
-  //     descripcion: 'Deliciosa pizza con ingredientes frescos.'
-  //   }
-  //   // Otros productos...
-  // ];
+  bebidas: Producto[] = [
+    {
+      id: '4',
+      nombre: 'Coca Cola',
+      fotos: ['../../../assets/img/fondo-gris.png', '../../../assets/img/fondoLogin.png', '../../../assets/img/fondoSplash.jpg'],
+      precio: 1.99,
+      tiempoPreparacionEnMinutos: 2,
+      descripcion: 'Refrescante bebida.',
+      tipo: TipoProducto.Bebida
+    },
+    // Otros productos...
+  ];
 
-  // bebidas: Producto[] = [
-  //   {
-  //     id: '4',
-  //     nombre: 'Coca Cola',
-  //     fotos: ['../../../assets/img/fondo-gris.png', '../../../assets/img/fondoLogin.png', '../../../assets/img/fondoSplash.jpg'],
-  //     precio: 1.99,
-  //     tiempo: 2,
-  //     descripcion: 'Refrescante bebida.'
-  //   },
-  //   // Otros productos...
-  // ];
+  postres: Producto[] = [
+    {
+      id: '5',
+      nombre: 'Tarta de Manzana',
+      fotos: ['../../../assets/img/fondo-gris.png', '../../../assets/img/fondoLogin.png', '../../../assets/img/fondoSplash.jpg'],
+      precio: 3.99,
+      tiempoPreparacionEnMinutos: 15,
+      descripcion: 'Deliciosa tarta de manzana.',
+      tipo: TipoProducto.Postre
+    },
+    // Otros productos...
+  ];
 
-  // postres: Producto[] = [
-  //   {
-  //     id: '5',
-  //     nombre: 'Tarta de Manzana',
-  //     fotos: ['../../../assets/img/fondo-gris.png', '../../../assets/img/fondoLogin.png', '../../../assets/img/fondoSplash.jpg'],
-  //     precio: 3.99,
-  //     tiempo: 15,
-  //     descripcion: 'Deliciosa tarta de manzana.'
-  //   },
-  //   // Otros productos...
-  // ];
-
-  constructor(private modalController: ModalController) { }
+  constructor(private modalController: ModalController, private auth: AuthService) {
+    
+    this.usuario = this.auth.usuarioActual!;
+   }
 
   ngOnInit() {}
 
@@ -103,13 +96,13 @@ export class MenuProductosPage implements OnInit {
   }
 
 
-  incrementarCantidad(producto: any) {
-    producto.cantidad++;
+  incrementarCantidad() {
+    this.cantidadProducto++;
   }
 
-  decrementarCantidad(producto: any) {
-    if (producto.cantidad > 0) {
-      producto.cantidad--;
+  decrementarCantidad() {
+    if (this.cantidadProducto > 0) {
+      this.cantidadProducto--;
     }
   }
 

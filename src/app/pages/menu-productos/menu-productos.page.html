@@ -1,4 +1,4 @@
-<!-- <body>
+<body>
   
 
  <ion-header><app-header></app-header> </ion-header>
@@ -17,10 +17,45 @@
  
     <ng-container *ngIf="selectedCategory === 'comida'">
     <ion-card *ngFor="let producto of comida">
-      <ion-item>
+      <ion-card-content>
+        <ion-row>
+          <ion-col>
+            
+              <swiper-container pager="true">
+                <swiper-slide *ngFor="let imagen of producto.fotos">
+                  <img [src]="imagen" />
+                </swiper-slide>
+              </swiper-container>
+            
+          </ion-col>
+          <ion-col>
+            <div class="nombre-detalles">
+              <h2>{{producto.nombre}}</h2>
+             
+            <p><a id="open-modal" (click)="openModal(producto)">Detalles</a></p>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <div class="item-end">
+            <h2>${{producto.precio}}</h2>
+            <div class="quantity-controls">
+              <ion-button fill="clear" size="small" (click)="decrementarCantidad()" >
+                <ion-icon name="trash-bin-outline"></ion-icon>
+              </ion-button>
+              <ion-label>{{cantidadProducto}}</ion-label>
+              <ion-button fill="clear" size="small" (click)="incrementarCantidad()">
+                <ion-icon name="add-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </ion-row>
+      </ion-card-content>
+      
+      <!-- <ion-item>
         <ion-thumbnail slot="start">
           <swiper-container pager="true">
-            <swiper-slide *ngFor="let imagen of producto.imagenes">
+            <swiper-slide *ngFor="let imagen of producto.fotos">
               <img [src]="imagen" />
             </swiper-slide>
           </swiper-container>
@@ -34,16 +69,16 @@
         <div class="item-end">
           <h2>${{producto.precio}}</h2>
           <div class="quantity-controls">
-            <ion-button fill="clear" size="small" (click)="decrementarCantidad(producto)" >
+            <ion-button fill="clear" size="small" (click)="decrementarCantidad()" >
               <ion-icon name="trash-bin-outline"></ion-icon>
             </ion-button>
-            <ion-label>{{producto.cantidad}}</ion-label>
-            <ion-button fill="clear" size="small" (click)="incrementarCantidad(producto)">
+            <ion-label>{{cantidadProducto}}</ion-label>
+            <ion-button fill="clear" size="small" (click)="incrementarCantidad()">
               <ion-icon name="add-outline"></ion-icon>
             </ion-button>
           </div>
         </div>
-      </ion-item>
+      </ion-item> -->
     </ion-card>
   </ng-container>
 
@@ -52,7 +87,7 @@
       <ion-item>
         <ion-thumbnail slot="start">
           <swiper-container pager="true">
-            <swiper-slide *ngFor="let imagen of producto.imagenes">
+            <swiper-slide *ngFor="let imagen of producto.fotos">
               <img [src]="imagen" />
             </swiper-slide>
           </swiper-container>
@@ -65,11 +100,11 @@
         <div class="item-end">
           <h2>${{producto.precio}}</h2>
           <div class="quantity-controls">
-            <ion-button fill="clear" size="small" (click)="decrementarCantidad(producto)" >
+            <ion-button fill="clear" size="small" (click)="decrementarCantidad()" >
               <ion-icon name="trash-bin-outline"></ion-icon>
             </ion-button>
-            <ion-label>{{producto.cantidad}}</ion-label>
-            <ion-button fill="clear" size="small" (click)="incrementarCantidad(producto)">
+            <ion-label>{{cantidadProducto}}</ion-label>
+            <ion-button fill="clear" size="small" (click)="incrementarCantidad()">
               <ion-icon name="add-outline"></ion-icon>
             </ion-button>
           </div>
@@ -83,7 +118,7 @@
       <ion-item>
         <ion-thumbnail slot="start">
           <swiper-container pager="true">
-            <swiper-slide *ngFor="let imagen of producto.imagenes">
+            <swiper-slide *ngFor="let imagen of producto.fotos">
               <img [src]="imagen" />
             </swiper-slide>
           </swiper-container>
@@ -96,11 +131,11 @@
         <div class="item-end">
           <h2>${{producto.precio}}</h2>
           <div class="quantity-controls">
-            <ion-button fill="clear" size="small" (click)="decrementarCantidad(producto)" >
+            <ion-button fill="clear" size="small" (click)="decrementarCantidad()" >
               <ion-icon name="trash-bin-outline"></ion-icon>
             </ion-button>
-            <ion-label>{{producto.cantidad}}</ion-label>
-            <ion-button fill="clear" size="small" (click)="incrementarCantidad(producto)">
+            <ion-label>{{cantidadProducto}}</ion-label>
+            <ion-button fill="clear" size="small" (click)="incrementarCantidad()">
               <ion-icon name="add-outline"></ion-icon>
             </ion-button>
           </div>
@@ -109,7 +144,7 @@
     </ion-card>
   </ng-container>
 
-    <ion-modal [isOpen]="isModalOpen" (ionModalDidDismiss)="closeModal()">
+    <ion-modal #modal [isOpen]="isModalOpen" (ionModalDidDismiss)="closeModal()">
       <ng-template>
       <ion-header style="background-color: #BF0000;">
       <ion-toolbar style="background-color: #BF0000;">
@@ -123,7 +158,7 @@
       <ion-card>
         <ion-card-content>
           <p>Precio: {{ selectedProduct?.precio | currency }}</p>
-          <p>Tiempo de preparación: {{ selectedProduct?.tiempo }} minutos</p>
+          <p>Tiempo de preparación: {{ selectedProduct?.tiempoPreparacionEnMinutos }} minutos</p>
           <p>{{ selectedProduct?.descripcion }}</p>
         </ion-card-content>
       </ion-card>
@@ -137,4 +172,4 @@
    
 
 
- -->
+

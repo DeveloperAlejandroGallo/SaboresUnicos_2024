@@ -114,7 +114,9 @@ export class HomeTabsPage implements OnInit {
               break;
             case "Mesa":
               const nroMesa = datos[1];
-              //this.tieneMesaAsignada = true;
+              if (this.usuario.mesaAsignada == Number(nroMesa)) {
+                this.router.navigate(['home-tabs/menu-productos']);
+              }
               //validar que haya pasado por lista de espera y que el qr de mesa escaneado sea el que se le fue asignado
               break;
             case "Propinas":
