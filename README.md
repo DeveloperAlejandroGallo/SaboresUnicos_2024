@@ -49,17 +49,43 @@ Gonzalez, Martín
 - [x] Diseño de tab Home para toda la app.
 - [x] Diseño de Header para toda la aplicacion.
 - [x] Diseño de sección Mi Perfil.
-- [ ] Desarrollo de Ingreso al Local con lectura de QR.
+- [x] Desarrollo de Ingreso al Local con lectura de QR.
+- [x] Visualizacion Lista Encuestas
 
 >**Gallo, Alejandro**
 - [x] Definición de tareas y armado de proyecto kanva en Git Proyects.
 - [x] Desarrollo de pantallas de Registro de Cliente Registrado y Anónimo.
 - [x] Desarrollo de pantalla de Listado de Pendientes para Home Dueño y Supervisor.
 - [x] Desarrollo de activar/desactivar Sonidos.
-- [ ] Investigación e Implementación de envío de correo.
+- [x] Investigación de envío de correo.
 - [x] Mantención de Readme.md.
+- [x] Manejo de todos los merge y Pull Request
 
 >**Gonzalez, Martín**
-- [ ] Investigación y desarrollo de Push Notification.
+- [_] Investigación y desarrollo de Push Notification.
 - [ ] Creación de Listado de Pendientes de Asignar a Mesa como Home de Maitre.
- 
+
+  ### Semana 3: Sábado 22/06 al 29/06 💻
+>**Calani, Romina**
+- [x] Diseño de Qrs
+- [x] Logica de Lectura de Qr
+- [x] Definición de Modelos del Sistema (los 3).
+- [x] Grabado de Video Segunda Entrega.
+
+>**Gallo, Alejandro**
+- [x] Mantención de Readme.md.
+- [x] Manejo de todos los merge y Pull Request
+- [x] Investigación y desarrollo de Push Notification.
+- [x] Implementación Envío de Mails.
+- [x] Hosting Firebase
+- [x] Creación de Servicios necesarios para todas las colecciones.
+- [x] Definición de Modelos del Sistema (los 3).
+- [x] Grabado de Video Segunda Entrega.
+
+
+>**Gonzalez, Martín**
+- [x] Creación de Listado de Pendientes de Asignar a Mesa como Home de Maitre.
+- [x] Logica de Asignación de Mesa y borrado de espera
+- [ ] Desarrollo de Menu de comidas
+- [x] Definición de Modelos del Sistema (los 3).
+- [x] Grabado de Video Segunda Entrega.
