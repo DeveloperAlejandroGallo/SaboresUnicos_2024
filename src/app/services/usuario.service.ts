@@ -222,7 +222,7 @@ export class UsuarioService {
       const documentoClientes = doc(colleccionClientes,id);
       updateDoc(documentoClientes,{
         mesaAsignada: mesaNumero,
-        //estaEnListaEspera: false
+        estaEnListaEspera: false
       })
     }
 

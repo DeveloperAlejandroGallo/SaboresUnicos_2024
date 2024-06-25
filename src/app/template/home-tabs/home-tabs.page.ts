@@ -136,37 +136,40 @@ export class HomeTabsPage implements OnInit {
 
 
   ingresarAListaEspera(){    
-    if(!this.usuario.estaEnListaEspera){
-      Swal.fire({
-        title: "¿Quieres entrar a la lista de espera?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#0EA06F",
-        cancelButtonColor: "#d33",
-        cancelButtonText: "Cancelar",
-        confirmButtonText: "Entrar",
-        heightAuto: false,
-        background: background
-      }).then((result) => {
-        if (result.isConfirmed) {
-          
-          this.isLoading = true;
-          this.usuario.estaEnListaEspera = true;
-          this.usrService.actualizar(this.usuario); 
-          this.listaSvc.nuevo(this.usuario).then(()=>{
-            this.isLoading = false;
-            this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
-          }).catch(err=>{
-            this.msgService.Error(err);
-          })
-        }
-      });
-    } else if(this.usuario.mesaAsignada != 0){ 
+    if (this.usuario.mesaAsignada == 0) {
+      if(!this.usuario.estaEnListaEspera){
+        Swal.fire({
+          title: "¿Quieres entrar a la lista de espera?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#0EA06F",
+          cancelButtonColor: "#d33",
+          cancelButtonText: "Cancelar",
+          confirmButtonText: "Entrar",
+          heightAuto: false,
+          background: background
+        }).then((result) => {
+          if (result.isConfirmed) {
+            
+            this.isLoading = true;
+            this.usuario.estaEnListaEspera = true;
+            this.usrService.actualizar(this.usuario); 
+            this.listaSvc.nuevo(this.usuario).then(()=>{
+              this.isLoading = false;
+              this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
+            }).catch(err=>{
+              this.msgService.Error(err);
+            })
+          }
+        });
+      } 
+      else{
+        this.msgService.Info("Ya estas en la lista de espera.");
+      }
+    }else{ 
       this.msgService.Info("Ya te asignaron una mesa, tu número de mesa es: " + this.usuario.mesaAsignada); 
     }
-    else{
-      this.msgService.Info("Ya estas en la lista de espera.");
-    }
+   
   }
 
 
