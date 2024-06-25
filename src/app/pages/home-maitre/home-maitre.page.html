@@ -1,15 +1,5 @@
 
 <body>
-  <!-- <app-header></app-header> -->
-
-  <!-- por cada persona pendiente de la lista de personas pendientes de ingreso al local -->
-  <!-- <ion-list class="items" [inset]="true" *ngFor="let element of listaUsuariosPendientes">
-    <ion-item >
-      <ion-label>
-        <b>Soy una persona pendiente, me llamo {{element}}</b>
-      </ion-label>
-    </ion-item>
-  </ion-list> -->
 
   <ion-grid class="grilla">
 
@@ -50,22 +40,20 @@
 
       <ion-row *ngFor="let espera of listaDeEspera">
 
-        <ion-col size="3">
-          <img src={{espera.usuario.foto}} alt="foto" width="60%">
+        <ion-col size="3" class="center-content">
+          <ion-avatar>
+            <img src={{espera.usuario.foto}} class="rounded-image bordered-image " alt="foto">
+          </ion-avatar>
+          
         </ion-col>
-        <ion-col size="6">
-         {{espera.usuario.nombre}}
+        <ion-col size="6" class="center-content">
+          {{espera.usuario.nombre}}
+         
         </ion-col>
-        <ion-col size="3">
+        <ion-col size="3" class="center-alert">
           <div>
-            <!-- <ion-item>
-              <ion-label>Mesa</ion-label>
-              <ion-select ok-text="Aceptar" cancel-text="Cancelar">
-                <ion-select-option *ngFor="let mesa of listadoMesasLibres" value=[mesa.numero]>{{mesa.numero}}</ion-select-option>
-              </ion-select>
-            </ion-item> -->
 
-              <ion-button color="danger" size="small" (click)="ofrecerMesas(espera)">
+              <ion-button color="danger"  size="small" (click)="ofrecerMesas(espera)">
                 <ion-icon name="wine"></ion-icon>
               </ion-button>
 
@@ -77,18 +65,4 @@
 
   </ion-grid>
 
- 
-  
-  <!-- <ion-tabs class="miTab">
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="home" style="color: #BF0000;">
-        <ion-icon name="body"></ion-icon>
-        Alta cliente
-      </ion-tab-button>
-      <ion-tab-button tab="home-lista" style="color: #BF0000;">
-        <ion-icon name="list"></ion-icon>
-        Lista de espera
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs> -->
 </body>
