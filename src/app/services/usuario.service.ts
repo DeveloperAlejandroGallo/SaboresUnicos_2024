@@ -112,7 +112,7 @@ export class UsuarioService {
       apellido: usuario.apellido,
       clave: usuario.clave,
       foto: usuario.foto,
-      // esAdmin: usuario.esAdmin,
+
       dni: usuario.dni,
       cuil: usuario.cuil,
       perfil: usuario.perfil,

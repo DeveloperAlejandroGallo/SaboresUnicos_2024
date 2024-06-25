@@ -168,6 +168,7 @@ export class AuthService {
     signOut(auth)
       .then(() => {
         localStorage.removeItem(usuarioLocalStorage);
+        this.usuarioActual = undefined;
         this.audioSrv.reporoduccionLogOut();
         this.messageService.InfoToast('Sesión cerrada');
         this.router.navigate(['/login']);

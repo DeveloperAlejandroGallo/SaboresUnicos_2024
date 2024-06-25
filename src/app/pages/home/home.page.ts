@@ -18,21 +18,21 @@ export class HomePage implements OnInit{
   public usuario!: Usuario;
   public isLoading = false;
   public esDuenio: boolean = false;
-  esCliente: boolean;
-  esSupervisor: boolean;
-  esEmpleado: boolean;
-  esMaitre: boolean;
-  esCocinero: boolean;
-  esMozo: boolean;
-  esBartender: boolean;
-  esAnonimo: boolean;
+  public esCliente: boolean;
+  public esSupervisor: boolean;
+  public esEmpleado: boolean;
+  public esMaitre: boolean;
+  public esCocinero: boolean;
+  public esMozo: boolean;
+  public esBartender: boolean;
+  public esAnonimo: boolean;
 
   constructor(private authSrv: AuthService,
     private audioSrv: AudioService,
     private router: Router) {
 
       this.router.events.subscribe((event) => {
-        
+
         if (event instanceof NavigationEnd && event.urlAfterRedirects.includes('/home')) {
           this.audioSrv.reporoduccionCambioPagina();
         }
@@ -40,15 +40,15 @@ export class HomePage implements OnInit{
 
     this.usuario = this.authSrv.usuarioActual!;
 
-    this.esDuenio = this.usuario.perfil === Perfil.Dueño;
     this.esCliente = this.usuario.perfil === Perfil.Cliente;
     this.esAnonimo = this.usuario.perfil === Perfil.Anonimo;
-    this.esSupervisor = this.usuario.perfil === Perfil.Supervisor;
+    this.esDuenio = this.usuario.tipoEmpleado === TipoEmpleado.Dueño;
+    this.esSupervisor = this.usuario.tipoEmpleado === TipoEmpleado.Supervisor;
     this.esEmpleado = this.usuario.perfil === Perfil.Empleado;
-    this.esMaitre = this.usuario.tipoEmpleado === TipoEmpleado.maitre;
-    this.esCocinero = this.usuario.tipoEmpleado === TipoEmpleado.cocinero;
-    this.esMozo = this.usuario.tipoEmpleado === TipoEmpleado.mozo;
-    this.esBartender = this.usuario.tipoEmpleado === TipoEmpleado.bartender;
+    this.esMaitre = this.usuario.tipoEmpleado === TipoEmpleado.Maitre;
+    this.esCocinero = this.usuario.tipoEmpleado === TipoEmpleado.Cocinero;
+    this.esMozo = this.usuario.tipoEmpleado === TipoEmpleado.Mozo;
+    this.esBartender = this.usuario.tipoEmpleado === TipoEmpleado.Bartender;
 
 
 
