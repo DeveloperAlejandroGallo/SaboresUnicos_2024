@@ -133,10 +133,10 @@ export class HomeTabsPage implements OnInit {
 
 
 
-  ingresarAListaEspera(){    
-    console.log(this.usuario);
+  ingresarAListaEspera(){
+    // console.log(this.usuario);
 
-    this.msgService.Info(this.usuario.mesaAsignada.toString());
+    // this.msgService.Info(this.usuario.mesaAsignada.toString());
 
     if (this.usuario.mesaAsignada == 0) {
       if(!this.estaEnEspera){
@@ -152,10 +152,10 @@ export class HomeTabsPage implements OnInit {
           background: background
         }).then((result) => {
           if (result.isConfirmed) {
-            
+
             this.isLoading = true;
             //this.usuario.estaEnListaEspera = true;
-            //this.usrService.actualizar(this.usuario); 
+            //this.usrService.actualizar(this.usuario);
             this.listaSvc.nuevo(this.usuario).then(()=>{
               this.isLoading = false;
               this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
@@ -164,14 +164,14 @@ export class HomeTabsPage implements OnInit {
             })
           }
         });
-      } 
+      }
       else{
         this.msgService.Info("Ya estas en la lista de espera.");
       }
-    }else{ 
-      this.msgService.Info("Ya te asignaron una mesa, tu número de mesa es: " + this.usuario.mesaAsignada); 
+    }else{
+      this.msgService.Info("Ya te asignaron una mesa, tu número de mesa es: " + this.usuario.mesaAsignada);
     }
-   
+
   }
 
 
@@ -202,7 +202,7 @@ async addListeners() {
     await PushNotifications.addListener('registration', token => {
       console.info('Token de registro: ', token.value);
 
-      this.usrSrv.actualizarToken(this.usuario.id!,token.value);
+      this.usrService.actualizarToken(this.usuario.id!,token.value);
     });
 
     await PushNotifications.addListener('registrationError', err => {
