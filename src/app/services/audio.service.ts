@@ -71,7 +71,7 @@ export class AudioService {
 
       const assetCompleto = `assets/audios/${audio}`;
 
-      console.log('Cargando audio: ', assetCompleto);
+      // console.log('Cargando audio: ', assetCompleto);
 
       const audioElement = await this.loadAudio(assetCompleto);
 
@@ -83,7 +83,7 @@ export class AudioService {
 
       // Intenta reproducir el audio
       audioElement.play().then(() => {
-        console.log('Audio reproduciendo...');
+        // console.log('Audio reproduciendo...');
       }).catch((error) => {
         console.error('Error al reproducir el audio:', error);
       });

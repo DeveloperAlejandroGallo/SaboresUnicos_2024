@@ -5,6 +5,7 @@
     {
       "files": ["*.ts"],
       "parserOptions": {
+        "ecmaVersion": 6,
         "project": ["tsconfig.json"],
         "createDefaultProgram": true
       },

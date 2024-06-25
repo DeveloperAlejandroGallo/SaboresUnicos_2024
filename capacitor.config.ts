@@ -32,6 +32,9 @@ const config: CapacitorConfig = {
       allowEditing: false,
       sourceType: ["camera", "library"]
     },
+    PushNotifications: {
+      presentationOptions: ["badge", "sound", "alert"]
+    },
   },
 };
 

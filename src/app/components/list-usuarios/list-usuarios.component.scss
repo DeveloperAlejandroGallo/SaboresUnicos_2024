@@ -25,8 +25,9 @@ ion-list{
   }
 
   ion-item {
-    color: white;
+    color: black;
     font-size: large;
+
   }
 }
 
@@ -51,4 +52,9 @@ ion-accordion {
   --ion-background-color:  #b75353bb !important;
   border-radius: 10px;
   margin-bottom: 10px;
+}
+
+ion-avatar {
+  width:  50px; /* Ajusta el tamaño según sea necesario */
+  height: 50px; /* Ajusta el tamaño según sea necesario */
 }
