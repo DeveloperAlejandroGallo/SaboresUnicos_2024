@@ -9,5 +9,5 @@ export const environment = {
     messagingSenderId: "847994126117",
     appId: "1:847994126117:web:7a02d1aadf97d5265ee4cc",
   },
-  apiPushNotificationAndMail: 'https://servermailandpushnotification.onrender.com:10000',
+  apiPushNotificationAndMail: 'https://us-central1-ajg-pps-2024.cloudfunctions.net/app',
 };
