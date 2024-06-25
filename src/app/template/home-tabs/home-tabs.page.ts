@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 import { ListaEsperaService } from 'src/app/services/lista-espera.service';
 import { MesaService } from 'src/app/services/mesas.service';
 import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
+import { UsuarioService } from 'src/app/services/usuario.service';
 const background = '#f8f8f8d7';
 @Component({
   selector: 'app-home-tabs',
@@ -42,7 +43,7 @@ export class HomeTabsPage implements OnInit {
   estaEnEspera : boolean = false;
   tieneMesaAsignada : boolean = false;
   //-------------------------
-  constructor(private mesasSvc: MesaService, private listaSvc: ListaEsperaService,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService) {
+  constructor(private mesasSvc: MesaService, private listaSvc: ListaEsperaService,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService, private usrService: UsuarioService) {
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
     console.log(this.usuario);
@@ -62,6 +63,10 @@ export class HomeTabsPage implements OnInit {
       console.log(this.estaEnEspera);
       
     });
+    
+    console.log('Esta en lista de espera ' + this.usuario.estaEnListaEspera);
+    console.log('Tiene mesa asignada '+ this.usuario.mesaAsignada);
+    
     
     if (this.platform.is('capacitor')) {
       try {
@@ -130,8 +135,8 @@ export class HomeTabsPage implements OnInit {
 
 
 
-  ingresarAListaEspera(){
-    if(!this.estaEnEspera && this.usuario.mesaAsignada == 0){
+  ingresarAListaEspera(){    
+    if(!this.usuario.estaEnListaEspera){
       Swal.fire({
         title: "¿Quieres entrar a la lista de espera?",
         icon: "warning",
@@ -144,7 +149,10 @@ export class HomeTabsPage implements OnInit {
         background: background
       }).then((result) => {
         if (result.isConfirmed) {
+          
           this.isLoading = true;
+          this.usuario.estaEnListaEspera = true;
+          this.usrService.actualizar(this.usuario); 
           this.listaSvc.nuevo(this.usuario).then(()=>{
             this.isLoading = false;
             this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
@@ -153,8 +161,8 @@ export class HomeTabsPage implements OnInit {
           })
         }
       });
-    } else if(this.usuario.mesaAsignada != 0){
-      this.msgService.Info("Ya te asignaron una mesa.");
+    } else if(this.usuario.mesaAsignada != 0){ 
+      this.msgService.Info("Ya te asignaron una mesa, tu número de mesa es: " + this.usuario.mesaAsignada); 
     }
     else{
       this.msgService.Info("Ya estas en la lista de espera.");

@@ -104,7 +104,8 @@ export class UsuarioService {
       tipoEmpleado: usuario.perfil !== (Perfil.Anonimo && Perfil.Cliente) ? usuario.tipoEmpleado : null,
       activo: usuario.perfil == Perfil.Anonimo ? true : false,
       mesaAsignada: 0,
-      tieneReserva: false
+      tieneReserva: false,
+      estaEnListaEspera: false
     });
 
     return usuario;
@@ -129,7 +130,8 @@ export class UsuarioService {
       tipoEmpleado: usuario.tipoEmpleado,
       activo: usuario.activo,
       mesaAsignada: usuario.mesaAsignada,
-      tieneReserva: usuario.tieneReserva
+      tieneReserva: usuario.tieneReserva,
+      estaEnListaEspera: usuario.estaEnListaEspera
     });
   }
 
@@ -220,6 +222,7 @@ export class UsuarioService {
       const documentoClientes = doc(colleccionClientes,id);
       updateDoc(documentoClientes,{
         mesaAsignada: mesaNumero,
+        //estaEnListaEspera: false
       })
     }
 

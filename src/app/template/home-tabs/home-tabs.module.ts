@@ -28,6 +28,10 @@ import { BarcodeScanningModalComponent } from './barcode-scanning-modal.componen
             path: 'mi-perfil',
             loadChildren: ()=> import('../../pages/mi-perfil/mi-perfil.module').then(m=>m.MiPerfilPageModule)
           },
+          {
+            path: 'signup/:perfil',
+            loadChildren: () => import('../../pages/signup/signup.module').then( m => m.SignupPageModule)
+          },
           //path: otra pagina
           {
             path: '',
