@@ -16,7 +16,7 @@
     </ion-segment> 
  
     <ng-container *ngIf="selectedCategory === 'comida'">
-    <ion-card *ngFor="let producto of comida">
+    <ion-card *ngFor="let producto of listaDeTipoComida">
       <ion-card-content>
         <ion-row>
           <ion-col>
@@ -51,39 +51,11 @@
           </div>
         </ion-row>
       </ion-card-content>
-      
-      <!-- <ion-item>
-        <ion-thumbnail slot="start">
-          <swiper-container pager="true">
-            <swiper-slide *ngFor="let imagen of producto.fotos">
-              <img [src]="imagen" />
-            </swiper-slide>
-          </swiper-container>
-        </ion-thumbnail>
-        <div class="nombre-detalles">
-          <h2>{{producto.nombre}}</h2>
-         
-        <p><a id="open-modal" (click)="openModal(producto)">Detalles</a></p>
-        </div>
-         
-        <div class="item-end">
-          <h2>${{producto.precio}}</h2>
-          <div class="quantity-controls">
-            <ion-button fill="clear" size="small" (click)="decrementarCantidad()" >
-              <ion-icon name="trash-bin-outline"></ion-icon>
-            </ion-button>
-            <ion-label>{{cantidadProducto}}</ion-label>
-            <ion-button fill="clear" size="small" (click)="incrementarCantidad()">
-              <ion-icon name="add-outline"></ion-icon>
-            </ion-button>
-          </div>
-        </div>
-      </ion-item> -->
     </ion-card>
   </ng-container>
 
   <ng-container *ngIf="selectedCategory === 'bebidas'">
-    <ion-card *ngFor="let producto of bebidas">
+    <ion-card *ngFor="let producto of listaDeTipoBebida">
       <ion-item>
         <ion-thumbnail slot="start">
           <swiper-container pager="true">
@@ -114,7 +86,7 @@
   </ng-container>
 
   <ng-container *ngIf="selectedCategory === 'postres'">
-    <ion-card *ngFor="let producto of postres">
+    <ion-card *ngFor="let producto of listaDeTipoPostre">
       <ion-item>
         <ion-thumbnail slot="start">
           <swiper-container pager="true">

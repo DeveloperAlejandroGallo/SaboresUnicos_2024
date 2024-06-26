@@ -5,6 +5,7 @@ import { IonModal } from '@ionic/angular';
 import { TipoProducto } from 'src/app/enums/tipo-producto';
 import { Usuario } from 'src/app/models/usuario';
 import { AuthService } from 'src/app/services/auth.service';
+import { ProductoService } from 'src/app/services/producto.service';
 
 @Component({
   selector: 'app-menu-productos',
@@ -22,48 +23,30 @@ export class MenuProductosPage implements OnInit {
   name: string | undefined;
   cantidadProducto: number = 0;
   public usuario!: Usuario;
+  public listaDeProductos: Array<Producto> = new Array<Producto>;
+  public listaDeTipoComida: Array<Producto> = new Array<Producto>;
+  public listaDeTipoBebida: Array<Producto> = new Array<Producto>;
+  public listaDeTipoPostre: Array<Producto> = new Array<Producto>;
 
-  comida: Producto[] = [
-    {
-      id: '1',
-      nombre: 'Pizza de muzzarela con tomates',
-      fotos: ['../../../assets/img/fondo-gris.png', '../../../assets/img/fondoLogin.png', '../../../assets/img/fondoSplash.jpg'],
-      precio: 10.99,
-      tiempoPreparacionEnMinutos: 20,
-      descripcion: 'Deliciosa pizza con ingredientes frescos.',
-      tipo: TipoProducto.Comida
-    },
-    // Otros productos...
-  ];
+  
 
-  bebidas: Producto[] = [
-    {
-      id: '4',
-      nombre: 'Coca Cola',
-      fotos: ['../../../assets/img/fondo-gris.png', '../../../assets/img/fondoLogin.png', '../../../assets/img/fondoSplash.jpg'],
-      precio: 1.99,
-      tiempoPreparacionEnMinutos: 2,
-      descripcion: 'Refrescante bebida.',
-      tipo: TipoProducto.Bebida
-    },
-    // Otros productos...
-  ];
-
-  postres: Producto[] = [
-    {
-      id: '5',
-      nombre: 'Tarta de Manzana',
-      fotos: ['../../../assets/img/fondo-gris.png', '../../../assets/img/fondoLogin.png', '../../../assets/img/fondoSplash.jpg'],
-      precio: 3.99,
-      tiempoPreparacionEnMinutos: 15,
-      descripcion: 'Deliciosa tarta de manzana.',
-      tipo: TipoProducto.Postre
-    },
-    // Otros productos...
-  ];
-
-  constructor(private modalController: ModalController, private auth: AuthService) {
+  constructor(private modalController: ModalController, private auth: AuthService, private productoService: ProductoService) {
     
+    this.productoService.allUsers$.subscribe((productos) => {
+
+      this.listaDeProductos = productos
+      console.log(this.listaDeProductos);
+
+      this.listaDeTipoComida = productos.filter(x => x.tipo == 'Comida')
+      console.log(this.listaDeTipoComida);
+
+      this.listaDeTipoBebida = productos.filter(x => x.tipo == 'Bebida')
+      console.log(this.listaDeTipoBebida);
+
+      this.listaDeTipoPostre = productos.filter(x => x.tipo == 'Postre')
+      console.log(this.listaDeTipoPostre);
+    });
+
     this.usuario = this.auth.usuarioActual!;
    }
 
