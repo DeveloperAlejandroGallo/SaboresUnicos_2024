@@ -69,6 +69,7 @@ export class HomeTabsPage implements OnInit {
   ngOnInit() {
 
     if(this.platform.is('android')) {
+      console.log("Validadndo permisos de notificaciones");
       this.addListeners();
       this.registerNotifications();
     }
@@ -215,12 +216,14 @@ export class HomeTabsPage implements OnInit {
  * Registra el dispositivo para recibir notificaciones
  */
 async registerNotifications() {
+  console.log("verificando permisos Push Notifications");
   let permisionStatus = await PushNotifications.checkPermissions();
 
+  console.log("Pregunto si tiene permisos de recibir notificaciones");
   if(permisionStatus.receive === "prompt"){
     permisionStatus = await PushNotifications.requestPermissions();
   }
-
+  console.log("verificando si se dieron permisos de recibir notificaciones");
   if(permisionStatus.receive !== "granted"){
     console.log("No se puede recibir notificaciones");
   }
@@ -232,7 +235,9 @@ async registerNotifications() {
 async addListeners() {
 
   if(this.usuario.token !== (null || undefined)) {
+    console.log("Usuario sin token");
 
+    
     await PushNotifications.addListener('registration', token => {
       console.info('Token de registro: ', token.value);
 
@@ -242,9 +247,8 @@ async addListeners() {
     await PushNotifications.addListener('registrationError', err => {
       console.error('Error Registro Push: ', err.error);
     });
-
-
   }
+
   await PushNotifications.addListener('pushNotificationReceived', notification => {
     console.log('Notificación Recibida: ', notification);
   });
@@ -253,9 +257,6 @@ async addListeners() {
     console.log('Push notification action performed', notification.actionId, notification.inputValue);
   });
 
-
 }
-
-
 
 }

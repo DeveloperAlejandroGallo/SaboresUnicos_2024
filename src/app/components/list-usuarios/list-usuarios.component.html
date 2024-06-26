@@ -1,11 +1,13 @@
-<div class="custom-spinner" *ngIf="isLoading" >
-  <img src="../../../assets/spinner.png" alt="Spinner">
-</div>
+
 <div class="card-list">
+
   <ion-list class="custom-ion-list">
     <ion-list-header>
       <ion-label>Pendientes de Aprobación</ion-label>
     </ion-list-header>
+    <div class="custom-spinner" *ngIf="isLoading" >
+      <img src="../../../assets/spinner.png" alt="Spinner">
+    </div>
     <ion-accordion-group>
       <ng-container *ngFor="let user of users">
         <ion-accordion value="{{user.id}}">

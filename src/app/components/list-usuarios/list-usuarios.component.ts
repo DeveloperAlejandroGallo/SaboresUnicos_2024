@@ -37,16 +37,11 @@ export class ListUsuariosComponent implements OnDestroy {
   }
 
   Rechazar(usr: Usuario) {
-    try{
+
       this.isLoading = true;
       this.usrService.modificarEstadoCuenta(usr, EstadoCliente.Rechazado);
       // this.auth.eliminarUsuario(usr);
-      }
-      catch(ex){
-        console.error(`Error al eliminar el usuario: ${ex}`)
-        this.isLoading = false;
-        return;
-      }
+
 
       this.emailService.enviarEmailAceptacionRechazo(usr, false).subscribe({
         next: responseData => {
@@ -63,7 +58,7 @@ export class ListUsuariosComponent implements OnDestroy {
     }
 
   Aceptar(usr: Usuario) {
-    this.isLoading = false;
+    this.isLoading = true;
     this.usrService.modificarEstadoCuenta(usr, EstadoCliente.Activo);
     this.emailService.enviarEmailAceptacionRechazo(usr, true).subscribe({
       next: responseData => {
