@@ -27,6 +27,9 @@ Gonzalez, Martín
 ## **Email de Confirmación**
 <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FMail%20Comanda.jpg?alt=media&token=994b381a-0394-4795-af02-9279af5c9143">
 
+## **El Push Notification**
+<img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Fpush.jpg?alt=media&token=fd4aa634-8b75-4df6-b422-0f4254efe651">
+
 ## **Detalles de la construcción** 🛠️
 ### Semana 1: Sábado 08/06 al 15/06 💻
 >**Calani, Romina**
