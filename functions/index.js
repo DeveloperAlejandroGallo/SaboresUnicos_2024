@@ -123,7 +123,7 @@ app.post("/enviar-email", async (req, res) => {
       <p>Su cuenta fue ${aceptacion ? "aceptada" : "rechazada"}</p>
       ${aceptacion ? "<p>Ya puede ingresar a la aplicación</p>" : ""}<br>
       <p>Saludos, el equipo de Sabores Únicos</p><br>
-      <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Fspinner.png?alt=media&token=a0e8799e-82bf-44e2-ac73-1db68f12c51e" alt="Sabores Únicos" width="300" height="300" ></img>`,
+      <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Fspinner.png?alt=media&token=a0e8799e-82bf-44e2-ac73-1db68f12c51e" alt="Sabores Únicos" width="150" height="150" ></img>`,
     });
     res.json({ ...resultado, seEnvio: true });
   } catch (ex) {
