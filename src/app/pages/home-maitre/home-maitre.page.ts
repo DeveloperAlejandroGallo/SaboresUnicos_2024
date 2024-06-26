@@ -149,8 +149,16 @@ export class HomeMaitrePage  {
   asignarMesa(elementoEspera: ListaEspera,mesa: Mesa){
     this.isLoading = true;
     try{
-      console.log(mesa.id);
-      console.log(elementoEspera.usuario.id);
+
+
+      this.usrService.escucharUsuario(elementoEspera.usuario.id).subscribe( {
+        next: (data) => {
+          elementoEspera.usuario = data;
+        }
+      });
+
+      console.log(mesa);
+      console.log(elementoEspera.usuario);
 
       // TO DO: MANDAR NOTIFICACIÓN AL CLIENTE DE LA MESA ASIGNADA CON SU QR.
       this.mesaService.cambiarEstadoDeNesa(EstadoMesa.ocupada, mesa.id);
