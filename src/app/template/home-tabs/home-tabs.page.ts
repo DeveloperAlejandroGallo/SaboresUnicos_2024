@@ -153,8 +153,7 @@ export class HomeTabsPage implements OnInit {
                 this.msgService.Error("Debes entrar a la lista de espera para ingresar a una mesa.");
                 return;
               }
-              //this.tieneMesaAsignada = true;
-              //validar que haya pasado por lista de espera y que el qr de mesa escaneado sea el que se le fue asignado
+              //validar que el qr de mesa escaneado sea el que se le fue asignado
               break;
             case "Propinas":
 
