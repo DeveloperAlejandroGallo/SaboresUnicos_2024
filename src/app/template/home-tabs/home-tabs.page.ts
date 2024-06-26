@@ -149,8 +149,11 @@ export class HomeTabsPage implements OnInit {
               break;
             case "Mesa":
               const nroMesa = datos[1];
-              //this.tieneMesaAsignada = true;
-              //validar que haya pasado por lista de espera y que el qr de mesa escaneado sea el que se le fue asignado
+              if(this.usuario.mesaAsignada == 0 && !this.estaEnEspera){
+                this.msgService.Error("Debes entrar a la lista de espera para ingresar a una mesa.");
+                return;
+              }
+              //validar que el qr de mesa escaneado sea el que se le fue asignado
               break;
             case "Propinas":
 
@@ -165,6 +168,7 @@ export class HomeTabsPage implements OnInit {
     }
 
   }
+
 
 
 
