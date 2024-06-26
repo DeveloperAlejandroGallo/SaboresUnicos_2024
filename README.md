@@ -24,6 +24,9 @@ Gonzalez, Martín
 ## **Login**
 <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FLogin.png?alt=media&token=3c00b62e-7db9-444b-ac45-435b27396d2c">
 
+## **Email de Confirmación**
+<img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FMail%20Comanda.jpg?alt=media&token=994b381a-0394-4795-af02-9279af5c9143">
+
 ## **Detalles de la construcción** 🛠️
 ### Semana 1: Sábado 08/06 al 15/06 💻
 >**Calani, Romina**
@@ -62,7 +65,7 @@ Gonzalez, Martín
 - [x] Manejo de todos los merge y Pull Request
 
 >**Gonzalez, Martín**
-- [_] Investigación y desarrollo de Push Notification.
+- [ ] Investigación y desarrollo de Push Notification.
 - [ ] Creación de Listado de Pendientes de Asignar a Mesa como Home de Maitre.
 
   ### Semana 3: Sábado 22/06 al 29/06 💻
