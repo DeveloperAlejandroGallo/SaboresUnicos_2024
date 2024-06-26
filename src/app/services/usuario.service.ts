@@ -66,7 +66,7 @@ export class UsuarioService {
     const coleccion = collection(this.firestore, this.colectionName);
     const documento = doc(coleccion, id);
     updateDoc(documento,{
-      tokenCelularActual: token
+      token: token
     })
   }
 //Genericos
