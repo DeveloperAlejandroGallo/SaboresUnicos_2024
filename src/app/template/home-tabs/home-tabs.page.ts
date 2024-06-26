@@ -216,38 +216,40 @@ export class HomeTabsPage implements OnInit {
  * Registra el dispositivo para recibir notificaciones
  */
 async registerNotifications() {
-  console.log("verificando permisos Push Notifications");
-  let permisionStatus = await PushNotifications.checkPermissions();
 
-  console.log("Pregunto si tiene permisos de recibir notificaciones");
-  if(permisionStatus.receive === "prompt"){
-    permisionStatus = await PushNotifications.requestPermissions();
-  }
-  console.log("verificando si se dieron permisos de recibir notificaciones");
-  if(permisionStatus.receive !== "granted"){
-    console.log("No se puede recibir notificaciones");
+  if(this.usuario.token == (null || undefined)) {
+    console.log("Usuario sin token");
+    console.log("verificando permisos Push Notifications");
+    let permisionStatus = await PushNotifications.checkPermissions();
+
+    console.log("Pregunto si tiene permisos de recibir notificaciones");
+    if(permisionStatus.receive === "prompt"){
+      permisionStatus = await PushNotifications.requestPermissions();
+    }
+    console.log("verificando si se dieron permisos de recibir notificaciones");
+    if(permisionStatus.receive !== "granted"){
+      console.log("No se puede recibir notificaciones");
+    }
+
   }
 
   PushNotifications.register();
-
 }
 
 async addListeners() {
 
-  if(this.usuario.token !== (null || undefined)) {
-    console.log("Usuario sin token");
-
-    
     await PushNotifications.addListener('registration', token => {
       console.info('Token de registro: ', token.value);
 
-      this.usrService.actualizarToken(this.usuario.id!,token.value);
+      if(this.usuario.token != token.value){
+        this.usrService.actualizarToken(this.usuario.id!,token.value);
+      }
     });
 
     await PushNotifications.addListener('registrationError', err => {
       console.error('Error Registro Push: ', err.error);
     });
-  }
+
 
   await PushNotifications.addListener('pushNotificationReceived', notification => {
     console.log('Notificación Recibida: ', notification);

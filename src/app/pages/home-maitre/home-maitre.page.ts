@@ -158,8 +158,15 @@ export class HomeMaitrePage  {
       this.usrService.asignarMesa(mesa.numero, elementoEspera.usuario.id);
       this.listEsperaService.delete(elementoEspera.id);
 
-      this.pushService.notificarMesaAsignada(elementoEspera.usuario, mesa.numero).subscribe((data) => {
-        console.log('Respuesta Push: '  + data);
+      this.pushService.notificarMesaAsignada(elementoEspera.usuario, mesa.numero).subscribe( {
+        next: (data) => {
+          console.log("Rta Push Mesa Asignada: ");
+          console.log(data);
+        },
+        error: (error) => {
+          console.error("Error Push Mesa Asignada: ");
+          console.error(error);
+        }
       });
     }catch(ex){
 
