@@ -149,6 +149,10 @@ export class HomeTabsPage implements OnInit {
               break;
             case "Mesa":
               const nroMesa = datos[1];
+              if(this.usuario.mesaAsignada == 0 && !this.estaEnEspera){
+                this.msgService.Error("Debes entrar a la lista de espera para ingresar a una mesa.");
+                return;
+              }
               //this.tieneMesaAsignada = true;
               //validar que haya pasado por lista de espera y que el qr de mesa escaneado sea el que se le fue asignado
               break;
@@ -167,6 +171,7 @@ export class HomeTabsPage implements OnInit {
   }
 
 
+  
 
   ingresarAListaEspera(){
     // console.log(this.usuario);
@@ -234,7 +239,7 @@ async registerNotifications() {
 
 async addListeners() {
 
-  if(this.usuario.token !== (null || undefined)) {
+  if(this.usuario.token == (null || undefined)) {
     console.log("Usuario sin token");
 
     
