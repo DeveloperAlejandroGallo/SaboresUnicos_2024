@@ -23,6 +23,7 @@ export class PushNotificationService {
   }
 
   notificarMesaAsignada(usuario: Usuario, mesaNro: number): Observable<any> {
+    console.log("Enviando a Token:"+usuario.token);
     let token = usuario.token;
     let title = 'Mesa Asignada';
     let body = `Por favor acerquese a la Mesa Nro: ${mesaNro}. Y escanee su código para comenzar a disfrutar de nuestros servicios.`;

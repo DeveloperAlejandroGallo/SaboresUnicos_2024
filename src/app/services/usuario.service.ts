@@ -85,7 +85,7 @@ export class UsuarioService {
 
   escucharUsuario(id: string) {
     const documentoRef = this.angularFirestore.doc<Usuario>(`${this.colectionName}/${id}`);
-    this.usuario$ = documentoRef.valueChanges() as Observable<Usuario>;
+    return this.usuario$ = documentoRef.valueChanges() as Observable<Usuario>;
   }
 
 
@@ -155,7 +155,7 @@ export class UsuarioService {
     const coleccion = collection(this.firestore, this.colectionName);
     const documento = doc(coleccion,usuario.id);
     updateDoc(documento,{
-      EstadoCliente: estado
+      estado: estado
     })
   }
 
