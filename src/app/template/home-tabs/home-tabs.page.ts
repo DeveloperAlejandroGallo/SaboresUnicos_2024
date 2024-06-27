@@ -38,6 +38,7 @@ export class HomeTabsPage implements OnInit {
   verChat : boolean = false;
   verChatFlotante: boolean = false;
   verMiPedido : boolean = false;
+  verEncuesta : boolean = false;
   estaEnEspera : boolean = false;
   tieneMesaAsignada : boolean = false;
   //-------------------------
@@ -116,6 +117,11 @@ export class HomeTabsPage implements OnInit {
               const nroMesa = datos[1];
               if (this.usuario.mesaAsignada == Number(nroMesa)) {
                 this.router.navigate(['home-tabs/menu-productos']);
+                this.verJuegos = true;
+                this.verChat = true;
+                this.verEncuesta = true;
+              }else{
+                this.msgService.Info('Mesa equivocada. Su número de mesa es ' + this.usuario.mesaAsignada);
               }
               //validar que haya pasado por lista de espera y que el qr de mesa escaneado sea el que se le fue asignado
               break;
