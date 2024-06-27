@@ -15,7 +15,7 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { provideStorage,getStorage } from '@angular/fire/storage';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations'
 import { HttpClientModule } from '@angular/common/http';
-
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 
 
@@ -31,8 +31,9 @@ import { HttpClientModule } from '@angular/common/http';
     provideDatabase(() => getDatabase()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
-  ],
+    ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    {provide: FIREBASE_OPTIONS, useValue: environment.firebaseConfig},
     importProvidersFrom(BrowserAnimationsModule)
 ],
   bootstrap: [AppComponent],

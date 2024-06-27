@@ -27,6 +27,13 @@ export class HomeTabsPage implements OnInit {
   public usuario!: Usuario;
   public esCliente:boolean = true;
   public esMaitre:boolean = false;
+  public esDuenio: boolean = false;
+  public esSupervisor: boolean = false;
+  public esEmpleado: boolean = false;
+  public esCocinero: boolean = false;
+  public esMozo: boolean = false;
+  public esBartender: boolean = false;
+  public esAnonimo: boolean = false;
   public url: string;
   public codigoLeido : string = "";
   public isSupported: boolean = false;
@@ -42,7 +49,16 @@ export class HomeTabsPage implements OnInit {
   estaEnEspera : boolean = false;
   tieneMesaAsignada : boolean = false;
   //-------------------------
-  constructor(private mesasSvc: MesaService, private listaSvc: ListaEsperaService,private modalController: ModalController, private platform: Platform, private msgService: MensajesService, private router: Router, private auth: AuthService, private usrService: UsuarioService) {
+  constructor(
+    private mesasSvc: MesaService,
+    private listaSvc: ListaEsperaService,
+    private modalController: ModalController,
+    private platform: Platform,
+    private msgService: MensajesService,
+    private router: Router,
+    private auth: AuthService,
+    private usrService: UsuarioService) {
+
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
     this.usrService.allUsers$.subscribe(data =>{
@@ -53,12 +69,14 @@ export class HomeTabsPage implements OnInit {
 
   ngOnInit() {
 
-    if(this.usuario.perfil == Perfil.Dueño || this.usuario.perfil == Perfil.Empleado){
-      this.esCliente = false;
-      if (this.usuario.tipoEmpleado == TipoEmpleado.maitre) {
-        this.esMaitre = true;
-      }
+    if(this.platform.is('android')) {
+      console.log("Validadndo permisos de notificaciones");
+      this.addListeners();
+      this.registerNotifications();
     }
+    this.tiposEntidades();
+
+
 
     this.listaSvc.buscarEnListaXid(this.usuario.id).subscribe(data=>{
       this.estaEnEspera = data.length > 0;
@@ -87,6 +105,23 @@ export class HomeTabsPage implements OnInit {
         console.error('Error al escanear: ' + error);
       }
     }
+  }
+
+
+  tiposEntidades() {
+
+    this.esCliente = true;
+
+    if(this.usuario.perfil == Perfil.Empleado){
+      this.esCliente = false;
+      this.esDuenio = this.usuario.tipoEmpleado === TipoEmpleado.Dueño;
+      this.esSupervisor = this.usuario.tipoEmpleado === TipoEmpleado.Supervisor;
+      this.esMaitre = this.usuario.tipoEmpleado === TipoEmpleado.Maitre;
+      this.esCocinero = this.usuario.tipoEmpleado === TipoEmpleado.Cocinero;
+      this.esMozo = this.usuario.tipoEmpleado === TipoEmpleado.Mozo;
+      this.esBartender = this.usuario.tipoEmpleado === TipoEmpleado.Bartender;
+    }
+
   }
 
   async escanearQR() {
@@ -141,6 +176,7 @@ export class HomeTabsPage implements OnInit {
 
 
 
+
   ingresarAListaEspera(){
     // console.log(this.usuario);
 
@@ -189,28 +225,34 @@ export class HomeTabsPage implements OnInit {
  * Registra el dispositivo para recibir notificaciones
  */
 async registerNotifications() {
-  let permisionStatus = await PushNotifications.checkPermissions();
 
-  if(permisionStatus.receive === "prompt"){
-    permisionStatus = await PushNotifications.requestPermissions();
-  }
+  if(this.usuario.token == (null || undefined)) {
+    console.log("Usuario sin token");
+    console.log("verificando permisos Push Notifications");
+    let permisionStatus = await PushNotifications.checkPermissions();
 
-  if(permisionStatus.receive !== "granted"){
-    console.log("No se puede recibir notificaciones");
+    console.log("Pregunto si tiene permisos de recibir notificaciones");
+    if(permisionStatus.receive === "prompt"){
+      permisionStatus = await PushNotifications.requestPermissions();
+    }
+    console.log("verificando si se dieron permisos de recibir notificaciones");
+    if(permisionStatus.receive !== "granted"){
+      console.log("No se puede recibir notificaciones");
+    }
+
   }
 
   PushNotifications.register();
-
 }
 
 async addListeners() {
 
-  if(this.usuario.token !== (null || undefined)) {
-
     await PushNotifications.addListener('registration', token => {
       console.info('Token de registro: ', token.value);
 
-      this.usrService.actualizarToken(this.usuario.id!,token.value);
+      if(this.usuario.token != token.value){
+        this.usrService.actualizarToken(this.usuario.id!,token.value);
+      }
     });
 
     await PushNotifications.addListener('registrationError', err => {
@@ -218,7 +260,6 @@ async addListeners() {
     });
 
 
-  }
   await PushNotifications.addListener('pushNotificationReceived', notification => {
     console.log('Notificación Recibida: ', notification);
   });
@@ -227,9 +268,6 @@ async addListeners() {
     console.log('Push notification action performed', notification.actionId, notification.inputValue);
   });
 
-
 }
-
-
 
 }

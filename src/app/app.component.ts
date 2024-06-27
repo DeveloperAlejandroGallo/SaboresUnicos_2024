@@ -36,12 +36,11 @@ export class AppComponent implements OnInit{
     this.iniciarApp();
     this.mesasSrv.traer();
     this.usuariosSrv.traer();
-
+    
   }
 
   ngOnInit(): void {
-    this.mesasSrv.traer();
-    this.usuariosSrv.traer();
+
 
   }
 

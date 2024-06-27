@@ -8,7 +8,7 @@ export const estaActivoGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const mensajes = inject(MensajesService);
 
-  if (authService.usuarioActual?.activo) {
+  if (authService.usuarioActual?.estado) {
     return true;
   }
 

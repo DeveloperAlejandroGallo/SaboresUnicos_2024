@@ -14,12 +14,14 @@ import {
   getDocs,
   query,
   setDoc,
-  updateDoc,
+  updateDoc
 } from '@angular/fire/firestore';
 import { Usuario } from '../models/usuario';
 import { map, Observable } from 'rxjs';
 import { Perfil } from '../enums/perfil';
-import {User} from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { EstadoCliente } from '../enums/estado-cliente';
+
 
 
 
@@ -32,7 +34,9 @@ export class UsuarioService {
   private colectionName: string = 'usuarios';
   private coleccionUsuarios: CollectionReference<DocumentData>;
 
-  constructor(private firestore: Firestore) {
+  public usuario$: Observable<Usuario> = new Observable<Usuario>();
+
+  constructor(private firestore: Firestore, private angularFirestore: AngularFirestore) {
     this.coleccionUsuarios = collection(this.firestore, this.colectionName);
    }
 
@@ -62,7 +66,7 @@ export class UsuarioService {
     const coleccion = collection(this.firestore, this.colectionName);
     const documento = doc(coleccion, id);
     updateDoc(documento,{
-      tokenCelularActual: token
+      token: token
     })
   }
 //Genericos
@@ -79,6 +83,10 @@ export class UsuarioService {
     });
   }
 
+  escucharUsuario(id: string) {
+    const documentoRef = this.angularFirestore.doc<Usuario>(`${this.colectionName}/${id}`);
+    return this.usuario$ = documentoRef.valueChanges() as Observable<Usuario>;
+  }
 
 
   delete(id: string){
@@ -104,12 +112,12 @@ export class UsuarioService {
       apellido: usuario.apellido,
       clave: usuario.clave,
       foto: usuario.foto,
-      // esAdmin: usuario.esAdmin,
+
       dni: usuario.dni,
       cuil: usuario.cuil,
       perfil: usuario.perfil,
       tipoEmpleado: usuario.perfil !== (Perfil.Anonimo && Perfil.Cliente) ? usuario.tipoEmpleado : null,
-      activo: usuario.perfil == Perfil.Anonimo ? true : false,
+      estado: usuario.perfil == Perfil.Anonimo ? EstadoCliente.Activo : EstadoCliente.Pendiente,
       mesaAsignada: 0,
       tieneReserva: false,
       //estaEnListaEspera: false
@@ -135,7 +143,7 @@ export class UsuarioService {
       cuil: usuario.cuil,
       perfil: usuario.perfil,
       tipoEmpleado: usuario.tipoEmpleado,
-      activo: usuario.activo,
+      estado: usuario.estado,
       mesaAsignada: usuario.mesaAsignada,
       tieneReserva: usuario.tieneReserva,
       //estaEnListaEspera: usuario.estaEnListaEspera
@@ -143,11 +151,11 @@ export class UsuarioService {
   }
 
 
-  aprobarCuenta(usuario: Usuario){
+  modificarEstadoCuenta(usuario: Usuario, estado: EstadoCliente){
     const coleccion = collection(this.firestore, this.colectionName);
     const documento = doc(coleccion,usuario.id);
     updateDoc(documento,{
-      activo: true
+      estado: estado
     })
   }
 
@@ -159,23 +167,20 @@ export class UsuarioService {
 
 
 
-  // actualizarCamposNuevos(){
+  actualizarCamposNuevos(){
 
-  //   this.listadoUsuarios.forEach((usuario) => {
-  //     const coleccion = collection(this.firestore, this.colectionName);
-  //     const documento = doc(coleccion,usuario.id);
+    this.listadoUsuarios.forEach((usuario) => {
+      const coleccion = collection(this.firestore, this.colectionName);
+      const documento = doc(coleccion,usuario.id);
 
-  //     updateDoc(documento, {
-  //       cuil: this.calcularCUIT(usuario.dni.toString()),
-  //       perfil: Perfil.Cliente,
-  //       tipoEmpleado:  null,
-  //       activo:  true
-  //     });
-  //   });
+      updateDoc(documento, {
+        estado:  EstadoCliente.Activo,
+      });
+    });
 
 
 
-  // }
+  }
 
 
   calcularCUIT(dni: string): string {
