@@ -32,6 +32,14 @@ import { BarcodeScanningModalComponent } from './barcode-scanning-modal.componen
             path: 'signup/:perfil',
             loadChildren: () => import('../../pages/signup/signup.module').then( m => m.SignupPageModule)
           },
+          {
+            path: 'menu-productos',
+            loadChildren: () => import('../../pages/menu-productos/menu-productos.module').then( m => m.MenuProductosPageModule)
+          },
+          {
+            path: 'chat',
+            loadChildren: () => import('../../pages/chat/chat.module').then( m => m.ChatPageModule)
+          },
           //path: otra pagina
           {
             path: '',

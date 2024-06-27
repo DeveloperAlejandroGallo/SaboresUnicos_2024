@@ -1,8 +1,8 @@
-<!-- <body>
+<body>
   
 
  <ion-header><app-header></app-header> </ion-header>
-  
+ 
     <ion-segment [(ngModel)]="selectedCategory" (ionChange)="segmentChanged($event)">
       <ion-segment-button value="comida">
         <ion-label>Comida</ion-label>
@@ -15,101 +15,138 @@
       </ion-segment-button>
     </ion-segment> 
  
+    <ion-content class="content">
+    <ion-list style=" overflow-y: auto; max-height: 80vh;">
     <ng-container *ngIf="selectedCategory === 'comida'">
-    <ion-card *ngFor="let producto of comida">
-      <ion-item>
-        <ion-thumbnail slot="start">
-          <swiper-container pager="true">
-            <swiper-slide *ngFor="let imagen of producto.imagenes">
-              <img [src]="imagen" />
-            </swiper-slide>
-          </swiper-container>
-        </ion-thumbnail>
-        <div class="nombre-detalles">
-          <h2>{{producto.nombre}}</h2>
-         
-        <p><a id="open-modal" (click)="openModal(producto)">Detalles</a></p>
-        </div>
-         
-        <div class="item-end">
-          <h2>${{producto.precio}}</h2>
-          <div class="quantity-controls">
-            <ion-button fill="clear" size="small" (click)="decrementarCantidad(producto)" >
-              <ion-icon name="trash-bin-outline"></ion-icon>
-            </ion-button>
-            <ion-label>{{producto.cantidad}}</ion-label>
-            <ion-button fill="clear" size="small" (click)="incrementarCantidad(producto)">
-              <ion-icon name="add-outline"></ion-icon>
-            </ion-button>
-          </div>
-        </div>
-      </ion-item>
-    </ion-card>
-  </ng-container>
+      <ion-card *ngFor="let producto of listaDeTipoComida">
+        <ion-card-content>
+          <ion-row>
+            <ion-col size="12">
+              <swiper-container pager="true">
+                <swiper-slide *ngFor="let imagen of producto.fotos">
+                  <img [src]="imagen" class="producto-imagen" />
+                </swiper-slide>
+              </swiper-container>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12" class="producto-info">
+              <div class="nombre-detalles">
+                <h2>{{producto.nombre}}</h2>
+                <p><a id="open-modal" (click)="openModal(producto)">Detalles</a></p>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12" class="item-end">
+              <h2>${{producto.precio}}</h2>
+              <div class="quantity-controls">
+                <ion-button fill="clear" size="small" (click)="decrementarCantidad()">
+                  <ion-icon name="trash-bin-outline"></ion-icon>
+                </ion-button>
+                <ion-label>{{cantidadProducto}}</ion-label>
+                <ion-button fill="clear" size="small" (click)="incrementarCantidad()">
+                  <ion-icon name="add-outline"></ion-icon>
+                </ion-button>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+    </ion-list>
+  
 
+  
+  <ion-list style=" overflow-y: auto; max-height: 80vh;">
   <ng-container *ngIf="selectedCategory === 'bebidas'">
-    <ion-card *ngFor="let producto of bebidas">
-      <ion-item>
-        <ion-thumbnail slot="start">
-          <swiper-container pager="true">
-            <swiper-slide *ngFor="let imagen of producto.imagenes">
-              <img [src]="imagen" />
-            </swiper-slide>
-          </swiper-container>
-        </ion-thumbnail>
-          <div class="nombre-detalles">
-            <h2>{{producto.nombre}}</h2>
-            
-          <p><a (click)="openModal(producto)">Detalles</a></p>
-          </div>
-        <div class="item-end">
-          <h2>${{producto.precio}}</h2>
-          <div class="quantity-controls">
-            <ion-button fill="clear" size="small" (click)="decrementarCantidad(producto)" >
-              <ion-icon name="trash-bin-outline"></ion-icon>
-            </ion-button>
-            <ion-label>{{producto.cantidad}}</ion-label>
-            <ion-button fill="clear" size="small" (click)="incrementarCantidad(producto)">
-              <ion-icon name="add-outline"></ion-icon>
-            </ion-button>
-          </div>
-        </div>
-      </ion-item>
+    <ion-card *ngFor="let producto of listaDeTipoBebida">
+      <ion-card-content>
+        <ion-row>
+          <ion-col size="12">
+            <swiper-container pager="true">
+              <swiper-slide *ngFor="let imagen of producto.fotos">
+                <img [src]="imagen" class="producto-imagen" />
+              </swiper-slide>
+            </swiper-container>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" class="producto-info">
+            <div class="nombre-detalles">
+              <h2>{{producto.nombre}}</h2>
+              <p><a id="open-modal" (click)="openModal(producto)">Detalles</a></p>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" class="item-end">
+            <h2>${{producto.precio}}</h2>
+            <div class="quantity-controls">
+              <ion-button fill="clear" size="small" (click)="decrementarCantidad()">
+                <ion-icon name="trash-bin-outline"></ion-icon>
+              </ion-button>
+              <ion-label>{{cantidadProducto}}</ion-label>
+              <ion-button fill="clear" size="small" (click)="incrementarCantidad()">
+                <ion-icon name="add-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
     </ion-card>
   </ng-container>
+</ion-list >
 
+
+
+
+
+ 
+    <ion-list style=" overflow-y: auto; max-height: 80vh;">
   <ng-container *ngIf="selectedCategory === 'postres'">
-    <ion-card *ngFor="let producto of postres">
-      <ion-item>
-        <ion-thumbnail slot="start">
-          <swiper-container pager="true">
-            <swiper-slide *ngFor="let imagen of producto.imagenes">
-              <img [src]="imagen" />
-            </swiper-slide>
-          </swiper-container>
-        </ion-thumbnail>
-        <div class="nombre-detalles">
-          <h2>{{producto.nombre}}</h2>
-          
-        <p><a (click)="openModal(producto)">Detalles</a></p>
-        </div>
-        <div class="item-end">
-          <h2>${{producto.precio}}</h2>
-          <div class="quantity-controls">
-            <ion-button fill="clear" size="small" (click)="decrementarCantidad(producto)" >
-              <ion-icon name="trash-bin-outline"></ion-icon>
-            </ion-button>
-            <ion-label>{{producto.cantidad}}</ion-label>
-            <ion-button fill="clear" size="small" (click)="incrementarCantidad(producto)">
-              <ion-icon name="add-outline"></ion-icon>
-            </ion-button>
-          </div>
-        </div>
-      </ion-item>
+    <ion-card *ngFor="let producto of listaDeTipoPostre">
+      <ion-card-content>
+        <ion-row>
+          <ion-col size="12">
+            <swiper-container pager="true">
+              <swiper-slide *ngFor="let imagen of producto.fotos">
+                <img [src]="imagen" class="producto-imagen" />
+              </swiper-slide>
+            </swiper-container>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" class="producto-info">
+            <div class="nombre-detalles">
+              <h2>{{producto.nombre}}</h2>
+              <p><a id="open-modal" (click)="openModal(producto)">Detalles</a></p>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" class="item-end">
+            <h2>${{producto.precio}}</h2>
+            <div class="quantity-controls">
+              <ion-button fill="clear" size="small" (click)="decrementarCantidad()">
+                <ion-icon name="trash-bin-outline"></ion-icon>
+              </ion-button>
+              <ion-label>{{cantidadProducto}}</ion-label>
+              <ion-button fill="clear" size="small" (click)="incrementarCantidad()">
+                <ion-icon name="add-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
     </ion-card>
   </ng-container>
+</ion-list >
+  </ion-content>
 
-    <ion-modal [isOpen]="isModalOpen" (ionModalDidDismiss)="closeModal()">
+
+
+    <ion-modal #modal [isOpen]="isModalOpen" (ionModalDidDismiss)="closeModal()">
       <ng-template>
       <ion-header style="background-color: #BF0000;">
       <ion-toolbar style="background-color: #BF0000;">
@@ -123,7 +160,7 @@
       <ion-card>
         <ion-card-content>
           <p>Precio: {{ selectedProduct?.precio | currency }}</p>
-          <p>Tiempo de preparación: {{ selectedProduct?.tiempo }} minutos</p>
+          <p>Tiempo de preparación: {{ selectedProduct?.tiempoPreparacionEnMinutos }} minutos</p>
           <p>{{ selectedProduct?.descripcion }}</p>
         </ion-card-content>
       </ion-card>
@@ -137,4 +174,4 @@
    
 
 
- -->
+

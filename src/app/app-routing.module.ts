@@ -53,6 +53,10 @@ const routes: Routes = [
     path: 'menu-productos',
     loadChildren: () => import('./pages/menu-productos/menu-productos.module').then( m => m.MenuProductosPageModule)
   },
+  {
+    path: 'chat',
+    loadChildren: () => import('./pages/chat/chat.module').then( m => m.ChatPageModule)
+  },
 
 
 
