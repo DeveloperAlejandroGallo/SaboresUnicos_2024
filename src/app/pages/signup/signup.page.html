@@ -171,8 +171,24 @@
         >
           La contraseña debe tener al menos 6 caracteres
         </ion-note>
-          </div>
 
+          </div>
+          <div *ngIf="verPassword">
+            <ion-item>
+              <ion-icon name="lock-closed"></ion-icon>
+              <ion-input
+                type="password"
+                name="passwordRep"
+                id="passwordRep"
+                placeholder="Repetir Contraseña"
+                formControlName="passwordRep"
+              ></ion-input>
+            </ion-item>
+            <ion-note class="error-message"
+            *ngIf="signupForm.controls['passwordRep'].touched ">
+              {{getPasswordRep?.getError('noCoincide')}}
+          </ion-note>
+          </div>
           <ion-button
             type="submit"
             expand="block"

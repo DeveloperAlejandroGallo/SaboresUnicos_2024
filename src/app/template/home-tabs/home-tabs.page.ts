@@ -76,14 +76,6 @@ export class HomeTabsPage implements OnInit {
     }
     this.tiposEntidades();
 
-
-
-    this.listaSvc.buscarEnListaXid(this.usuario.id).subscribe(data=>{
-      this.estaEnEspera = data.length > 0;
-      console.log(this.estaEnEspera);
-
-    });
-
     if (this.platform.is('capacitor')) {
       try {
         BarcodeScanner.installGoogleBarcodeScannerModule();
@@ -105,6 +97,23 @@ export class HomeTabsPage implements OnInit {
         console.error('Error al escanear: ' + error);
       }
     }
+
+    //Si al loguearse tiene mesa asignada, que NO es de reserva, voy directamente al menu.
+    if (this.usuario.mesaAsignada != 0 && !this.usuario.tieneReserva) {
+      this.router.navigate(['home-tabs/menu-productos']);
+      this.verJuegos = true;
+      this.verChat = true;
+      this.verEncuesta = true;
+      return;
+    }
+
+
+    this.listaSvc.buscarEnListaXid(this.usuario.id).subscribe(data=>{
+      this.estaEnEspera = data.length > 0;
+      console.log(this.estaEnEspera);
+
+    });
+
   }
 
 

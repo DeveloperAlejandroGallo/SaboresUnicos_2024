@@ -40,6 +40,7 @@ import { Perfil } from 'src/app/enums/perfil';
 import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
 import { EstadoCliente } from 'src/app/enums/estado-cliente';
 import { PushNotificationService } from 'src/app/services/push-notification.service';
+import { confirmarClaveValidator } from 'src/app/comun/custom-validators';
 
 @Component({
   selector: 'app-signup',
@@ -65,7 +66,7 @@ export class SignupPage implements OnInit {
   public tituloBoton:  string = "Registrarse";
   public verScanner:  boolean = false;
   private perfil: Perfil;
-  esMaitre:boolean = false;
+  public esMaitre:boolean = false;
   public usuario!: Usuario;
 
   constructor(
@@ -114,6 +115,10 @@ export class SignupPage implements OnInit {
 
   get getPassword() {
     return this.signupForm.get('password');
+  }
+
+  get getPasswordRep() {
+    return this.signupForm.get('passwordRep');
   }
 
   get getNombre() {
@@ -201,8 +206,8 @@ export class SignupPage implements OnInit {
           Validators.required,
           Validators.minLength(6),
         ]),
-      },
-      Validators.required
+        passwordRep: new FormControl('',[Validators.required]),
+      },[confirmarClaveValidator(),Validators.required]
     );
 
     this.mensaje = '';
