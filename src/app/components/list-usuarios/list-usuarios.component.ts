@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EstadoCliente } from 'src/app/enums/estado-cliente';
 import { Usuario } from 'src/app/models/usuario';
@@ -15,6 +15,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 export class ListUsuariosComponent implements OnDestroy {
 
 
+  @Output() EnviarIsLoading = new EventEmitter<boolean>();
 
   public users: Array<Usuario> = new Array<Usuario>;
   public isLoading: boolean = false;
@@ -38,36 +39,37 @@ export class ListUsuariosComponent implements OnDestroy {
 
   Rechazar(usr: Usuario) {
 
-      this.isLoading = true;
+      this.EnviarIsLoading.emit(true);
       this.usrService.modificarEstadoCuenta(usr, EstadoCliente.Rechazado);
       // this.auth.eliminarUsuario(usr);
 
 
       this.emailService.enviarEmailAceptacionRechazo(usr, false).subscribe({
         next: responseData => {
-          this.isLoading = false;
+          this.EnviarIsLoading.emit(false);
           this.msgService.Exito("Usuario Rechazado. Email de aviso enviado correctamente.");
         },
         error: error => {
           console.error(`Error al enviar el email: ${error}`);
-          this.isLoading = false;
+          this.EnviarIsLoading.emit(false);
           this.msgService.Warning("Usuario Rechazado. Pero con error al enviar el email.");
         }
       });
-      this.isLoading = false;
+      this.EnviarIsLoading.emit(false);
     }
 
   Aceptar(usr: Usuario) {
-    this.isLoading = true;
+    this.EnviarIsLoading.emit(true);
     this.usrService.modificarEstadoCuenta(usr, EstadoCliente.Activo);
+
     this.emailService.enviarEmailAceptacionRechazo(usr, true).subscribe({
       next: responseData => {
-        this.isLoading = false;
+        this.EnviarIsLoading.emit(false);
         this.msgService.Exito("Usuario aprobado. Email de aviso enviado correctamente.");
       },
       error: error => {
         console.error(`Error al enviar el email: ${error}`);
-        this.isLoading = false;
+        this.EnviarIsLoading.emit(false);
         this.msgService.Warning("Usuario aprobado. Pero con error al enviar el email.");
       }
     });

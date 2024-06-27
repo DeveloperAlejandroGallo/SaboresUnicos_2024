@@ -10,6 +10,7 @@ import { HomeTabsPage } from './home-tabs.page';
 import { RouterModule } from '@angular/router';
 import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -39,6 +40,10 @@ import { BarcodeScanningModalComponent } from './barcode-scanning-modal.componen
           {
             path: 'chat',
             loadChildren: () => import('../../pages/chat/chat.module').then( m => m.ChatPageModule)
+          },
+          {
+            path: 'juegos',
+            loadChildren: () => import('../../pages/juegos/juegos.module').then( m => m.JuegosPageModule)
           },
           //path: otra pagina
           {

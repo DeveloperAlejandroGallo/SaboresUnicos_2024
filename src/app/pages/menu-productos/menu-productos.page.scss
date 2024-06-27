@@ -50,13 +50,14 @@ ion-card {
 
     .producto-info {
       text-align: center;
-      padding: 15px 0;
+      padding: 7px 0;
 
       .nombre-detalles {
         h2 {
           font-size: x-large;
           color: black;
           margin: 0 0 5px 0;
+          font-weight: bolder;
         }
 
         p {
@@ -72,7 +73,7 @@ ion-card {
 
     .item-end {
       text-align: center;
-      padding: 15px 0;
+      padding: 7px 0;
 
       h2 {
         font-size: 18px;
@@ -147,3 +148,16 @@ ion-row{
 //   overflow-y: hidden;
 //   height: calc(100% - 52px);
 // }
+ion-list {
+  background-color: transparent !important;
+}
+
+
+swiper-container {
+  width: 100%;
+  height: 100%;
+
+  --swiper-pagination-bullet-inactive-color: var(--ion-color-step-200, black);
+  --swiper-pagination-color: var(--ion-color-primary, #BF0000);
+}
+

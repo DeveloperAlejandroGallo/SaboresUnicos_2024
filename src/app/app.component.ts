@@ -8,7 +8,7 @@ import { AuthService } from './services/auth.service';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { MesaService } from './services/mesas.service';
 import { register } from 'swiper/element/bundle';
-
+import { ScreenOrientation, ScreenOrientationPlugin } from '@capacitor/screen-orientation';
 
 register();
 
@@ -17,7 +17,7 @@ register();
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent implements OnInit{
+export class AppComponent{
 
 
 
@@ -36,13 +36,10 @@ export class AppComponent implements OnInit{
     this.iniciarApp();
     this.mesasSrv.traer();
     this.usuariosSrv.traer();
-    
-  }
-
-  ngOnInit(): void {
-
 
   }
+
+
 
   logout() {
    this.authSrv.cerrarSesion();
@@ -68,8 +65,10 @@ export class AppComponent implements OnInit{
       this.setAndroidBackButtonBehavior();
 
       //para la barra de notificaciones
-      StatusBar.setBackgroundColor({ color: '#BF0000' });
-      StatusBar.setStyle({ style: Style.Light });
+      if(this.platform.is('capacitor')){
+        StatusBar.setBackgroundColor({ color: '#BF0000' });
+        StatusBar.setStyle({ style: Style.Light });
+      }
     });
   }
   setAndroidBackButtonBehavior() {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { Perfil } from 'src/app/enums/perfil';
@@ -57,6 +57,10 @@ export class HomePage implements OnInit{
   ngOnInit(): void {
     this.audioSrv.reporoduccionCambioPagina();
   }
+
+  recibirIsLoading($event: boolean) {
+      this.isLoading = $event;
+    }
 }
 
 

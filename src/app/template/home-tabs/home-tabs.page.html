@@ -5,41 +5,47 @@
       <ion-label>Inicio</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button *ngIf="esCliente && verJuegos"  tab="">
-      <ion-icon name="game-controller-outline"></ion-icon>
-      <ion-label>Juegos</ion-label>
+    <ion-tab-button *ngIf="esCliente && verEncuesta"  tab="menu-productos">
+      <ion-icon name="newspaper"></ion-icon>
+      <ion-label>Menú</ion-label>
     </ion-tab-button>
+
 
     <!-- Boton vacio para colocar el qr -->
     <ion-tab-button *ngIf="esCliente" class="empty-tab-button"></ion-tab-button>
 
-    <ion-tab-button *ngIf="esMaitre" tab="signup/Cliente">
-      <ion-icon name="reader-outline"></ion-icon>
-      <ion-label>Dar alta</ion-label>
+    <ion-tab-button *ngIf="esMaitre || esDuenio || esSupervisor" tab="signup/{{queAlta}}">
+      <ion-icon name="reader"></ion-icon>
+      <ion-label>Alta {{queAlta}}</ion-label>
     </ion-tab-button>
 
-    
-
-    <ion-tab-button *ngIf="esCliente && verEncuesta"  tab="">
-      <ion-icon name="newspaper-outline"></ion-icon>
-      <ion-label>Encuesta</ion-label>
+    <ion-tab-button *ngIf="esCliente && verJuegos"  tab="juegos">
+      <ion-icon name="game-controller"></ion-icon>
+      <ion-label>Juegos</ion-label>
     </ion-tab-button>
-    
+
+
     <ion-tab-button tab="mi-perfil">
       <ion-icon name="person"></ion-icon>
       <ion-label>Mi perfil</ion-label>
     </ion-tab-button>
 
-   
+
 
   </ion-tab-bar>
+
+  <ion-fab *ngIf="esCliente && verEncuesta" class="fab-chat fab-encuesta"  slot="fixed" vertical="top" horizontal="end">
+    <ion-fab-button color="white" class="boton-encuesta">
+      <ion-icon color="primary" name="megaphone-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
   <ion-fab *ngIf="esCliente && verChat" class="fab-chat"  slot="fixed" vertical="top" horizontal="end">
     <ion-fab-button color="white" class="boton-chat-mozo">
       <ion-icon color="primary" name="chatbox-ellipses-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  
+
 </ion-tabs>
 
 <ion-fab *ngIf="esCliente" slot="fixed" vertical="bottom" horizontal="center">
