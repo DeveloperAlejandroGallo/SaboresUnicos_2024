@@ -40,6 +40,7 @@ import { Perfil } from 'src/app/enums/perfil';
 import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
 import { EstadoCliente } from 'src/app/enums/estado-cliente';
 import { PushNotificationService } from 'src/app/services/push-notification.service';
+import { confirmarClaveValidator } from 'src/app/comun/custom-validators';
 
 @Component({
   selector: 'app-signup',
@@ -64,9 +65,13 @@ export class SignupPage implements OnInit {
   public verEmail:  boolean = false;
   public tituloBoton:  string = "Registrarse";
   public verScanner:  boolean = false;
-  private perfil: Perfil;
-  esMaitre:boolean = false;
+  public perfilDadoDeAlta!: Perfil;
+  public esMaitre:boolean = false;
   public usuario!: Usuario;
+  public verTipoEmpleado: boolean = false;
+  public verVolver: boolean = true;
+
+
 
   constructor(
     private authService: AuthService,
@@ -79,21 +84,35 @@ export class SignupPage implements OnInit {
     private route: ActivatedRoute,
     private usrService: UsuarioService,
     private auth: AuthService,
-    private pushSrv: PushNotificationService
+    private pushSrv: PushNotificationService,
+
   ) {
     this.audioSrv.reporoduccionCambioPagina();
-    this.perfil = this.route.snapshot.paramMap.get('perfil') as Perfil;
+    this.configuraPorPerfil();
+    if(this.signupForm)
+      this.signupForm.reset();
+  }
+
+
+  private configuraPorPerfil() {
+
+    this.perfilDadoDeAlta = this.route.snapshot.paramMap.get('perfil') as Perfil;
     this.usuario = this.auth.usuarioActual!;
-    switch (this.perfil) {
+
+    switch (this.perfilDadoDeAlta) {
       case Perfil.Cliente:
+      case Perfil.Empleado:
         this.verApellido = true;
         this.verDni = true;
         this.verEmail = true;
         this.verPassword = true;
-        this.verCuil = false;
+        this.verCuil = this.perfilDadoDeAlta == Perfil.Empleado;
         this.tituloBoton = 'Registrarse';
         this.verScanner = true;
+        this.verTipoEmpleado = this.perfilDadoDeAlta == Perfil.Empleado;
+        this.verVolver = !(this.perfilDadoDeAlta == Perfil.Empleado);
         break;
+
       case Perfil.Anonimo:
         this.verApellido = false;
         this.verDni = false;
@@ -101,19 +120,22 @@ export class SignupPage implements OnInit {
         this.verPassword = false;
         this.verCuil = false;
         this.tituloBoton = 'Ingresar';
+        this.verVolver = true;
         break;
     }
   }
 
-
-
-  //getters
+  //getters Form
   get getEmail() {
     return this.signupForm.get('email');
   }
 
   get getPassword() {
     return this.signupForm.get('password');
+  }
+
+  get getPasswordRep() {
+    return this.signupForm.get('passwordRep');
   }
 
   get getNombre() {
@@ -136,10 +158,59 @@ export class SignupPage implements OnInit {
     return this.signupForm.get('cuil');
   }
 
+  get getTipoEmpleado() {
+    return this.signupForm.get('tipoEmpleado');
+  }
+
   ngOnInit(): void {
 
+    this.inicializaLectorQr();
+    this.armaFormulario();
+    this.mensaje = '';
+  }
 
-    if (this.platform.is('capacitor') && this.perfil != Perfil.Anonimo) {
+
+
+
+
+  private armaFormulario() {
+    this.signupForm = new FormGroup(
+      {
+        email: new FormControl('', [Validators.required, Validators.email]),
+        nombre: new FormControl('', [
+          Validators.required,
+          Validators.pattern('^[a-zA-Z ]+$'), //solo letras y espacios
+        ]),
+        apellido: new FormControl('', [
+          Validators.required,
+          Validators.pattern('^[a-zA-Z ]+$'),
+        ]),
+        dni: new FormControl('', [
+          Validators.required,
+          Validators.pattern('^[0-9]+$'),
+          Validators.min(1000000),
+          Validators.max(999999999),
+        ]),
+        cuil: new FormControl('', [
+          Validators.required,
+          Validators.pattern('^[0-9]+$'),
+          Validators.min(1000000000),
+          Validators.max(999999999999),
+        ]),
+        tipoEmpleado: new FormControl('',[Validators.required]),
+        password: new FormControl('', [
+          Validators.required,
+          Validators.minLength(6),
+        ]),
+        passwordRep: new FormControl('', [Validators.required]),
+      }, [confirmarClaveValidator(), Validators.required]
+    );
+  }
+
+  private inicializaLectorQr() {
+
+
+    if (this.platform.is('capacitor') && this.perfilDadoDeAlta != Perfil.Anonimo) {
       try {
         BarcodeScanner.installGoogleBarcodeScannerModule();
 
@@ -165,47 +236,6 @@ export class SignupPage implements OnInit {
       );
     }
 
-    if (this.usuario) {
-      console.log('Hay usuario: '+ this.usuario);
-
-      if (this.usuario.tipoEmpleado == TipoEmpleado.Maitre) {
-          this.esMaitre = true;
-        }
-    }
-
-
-    this.signupForm = new FormGroup(
-      {
-        email: new FormControl('', [Validators.required, Validators.email]),
-        nombre: new FormControl('', [
-          Validators.required,
-          Validators.pattern('^[a-zA-Z ]+$'), //solo letras y espacios
-        ]),
-        apellido: new FormControl('', [
-          Validators.required,
-          Validators.pattern('^[a-zA-Z ]+$'),
-        ]),
-        dni: new FormControl('', [
-          Validators.required,
-          Validators.pattern('^[0-9]+$'),
-          Validators.min(1000000),
-          Validators.max(999999999),
-        ]),
-        cuil: new FormControl('', [
-          Validators.required,
-          Validators.pattern('^[0-9]+$'),
-          Validators.min(1000000000),
-          Validators.max(999999999999),
-        ]),
-        password: new FormControl('', [
-          Validators.required,
-          Validators.minLength(6),
-        ]),
-      },
-      Validators.required
-    );
-
-    this.mensaje = '';
   }
 
 
@@ -213,7 +243,7 @@ export class SignupPage implements OnInit {
     this.guardando = true;
     this.isLoading = true;
     console.log('Formulario de registro enviado');
-    if (this.perfil == Perfil.Anonimo)
+    if (this.perfilDadoDeAlta == Perfil.Anonimo)
       this.createUserAnonimo();
     else
       this.createUserRegistrado();
@@ -248,9 +278,9 @@ export class SignupPage implements OnInit {
         dni: this.getDni?.value,
         foto: urlImage,
         cuil: '',
-        perfil: Perfil.Cliente,
-        tipoEmpleado: undefined,
-        estado: EstadoCliente.Pendiente,
+        perfil: this.perfilDadoDeAlta == Perfil.Empleado ? Perfil.Empleado : Perfil.Cliente,
+        tipoEmpleado: this.getTipoEmpleado!.value,
+        estado: this.perfilDadoDeAlta == Perfil.Empleado ? EstadoCliente.Pendiente : EstadoCliente.Activo,
         mesaAsignada: 0,
         tieneReserva: false,
         token: '',
@@ -292,6 +322,7 @@ export class SignupPage implements OnInit {
       this.guardando = this.isLoading = false;
     }
   }
+
 
   async createUserAnonimo() {
     try {
@@ -353,7 +384,7 @@ export class SignupPage implements OnInit {
       return false;
     }
 
-    if(this.perfil == Perfil.Anonimo){
+    if(this.perfilDadoDeAlta == Perfil.Anonimo){
       return true;
     }
 
@@ -379,6 +410,10 @@ export class SignupPage implements OnInit {
     if (this.verCuil && (this.getCuil?.value === '' || this.getCuil?.value.length < 10 || this.getCuil?.value.length > 12)) {
       this.mostrarError('Ingrese un CUIL válido');
       return false;
+    }
+
+    if(this.verTipoEmpleado && (this.getTipoEmpleado?.value === ('' || undefined || null  ))){
+      this.mostrarError('Seleccione un Tipo de Empleado');
     }
 
     //validar password

@@ -1,9 +1,9 @@
 <body>
-  
+
 
  <ion-header><app-header></app-header> </ion-header>
- 
-    <ion-segment [(ngModel)]="selectedCategory" (ionChange)="segmentChanged($event)">
+
+    <ion-segment mode="ios" [(ngModel)]="selectedCategory" (ionChange)="segmentChanged($event)">
       <ion-segment-button value="comida">
         <ion-label>Comida</ion-label>
       </ion-segment-button>
@@ -13,8 +13,8 @@
       <ion-segment-button value="postres">
         <ion-label>Postres</ion-label>
       </ion-segment-button>
-    </ion-segment> 
- 
+    </ion-segment>
+
     <ion-content class="content">
     <ion-list style=" overflow-y: auto; max-height: 80vh;">
     <ng-container *ngIf="selectedCategory === 'comida'">
@@ -22,7 +22,10 @@
         <ion-card-content>
           <ion-row>
             <ion-col size="12">
-              <swiper-container pager="true">
+              <swiper-container
+              pager="true"
+              [loop]="true"
+              [pagination]="true">
                 <swiper-slide *ngFor="let imagen of producto.fotos">
                   <img [src]="imagen" class="producto-imagen" />
                 </swiper-slide>
@@ -55,9 +58,9 @@
       </ion-card>
     </ng-container>
     </ion-list>
-  
 
-  
+
+
   <ion-list style=" overflow-y: auto; max-height: 80vh;">
   <ng-container *ngIf="selectedCategory === 'bebidas'">
     <ion-card *ngFor="let producto of listaDeTipoBebida">
@@ -102,7 +105,7 @@
 
 
 
- 
+
     <ion-list style=" overflow-y: auto; max-height: 80vh;">
   <ng-container *ngIf="selectedCategory === 'postres'">
     <ion-card *ngFor="let producto of listaDeTipoPostre">
@@ -166,12 +169,12 @@
       </ion-card>
     </ion-content>
   </ng-template>
-      
+
     </ion-modal>
-   
-  
+
+
 </body>
-   
+
 
 
 

@@ -37,7 +37,7 @@ const routes: Routes = [
   {
     path: 'home-tabs',
     loadChildren: () => import('./template/home-tabs/home-tabs.module').then( m => m.HomeTabsPageModule),
-    canActivate: [EstaLogueadoGuard]
+    // canActivate: [EstaLogueadoGuard]
   },
   {
     path: 'mi-perfil',
@@ -49,14 +49,19 @@ const routes: Routes = [
     path: 'home-maitre',
     loadChildren: () => import('./pages/home-maitre/home-maitre.module').then( m => m.HomeMaitrePageModule),
     canActivate: [EstaLogueadoGuard]
-  },  {
+  },
+  {
     path: 'menu-productos',
     loadChildren: () => import('./pages/menu-productos/menu-productos.module').then( m => m.MenuProductosPageModule)
   },
   {
     path: 'chat',
     loadChildren: () => import('./pages/chat/chat.module').then( m => m.ChatPageModule)
+  },  {
+    path: 'juegos',
+    loadChildren: () => import('./pages/juegos/juegos.module').then( m => m.JuegosPageModule)
   },
+
 
 
 

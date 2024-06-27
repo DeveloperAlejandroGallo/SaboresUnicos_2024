@@ -1,7 +1,7 @@
 
 <div class="card-list">
 
-  <ion-list class="custom-ion-list">
+  <ion-list class="custom-ion-list" *ngIf="!isLoading && users && users.length > 0; else noUsuarios">
     <ion-list-header>
       <ion-label>Pendientes de Aprobación</ion-label>
     </ion-list-header>
@@ -32,3 +32,10 @@
   </ion-list>
 </div>
 
+<ng-template #noUsuarios>
+  <ion-item slot="content" *ngIf="!isLoading">
+    <ion-label color="medium" class="ion-text-center"
+      >No hay usuarios pendientes.</ion-label
+    >
+  </ion-item>
+</ng-template>
