@@ -1,3 +1,91 @@
 .bg-sala-a{
+    background: url("../../../assets/img/fondo-gris.png") no-repeat center center / cover;
+}
+
+.cont-chat{
+    height: 100vh;
+    border: 2px solid black;
+}
+
+.mensajes {
+    overflow-y: auto;
+	height: auto;
+}
+
+.input-row{
+    position: fixed;
+    bottom: 2rem;
+    width: 100%;
+}
+
+.input-row button{
+  margin-left: 10rem;
+  padding: 10px 20px;
+  border: none;
+  background-color: white;
+  color: #FE4A49;
+  border-radius: 4px;
+  border: #463D66 solid 2px;
+  cursor: pointer;
+}
+
+.input-row input{
+    margin-left: 6rem;
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn-back{
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+}
+
+.btn-logout{
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+}
+
+.cont-chat{
+    height: 100vh;
+    border: 2px solid black;
+}
+
+.bg-sala-a{
     background-color: #FE4A49;
+}
+
+.bg-sala-b{
+    background-color: #463D66;
+}
+
+ion-toolbar {
+    --background: #463D66;
+  
+    --border-color: #FE4A49 ;
+    --border-width: 4px 0;
+    --border-style: double;
+  
+    
+  }
+
+.mi-mensaje{
+    margin-bottom: 5px;
+    text-align: center;
+    margin-left: 16rem;
+    border: solid black;
+    border-radius: 25%;
+    background-color: lightgoldenrodyellow;
+}
+
+.su-mensaje{
+    margin-bottom: 5px;
+    text-align: center;
+    margin-right: 14rem;
+    border: solid black;
+    border-radius: 25%;
+    background-color: lightgoldenrodyellow;
 }

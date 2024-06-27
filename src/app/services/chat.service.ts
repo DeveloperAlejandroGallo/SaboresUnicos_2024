@@ -87,18 +87,19 @@ import { Mensaje } from '../models/mensaje';
 //Usuario
   nuevo(mensj: Mensaje): Promise<void> {
 
-    const docuNuevo = doc(this.coleccionMensajes);
+    const docuNuevo = doc(this.coleccionMensajes,mensj.fecha.toString());
     // addDoc(coleccion, objeto);
-    const nuevoId = docuNuevo.id;
+    const nuevoId = docuNuevo;
 
-    mensj.id = nuevoId;
+    //mensj.id = nuevoId;
 
     return setDoc(docuNuevo, {
-      id: nuevoId,
+      id: mensj.fecha.toString(),
       numeroDeMesa: mensj.numeroDeMesa,
       nombreMozo: mensj.nombreMozo,
       mensaje: mensj.mensaje,
-      fecha: mensj.fecha
+      fecha: mensj.fecha,
+      idDelEnviador: mensj.idDelEnviador
 
     });
 

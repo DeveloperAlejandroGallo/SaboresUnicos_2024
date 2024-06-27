@@ -174,7 +174,9 @@ export class HomeTabsPage implements OnInit {
 
   }
 
-
+irAlChat(){
+  this.router.navigate(['home-tabs/chat']);
+}
 
 
   ingresarAListaEspera(){

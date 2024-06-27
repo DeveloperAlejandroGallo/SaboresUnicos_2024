@@ -34,8 +34,9 @@
 
   </ion-tab-bar>
 
-  <ion-fab *ngIf="esCliente && verChat" class="fab-chat"  slot="fixed" vertical="top" horizontal="end">
-    <ion-fab-button color="white" class="boton-chat-mozo">
+  <!-- PONER EL verChat ANTES DE ENTREGAR -->
+  <ion-fab *ngIf="esCliente || esMozo" class="fab-chat"  slot="fixed" vertical="top" horizontal="end">
+    <ion-fab-button color="white" class="boton-chat-mozo" (click)="irAlChat()">
       <ion-icon color="primary" name="chatbox-ellipses-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
