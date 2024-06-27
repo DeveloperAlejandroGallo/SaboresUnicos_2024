@@ -62,6 +62,7 @@ export class LoginPage implements OnInit {
     setTimeout(() => {
       this.isLoading = false;
       this.authService.iniciarSesion(this.getEmailLogin?.value, this.getPasswordLogin?.value);
+      this.router.navigate(['/home-tabs']);
     }, 2000);
 
   }

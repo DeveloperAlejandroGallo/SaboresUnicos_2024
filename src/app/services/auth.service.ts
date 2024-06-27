@@ -74,8 +74,7 @@ export class AuthService {
           return;
         }
         this.usrService.escucharUsuario(this.usuarioActual!.id);
-        this.router.navigate(['/home-tabs']);
-      })
+    })
       .catch((error) => {
         let msg: string = '';
         switch (error.code) {

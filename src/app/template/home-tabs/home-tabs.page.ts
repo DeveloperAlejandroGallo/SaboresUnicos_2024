@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Perfil } from 'src/app/enums/perfil';
 import { Usuario } from 'src/app/models/usuario';
@@ -24,7 +24,12 @@ const background = '#f8f8f8d7';
 })
 
 export class HomeTabsPage implements OnInit {
-  public usuario!: Usuario;
+
+  @Input() isLoading: boolean = false;
+
+
+
+  public usuarioLogueado!: Usuario;
   public esCliente:boolean = true;
   public esMaitre:boolean = false;
   public esDuenio: boolean = false;
@@ -39,7 +44,7 @@ export class HomeTabsPage implements OnInit {
   public isSupported: boolean = false;
   public isPermissionGranted = false;
 
-  isLoading = false;
+
   //para ocultar/ver distintos TABS -->
   verJuegos : boolean = false;
   verChat : boolean = false;
@@ -48,6 +53,7 @@ export class HomeTabsPage implements OnInit {
   verEncuesta : boolean = false;
   estaEnEspera : boolean = false;
   tieneMesaAsignada : boolean = false;
+  queAlta: string = '';
   //-------------------------
   constructor(
     private mesasSvc: MesaService,
@@ -60,30 +66,45 @@ export class HomeTabsPage implements OnInit {
     private usrService: UsuarioService) {
 
     this.url = this.router.url;
-    this.usuario = this.auth.usuarioActual!;
+    this.usuarioLogueado = this.auth.usuarioActual!;
     this.usrService.allUsers$.subscribe(data =>{
-      this.usuario = data.filter(x => x.id === this.auth.usuarioActual?.id)[0];
+      this.usuarioLogueado = data.filter(x => x.id === this.auth.usuarioActual?.id)[0];
     });
-    console.log(this.usuario);
+    console.log(this.usuarioLogueado);
   }
 
   ngOnInit() {
 
-    if(this.platform.is('android')) {
-      console.log("Validadndo permisos de notificaciones");
+    if(this.platform.is('capacitor')) {
+      console.log("Validadndo permisos de notificaciones en plataforma:");
+      console.log(this.platform);
       this.addListeners();
       this.registerNotifications();
     }
     this.tiposEntidades();
 
+    this.preparaCamara();
+
+    //Si al loguearse tiene mesa asignada, que NO es de reserva, voy directamente al menu.
+
+    if (this.esCliente && this.usuarioLogueado.mesaAsignada != 0 && !this.usuarioLogueado.tieneReserva) {
+      this.router.navigate(['home-tabs/menu-productos']);
+      this.verJuegos = true;
+      this.verChat = true;
+      this.verEncuesta = true;
+      return;
+    }
 
 
-    this.listaSvc.buscarEnListaXid(this.usuario.id).subscribe(data=>{
+    this.listaSvc.buscarEnListaXid(this.usuarioLogueado.id).subscribe(data=>{
       this.estaEnEspera = data.length > 0;
       console.log(this.estaEnEspera);
-
     });
 
+  }
+
+
+  private preparaCamara() {
     if (this.platform.is('capacitor')) {
       try {
         BarcodeScanner.installGoogleBarcodeScannerModule();
@@ -107,20 +128,29 @@ export class HomeTabsPage implements OnInit {
     }
   }
 
-
   tiposEntidades() {
 
     this.esCliente = true;
 
-    if(this.usuario.perfil == Perfil.Empleado){
+    if(this.usuarioLogueado.perfil == Perfil.Empleado){
       this.esCliente = false;
-      this.esDuenio = this.usuario.tipoEmpleado === TipoEmpleado.Dueño;
-      this.esSupervisor = this.usuario.tipoEmpleado === TipoEmpleado.Supervisor;
-      this.esMaitre = this.usuario.tipoEmpleado === TipoEmpleado.Maitre;
-      this.esCocinero = this.usuario.tipoEmpleado === TipoEmpleado.Cocinero;
-      this.esMozo = this.usuario.tipoEmpleado === TipoEmpleado.Mozo;
-      this.esBartender = this.usuario.tipoEmpleado === TipoEmpleado.Bartender;
+      this.esDuenio = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Dueño;
+      this.esSupervisor = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Supervisor;
+      this.esMaitre = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Maitre;
+      this.esCocinero = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Cocinero;
+      this.esMozo = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Mozo;
+      this.esBartender = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Bartender;
+
     }
+
+    if(this.esMozo){
+      this.queAlta = 'Cliente'
+    }
+
+    if(this.esDuenio || this.esSupervisor){
+      this.queAlta = 'Empleado';
+    }
+
 
   }
 
@@ -141,7 +171,7 @@ export class HomeTabsPage implements OnInit {
       this.codigoLeido = data?.barcode?.displayValue;
       const datos = this.codigoLeido.split('/');
 
-      switch(this.usuario.perfil){
+      switch(this.usuarioLogueado.perfil){
         case Perfil.Cliente:
         case Perfil.Anonimo:
           switch(datos[0]){
@@ -150,13 +180,13 @@ export class HomeTabsPage implements OnInit {
               break;
             case "Mesa":
               const nroMesa = datos[1];
-              if (this.usuario.mesaAsignada == Number(nroMesa)) {
+              if (this.usuarioLogueado.mesaAsignada == Number(nroMesa)) {
                 this.router.navigate(['home-tabs/menu-productos']);
                 this.verJuegos = true;
                 this.verChat = true;
                 this.verEncuesta = true;
               }else{
-                this.msgService.Info('Mesa equivocada. Su número de mesa es ' + this.usuario.mesaAsignada);
+                this.msgService.Info('Mesa equivocada. Su número de mesa es ' + this.usuarioLogueado.mesaAsignada);
               }
               //validar que haya pasado por lista de espera y que el qr de mesa escaneado sea el que se le fue asignado
               break;
@@ -182,7 +212,7 @@ export class HomeTabsPage implements OnInit {
 
     // this.msgService.Info(this.usuario.mesaAsignada.toString());
 
-    if (this.usuario.mesaAsignada == 0) {
+    if (this.usuarioLogueado.mesaAsignada == 0) {
       if(!this.estaEnEspera){
         Swal.fire({
           title: "¿Quieres entrar a la lista de espera?",
@@ -200,7 +230,7 @@ export class HomeTabsPage implements OnInit {
             this.isLoading = true;
             //this.usuario.estaEnListaEspera = true;
             //this.usrService.actualizar(this.usuario);
-            this.listaSvc.nuevo(this.usuario).then(()=>{
+            this.listaSvc.nuevo(this.usuarioLogueado).then(()=>{
               this.isLoading = false;
               this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
             }).catch(err=>{
@@ -213,61 +243,66 @@ export class HomeTabsPage implements OnInit {
         this.msgService.Info("Ya estas en la lista de espera.");
       }
     }else{
-      this.msgService.Info("Ya te asignaron una mesa, tu número de mesa es: " + this.usuario.mesaAsignada);
+      this.msgService.Info("Ya te asignaron una mesa, tu número de mesa es: " + this.usuarioLogueado.mesaAsignada);
     }
 
   }
 
 
 
-  /**
- * Push Notifications
- * Registra el dispositivo para recibir notificaciones
- */
-async registerNotifications() {
+    /**
+   * Push Notifications
+   * Registra el dispositivo para recibir notificaciones
+   */
+  async registerNotifications() {
 
-  if(this.usuario.token == (null || undefined)) {
-    console.log("Usuario sin token");
-    console.log("verificando permisos Push Notifications");
-    let permisionStatus = await PushNotifications.checkPermissions();
+    if(this.usuarioLogueado.token == (null || undefined)) {
+      console.log("Usuario sin token");
+      console.log("verificando permisos Push Notifications");
+      let permisionStatus = await PushNotifications.checkPermissions();
 
-    console.log("Pregunto si tiene permisos de recibir notificaciones");
-    if(permisionStatus.receive === "prompt"){
-      permisionStatus = await PushNotifications.requestPermissions();
-    }
-    console.log("verificando si se dieron permisos de recibir notificaciones");
-    if(permisionStatus.receive !== "granted"){
-      console.log("No se puede recibir notificaciones");
-    }
-
-  }
-
-  PushNotifications.register();
-}
-
-async addListeners() {
-
-    await PushNotifications.addListener('registration', token => {
-      console.info('Token de registro: ', token.value);
-
-      if(this.usuario.token != token.value){
-        this.usrService.actualizarToken(this.usuario.id!,token.value);
+      console.log("Pregunto si tiene permisos de recibir notificaciones");
+      if(permisionStatus.receive === "prompt"){
+        permisionStatus = await PushNotifications.requestPermissions();
       }
+      console.log("verificando si se dieron permisos de recibir notificaciones");
+      if(permisionStatus.receive !== "granted"){
+        console.log("No se puede recibir notificaciones");
+      }
+
+    }
+
+    PushNotifications.register();
+  }
+
+  async addListeners() {
+
+      await PushNotifications.addListener('registration', token => {
+        console.info('Token de registro: ', token.value);
+
+        if(this.usuarioLogueado.token != token.value){
+          this.usrService.actualizarToken(this.usuarioLogueado.id!,token.value);
+        }
+      });
+
+      await PushNotifications.addListener('registrationError', err => {
+        console.error('Error Registro Push: ', err.error);
+      });
+
+
+    await PushNotifications.addListener('pushNotificationReceived', notification => {
+      console.log('Notificación Recibida: ', notification);
     });
 
-    await PushNotifications.addListener('registrationError', err => {
-      console.error('Error Registro Push: ', err.error);
+    await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+      console.log('Push notification action performed', notification.actionId, notification.inputValue);
     });
 
+  }
 
-  await PushNotifications.addListener('pushNotificationReceived', notification => {
-    console.log('Notificación Recibida: ', notification);
-  });
+  recibirIsLoading(is: boolean){
+    this.isLoading = is;
+  }
 
-  await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
-    console.log('Push notification action performed', notification.actionId, notification.inputValue);
-  });
-
-}
 
 }

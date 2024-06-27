@@ -124,9 +124,12 @@ app.post("/enviar-email", async (req, res) => {
 <head>
   <meta charset="UTF-8">
   <title>Sabores Únicos</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <style type="text/css">
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Roboto', sans-serif;
       margin: 0;
       padding: 0;
       background-color: #f5f5f5;

@@ -35,13 +35,13 @@ body {
   display: flex;
   flex-direction: column;
   max-height: calc(100vh - 200px); /* Ajusta este valor según sea necesario */
-  overflow-y: auto; /* Permite desplazamiento si el contenido excede el máximo */
+  overflow-y: scroll; /* Permite desplazamiento si el contenido excede el máximo */
   min-height: 0; /* Agrega esta línea para solucionar problemas de desbordamiento  con flexbox*/
   margin-bottom: 20px;
 }
 
 .formulario{
-  background-color: #ffffffe0;
+  background-color: #ffffff;
   width: 100%;
   padding: 20px;
   border-radius: 20px;

@@ -2,7 +2,7 @@
 <app-header> </app-header>
 <body>
   <div *ngIf="esDuenio || esSupervisor">
-    <app-list-usuarios></app-list-usuarios>
+    <app-list-usuarios (EnviarIsLoading)="recibirIsLoading($event)"></app-list-usuarios>
   </div>
   <div *ngIf="esCliente || esAnonimo">
     <!-- Listado de productos -->
@@ -22,3 +22,7 @@
     <!-- Listado de Pedidos a Aprobar -->
   </div>
 </body>
+
+<div class="custom-spinner" *ngIf="isLoading" >
+  <img src="../../../assets/spinner.png" alt="Spinner">
+</div>

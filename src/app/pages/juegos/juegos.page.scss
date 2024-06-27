@@ -1,0 +1,25 @@
+.container {
+  text-align: center;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.centrado {
+  width: 100vw;
+  height: 100vh;
+  flex: auto;
+  align-items: center;
+}
+
+body {
+  position: relative;
+  overflow: hidden; // Asegura que el pseudo-elemento no se desborde
+  //background: none; // Elimina el fondo del body para que solo se vea el pseudo-elemento
+  // background-color: antiquewhite;
+  background: url("../../../assets/img/fondo-gris.png") no-repeat center center / cover;
+ }
+
+

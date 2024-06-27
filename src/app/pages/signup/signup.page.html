@@ -1,14 +1,14 @@
 <!-- <app-nav-bar  [titulo]="'Alta de Usuarios'" ></app-nav-bar> -->
 
-<app-header *ngIf="esMaitre"></app-header>
+<!-- <app-header *ngIf="esMaitre"></app-header> -->
 <body class="centrado">
-  <ion-icon *ngIf="!esMaitre"
+  <ion-icon *ngIf="verVolver"
     class="icon-volver"
     name="arrow-back-outline"
     (click)="volver()"
   ></ion-icon>
   <div class="container">
-    <ion-card-header style="align-items: center; margin-top: 30px; min-width: 0; min-height: 0;">
+    <ion-card-header style="align-items: center; margin-top: 20px; min-width: 0; min-height: 0;">
       <div (click)="tomarFoto()" class="image-container">
         <img [src]="imageTomadaURL" alt="Imagen Tomada"/>
       </div>
@@ -145,6 +145,22 @@
               >Debe ingresar un correo válido
             </ion-note>
           </div>
+          <div *ngIf="verTipoEmpleado">
+            <ion-item>
+              <ion-icon name="people"></ion-icon>
+              <ion-select formControlName="tipoEmpleado" placeholder="Tipo de Empleado">
+                <ion-select-option  value="Bartender">Bartender</ion-select-option>
+                <ion-select-option  value="Cocinero">Cocinero</ion-select-option>
+                <ion-select-option  value="Dueño">Dueño</ion-select-option>
+                <ion-select-option  value="Maitre">Maitre</ion-select-option>
+                <ion-select-option  value="Supervisor">Supervisor</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-note class="error-message"
+              *ngIf="(signupForm.controls['tipoEmpleado'].hasError('required')) && signupForm.controls['tipoEmpleado'].touched" >
+              Debe seleccionar un tipo de empleado
+            </ion-note>
+          </div>
           <div *ngIf="verPassword">
             <ion-item>
               <ion-icon name="lock-open"></ion-icon>
@@ -171,8 +187,24 @@
         >
           La contraseña debe tener al menos 6 caracteres
         </ion-note>
-          </div>
 
+          </div>
+          <div *ngIf="verPassword">
+            <ion-item>
+              <ion-icon name="lock-closed"></ion-icon>
+              <ion-input
+                type="password"
+                name="passwordRep"
+                id="passwordRep"
+                placeholder="Repetir Contraseña"
+                formControlName="passwordRep"
+              ></ion-input>
+            </ion-item>
+            <ion-note class="error-message"
+            *ngIf="signupForm.controls['passwordRep'].touched ">
+              {{getPasswordRep?.getError('noCoincide')}}
+          </ion-note>
+          </div>
           <ion-button
             type="submit"
             expand="block"
