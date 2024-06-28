@@ -7,6 +7,7 @@ import { Usuario } from 'src/app/models/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChatService } from 'src/app/services/chat.service';
 import { ProductoService } from 'src/app/services/producto.service';
+import { PushNotificationService } from 'src/app/services/push-notification.service';
 
 @Component({
   selector: 'app-chat',
@@ -27,7 +28,7 @@ export class ChatPage implements OnInit {
   //public mensaje!: Mensaje = new Mensaje();
 
 
-  constructor(private chatSrv: ChatService, private auth: AuthService, private productoService: ProductoService, private fb:FormBuilder,) {
+  constructor(private chatSrv: ChatService, private auth: AuthService, private productoService: ProductoService, private fb:FormBuilder, private pushService:PushNotificationService) {
     this.chatSrv.allMensajes$.subscribe((mensajes) => {
 
       this.listaDeMensajes = mensajes
@@ -74,7 +75,33 @@ export class ChatPage implements OnInit {
 
     this.chatSrv.nuevo(mensaje);
 
+   
+    if (this.nombreMozo != "") {
+      this.pushService.notificarConsultaAMozos(this.numeroMesaCliente, this.ngmensaje).subscribe( {
+        next: (data) => {
+          console.log("Rta Push consulta del cliente: ");
+          console.log(data);
+        },
+        error: (error) => {
+          console.error("Error Push consulta del cliente: ");
+          console.error(error);
+        }
+      });
+    } else {
+      this.pushService.notificarConsultaAMesas(this.usuario, this.nombreMozo, this.ngmensaje).subscribe( {
+        next: (data) => {
+          console.log("Rta Push respuesta del mozo: ");
+          console.log(data);
+        },
+        error: (error) => {
+          console.error("Error Push respuesta del mozo: ");
+          console.error(error);
+        }
+      });
+    }
+
     this.ngmensaje = "";
+   
   }
 
 }

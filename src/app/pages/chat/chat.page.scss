@@ -7,7 +7,7 @@
     border-bottom-right-radius: 38px;
     .chat-section{
         height: calc(100% - 90px);
-        //overflow: scroll;
+        overflow: scroll;
 
         .chat{
             display: flex;
@@ -71,6 +71,13 @@
             color: #fff;
             font-size: 1.31rem;
         }
+    }
+    .chat-time {
+        position: absolute;
+        bottom: 2px;
+        right: 8px;
+        font-size: 0.7rem;
+        color: rgba(0,0,0,0.6);
     }
 }
 

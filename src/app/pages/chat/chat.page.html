@@ -12,18 +12,16 @@
                 <div class="message" *ngIf="esCliente">
                   Mesa número: {{mje.numeroDeMesa}}
                   <br />
-                  {{mje.fecha | date:'short'}}
-                  <br />
-                  <br />
+                  <span class="chat-time"> {{mje.fecha | date:'short'}} </span> 
                   {{mje.mensaje}}
+                  <br>
                 </div>
                 <div class="message" *ngIf="esMozo">
-                  {{mje.nombreMozo}}
+                  {{mje.nombreMozo}}:
                   <br />
-                  {{mje.fecha | date:'short'}}>
-                  <br />
-                  <br />
+                  <span class="chat-time"> {{mje.fecha | date:'short'}} </span> 
                   {{mje.mensaje}}
+                  <br>
                 </div>
               </div>
 
@@ -33,18 +31,17 @@
                 <div class="message other" *ngIf="esMozo">
                   Mesa número: {{mje.numeroDeMesa}}
                   <br />
-                  {{mje.fecha | date:'short'}}
-                  <br />
-                  <br />
+                  <span class="chat-time"> {{mje.fecha | date:'short'}} </span> 
+                 
                   {{mje.mensaje}}
+                  <br>
                 </div>
                 <div class="message other" *ngIf="esCliente">
-                  {{mje.nombreMozo}}
+                  {{mje.nombreMozo}}:
                   <br />
-                  {{mje.fecha | date:'short'}}
-                  <br />
-                  <br />
+                  <span class="chat-time"> {{mje.fecha | date:'short'}} </span> 
                   {{mje.mensaje}}
+                  <br>
                 </div>
               </div>
             </div>
