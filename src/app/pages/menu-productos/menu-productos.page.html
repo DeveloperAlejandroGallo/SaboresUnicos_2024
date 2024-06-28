@@ -178,3 +178,29 @@
 
 
 
+<div *ngIf="verImporte"
+id="popover-button" class="floating-action-button" [style.width.px]="buttonWidth" [style.height.px]="buttonHeight">
+  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+    <div style="flex-grow: 1; text-align: center;">
+      <span>{{ subtotal | currency:'USD':'symbol' }}</span>
+    </div>
+    <ion-icon name="eye-outline"></ion-icon>
+  </div>
+</div>
+
+
+<ion-popover trigger="popover-button"
+  [dismissOnSelect]="true"
+  [animated]="true"
+  side="top"
+  alignment="center">
+  <ng-template>
+    <ion-content>
+      <ion-list>
+        <ion-item [button]="true" [detail]="false">Ver Detalle</ion-item>
+        <ion-item [button]="true" [detail]="false">Pedir Cuenta</ion-item>
+        <ion-item [button]="true" [detail]="false">Pedir Cuenta</ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-popover>

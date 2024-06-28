@@ -39,7 +39,7 @@ export class ProductoService {
   public listadoProducto!: Array<Producto>;
 
 
-  get allUsers$(): Observable<Producto[]> {
+  get allProductos$(): Observable<Producto[]> {
     const ref = collection(this.firestore, 'productos');
     const queryAll = query(ref);
     return collectionData(queryAll) as Observable<Producto[]>;

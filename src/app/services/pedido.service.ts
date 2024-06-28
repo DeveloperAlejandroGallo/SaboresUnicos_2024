@@ -23,7 +23,7 @@ import { Perfil } from '../enums/perfil';
 import {User} from '@angular/fire/auth';
 import { orderBy, where } from 'firebase/firestore';
 import { Pedido } from '../models/pedido';
-
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -34,15 +34,16 @@ export class PedidoService {
 
   private colectionName: string = 'pedidos';
   private coleccionPedido: CollectionReference<DocumentData>;
+  public pedido$!: Observable<Usuario>;
 
-  constructor(private firestore: Firestore) {
+  constructor(private firestore: Firestore, private angularFirestore: AngularFirestore) {
     this.coleccionPedido = collection(this.firestore, this.colectionName);
    }
 
   public listadoPedidos!: Array<Pedido>;
 
 
-  get allPedido$(): Observable<Pedido[]> {
+  get allPedidos$(): Observable<Pedido[]> {
     const ref = collection(this.firestore, this.colectionName);
     const queryAll = query(ref, orderBy('fecha_ingreso', 'asc'));
     return collectionData(queryAll) as Observable<Pedido[]>;
@@ -59,6 +60,12 @@ export class PedidoService {
         })
       )
     );
+  }
+
+
+  escucharPedidoId(id: string) {
+    const documentoRef = this.angularFirestore.doc<Usuario>(`${this.colectionName}/${id}`);
+    return this.pedido$ = documentoRef.valueChanges() as Observable<Usuario>;
   }
 
 //Genericos

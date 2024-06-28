@@ -27,12 +27,16 @@ export class MenuProductosPage implements OnInit {
   public listaDeTipoComida: Array<Producto> = new Array<Producto>;
   public listaDeTipoBebida: Array<Producto> = new Array<Producto>;
   public listaDeTipoPostre: Array<Producto> = new Array<Producto>;
+  public subtotal: string|number = 100010;
+  public buttonWidth: number = 190;
+  public buttonHeight: number = 50;
+  public verImporte: boolean = true;
 
-  
+
 
   constructor(private modalController: ModalController, private auth: AuthService, private productoService: ProductoService) {
-    
-    this.productoService.allUsers$.subscribe((productos) => {
+
+    this.productoService.allProductos$.subscribe((productos) => {
 
       this.listaDeProductos = productos
       console.log(this.listaDeProductos);
@@ -48,9 +52,14 @@ export class MenuProductosPage implements OnInit {
     });
 
     this.usuario = this.auth.usuarioActual!;
+
+    
+
    }
 
-  ngOnInit() {}
+  ngOnInit() {
+    var a =1;
+  }
 
   segmentChanged(event: any) {
     this.selectedCategory = event.detail.value;
@@ -75,7 +84,7 @@ export class MenuProductosPage implements OnInit {
   }
 
   onWillDismiss(event: Event) {
-    
+
   }
 
 

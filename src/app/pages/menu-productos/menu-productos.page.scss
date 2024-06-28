@@ -161,3 +161,26 @@ swiper-container {
   --swiper-pagination-color: var(--ion-color-primary, #BF0000);
 }
 
+
+
+
+
+.floating-action-button {
+  position: fixed;
+  bottom: 16px; /* Ajusta según sea necesario */
+  right: 16px; /* Ajusta según sea necesario */
+  display: flex;
+  // justify-content: center;
+  // align-items: center;
+  background-color: #06bf00; /* Color de fondo */
+  color:  #000000; /* Color del texto */
+  font-size: 28px; /* Tamaño de fuente */
+  font-weight: bolder;
+//  border-radius: 10%; /* Bordes no redondeados */
+  padding: 5px; /* Espaciado interno */
+  box-shadow: 0px 1px 2px 0px #000000be, 0px 1px 3px 1px #000000; /* Sombra opcional */
+
+  --border-radius: 16px;
+  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  border: black solid 1px;
+}
