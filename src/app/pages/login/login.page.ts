@@ -62,7 +62,7 @@ export class LoginPage implements OnInit {
     setTimeout(() => {
       this.isLoading = false;
       this.authService.iniciarSesion(this.getEmailLogin?.value, this.getPasswordLogin?.value);
-      this.router.navigate(['/home-tabs']);
+
     }, 2000);
 
   }
@@ -97,28 +97,34 @@ export class LoginPage implements OnInit {
           passwordLogin: '111111',
         });
         break;
-      case 'invitado':
+      case 'cliente':
         this.loginForm.setValue({
           emailLogin: 'invitado@yopmail.com', //Supervisor
           passwordLogin: '222222',
         });
         break;
-      case 'usuario':
+      case 'maitre':
         this.loginForm.setValue({
-          emailLogin: 'usuario@yopmail.com', //Cliente
-          passwordLogin: '333333',
+          emailLogin: 'maitre@yopmail.com', //Maitre
+          passwordLogin: '111111',
         });
         break;
-      case 'anonimo':
+      case 'mozo':
         this.loginForm.setValue({
-          emailLogin: 'anonimo@yopmail.com',
-          passwordLogin: '444444',
+          emailLogin: 'mozo@yopmail.com', //Mozo
+          passwordLogin: '111111',
         });
         break;
-      case 'tester':
+      case 'cocinero':
         this.loginForm.setValue({
-          emailLogin: 'tester@yopmail.com',
-          passwordLogin: '555555',
+          emailLogin: 'cocinero1@yopmail.com', //Cocinero
+          passwordLogin: '111111',
+        });
+        break;
+      case 'barman':
+        this.loginForm.setValue({
+          emailLogin: 'bar1@yopmail.com', //Barman
+          passwordLogin: '111111',
         });
         break;
     }

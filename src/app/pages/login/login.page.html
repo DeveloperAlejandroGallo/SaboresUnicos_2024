@@ -86,15 +86,23 @@
     <ion-icon name="mail-open"></ion-icon>
   </ion-fab-button>
   <ion-fab-list side="start">
-    <ion-fab-button (click)="loginAutomatico('admin')">
+    <ion-fab-button (click)="loginAutomatico('duenio')">
       <ion-icon name="glasses" color="dark"></ion-icon>
     </ion-fab-button>
-    <ion-fab-button (click)="loginAutomatico('invitado')">
-      <ion-icon name="man" color="dark"></ion-icon>
+    <ion-fab-button (click)="loginAutomatico('cliente')">
+      <ion-icon name="person-circle-outline"></ion-icon>
     </ion-fab-button>
-    <ion-fab-button (click)="loginAutomatico('usuario')">
-      <ion-icon name="star" color="dark"></ion-icon>
+    <ion-fab-button (click)="loginAutomatico('maitre')">
+      <ion-icon name="download-outline"></ion-icon>
     </ion-fab-button>
-
+    <ion-fab-button (click)="loginAutomatico('mozo')">
+      <ion-icon name="footsteps-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button (click)="loginAutomatico('cocinero')">
+      <ion-icon name="pizza-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button (click)="loginAutomatico('barman')">
+      <ion-icon name="beer-outline"></ion-icon>
+    </ion-fab-button>
   </ion-fab-list>
 </ion-fab>

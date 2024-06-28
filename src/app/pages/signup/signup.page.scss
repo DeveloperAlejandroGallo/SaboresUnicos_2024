@@ -6,6 +6,7 @@
   right: 0;
   top: 50%;
   transform: translateY(-50%);
+  margin-top: 10px;
 }
 
 .header-image {
@@ -13,6 +14,7 @@
   // height: auto;
   // margin-bottom: 20px;
   // align-items: center; margin-top: 30px; min-width: 0; min-height: 0;
+
   align-self: center;
   width: 50%;
 
@@ -20,6 +22,8 @@
 
 body {
   background: url("../../../assets/img/otro-fondo-liso.png") no-repeat center center / cover;
+  flex-grow: 1; /* Permite que el contenido crezca para ocupar el espacio disponible */
+  overflow-y: auto; /* Habilita el desplazamiento vertical */
 }
 
 .centrado {
@@ -34,9 +38,9 @@ body {
 .wrapform {
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 200px); /* Ajusta este valor según sea necesario */
-  overflow-y: scroll; /* Permite desplazamiento si el contenido excede el máximo */
-  min-height: 0; /* Agrega esta línea para solucionar problemas de desbordamiento  con flexbox*/
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  min-height: 0;
   margin-bottom: 20px;
 }
 
@@ -181,3 +185,29 @@ form{
   margin-left: 10px;
   margin-top: 10px;
 }
+
+
+
+// /* Establece el contenedor principal como un contenedor flex */
+// .container {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-between; /* Ajusta el espacio entre elementos */
+//   height: 100vh; /* Toma toda la altura de la ventana */
+// }
+
+// /* Ajusta el alto del contenido principal */
+// .wrapform {
+//   flex-grow: 1; /* Permite que el contenido crezca para ocupar el espacio disponible */
+//   overflow-y: auto; /* Habilita el desplazamiento vertical */
+// }
+
+// /* Asegúrate de que el encabezado tenga un alto fijo si es necesario */
+// .header-image {
+//   height: 50px; /* Ajusta según sea necesario */
+// }
+
+// /* Ajusta el estilo del formulario para asegurar que no exceda el alto disponible */
+// .formulario {
+//   max-height: calc(100vh - 50px); /* Ajusta el valor de 50px al alto del encabezado */
+// }
