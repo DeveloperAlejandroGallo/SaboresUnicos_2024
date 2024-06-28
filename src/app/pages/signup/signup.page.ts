@@ -7,7 +7,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Usuario } from 'src/app/models/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { MensajesService } from 'src/app/services/mensajes.service';
@@ -67,7 +67,7 @@ export class SignupPage implements OnInit {
   public verScanner:  boolean = false;
   public perfilDadoDeAlta!: Perfil;
   public esMaitre:boolean = false;
-  public usuario!: Usuario;
+  public usuarioLogueado!: Usuario;
   public verTipoEmpleado: boolean = false;
   public verVolver: boolean = true;
 
@@ -89,15 +89,15 @@ export class SignupPage implements OnInit {
   ) {
     this.audioSrv.reporoduccionCambioPagina();
     this.configuraPorPerfil();
-    if(this.signupForm)
-      this.signupForm.reset();
+
+
   }
 
 
   private configuraPorPerfil() {
 
     this.perfilDadoDeAlta = this.route.snapshot.paramMap.get('perfil') as Perfil;
-    this.usuario = this.auth.usuarioActual!;
+    this.usuarioLogueado = this.auth.usuarioActual!;
 
     switch (this.perfilDadoDeAlta) {
       case Perfil.Cliente:
@@ -110,7 +110,7 @@ export class SignupPage implements OnInit {
         this.tituloBoton = 'Registrarse';
         this.verScanner = true;
         this.verTipoEmpleado = this.perfilDadoDeAlta == Perfil.Empleado;
-        this.verVolver = !(this.perfilDadoDeAlta == Perfil.Empleado);
+        this.verVolver = this.usuarioLogueado ? !(this.usuarioLogueado.perfil == Perfil.Empleado) : true;
         break;
 
       case Perfil.Anonimo:
@@ -164,6 +164,11 @@ export class SignupPage implements OnInit {
 
   ngOnInit(): void {
 
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.signupForm.reset();
+      }
+    });
     this.inicializaLectorQr();
     this.armaFormulario();
     this.mensaje = '';
