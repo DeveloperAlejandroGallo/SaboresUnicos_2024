@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import { EstadoMesa } from 'src/app/enums/estado-mesa';
 import { ListaEspera } from 'src/app/models/lista-espera';
 import { PushNotificationService } from 'src/app/services/push-notification.service';
+import { PedidoService } from 'src/app/services/pedido.service';
 
 @Component({
   selector: 'app-home-maitre',
@@ -32,7 +33,8 @@ export class HomeMaitrePage  {
             private usrService: UsuarioService,
             private listEsperaService: ListaEsperaService,
             private mensajeService: MensajesService,
-            private pushService: PushNotificationService) {
+            private pushService: PushNotificationService,
+            private pedidoSrv: PedidoService) {
 
     this.url = this.router.url;
     this.usuario = this.auth.usuarioActual!;
@@ -160,10 +162,15 @@ export class HomeMaitrePage  {
       console.log(mesa);
       console.log(elementoEspera.usuario);
 
-      // TO DO: MANDAR NOTIFICACIÓN AL CLIENTE DE LA MESA ASIGNADA CON SU QR.
-      this.mesaService.cambiarEstadoDeNesa(EstadoMesa.ocupada, mesa.id);
+        this.mesaService.cambiarEstadoDeNesa(EstadoMesa.ocupada, mesa.id);
 
       this.usrService.asignarMesa(mesa.numero, elementoEspera.usuario.id);
+
+      //Al asignar mesa creo el pedido con la relacion entre todos:
+
+      let nuevoPedido = this.pedidoSrv.nuevo(elementoEspera.usuario, mesa);
+      this.pedidoSrv.escucharPedidoId(nuevoPedido.id);
+
       this.listEsperaService.delete(elementoEspera.id);
 
       this.pushService.notificarMesaAsignada(elementoEspera.usuario, mesa.numero).subscribe( {
@@ -174,11 +181,13 @@ export class HomeMaitrePage  {
         error: (error) => {
           console.error("Error Push Mesa Asignada: ");
           console.error(error);
+          this.isLoading = false;
         }
       });
     }catch(ex){
 
       console.error(ex);
+      this.isLoading = false;
     }
 
 

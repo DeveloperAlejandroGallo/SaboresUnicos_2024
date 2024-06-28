@@ -70,6 +70,10 @@ export class HomeTabsPage implements OnInit {
     this.usrService.allUsers$.subscribe(data =>{
       this.usuarioLogueado = data.filter(x => x.id === this.auth.usuarioActual?.id)[0];
     });
+
+
+
+
     console.log(this.usuarioLogueado);
   }
 
@@ -95,6 +99,7 @@ export class HomeTabsPage implements OnInit {
       return;
     }
 
+    
 
     this.listaSvc.buscarEnListaXid(this.usuarioLogueado.id).subscribe(data=>{
       this.estaEnEspera = data.length > 0;
@@ -179,16 +184,12 @@ export class HomeTabsPage implements OnInit {
               this.ingresarAListaEspera();
               break;
             case "Mesa":
-              const nroMesa = datos[1];
-              if (this.usuarioLogueado.mesaAsignada == Number(nroMesa)) {
+              if(this.validacionesMesa(datos[1])) {
                 this.router.navigate(['home-tabs/menu-productos']);
                 this.verJuegos = true;
                 this.verChat = true;
                 this.verEncuesta = true;
-              }else{
-                this.msgService.Info('Mesa equivocada. Su número de mesa es ' + this.usuarioLogueado.mesaAsignada);
               }
-              //validar que haya pasado por lista de espera y que el qr de mesa escaneado sea el que se le fue asignado
               break;
             case "Propinas":
 
@@ -202,6 +203,25 @@ export class HomeTabsPage implements OnInit {
 
     }
 
+  }
+
+
+
+  validacionesMesa(mesa: string): boolean {
+
+      if(this.usuarioLogueado.mesaAsignada == 0)
+      {
+        this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
+        return false;
+      }
+
+        const nroMesa = mesa;
+      if (this.usuarioLogueado.mesaAsignada != Number(nroMesa)) {
+        this.msgService.Info('Mesa equivocada. Su número de mesa es ' + this.usuarioLogueado.mesaAsignada);
+        return false;
+
+      }
+      return true;
   }
 
 

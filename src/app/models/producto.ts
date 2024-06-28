@@ -11,3 +11,9 @@ export interface Producto {
   tipo: TipoProducto;
 
 }
+
+
+export interface ItemLista {
+  producto: Producto;
+  cantidad: number;
+}

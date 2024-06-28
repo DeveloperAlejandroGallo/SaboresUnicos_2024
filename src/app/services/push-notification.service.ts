@@ -60,7 +60,7 @@ export class PushNotificationService {
   }
 
   notificarMozoPedidoCuenta(pedido: Pedido): Observable<any> {
-    let token = pedido.mozo.token;
+    let token = pedido.mozo!.token;
     let title = `Cierre de Cuenta Mesa ${pedido.mesa.numero}.`;
 
     let body = `${pedido.cliente.nombre} de la Mesa Nro: ${pedido.mesa.numero} desea cerrar la cuenta por un total de $ ${pedido.total}.`;
