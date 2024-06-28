@@ -1,58 +1,78 @@
 <body>
   <ion-header><app-header></app-header> </ion-header>
 
-  <ion-content  fullscreen>
-    <div class="cont-chat bg-sala-a">
-     
-      <div class="row" style="max-height: 65vh; overflow-y: auto;">
-        <div class="col">
-          <div class="mensajes" *ngFor="let mje of listaDeMensajes">
-        
-            <div class="row m-1" >
-              <div class="col">
-                <div class="alert alert-primary p-1 text-end mi-mensaje" *ngIf="mje.idDelEnviador == idUsuarioActual">
-                  <div *ngIf="esCliente">
-                    <p class="mb-0 "><small>Mesa número: {{mje.numeroDeMesa}}</small></p>
-                    <p class="mb-0 "><small>{{mje.fecha | date:'short'}}</small></p>
-                    <p class="mb-0 "> {{mje.mensaje}}</p> 
-                  </div>
-                  <div *ngIf="esMozo">
-                    <p class="mb-0 "><small>{{mje.nombreMozo}}</small></p>
-                    <p class="mb-0 "><small>{{mje.fecha | date:'short'}}</small></p>
-                    <p class="mb-0 "> {{mje.mensaje}}</p> 
-                  </div>
+  <ion-content fullscreen>
+    <div class="conversation ion-padding">
+      <div class="chat-section" id="chat">
+        <div class="chat">
+            <div *ngFor="let mje of listaDeMensajes">
+              <div class="mine messages"
+                *ngIf="mje.idDelEnviador == idUsuarioActual"
+              >
+                <div class="message" *ngIf="esCliente">
+                  Mesa número: {{mje.numeroDeMesa}}
+                  <br />
+                  {{mje.fecha | date:'short'}}
+                  <br />
+                  <br />
+                  {{mje.mensaje}}
                 </div>
-      
-                <div class="alert alert-warning p-1 su-mensaje" *ngIf="mje.idDelEnviador != idUsuarioActual">
-                  <div *ngIf="esMozo">
-                    <p class="mb-0 "><small>Mesa número: {{mje.numeroDeMesa}}</small></p>
-                    <p class="mb-0 "><small>{{mje.fecha | date:'short'}}</small></p>
-                    <p class="mb-0 "> {{mje.mensaje}}</p> 
-                  </div>
-                  <div *ngIf="esCliente">
-                    <p class="mb-0 "><small>{{mje.nombreMozo}}</small></p>
-                    <p class="mb-0 "><small>{{mje.fecha | date:'short'}}</small></p>
-                    <p class="mb-0 "> {{mje.mensaje}}</p> 
-                  </div>
+                <div class="message" *ngIf="esMozo">
+                  {{mje.nombreMozo}}
+                  <br />
+                  {{mje.fecha | date:'short'}}>
+                  <br />
+                  <br />
+                  {{mje.mensaje}}
                 </div>
-              </div>        
-            </div>          
-          </div> 
-        </div>
-      </div>
-  
-      <div class="row input-row">
-        <div class="col">
-           <form [formGroup]="chatForm" (ngSubmit)="enviarMensaje()"> 
-            
-            <input type="text" value="incomplete" class="form-control mje-ctrl" id="floatingInput" placeholder="Escriba aquí su mensaje" [(ngModel)]="ngmensaje" formControlName="messageCtrl">  
+              </div>
 
-            <br>     
-            <br>
-            <button type="submit" class="w-100 btn btn-lg btn-danger">Enviar</button>                
-          </form>
+              <div class="yours messages"
+                *ngIf="mje.idDelEnviador != idUsuarioActual"
+              >
+                <div class="message other" *ngIf="esMozo">
+                  Mesa número: {{mje.numeroDeMesa}}
+                  <br />
+                  {{mje.fecha | date:'short'}}
+                  <br />
+                  <br />
+                  {{mje.mensaje}}
+                </div>
+                <div class="message other" *ngIf="esCliente">
+                  {{mje.nombreMozo}}
+                  <br />
+                  {{mje.fecha | date:'short'}}
+                  <br />
+                  <br />
+                  {{mje.mensaje}}
+                </div>
+              </div>
+            </div>
         </div>
+        <div class="message-input">
+          <form [formGroup]="chatForm" (ngSubmit)="enviarMensaje()">
+            <ion-input
+              type="text"
+              value="incomplete"
+              id="floatingInput"
+              placeholder="Escriba aquí su mensaje"
+              [(ngModel)]="ngmensaje"
+              formControlName="messageCtrl"
+            >
+            </ion-input>
+  
+            
+          </form>
+          <div class="send-button">
+            <ion-button type="submit">
+              <ion-icon slot="icon-only" name="send-outline" ></ion-icon>
+            </ion-button>
+            
+          </div>
+        </div>
+        
       </div>
+      
     </div>
   </ion-content>
 </body>
