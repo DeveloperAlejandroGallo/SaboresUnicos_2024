@@ -188,16 +188,23 @@
 
 
 <ion-popover trigger="popover-button"
+  triggerAction="click"
   [dismissOnSelect]="true"
   [animated]="true"
   side="bottom"
-  alignment="center">
+  alignment="end"
+  mode="ios">
   <ng-template>
-    <ion-content>
+    <ion-content >
       <ion-list>
-        <ion-item [button]="true" [detail]="false">Ver Detalle</ion-item>
-        <ion-item [button]="true" [detail]="false">Pedir Cuenta</ion-item>
-        <ion-item [button]="true" [detail]="false">Cerrar Cuenta</ion-item>
+        <ion-item  [button]="true" [detail]="false" (click)="VerDetalle()">
+          <ion-icon color="primary" name="newspaper"></ion-icon>
+          <ion-label style="padding: 10px;">Ver Detalle</ion-label>
+        </ion-item>
+        <ion-item *ngIf="PedirCuenta" [button]="true" [detail]="false" (click)="PedirCuenta()">
+          <ion-icon color="primary" name="wallet"></ion-icon>
+          <ion-label style="padding: 10px;">Pedir Cuenta</ion-label>
+        </ion-item>
       </ion-list>
     </ion-content>
   </ng-template>
