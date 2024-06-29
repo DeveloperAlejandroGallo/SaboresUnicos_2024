@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ProductoService } from 'src/app/services/producto.service';
 import { PedidoService } from 'src/app/services/pedido.service';
 import { Pedido } from 'src/app/models/pedido';
+import { EstadoPedido } from 'src/app/enums/estado-pedido';
 
 @Component({
   selector: 'app-menu-productos',
@@ -29,7 +30,7 @@ export class MenuProductosPage implements OnInit {
   public listaDeTipoComida: Array<ItemLista> = new Array<ItemLista>;
   public listaDeTipoBebida: Array<ItemLista> = new Array<ItemLista>;
   public listaDeTipoPostre: Array<ItemLista> = new Array<ItemLista>;
-  public subtotal: number = 100010;
+  public subtotal: number = 0;
   public buttonWidth: number = 190;
   public buttonHeight: number = 50;
   public verImporte: boolean = true;
@@ -44,28 +45,51 @@ export class MenuProductosPage implements OnInit {
     private productoService: ProductoService,
     private pedidoSrv: PedidoService) {
 
+
+    this.usuario = this.auth.usuarioActual!;
+
+    this.pedido = this.pedidoSrv.listadoPedidos.find(
+      x => x.cliente.id === this.auth.usuarioActual!.id
+      && x.estadoPedido == EstadoPedido.Pendiente)!;
+
+    this.pedidoSrv.escucharPedidoId(this.pedido.id);
+
+    console.log('Id Pedido: ',this.pedido.id);
+
+    this.LlenarListasDeProductos();
+
+
+    this.pedidoSrv.pedido$.subscribe(data => {
+        this.pedido = data;
+        this.subtotal = this.pedido.productos.length != 0 ? this.pedido.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0) : 0;
+      }
+    )
+
+
+   }
+
+  private LlenarListasDeProductos() {
     this.productoService.allProductos$.subscribe((productos) => {
 
-      this.listaDeProductos = productos
+      this.listaDeProductos = productos;
       console.log(this.listaDeProductos);
 
       this.listaDeTipoComida = productos.filter(x => x.tipo == 'Comida').map(
         x => {
           return {
             producto: x,
-            cantidad: 0
-          }
+            cantidad: cantidad
+          };
         }
 
       );
       console.log(this.listaDeTipoComida);
 
-      this.listaDeTipoBebida = productos.filter(x => x.tipo == 'Bebida').map
-      (x => {
+      this.listaDeTipoBebida = productos.filter(x => x.tipo == 'Bebida').map(x => {
         return {
           producto: x,
           cantidad: 0
-        }
+        };
       }
       );
       console.log(this.listaDeTipoBebida);
@@ -75,25 +99,12 @@ export class MenuProductosPage implements OnInit {
           return {
             producto: x,
             cantidad: 0
-          }
+          };
         }
       );
       console.log(this.listaDeTipoPostre);
     });
-
-    this.usuario = this.auth.usuarioActual!;
-
-    this.pedidoSrv.allPedidos$.subscribe((pedidos) => {
-      //terminar esto.
-    });
-
-    this.pedidoSrv.pedido$.subscribe(data => {
-        this.pedido = data;
-      }
-    )
-
-
-   }
+  }
 
   ngOnInit() {
     var a =1;
@@ -141,10 +152,15 @@ export class MenuProductosPage implements OnInit {
     }
 
 
-
     let index = this.pedido.productos.findIndex(x => x.producto.id === item.producto.id);
-
-    this.pedido.productos[index].cantidad++;
+    if(index == -1){
+      this.pedido.productos.push({
+        producto: item.producto,
+        cantidad: 1
+      });
+    }else{
+        this.pedido.productos[index].cantidad++;
+    }
 
      this.pedidoSrv.actualizarProducto(this.pedido);
   }
@@ -168,6 +184,9 @@ export class MenuProductosPage implements OnInit {
       let index = this.pedido.productos.findIndex(x => x.producto.id === item.producto.id);
 
       this.pedido.productos[index].cantidad--;
+
+      if(this.pedido.productos[index].cantidad === 0)
+        this.pedido.productos.splice(index,1);
 
        this.pedidoSrv.actualizarProducto(this.pedido);
 

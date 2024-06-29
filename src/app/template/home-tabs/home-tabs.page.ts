@@ -71,17 +71,14 @@ export class HomeTabsPage implements OnInit {
       this.usuarioLogueado = data.filter(x => x.id === this.auth.usuarioActual?.id)[0];
     });
 
-
-
-
-    console.log(this.usuarioLogueado);
+  // console.log(this.usuarioLogueado);
   }
 
   ngOnInit() {
 
     if(this.platform.is('capacitor')) {
       console.log("Validadndo permisos de notificaciones en plataforma:");
-      console.log(this.platform);
+
       this.addListeners();
       this.registerNotifications();
     }
@@ -99,11 +96,10 @@ export class HomeTabsPage implements OnInit {
       return;
     }
 
-    
+
 
     this.listaSvc.buscarEnListaXid(this.usuarioLogueado.id).subscribe(data=>{
       this.estaEnEspera = data.length > 0;
-      console.log(this.estaEnEspera);
     });
 
   }
@@ -148,14 +144,13 @@ export class HomeTabsPage implements OnInit {
 
     }
 
-    if(this.esMozo){
+    if(this.esMaitre){
       this.queAlta = 'Cliente'
     }
 
     if(this.esDuenio || this.esSupervisor){
       this.queAlta = 'Empleado';
     }
-
 
   }
 

@@ -9,6 +9,10 @@ import { StatusBar, Style } from '@capacitor/status-bar';
 import { MesaService } from './services/mesas.service';
 import { register } from 'swiper/element/bundle';
 import { ScreenOrientation, ScreenOrientationPlugin } from '@capacitor/screen-orientation';
+import { EncuestaService } from './services/encuesta.service';
+import { ListaEsperaService } from './services/lista-espera.service';
+import { PedidoService } from './services/pedido.service';
+import { ProductoService } from './services/producto.service';
 
 register();
 
@@ -25,21 +29,33 @@ export class AppComponent{
   esAdmin: boolean = false;
 
   constructor(private usuariosSrv: UsuarioService,
-              private audioSrv: AudioService,
-              private router: Router,
-              private platform: Platform,
-              private authSrv: AuthService,
-              private mesasSrv: MesaService) {
+            private audioSrv: AudioService,
+            private router: Router,
+            private platform: Platform,
+            private authSrv: AuthService,
+            private mesasSrv: MesaService,
+            private encuestaSrv: EncuestaService,
+            private listaEsperaSrv: ListaEsperaService,
+            private pedidoSrv: PedidoService,
+            private productoSrv: ProductoService) {
 
 
 
     this.iniciarApp();
-    this.mesasSrv.traer();
-    this.usuariosSrv.traer();
+    this.LlenarListas();
 
   }
 
 
+
+  private LlenarListas() {
+    this.mesasSrv.traer();
+    this.usuariosSrv.traer();
+    this.encuestaSrv.traer();
+    this.listaEsperaSrv.traer();
+    this.pedidoSrv.traer();
+    this.productoSrv.traer();
+  }
 
   logout() {
    this.authSrv.cerrarSesion();

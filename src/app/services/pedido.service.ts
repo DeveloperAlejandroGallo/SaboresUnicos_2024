@@ -36,7 +36,7 @@ export class PedidoService {
 
   private colectionName: string = 'pedidos';
   private coleccionPedido: CollectionReference<DocumentData>;
-  public pedido$!: Observable<Pedido>;
+  public pedido$: Observable<Pedido> = new Observable<Pedido>();
 
   constructor(private firestore: Firestore, private angularFirestore: AngularFirestore) {
     this.coleccionPedido = collection(this.firestore, this.colectionName);
@@ -95,16 +95,13 @@ export class PedidoService {
 
 //Usuario
   nuevo(cliente: Usuario, mesa: Mesa): Pedido {
-
     const docuNuevo = doc(this.coleccionPedido);
-    // addDoc(coleccion, objeto);
     const nuevoId = docuNuevo.id;
-
     const pedido: Pedido = {
       id: nuevoId,
       cliente: cliente,
       descuentoPorJuego: 0,
-      estadoPedido: null,
+      estadoPedido: EstadoPedido.Pendiente,
       fechaDePedidoAceptado: null,
       fechaIngreso: Timestamp.now(),
       mesa: mesa,
@@ -114,10 +111,8 @@ export class PedidoService {
       subTotal: 0,
       tiempoEstimado: 0,
       total: 0
-
-
     }
-
+    try{
      setDoc(docuNuevo, {
       id: pedido.id,
       cliente: pedido.cliente,
@@ -134,7 +129,12 @@ export class PedidoService {
       total: pedido.total
     });
 
-    return pedido;
+    console.log('Pedido creado');
+
+  }catch(ex){
+    console.error(ex);
+  }
+  return pedido;
 
   }
 
