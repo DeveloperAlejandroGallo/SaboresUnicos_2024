@@ -1,3 +1,85 @@
-.bg-sala-a{
-    background-color: #FE4A49;
+
+.conversation{
+    background: url("../../../assets/img/fondo-gris.png") no-repeat center center / cover;
+    height: 90vh;
+    margin-top: 5px;
+    border-bottom-left-radius: 38px;
+    border-bottom-right-radius: 38px;
+    .chat-section{
+        height: calc(100% - 90px);
+        overflow: scroll;
+
+        .chat{
+            display: flex;
+            flex-direction: column;
+            .messages{
+                display: flex;
+                flex-direction: column;
+                .message{
+                    border-radius: 18px;
+                    padding: 18px 20px;
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                    font-size: 0.9rem;
+                }
+            }
+            .yours{
+                align-items: flex-start;
+                .message{
+                    background: #eee;
+                    position: relative;
+                }
+            }
+            .mine{
+                align-items: flex-end;
+                .message{
+                    color: #fff;
+                     margin-left: 25%;
+                     background: #bf0000;
+                     background-attachment: fixed;
+                     position: relative;
+                }
+            }
+        }
+        
+        
+    }
+    .message-input{
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        position: fixed;
+        bottom: 20px;
+        width: 90vw;
+        left: 50%;
+        margin-left: -45vw;
+        //flex-direction: row;
+        ion-input{
+            border: 1px solid #ddd;
+            background: #ffffff;
+            border-radius: 20px;
+            height: 48px;
+            --padding-start: 20px;
+            width: 300px;
+            //flex-grow: 1;
+        }
+        .send-button{
+            margin-left: 20px;
+            //background: #feacac;
+            //padding: 12px 12px 9px 15px;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.31rem;
+        }
+    }
+    .chat-time {
+        position: absolute;
+        bottom: 2px;
+        right: 8px;
+        font-size: 0.7rem;
+        color: rgba(0,0,0,0.6);
+    }
 }
+
+
+

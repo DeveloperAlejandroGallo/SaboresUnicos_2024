@@ -26,7 +26,7 @@
         </div>
       </div>
 
-    <ion-list style=" overflow-y: auto; max-height: 80vh;">
+    <ion-list style=" overflow-y: auto; max-height: 70vh;">
     <ng-container *ngIf="selectedCategory === 'comida'">
       <ion-card *ngFor="let itemProd of listaDeTipoComida">
         <ion-card-content>
@@ -72,10 +72,10 @@
 
 
 
-  <ion-list style=" overflow-y: auto; max-height: 80vh;">
+  <ion-list style=" overflow-y: auto; max-height: 70vh;">
   <ng-container *ngIf="selectedCategory === 'bebidas'">
-    <ion-card *ngFor="let itemProd of listaDeTipoBebida">
-      <ion-card-content>
+    <ion-card *ngFor="let itemProd of listaDeTipoBebida" >
+      <ion-card-content color="#ffeeee">
         <ion-row>
           <ion-col size="12">
             <swiper-container pager="true">
@@ -112,12 +112,7 @@
   </ng-container>
 </ion-list >
 
-
-
-
-
-
-    <ion-list style=" overflow-y: auto; max-height: 80vh;">
+  <ion-list style=" overflow-y: auto; max-height: 70vh;">
   <ng-container *ngIf="selectedCategory === 'postres'">
     <ion-card *ngFor="let itemProd of listaDeTipoPostre">
       <ion-card-content>

@@ -3,7 +3,7 @@
 
   <ion-grid class="grilla">
 
-    <div *ngIf="listaDeEspera == null">
+    <div *ngIf="listaDeEspera === null">
 
       <ion-row>
         <ion-col size="12">
@@ -15,7 +15,7 @@
 
     </div>
 
-    <div *ngIf="listaDeEspera != null">
+    <div *ngIf="listaDeEspera !== null">
 
       <ion-row class="titulos">
         <ion-col size="3">
@@ -42,13 +42,13 @@
 
         <ion-col size="3" class="center-content">
           <ion-avatar>
-            <img src={{espera.usuario.foto}} class="rounded-image bordered-image " alt="foto">
+            <img src="{{espera.usuario.foto}}" class="rounded-image bordered-image " alt="foto">
           </ion-avatar>
-          
+
         </ion-col>
         <ion-col size="6" class="center-content">
           {{espera.usuario.nombre}}
-         
+
         </ion-col>
         <ion-col size="3" class="center-alert">
           <div>

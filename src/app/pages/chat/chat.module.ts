@@ -11,6 +11,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ChatPageRoutingModule } from './chat-routing.module';
 
 import { ChatPage } from './chat.page';
+import { FechaToStringPipe } from 'src/app/pipes/fecha-to-string.pipe';
 
 @NgModule({
   imports: [
@@ -20,8 +21,10 @@ import { ChatPage } from './chat.page';
     ChatPageRoutingModule,
     NavBarModule,
     HeaderModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FechaToStringPipe
   ],
-  declarations: [ChatPage]
+  declarations: [ChatPage],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ChatPageModule {}
