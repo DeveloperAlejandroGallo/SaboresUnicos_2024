@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Perfil } from 'src/app/enums/perfil';
 import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
@@ -25,6 +25,7 @@ export class ChatPage implements OnInit {
   public numeroMesaCliente: number = 0;
   public chatForm!: FormGroup;
   ngmensaje!:string ;
+  
   //public mensaje!: Mensaje = new Mensaje();
 
 
@@ -53,7 +54,11 @@ export class ChatPage implements OnInit {
     this.chatForm = this.fb.group({
       messageCtrl:[''],      
     });  
+    
   }
+
+ 
+
 
   enviarMensaje(){
     

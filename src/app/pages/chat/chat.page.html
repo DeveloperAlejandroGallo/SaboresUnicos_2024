@@ -17,7 +17,7 @@
                   <br>
                 </div>
                 <div class="message" *ngIf="esMozo">
-                  {{mje.nombreMozo}}:
+                  Mozo {{mje.nombreMozo}}:
                   <br />
                   <span class="chat-time"> {{mje.fecha | date:'short'}} </span> 
                   {{mje.mensaje}}
@@ -37,7 +37,7 @@
                   <br>
                 </div>
                 <div class="message other" *ngIf="esCliente">
-                  {{mje.nombreMozo}}:
+                  Mozo {{mje.nombreMozo}}:
                   <br />
                   <span class="chat-time"> {{mje.fecha | date:'short'}} </span> 
                   {{mje.mensaje}}
