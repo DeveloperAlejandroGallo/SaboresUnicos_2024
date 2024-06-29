@@ -78,7 +78,9 @@
       <ion-card-content color="#ffeeee">
         <ion-row>
           <ion-col size="12">
-            <swiper-container pager="true">
+            <swiper-container pager="true"
+            [loop]="true"
+            [pagination]="true">
               <swiper-slide *ngFor="let imagen of itemProd.producto.fotos">
                 <img [src]="imagen" class="producto-imagen" />
               </swiper-slide>
@@ -95,7 +97,7 @@
         </ion-row>
         <ion-row>
           <ion-col size="12" class="item-end">
-            <h2>${{itemProd.producto.precio}}</h2>
+            <h2>${{itemProd.producto.precio}}   <ion-icon color="primary" name="flash" class="price-icon"></ion-icon>{{itemProd.producto.tiempoPreparacionEnMinutos}} min</h2>
             <div class="quantity-controls">
               <ion-button fill="clear" size="small" (click)="decrementarCantidad(itemProd, 'Bebida')">
                 <ion-icon name="trash-bin-outline"></ion-icon>
@@ -118,7 +120,8 @@
       <ion-card-content>
         <ion-row>
           <ion-col size="12">
-            <swiper-container pager="true">
+            <swiper-container [loop]="true"
+            [pagination]="true" pager="true">
               <swiper-slide *ngFor="let imagen of itemProd.producto.fotos">
                 <img [src]="imagen" class="producto-imagen" />
               </swiper-slide>
@@ -135,7 +138,7 @@
         </ion-row>
         <ion-row>
           <ion-col size="12" class="item-end">
-            <h2>${{itemProd.producto.precio}}</h2>
+            <h2>${{itemProd.producto.precio}}   <ion-icon color="primary" name="flash" class="price-icon"></ion-icon>{{itemProd.producto.tiempoPreparacionEnMinutos}} min</h2>
             <div class="quantity-controls">
               <ion-button fill="clear" size="small" (click)="decrementarCantidad(itemProd, 'Postre')">
                 <ion-icon name="trash-bin-outline"></ion-icon>
