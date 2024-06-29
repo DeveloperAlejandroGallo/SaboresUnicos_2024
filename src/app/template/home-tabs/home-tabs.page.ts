@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Perfil } from 'src/app/enums/perfil';
 import { Usuario } from 'src/app/models/usuario';
@@ -13,7 +13,7 @@ import { MesaService } from 'src/app/services/mesas.service';
 import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
+import { PushNotificationService } from 'src/app/services/push-notification.service';
 
 
 
@@ -24,12 +24,11 @@ const background = '#f8f8f8d7';
   styleUrls: ['./home-tabs.page.scss'],
 })
 
-export class HomeTabsPage implements OnInit{
+export class HomeTabsPage implements OnInit {
 
   @Input() isLoading: boolean = false;
 
-  public keyboardShowListener: any
-  public keyboardHideListener: any
+
 
   public usuarioLogueado!: Usuario;
   public esCliente:boolean = true;
@@ -45,7 +44,8 @@ export class HomeTabsPage implements OnInit{
   public codigoLeido : string = "";
   public isSupported: boolean = false;
   public isPermissionGranted = false;
-  public habilitarBoton = true;
+
+
   //para ocultar/ver distintos TABS -->
   verJuegos : boolean = false;
   verChat : boolean = false;
@@ -64,7 +64,8 @@ export class HomeTabsPage implements OnInit{
     private msgService: MensajesService,
     private router: Router,
     private auth: AuthService,
-    private usrService: UsuarioService) {
+    private usrService: UsuarioService,
+  private pushSrv: PushNotificationService) {
 
     this.url = this.router.url;
     this.usuarioLogueado = this.auth.usuarioActual!;
@@ -74,8 +75,6 @@ export class HomeTabsPage implements OnInit{
 
   // console.log(this.usuarioLogueado);
   }
-
-
 
   ngOnInit() {
 
@@ -105,11 +104,7 @@ export class HomeTabsPage implements OnInit{
       this.estaEnEspera = data.length > 0;
     });
 
-
   }
-
-
-
 
 
   private preparaCamara() {
@@ -206,6 +201,25 @@ export class HomeTabsPage implements OnInit{
 
     }
 
+  }
+
+
+
+  validacionesMesa(mesa: string): boolean {
+
+      if(this.usuarioLogueado.mesaAsignada == 0)
+      {
+        this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
+        return false;
+      }
+
+        const nroMesa = mesa;
+      if (this.usuarioLogueado.mesaAsignada != Number(nroMesa)) {
+        this.msgService.Info('Mesa equivocada. Su número de mesa es ' + this.usuarioLogueado.mesaAsignada);
+        return false;
+
+      }
+      return true;
   }
 
 
