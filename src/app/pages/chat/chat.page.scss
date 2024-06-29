@@ -28,16 +28,19 @@
                 .message{
                     background: #eee;
                     position: relative;
+                    color: #bf0000;
                 }
             }
             .mine{
                 align-items: flex-end;
                 .message{
-                    color: #fff;
+                     color: black;
                      margin-left: 25%;
                      background: #bf0000;
                      background-attachment: fixed;
                      position: relative;
+                     min-width: 140px;
+
                 }
             }
         }

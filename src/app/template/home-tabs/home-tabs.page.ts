@@ -84,6 +84,8 @@ export class HomeTabsPage implements OnInit {
 
       this.addListeners();
       this.registerNotifications();
+
+     
     }
     this.tiposEntidades();
 

@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, HostListener} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Perfil } from 'src/app/enums/perfil';
 import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
@@ -16,6 +16,7 @@ import { PushNotificationService } from 'src/app/services/push-notification.serv
   styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
+
 
 toDate(fecha: number): Date {
   return new Date(fecha);
@@ -99,6 +100,7 @@ toDate(fecha: number): Date {
    
   }
 
+ 
 
 
 }
