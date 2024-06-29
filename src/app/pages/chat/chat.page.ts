@@ -31,7 +31,7 @@ toDate(fecha: number): Date {
   public numeroMesaCliente: number = 0;
   public chatForm!: FormGroup;
   ngmensaje!:string ;
-  
+
   //public mensaje!: Mensaje = new Mensaje();
 
 
@@ -58,12 +58,12 @@ toDate(fecha: number): Date {
 
   ngOnInit() {
     this.chatForm = this.fb.group({
-      messageCtrl:[''],      
-    });  
-    
+      messageCtrl:[''],
+    });
+
   }
 
- 
+
 
 
   enviarMensaje(){
@@ -83,7 +83,7 @@ toDate(fecha: number): Date {
 
     this.chatSrv.nuevo(mensaje);
 
-   
+
     if (this.nombreMozo == "") {
       this.pushService.notificarConsultaAMozos(this.numeroMesaCliente, this.ngmensaje).subscribe( {
         next: (data) => {
@@ -97,7 +97,7 @@ toDate(fecha: number): Date {
       });
     } 
     this.ngmensaje = "";
-   
+
   }
 
  

@@ -7,7 +7,7 @@
         <div class="chat">
             <div *ngFor="let mje of listaDeMensajes">
               <div class="mine messages"
-                *ngIf="mje.idDelEnviador == idUsuarioActual"
+                *ngIf="mje.idDelEnviador === idUsuarioActual"
               >
                 <div class="message" *ngIf="esCliente">
                   <b>Mesa  {{mje.numeroDeMesa}}</b>
@@ -26,7 +26,7 @@
               </div>
 
               <div class="yours messages"
-                *ngIf="mje.idDelEnviador != idUsuarioActual"
+                *ngIf="mje.idDelEnviador !== idUsuarioActual"
               >
                 <div class="message other" *ngIf="esMozo">
                   <b>Mesa {{mje.numeroDeMesa}}</b>
@@ -67,9 +67,9 @@
               
             </div>
         </div>
-        
+
       </div>
-      
+
     </div>
   </ion-content>
 </body>
