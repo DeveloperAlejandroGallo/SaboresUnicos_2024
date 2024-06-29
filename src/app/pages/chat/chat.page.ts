@@ -25,7 +25,7 @@ export class ChatPage implements OnInit {
   public numeroMesaCliente: number = 0;
   public chatForm!: FormGroup;
   ngmensaje!:string ;
-  
+
   //public mensaje!: Mensaje = new Mensaje();
 
 
@@ -52,16 +52,16 @@ export class ChatPage implements OnInit {
 
   ngOnInit() {
     this.chatForm = this.fb.group({
-      messageCtrl:[''],      
-    });  
-    
+      messageCtrl:[''],
+    });
+
   }
 
- 
+
 
 
   enviarMensaje(){
-    
+
     //console.log('El mensaje antes del service ' + this.mensaje);
 
     const mensaje: Mensaje = {
@@ -74,13 +74,13 @@ export class ChatPage implements OnInit {
 
     };
 
-   
 
-    
+
+
 
     this.chatSrv.nuevo(mensaje);
 
-   
+
     if (this.nombreMozo == "") {
       this.pushService.notificarConsultaAMozos(this.numeroMesaCliente, this.ngmensaje).subscribe( {
         next: (data) => {
@@ -106,7 +106,7 @@ export class ChatPage implements OnInit {
     }
 
     this.ngmensaje = "";
-   
+
   }
 
 }
