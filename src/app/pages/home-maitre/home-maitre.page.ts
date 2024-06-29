@@ -65,7 +65,7 @@ export class HomeMaitrePage  {
 
         title:'No hay más mesas disponibles',
         icon: "warning",
-        confirmButtonText: "OK",
+        confirmButtonText: "Cerrar",
         position: 'center',
         heightAuto: false,
         customClass: {

@@ -26,6 +26,7 @@ const background = '#f8f8f8d7';
 
 export class HomeTabsPage implements OnInit {
 
+
   @Input() isLoading: boolean = false;
 
 
@@ -333,5 +334,7 @@ export class HomeTabsPage implements OnInit {
     this.isLoading = is;
   }
 
-
+  irAlChat(){
+    this.router.navigate(['home-tabs/chat']);
+  }
 }
