@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Perfil } from 'src/app/enums/perfil';
 import { Usuario } from 'src/app/models/usuario';
@@ -13,7 +13,9 @@ import { MesaService } from 'src/app/services/mesas.service';
 import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
+import { PushNotificationService } from 'src/app/services/push-notification.service';
+
+
 
 const background = '#f8f8f8d7';
 @Component({
@@ -22,12 +24,12 @@ const background = '#f8f8f8d7';
   styleUrls: ['./home-tabs.page.scss'],
 })
 
-export class HomeTabsPage implements OnInit{
+export class HomeTabsPage implements OnInit {
+
 
   @Input() isLoading: boolean = false;
- 
-  public keyboardShowListener: any
-  public keyboardHideListener: any
+
+
 
   public usuarioLogueado!: Usuario;
   public esCliente:boolean = true;
@@ -43,7 +45,8 @@ export class HomeTabsPage implements OnInit{
   public codigoLeido : string = "";
   public isSupported: boolean = false;
   public isPermissionGranted = false;
-  public habilitarBoton = true;
+
+
   //para ocultar/ver distintos TABS -->
   verJuegos : boolean = false;
   verChat : boolean = false;
@@ -63,23 +66,22 @@ export class HomeTabsPage implements OnInit{
     private router: Router,
     private auth: AuthService,
     private usrService: UsuarioService,
-    ) {
+  private pushSrv: PushNotificationService) {
 
     this.url = this.router.url;
     this.usuarioLogueado = this.auth.usuarioActual!;
     this.usrService.allUsers$.subscribe(data =>{
       this.usuarioLogueado = data.filter(x => x.id === this.auth.usuarioActual?.id)[0];
     });
-    console.log(this.usuarioLogueado);
+
+  // console.log(this.usuarioLogueado);
   }
-
-
 
   ngOnInit() {
 
     if(this.platform.is('capacitor')) {
       console.log("Validadndo permisos de notificaciones en plataforma:");
-      console.log(this.platform);
+
       this.addListeners();
       this.registerNotifications();
     }
@@ -98,17 +100,13 @@ export class HomeTabsPage implements OnInit{
     }
 
 
+
     this.listaSvc.buscarEnListaXid(this.usuarioLogueado.id).subscribe(data=>{
       this.estaEnEspera = data.length > 0;
-      console.log(this.estaEnEspera);
     });
-    
 
   }
 
-  
-
-  
 
   private preparaCamara() {
     if (this.platform.is('capacitor')) {
@@ -149,14 +147,13 @@ export class HomeTabsPage implements OnInit{
 
     }
 
-    if(this.esMozo){
+    if(this.esMaitre){
       this.queAlta = 'Cliente'
     }
 
     if(this.esDuenio || this.esSupervisor){
       this.queAlta = 'Empleado';
     }
-
 
   }
 
@@ -183,18 +180,15 @@ export class HomeTabsPage implements OnInit{
           switch(datos[0]){
             case "IngresoLocal":
               this.ingresarAListaEspera();
+
               break;
             case "Mesa":
-              const nroMesa = datos[1];
-              if (this.usuarioLogueado.mesaAsignada == Number(nroMesa)) {
+              if(this.validacionesMesa(datos[1])) {
                 this.router.navigate(['home-tabs/menu-productos']);
                 this.verJuegos = true;
                 this.verChat = true;
                 this.verEncuesta = true;
-              }else{
-                this.msgService.Info('Mesa equivocada. Su número de mesa es ' + this.usuarioLogueado.mesaAsignada);
               }
-              //validar que haya pasado por lista de espera y que el qr de mesa escaneado sea el que se le fue asignado
               break;
             case "Propinas":
 
@@ -210,10 +204,26 @@ export class HomeTabsPage implements OnInit{
 
   }
 
-irAlChat(){
-  this.router.navigate(['home-tabs/chat']);
-  //this.isKeyboardVisible = true;
-}
+
+
+  validacionesMesa(mesa: string): boolean {
+
+      if(this.usuarioLogueado.mesaAsignada == 0)
+      {
+        this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
+        return false;
+      }
+
+        const nroMesa = mesa;
+      if (this.usuarioLogueado.mesaAsignada != Number(nroMesa)) {
+        this.msgService.Info('Mesa equivocada. Su número de mesa es ' + this.usuarioLogueado.mesaAsignada);
+        return false;
+
+      }
+      return true;
+  }
+
+
 
 
   ingresarAListaEspera(){
@@ -242,6 +252,17 @@ irAlChat(){
             this.listaSvc.nuevo(this.usuarioLogueado).then(()=>{
               this.isLoading = false;
               this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
+              this.pushSrv.notificarMaitreNuevoEnListaEspera(this.usuarioLogueado).subscribe( {
+                next: (data) => {
+                  console.log("Rta Push Lista: ");
+                  console.log(data);
+                },
+                error: (error) => {
+                  console.error("Error Push Lista: ");
+                  console.error(error);
+                  this.isLoading = false;
+                }
+              });
             }).catch(err=>{
               this.msgService.Error(err);
             })
@@ -313,5 +334,7 @@ irAlChat(){
     this.isLoading = is;
   }
 
-
+  irAlChat(){
+    this.router.navigate(['home-tabs/chat']);
+  }
 }

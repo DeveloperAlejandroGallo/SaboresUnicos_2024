@@ -161,3 +161,40 @@ swiper-container {
   --swiper-pagination-color: var(--ion-color-primary, #BF0000);
 }
 
+
+
+
+
+.floating-action-button {
+  position: relative;// fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  background-color: black;//#11E35F;
+  color:  white;
+  font-size: 28px;
+  font-weight: bolder;
+  padding: 5px;
+  box-shadow: 0px 1px 2px 0px #000000be, 0px 1px 3px 1px #000000; /* Sombra opcional */
+  --border-radius: 16px;
+  --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  width: 100%;
+
+}
+
+.price-container {
+  display: flex;
+  align-items: baseline; /* Alinea verticalmente el precio y el ícono */
+}
+
+.d-flex {
+  display: flex;
+}
+
+.justify-content-between {
+  justify-content: space-between; /* Distribuye el espacio entre los elementos */
+}
+
+.align-items-center {
+  align-items: center; /* Alinea los elementos verticalmente en el centro */
+}

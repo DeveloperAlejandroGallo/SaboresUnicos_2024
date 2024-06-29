@@ -91,7 +91,7 @@ export class LoginPage implements OnInit {
 
   loginAutomatico(perfil: string) {
     switch (perfil) {
-      case 'admin':
+      case 'duenio':
         this.loginForm.setValue({
           emailLogin: 'administrador@yopmail.com', //Dueño
           passwordLogin: '111111',

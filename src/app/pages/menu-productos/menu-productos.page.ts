@@ -1,11 +1,14 @@
 import { Component, OnInit, ViewChild  } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { Producto } from 'src/app/models/producto';
+import { ItemLista, Producto } from 'src/app/models/producto';
 import { IonModal } from '@ionic/angular';
 import { TipoProducto } from 'src/app/enums/tipo-producto';
 import { Usuario } from 'src/app/models/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProductoService } from 'src/app/services/producto.service';
+import { PedidoService } from 'src/app/services/pedido.service';
+import { Pedido } from 'src/app/models/pedido';
+import { EstadoPedido } from 'src/app/enums/estado-pedido';
 
 @Component({
   selector: 'app-menu-productos',
@@ -21,36 +24,91 @@ export class MenuProductosPage implements OnInit {
   isModalOpen = false;
   selectedProduct: Producto | null = null;
   name: string | undefined;
-  cantidadProducto: number = 0;
+
   public usuario!: Usuario;
   public listaDeProductos: Array<Producto> = new Array<Producto>;
-  public listaDeTipoComida: Array<Producto> = new Array<Producto>;
-  public listaDeTipoBebida: Array<Producto> = new Array<Producto>;
-  public listaDeTipoPostre: Array<Producto> = new Array<Producto>;
+  public listaDeTipoComida: Array<ItemLista> = new Array<ItemLista>;
+  public listaDeTipoBebida: Array<ItemLista> = new Array<ItemLista>;
+  public listaDeTipoPostre: Array<ItemLista> = new Array<ItemLista>;
+  public subtotal: number = 0;
+  public buttonWidth: number = 190;
+  public buttonHeight: number = 50;
+  public verImporte: boolean = true;
+  public pedido!: Pedido;
+  private idPedido: string = '';
 
-  
 
-  constructor(private modalController: ModalController, private auth: AuthService, private productoService: ProductoService) {
-    
-    this.productoService.allUsers$.subscribe((productos) => {
 
-      this.listaDeProductos = productos
-      console.log(this.listaDeProductos);
+  constructor(
+    private modalController: ModalController,
+    private auth: AuthService,
+    private productoService: ProductoService,
+    private pedidoSrv: PedidoService) {
 
-      this.listaDeTipoComida = productos.filter(x => x.tipo == 'Comida')
-      console.log(this.listaDeTipoComida);
-
-      this.listaDeTipoBebida = productos.filter(x => x.tipo == 'Bebida')
-      console.log(this.listaDeTipoBebida);
-
-      this.listaDeTipoPostre = productos.filter(x => x.tipo == 'Postre')
-      console.log(this.listaDeTipoPostre);
-    });
 
     this.usuario = this.auth.usuarioActual!;
+
+    this.pedido = this.pedidoSrv.listadoPedidos.find(
+      x => x.cliente.id === this.auth.usuarioActual!.id
+      && x.estadoPedido == EstadoPedido.Pendiente)!;
+
+    this.pedidoSrv.escucharPedidoId(this.pedido.id);
+
+    console.log('Id Pedido: ',this.pedido.id);
+
+    this.LlenarListasDeProductos();
+
+
+    this.pedidoSrv.pedido$.subscribe(data => {
+        this.pedido = data;
+        this.subtotal = this.pedido.productos.length != 0 ? this.pedido.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0) : 0;
+      }
+    )
+
+
    }
 
-  ngOnInit() {}
+  private LlenarListasDeProductos() {
+    this.productoService.allProductos$.subscribe((productos) => {
+
+      this.listaDeProductos = productos;
+      console.log(this.listaDeProductos);
+
+      this.listaDeTipoComida = productos.filter(x => x.tipo == 'Comida').map(
+        x => {
+          return {
+            producto: x,
+            cantidad: 0
+          };
+        }
+
+      );
+      console.log(this.listaDeTipoComida);
+
+      this.listaDeTipoBebida = productos.filter(x => x.tipo == 'Bebida').map(x => {
+        return {
+          producto: x,
+          cantidad: 0
+        };
+      }
+      );
+      console.log(this.listaDeTipoBebida);
+
+      this.listaDeTipoPostre = productos.filter(x => x.tipo == 'Postre').map(
+        x => {
+          return {
+            producto: x,
+            cantidad: 0
+          };
+        }
+      );
+      console.log(this.listaDeTipoPostre);
+    });
+  }
+
+  ngOnInit() {
+    var a =1;
+  }
 
   segmentChanged(event: any) {
     this.selectedCategory = event.detail.value;
@@ -75,17 +133,63 @@ export class MenuProductosPage implements OnInit {
   }
 
   onWillDismiss(event: Event) {
-    
+
   }
 
 
-  incrementarCantidad() {
-    this.cantidadProducto++;
+  incrementarCantidad(item: ItemLista, queLista: string) {
+
+    switch (queLista) {
+      case 'Comida':
+        this.listaDeTipoComida.find(x => x.producto.id === item.producto.id)!.cantidad++;
+        break;
+      case 'Bebida':
+        this.listaDeTipoBebida.find(x => x.producto.id === item.producto.id)!.cantidad++;
+        break;
+      case 'Postre':
+        this.listaDeTipoPostre.find(x => x.producto.id === item.producto.id)!.cantidad++;
+        break;
+    }
+
+
+    let index = this.pedido.productos.findIndex(x => x.producto.id === item.producto.id);
+    if(index == -1){
+      this.pedido.productos.push({
+        producto: item.producto,
+        cantidad: 1
+      });
+    }else{
+        this.pedido.productos[index].cantidad++;
+    }
+
+     this.pedidoSrv.actualizarProducto(this.pedido);
   }
 
-  decrementarCantidad() {
-    if (this.cantidadProducto > 0) {
-      this.cantidadProducto--;
+  decrementarCantidad(item: ItemLista, queLista: string) {
+    if (item.cantidad > 0) {
+
+      switch (queLista) {
+        case 'Comida':
+          this.listaDeTipoComida.find(x => x.producto.id === item.producto.id)!.cantidad--;
+          break;
+        case 'Bebida':
+          this.listaDeTipoBebida.find(x => x.producto.id === item.producto.id)!.cantidad--;
+          break;
+        case 'Postre':
+          this.listaDeTipoPostre.find(x => x.producto.id === item.producto.id)!.cantidad--;
+          break;
+      }
+
+
+      let index = this.pedido.productos.findIndex(x => x.producto.id === item.producto.id);
+
+      this.pedido.productos[index].cantidad--;
+
+      if(this.pedido.productos[index].cantidad === 0)
+        this.pedido.productos.splice(index,1);
+
+       this.pedidoSrv.actualizarProducto(this.pedido);
+
     }
   }
 

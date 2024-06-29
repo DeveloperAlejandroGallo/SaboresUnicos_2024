@@ -12,10 +12,10 @@ export interface Pedido {
   total: number;
   subTotal: number;
   propina: number;
-  productos: Array<{producto: Producto, cantidad: number}>;
-  estadoPedido: EstadoPedido;
+  productos: Array<{producto: Producto, cantidad: number}> ;
+  estadoPedido: EstadoPedido | null;
   descuentoPorJuego: number;
   tiempoEstimado: number;
-  fechaDePedidoAceptado: Timestamp; //Con este calculamos el tiempo de espera
-  mozo: Usuario;
+  fechaDePedidoAceptado: Timestamp | null; //Con este calculamos el tiempo de espera
+  mozo: Usuario | null;
 }

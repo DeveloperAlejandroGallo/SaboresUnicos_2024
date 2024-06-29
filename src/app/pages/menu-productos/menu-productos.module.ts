@@ -10,6 +10,7 @@ import { MenuProductosPage } from './menu-productos.page';
 import { NavBarModule } from 'src/app/components/nav-bar/nav-bar.module';
 import { HeaderModule } from 'src/app/components/header/header.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { MonedaPesosPipe } from 'src/app/pipes/moneda-pesos.pipe';
 @NgModule({
   imports: [
     CommonModule,
@@ -17,7 +18,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     IonicModule,
     MenuProductosPageRoutingModule,
     NavBarModule,
-    HeaderModule
+    HeaderModule,
+    MonedaPesosPipe
   ],
   declarations: [MenuProductosPage],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

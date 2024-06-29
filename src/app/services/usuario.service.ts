@@ -14,7 +14,8 @@ import {
   getDocs,
   query,
   setDoc,
-  updateDoc
+  updateDoc,
+  Timestamp
 } from '@angular/fire/firestore';
 import { Usuario } from '../models/usuario';
 import { map, Observable } from 'rxjs';

@@ -21,6 +21,8 @@ import { MensajesService } from './mensajes.service';
 import { usuarioLocalStorage } from '../models/constantes';
 import { AudioService } from './audio.service';
 import { EstadoCliente } from '../enums/estado-cliente';
+import { TipoEmpleado } from '../enums/tipo-empleado';
+import { PushNotificationService } from './push-notification.service';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +36,8 @@ export class AuthService {
     private usrService: UsuarioService,
     private messageService: MensajesService,
     private router: Router,
-    private audioSrv: AudioService
+    private audioSrv: AudioService,
+    private pushSrv: PushNotificationService
   ) {}
 
   public iniciarSesion(email: string, password: string) {
@@ -132,6 +135,29 @@ export class AuthService {
         this.messageService.Exito(
           `Usuario ${usuario.nombre} ${usuario.apellido} registrado correctamente.\nRecibirá un correo cuando su cuenta sea aprobada.`
         );
+        this.pushSrv.notificarAltaCliente(usuario, TipoEmpleado.Dueño).subscribe( {
+          next: (data) => {
+            console.log("Rta Push Alta a Dueño:  ");
+            console.log(data);
+          },
+          error: (error) => {
+            console.error("Error Push Alta a Dueño: ");
+            console.error(error);
+          }
+        });
+
+        this.pushSrv.notificarAltaCliente(usuario, TipoEmpleado.Supervisor).subscribe( {
+          next: (data) => {
+            console.log("Rta Push Alta a Superv: ");
+            console.log(data);
+          },
+          error: (error) => {
+            console.error("Error Push Alta a Superv: ");
+            console.error(error);
+          }
+        });
+
+
       })
       .catch((error) => {
         let msg: string = '';
