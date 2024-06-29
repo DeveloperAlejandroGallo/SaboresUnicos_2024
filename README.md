@@ -90,7 +90,7 @@ Gonzalez, Martín
 - [x] Definición de Modelos del Sistema (los 3).
 - [x] Grabado de Video Segunda Entrega.
 - [x] Logica de estados para Rechazado.
-- [x] Todas las llamadas Push
+- [x] Todas las llamadas Push y metodos de mail.
 - [x] Mail enviado con estilo.
 - [x] Alta para todas las entidades!
 - [x] Diseño de importe
