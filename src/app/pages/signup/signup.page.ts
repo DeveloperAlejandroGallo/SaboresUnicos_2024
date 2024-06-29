@@ -292,28 +292,7 @@ export class SignupPage implements OnInit {
       };
 
       this.authService.registrarCuenta(usuario);
-      this.pushSrv.notificarAltaCliente(usuario, TipoEmpleado.Dueño).subscribe( {
-        next: (data) => {
-          console.log("Rta Push Alta a Dueño:  ");
-          console.log(data);
-        },
-        error: (error) => {
-          console.error("Error Push Alta a Dueño: ");
-          console.error(error);
-        }
-      });
-
-      this.pushSrv.notificarAltaCliente(usuario, TipoEmpleado.Supervisor).subscribe( {
-        next: (data) => {
-          console.log("Rta Push Alta a Superv: ");
-          console.log(data);
-        },
-        error: (error) => {
-          console.error("Error Push Alta a Superv: ");
-          console.error(error);
-        }
-      });
-
+      
 
       setTimeout(() => {
         this.isLoading = false;

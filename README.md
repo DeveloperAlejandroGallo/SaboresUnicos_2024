@@ -25,7 +25,7 @@ Gonzalez, Martín
 <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FLogin.png?alt=media&token=3c00b62e-7db9-444b-ac45-435b27396d2c">
 
 ## **Email de Confirmación**
-<img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FMail%20Comanda.jpg?alt=media&token=994b381a-0394-4795-af02-9279af5c9143">
+<img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FMailSaboresUnicos.png?alt=media&token=417dbc22-534d-4abe-b991-66128f16a469">
 
 ## **El Push Notification**
 <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Fpush.jpg?alt=media&token=fd4aa634-8b75-4df6-b422-0f4254efe651">
@@ -44,7 +44,7 @@ Gonzalez, Martín
 - [x] Creación de la estructura de la aplicación.
 - [x] Armado de Repositorio Git
 - [x] Creación de Readme.md.
-- [ ] Desarrollo de Pantalla de Registro Anónimo y Cliente (Incompleto).
+- [x] Desarrollo de Pantalla de Registro Anónimo y Client.
 
 >**Gonzalez, Martín**
 - [x] Splash Animado.
@@ -78,6 +78,7 @@ Gonzalez, Martín
 - [x] Logica de Lectura de Qr
 - [x] Definición de Modelos del Sistema (los 3).
 - [x] Grabado de Video Segunda Entrega.
+- [ ] Menu de Mozo.
 
 >**Gallo, Alejandro**
 - [x] Mantención de Readme.md.
@@ -88,11 +89,20 @@ Gonzalez, Martín
 - [x] Creación de Servicios necesarios para todas las colecciones.
 - [x] Definición de Modelos del Sistema (los 3).
 - [x] Grabado de Video Segunda Entrega.
+- [x] Logica de estados para Rechazado.
+- [x] Todas las llamadas Push y metodos de mail.
+- [x] Mail enviado con estilo.
+- [x] Alta para todas las entidades!
+- [x] Diseño de importe
+- [x] Logica de pedido
+- [x] Rediseño de Tabs de Menu
 
 
 >**Gonzalez, Martín**
 - [x] Creación de Listado de Pendientes de Asignar a Mesa como Home de Maitre.
 - [x] Logica de Asignación de Mesa y borrado de espera
-- [ ] Desarrollo de Menu de comidas
+- [x] Desarrollo del front de Menu de comidas
 - [x] Definición de Modelos del Sistema (los 3).
 - [x] Grabado de Video Segunda Entrega.
+- [ ] Frontend de Chat y Logica.
+

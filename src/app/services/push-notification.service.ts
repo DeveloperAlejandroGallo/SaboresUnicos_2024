@@ -22,6 +22,13 @@ export class PushNotificationService {
     return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
   }
 
+  notificarMaitreNuevoEnListaEspera(usuario: Usuario): Observable<any> {
+    let title = 'Nuevo Cliente en Lista de Espera';
+    let body = `El Cliente ${usuario.nombre} ${usuario.apellido} espera por una mesa libre.`;
+    let role = TipoEmpleado.Maitre;
+    return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
+  }
+
   notificarMesaAsignada(usuario: Usuario, mesaNro: number): Observable<any> {
     console.log("Enviando a Token:"+usuario.token);
     let token = usuario.token;
@@ -60,7 +67,7 @@ export class PushNotificationService {
   }
 
   notificarMozoPedidoCuenta(pedido: Pedido): Observable<any> {
-    let token = pedido.mozo.token;
+    let token = pedido.mozo!.token;
     let title = `Cierre de Cuenta Mesa ${pedido.mesa.numero}.`;
 
     let body = `${pedido.cliente.nombre} de la Mesa Nro: ${pedido.mesa.numero} desea cerrar la cuenta por un total de $ ${pedido.total}.`;
