@@ -22,6 +22,13 @@ export class PushNotificationService {
     return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
   }
 
+  notificarMaitreNuevoEnListaEspera(usuario: Usuario): Observable<any> {
+    let title = 'Nuevo Cliente en Lista de Espera';
+    let body = `El Cliente ${usuario.nombre} ${usuario.apellido} espera por una mesa libre.`;
+    let role = TipoEmpleado.Maitre;
+    return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
+  }
+
   notificarMesaAsignada(usuario: Usuario, mesaNro: number): Observable<any> {
     console.log("Enviando a Token:"+usuario.token);
     let token = usuario.token;

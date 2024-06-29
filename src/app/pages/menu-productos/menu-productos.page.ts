@@ -78,7 +78,7 @@ export class MenuProductosPage implements OnInit {
         x => {
           return {
             producto: x,
-            cantidad: cantidad
+            cantidad: 0
           };
         }
 

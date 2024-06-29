@@ -13,6 +13,7 @@ import { MesaService } from 'src/app/services/mesas.service';
 import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { UsuarioService } from 'src/app/services/usuario.service';
+import { PushNotificationService } from 'src/app/services/push-notification.service';
 
 
 
@@ -63,7 +64,8 @@ export class HomeTabsPage implements OnInit {
     private msgService: MensajesService,
     private router: Router,
     private auth: AuthService,
-    private usrService: UsuarioService) {
+    private usrService: UsuarioService,
+  private pushSrv: PushNotificationService) {
 
     this.url = this.router.url;
     this.usuarioLogueado = this.auth.usuarioActual!;
@@ -177,6 +179,7 @@ export class HomeTabsPage implements OnInit {
           switch(datos[0]){
             case "IngresoLocal":
               this.ingresarAListaEspera();
+
               break;
             case "Mesa":
               if(this.validacionesMesa(datos[1])) {
@@ -248,6 +251,17 @@ export class HomeTabsPage implements OnInit {
             this.listaSvc.nuevo(this.usuarioLogueado).then(()=>{
               this.isLoading = false;
               this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
+              this.pushSrv.notificarMaitreNuevoEnListaEspera(this.usuarioLogueado).subscribe( {
+                next: (data) => {
+                  console.log("Rta Push Lista: ");
+                  console.log(data);
+                },
+                error: (error) => {
+                  console.error("Error Push Lista: ");
+                  console.error(error);
+                  this.isLoading = false;
+                }
+              });
             }).catch(err=>{
               this.msgService.Error(err);
             })
