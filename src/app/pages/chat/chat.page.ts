@@ -9,12 +9,17 @@ import { ChatService } from 'src/app/services/chat.service';
 import { ProductoService } from 'src/app/services/producto.service';
 import { PushNotificationService } from 'src/app/services/push-notification.service';
 
+
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
+
+toDate(fecha: number): Date {
+  return new Date(fecha);
+}
 
   public listaDeMensajes: Array<Mensaje> = new Array<Mensaje>;
   public usuario!: Usuario;
@@ -62,21 +67,18 @@ export class ChatPage implements OnInit {
 
   enviarMensaje(){
     
-    //console.log('El mensaje antes del service ' + this.mensaje);
+    
 
     const mensaje: Mensaje = {
       id: "",
       mensaje: this.ngmensaje,
+      //fecha: new Date(),
       fecha: Date.now(),
       nombreMozo: this.nombreMozo,
       numeroDeMesa: this.numeroMesaCliente,
       idDelEnviador: this.idUsuarioActual
 
     };
-
-   
-
-    
 
     this.chatSrv.nuevo(mensaje);
 
@@ -92,21 +94,11 @@ export class ChatPage implements OnInit {
           console.error(error);
         }
       });
-    } else {
-      this.pushService.notificarConsultaAMesas(this.usuario, this.nombreMozo, this.ngmensaje).subscribe( {
-        next: (data) => {
-          console.log("Rta Push respuesta del mozo: ");
-          console.log(data);
-        },
-        error: (error) => {
-          console.error("Error Push respuesta del mozo: ");
-          console.error(error);
-        }
-      });
-    }
-
+    } 
     this.ngmensaje = "";
    
   }
+
+
 
 }

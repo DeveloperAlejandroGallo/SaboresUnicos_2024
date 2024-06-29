@@ -12,14 +12,14 @@
                 <div class="message" *ngIf="esCliente">
                   Mesa número: {{mje.numeroDeMesa}}
                   <br />
-                  <span class="chat-time"> {{mje.fecha | date:'short'}} </span> 
+                  <span class="chat-time"> {{toDate(mje.fecha) | fechaToString}} </span> 
                   {{mje.mensaje}}
                   <br>
                 </div>
                 <div class="message" *ngIf="esMozo">
                   Mozo {{mje.nombreMozo}}:
                   <br />
-                  <span class="chat-time"> {{mje.fecha | date:'short'}} </span> 
+                  <span class="chat-time"> {{toDate(mje.fecha) | fechaToString}} </span> 
                   {{mje.mensaje}}
                   <br>
                 </div>
@@ -31,7 +31,7 @@
                 <div class="message other" *ngIf="esMozo">
                   Mesa número: {{mje.numeroDeMesa}}
                   <br />
-                  <span class="chat-time"> {{mje.fecha | date:'short'}} </span> 
+                  <span class="chat-time"> {{toDate(mje.fecha) | fechaToString}} </span> 
                  
                   {{mje.mensaje}}
                   <br>
@@ -39,7 +39,7 @@
                 <div class="message other" *ngIf="esCliente">
                   Mozo {{mje.nombreMozo}}:
                   <br />
-                  <span class="chat-time"> {{mje.fecha | date:'short'}} </span> 
+                  <span class="chat-time"> {{toDate(mje.fecha) | fechaToString }} </span> 
                   {{mje.mensaje}}
                   <br>
                 </div>
@@ -58,14 +58,14 @@
             >
             </ion-input>
   
-            
+           
           </form>
-          <div class="send-button">
-            <ion-button type="submit">
-              <ion-icon slot="icon-only" name="send-outline" ></ion-icon>
-            </ion-button>
-            
-          </div>
+         <div class="send-button">
+              <ion-button type="submit" (click)="enviarMensaje()">
+                <ion-icon slot="icon-only" name="send-outline"></ion-icon>
+              </ion-button>
+              
+            </div>
         </div>
         
       </div>

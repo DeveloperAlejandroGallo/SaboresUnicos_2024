@@ -4,5 +4,6 @@ export interface Mensaje {
     nombreMozo:string;    
     mensaje:string; 
     idDelEnviador: string;
-    fecha:number; //hora y minutos    
+    //fecha:Date; //hora y minutos   
+    fecha: number; 
 }

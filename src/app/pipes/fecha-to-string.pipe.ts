@@ -14,7 +14,7 @@ export class FechaToStringPipe implements PipeTransform {
     const minutos = String(fecha.getMinutes()).padStart(2, '0');
     const segundos = String(fecha.getSeconds()).padStart(2, '0');
 
-    return `${año}/${mes}/${dia} ${horas}:${minutos}:${segundos}`;
+    return `${dia}/${mes}/${año} ${horas}:${minutos}:${segundos}`;
   }
 
 }
