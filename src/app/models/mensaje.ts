@@ -3,5 +3,6 @@ export interface Mensaje {
     numeroDeMesa: number;
     nombreMozo:string;    
     mensaje:string; 
+    idDelEnviador: string;
     fecha:number; //hora y minutos    
 }
