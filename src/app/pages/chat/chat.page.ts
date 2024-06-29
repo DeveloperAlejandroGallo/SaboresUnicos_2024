@@ -81,7 +81,7 @@ export class ChatPage implements OnInit {
     this.chatSrv.nuevo(mensaje);
 
    
-    if (this.nombreMozo != "") {
+    if (this.nombreMozo == "") {
       this.pushService.notificarConsultaAMozos(this.numeroMesaCliente, this.ngmensaje).subscribe( {
         next: (data) => {
           console.log("Rta Push consulta del cliente: ");
