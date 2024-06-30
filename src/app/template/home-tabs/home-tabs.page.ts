@@ -34,8 +34,8 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   private keyboardWillHideSub: any;
 
   public usuarioLogueado!: Usuario;
-  public esCliente:boolean = true;
-  public esMaitre:boolean = false;
+  public esCliente: boolean = true;
+  public esMaitre: boolean = false;
   public esDuenio: boolean = false;
   public esSupervisor: boolean = false;
   public esEmpleado: boolean = false;
@@ -44,19 +44,19 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   public esBartender: boolean = false;
   public esAnonimo: boolean = false;
   public url: string;
-  public codigoLeido : string = "";
+  public codigoLeido: string = "";
   public isSupported: boolean = false;
   public isPermissionGranted = false;
 
 
   //para ocultar/ver distintos TABS -->
-  verJuegos : boolean = false;
-  verChat : boolean = false;
+  verJuegos: boolean = false;
+  verChat: boolean = false;
   verChatFlotante: boolean = false;
-  verMiPedido : boolean = false;
-  verEncuesta : boolean = false;
-  estaEnEspera : boolean = false;
-  tieneMesaAsignada : boolean = false;
+  verMiPedido: boolean = false;
+  verEncuesta: boolean = false;
+  estaEnEspera: boolean = false;
+  tieneMesaAsignada: boolean = false;
   queAlta: string = '';
   //-------------------------
   constructor(
@@ -68,40 +68,40 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     private router: Router,
     private auth: AuthService,
     private usrService: UsuarioService,
-  private pushSrv: PushNotificationService) {
+    private pushSrv: PushNotificationService) {
 
     this.url = this.router.url;
     this.usuarioLogueado = this.auth.usuarioActual!;
-    this.usrService.allUsers$.subscribe(data =>{
+    this.usrService.allUsers$.subscribe(data => {
       this.usuarioLogueado = data.filter(x => x.id === this.auth.usuarioActual?.id)[0];
     });
 
-  // console.log(this.usuarioLogueado);
+    // console.log(this.usuarioLogueado);
   }
 
   ngOnInit() {
-    Keyboard.addListener('keyboardWillShow', () => {
-      this.isKeyboardOpen = true;
-      console.log("teclado abierto");
-    }).then(handle => {
-      this.keyboardWillShowSub = handle;
-    });
 
-    Keyboard.addListener('keyboardWillHide', () => {
-      this.isKeyboardOpen = false;
-      console.log("teclado oculto");
-      
-    }).then(handle => {
-      this.keyboardWillHideSub = handle;
-    });
 
-    if(this.platform.is('capacitor')) {
+    if (this.platform.is('capacitor')) {
       console.log("Validadndo permisos de notificaciones en plataforma:");
+      Keyboard.addListener('keyboardWillShow', () => {
+        this.isKeyboardOpen = true;
+        console.log("teclado abierto");
+      }).then(handle => {
+        this.keyboardWillShowSub = handle;
+      });
 
+      Keyboard.addListener('keyboardWillHide', () => {
+        this.isKeyboardOpen = false;
+        console.log("teclado oculto");
+
+      }).then(handle => {
+        this.keyboardWillHideSub = handle;
+      });
       this.addListeners();
       this.registerNotifications();
 
-     
+
     }
     this.tiposEntidades();
 
@@ -119,7 +119,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
 
 
-    this.listaSvc.buscarEnListaXid(this.usuarioLogueado.id).subscribe(data=>{
+    this.listaSvc.buscarEnListaXid(this.usuarioLogueado.id).subscribe(data => {
       this.estaEnEspera = data.length > 0;
     });
 
@@ -162,7 +162,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
     this.esCliente = true;
 
-    if(this.usuarioLogueado.perfil == Perfil.Empleado){
+    if (this.usuarioLogueado.perfil == Perfil.Empleado) {
       this.esCliente = false;
       this.esDuenio = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Dueño;
       this.esSupervisor = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Supervisor;
@@ -173,11 +173,11 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
     }
 
-    if(this.esMaitre){
+    if (this.esMaitre) {
       this.queAlta = 'Cliente'
     }
 
-    if(this.esDuenio || this.esSupervisor){
+    if (this.esDuenio || this.esSupervisor) {
       this.queAlta = 'Empleado';
     }
 
@@ -196,20 +196,20 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     await modal.present();
     const { data } = await modal.onWillDismiss();
 
-    if(data){
+    if (data) {
       this.codigoLeido = data?.barcode?.displayValue;
       const datos = this.codigoLeido.split('/');
 
-      switch(this.usuarioLogueado.perfil){
+      switch (this.usuarioLogueado.perfil) {
         case Perfil.Cliente:
         case Perfil.Anonimo:
-          switch(datos[0]){
+          switch (datos[0]) {
             case "IngresoLocal":
               this.ingresarAListaEspera();
 
               break;
             case "Mesa":
-              if(this.validacionesMesa(datos[1])) {
+              if (this.validacionesMesa(datos[1])) {
                 this.router.navigate(['home-tabs/menu-productos']);
                 this.verJuegos = true;
                 this.verChat = true;
@@ -234,31 +234,30 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
   validacionesMesa(mesa: string): boolean {
 
-      if(this.usuarioLogueado.mesaAsignada == 0)
-      {
-        this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
-        return false;
-      }
+    if (this.usuarioLogueado.mesaAsignada == 0) {
+      this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
+      return false;
+    }
 
-        const nroMesa = mesa;
-      if (this.usuarioLogueado.mesaAsignada != Number(nroMesa)) {
-        this.msgService.Info('Mesa equivocada. Su número de mesa es ' + this.usuarioLogueado.mesaAsignada);
-        return false;
+    const nroMesa = mesa;
+    if (this.usuarioLogueado.mesaAsignada != Number(nroMesa)) {
+      this.msgService.Info('Mesa equivocada. Su número de mesa es ' + this.usuarioLogueado.mesaAsignada);
+      return false;
 
-      }
-      return true;
+    }
+    return true;
   }
 
 
 
 
-  ingresarAListaEspera(){
+  ingresarAListaEspera() {
     // console.log(this.usuario);
 
     // this.msgService.Info(this.usuario.mesaAsignada.toString());
 
     if (this.usuarioLogueado.mesaAsignada == 0) {
-      if(!this.estaEnEspera){
+      if (!this.estaEnEspera) {
         Swal.fire({
           title: "¿Quieres entrar a la lista de espera?",
           icon: "warning",
@@ -275,10 +274,10 @@ export class HomeTabsPage implements OnInit, OnDestroy {
             this.isLoading = true;
             //this.usuario.estaEnListaEspera = true;
             //this.usrService.actualizar(this.usuario);
-            this.listaSvc.nuevo(this.usuarioLogueado).then(()=>{
+            this.listaSvc.nuevo(this.usuarioLogueado).then(() => {
               this.isLoading = false;
               this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
-              this.pushSrv.notificarMaitreNuevoEnListaEspera(this.usuarioLogueado).subscribe( {
+              this.pushSrv.notificarMaitreNuevoEnListaEspera(this.usuarioLogueado).subscribe({
                 next: (data) => {
                   console.log("Rta Push Lista: ");
                   console.log(data);
@@ -289,16 +288,16 @@ export class HomeTabsPage implements OnInit, OnDestroy {
                   this.isLoading = false;
                 }
               });
-            }).catch(err=>{
+            }).catch(err => {
               this.msgService.Error(err);
             })
           }
         });
       }
-      else{
+      else {
         this.msgService.Info("Ya estas en la lista de espera.");
       }
-    }else{
+    } else {
       this.msgService.Info("Ya te asignaron una mesa, tu número de mesa es: " + this.usuarioLogueado.mesaAsignada);
     }
 
@@ -306,23 +305,23 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
 
 
-    /**
-   * Push Notifications
-   * Registra el dispositivo para recibir notificaciones
-   */
+  /**
+ * Push Notifications
+ * Registra el dispositivo para recibir notificaciones
+ */
   async registerNotifications() {
 
-    if(this.usuarioLogueado.token == (null || undefined)) {
+    if (this.usuarioLogueado.token == (null || undefined)) {
       console.log("Usuario sin token");
       console.log("verificando permisos Push Notifications");
       let permisionStatus = await PushNotifications.checkPermissions();
 
       console.log("Pregunto si tiene permisos de recibir notificaciones");
-      if(permisionStatus.receive === "prompt"){
+      if (permisionStatus.receive === "prompt") {
         permisionStatus = await PushNotifications.requestPermissions();
       }
       console.log("verificando si se dieron permisos de recibir notificaciones");
-      if(permisionStatus.receive !== "granted"){
+      if (permisionStatus.receive !== "granted") {
         console.log("No se puede recibir notificaciones");
       }
 
@@ -333,17 +332,17 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
   async addListeners() {
 
-      await PushNotifications.addListener('registration', token => {
-        console.info('Token de registro: ', token.value);
+    await PushNotifications.addListener('registration', token => {
+      console.info('Token de registro: ', token.value);
 
-        if(this.usuarioLogueado.token != token.value){
-          this.usrService.actualizarToken(this.usuarioLogueado.id!,token.value);
-        }
-      });
+      if (this.usuarioLogueado.token != token.value) {
+        this.usrService.actualizarToken(this.usuarioLogueado.id!, token.value);
+      }
+    });
 
-      await PushNotifications.addListener('registrationError', err => {
-        console.error('Error Registro Push: ', err.error);
-      });
+    await PushNotifications.addListener('registrationError', err => {
+      console.error('Error Registro Push: ', err.error);
+    });
 
 
     await PushNotifications.addListener('pushNotificationReceived', notification => {
@@ -356,11 +355,11 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
   }
 
-  recibirIsLoading(is: boolean){
+  recibirIsLoading(is: boolean) {
     this.isLoading = is;
   }
 
-  irAlChat(){
+  irAlChat() {
     this.router.navigate(['home-tabs/chat']);
   }
 }
