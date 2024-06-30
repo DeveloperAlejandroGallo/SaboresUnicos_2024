@@ -65,6 +65,10 @@ const routes: Routes = [
     path: 'resumen',
     loadChildren: () => import('./pages/resumen/resumen.module').then( m => m.ResumenPageModule)
   },
+  {
+    path: 'encuesta-cliente',
+    loadChildren: () => import('./pages/encuesta-cliente/encuesta-cliente.module').then( m => m.EncuestaClientePageModule)
+  },
 
 
 

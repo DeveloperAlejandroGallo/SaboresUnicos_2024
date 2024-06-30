@@ -1,0 +1,233 @@
+<body>
+  <ion-header><app-header></app-header> </ion-header>
+  <ion-content>
+    <ion-title class="titulo" color="primary"
+      >¡Queremos saber tu opinión!</ion-title
+    >
+
+    <div class="formulario">
+      <ion-card class="mi-ion-card">
+        <!-- <form [formGroup]="" (ngSubmit)="()"></form> -->
+        <ion-card-content>
+          <form [formGroup]="encuestaForm">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12">
+                  <div >
+                    <swiper-container
+                      pager="true"
+                     [loop]="true"
+                      [pagination]="true"
+                    >
+                      <swiper-slide *ngFor="let imagen of selectedPhotos">
+                        <img [src]="imagen" class="producto-imagen" loading="lazy"/>
+                      </swiper-slide>
+                    </swiper-container>
+                  </div>
+                  <ion-button (click)="tomarFoto()"> Tomar Foto</ion-button>
+                
+                </ion-col>
+              </ion-row>
+
+              <!-- Calificaicon del servicio -->
+              <ion-row>
+                <ion-col size="12">
+                  <div class="labels">
+                    <label>Calificación del Servicio</label>
+                  </div>
+
+                  <ion-col size="12" class="star-rating">
+                    <img
+                      *ngFor="let star of stars; let i = index"
+                      [src]="star"
+                      class="star-image"
+                      (click)="setStarRating(i + 1)"
+                    />
+                  </ion-col>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col size="12">
+                  <ion-item-divider
+                    style="background: #ffeeee"
+                  ></ion-item-divider>
+                </ion-col>
+              </ion-row>
+
+              <!-- Sabor de la comida -->
+              <ion-row>
+                <ion-col size="12">
+                  <div class="labels">
+                    <label>Sabor de la Comida (1-10)</label>
+                  </div>
+                  <ion-item lines="none" class="item-background-color">
+                    <ion-range
+                      min="1"
+                      max="10"
+                      step="1"
+                      formControlName="saborDeLaComida"
+                      (ionChange)="onRangeChange($event)"
+                      style="background: #ffeeee"
+                    >
+                      <ion-icon
+                        slot="start"
+                        name="restaurant-outline"
+                      ></ion-icon>
+                      <ion-icon slot="end" name="restaurant"></ion-icon>
+                    </ion-range>
+                  </ion-item>
+                  <div class="label-sabor-puntaje-comida">
+                    <label
+                      >{{textoSaborDeLaComida}}
+                      ({{puntajeSaborDeLaComida}})</label
+                    >
+                  </div>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col size="12">
+                  <ion-item-divider
+                    style="background: #ffeeee"
+                  ></ion-item-divider>
+                </ion-col>
+              </ion-row>
+
+              <!-- Recomendar lugar -->
+              <ion-row>
+                <ion-col size="12">
+                  <ion-item lines="none" class="item-background-color">
+                    <div class="labels">
+                      <label>¿Recomendarías el lugar?</label>
+                    </div>
+                  </ion-item>
+                  <ion-item class="radio-item item-background-color">
+                    <ion-radio-group
+                      formControlName="recomendariasElLugar"
+                      [(ngModel)]="valorRecomendarLugar"
+                      (ionChange)="checkValorRecomendarLugar($event)"
+                      class="radio-group"
+                    >
+                      <ion-item>
+                        <label>Sí</label>
+                        <ion-radio
+                          slot="start"
+                          value="Sí"
+                          aria-label="Sí"
+                        ></ion-radio>
+                      </ion-item>
+                      <ion-item>
+                        <label>No</label>
+                        <ion-radio
+                          slot="start"
+                          value="No"
+                          aria-label="No"
+                        ></ion-radio>
+                      </ion-item>
+                    </ion-radio-group>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+
+              <!-- <ion-row>
+                <ion-col size="12">
+                  <ion-item-divider
+                    style="background: #ffeeee"
+                  ></ion-item-divider>
+                </ion-col>
+              </ion-row> -->
+
+              <!-- Qué te agradó -->
+              <ion-row>
+                <ion-col size="12">
+                  <ion-item class="item-background-color">
+                    <div class="labels">
+                      <label>¿Qué cosas te agradaron?</label>
+                    </div>
+                  </ion-item>
+                  <ion-item
+                    *ngFor="let cosa of listaDeCosas"
+                    class="item-background-color"
+                    lines="none"
+                  >
+                    <ion-checkbox
+                      slot="start"
+                      formControlName="cosasAgradaron"
+                      [(ngModel)]="cosa.si"
+                      (ionChange)="getCheckBoxValuesChange()"
+                      >{{cosa.cosa}}</ion-checkbox
+                    >
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col size="12">
+                  <ion-item-divider
+                    style="background: #ffeeee"
+                  ></ion-item-divider>
+                </ion-col>
+              </ion-row>
+
+              <!-- Mejor comida -->
+              <ion-row>
+                <ion-col size="12">
+                  <ion-item lines="none" class="item-background-color">
+                    <div class="label-mejor-comida">
+                      <label>¿Cuál fue la mejor comida?</label>
+                    </div>
+                  </ion-item>
+                  <ion-item>
+                    <!-- <ion-label>Mejor comida</ion-label> -->
+                    <ion-select
+                      label="Mejor comida"
+                      formControlName="mejorComida"
+                      (ionChange)="getSelectValuesChange()"
+                    >
+                      <ion-select-option
+                        *ngFor="let producto of listaDeProductos"
+                        [value]="producto"
+                      >
+                        Nombre: {{producto.nombre}} - Tipo: {{producto.tipo}}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+
+              <!-- Fotos -->
+              <!-- <ion-row>
+                <ion-col size="12">
+                  
+                  <ion-item>
+                    <ion-label>Fotos</ion-label>
+                    <input type="file" multiple accept="image/*" />
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col size="12">
+                  <ion-item-divider
+                    style="background: #ffeeee"
+                  ></ion-item-divider>
+                </ion-col>
+              </ion-row> -->
+
+              <!-- Comentarios -->
+              <ion-row>
+                <ion-col size="12">
+                  <ion-item>
+                    <!-- <ion-label position="floating">Comentario</ion-label> -->
+                    <ion-textarea label="Comentarios"></ion-textarea>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </form>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ion-content>
+</body>

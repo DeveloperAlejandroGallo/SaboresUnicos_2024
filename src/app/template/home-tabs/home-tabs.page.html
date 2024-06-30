@@ -35,7 +35,7 @@
   </ion-tab-bar>
 
   <ion-fab *ngIf="esCliente"  class="fab-chat fab-encuesta"  slot="fixed" vertical="top" horizontal="end">
-    <ion-fab-button color="white" class="boton-encuesta">
+    <ion-fab-button color="white" class="boton-encuesta" (click)="irACreacionEncuesta()" >
       <ion-icon color="primary" name="megaphone-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
