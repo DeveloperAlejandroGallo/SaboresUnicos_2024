@@ -87,6 +87,7 @@ export class HomeMaitrePage  {
         showCancelButton: true,
         cancelButtonText:'Cancelar',
         confirmButtonColor: "#0EA06F",
+        confirmButtonText: "Aceptar",
         cancelButtonColor: "#d33",
         inputValidator: (value) => {
           return new Promise((resolve: any) => {
@@ -131,9 +132,11 @@ export class HomeMaitrePage  {
           title:`Seleccionó la mesa número: ` + mesaAAsignar?.numero,
           position: 'center',
           heightAuto: false,
+
           customClass: {
             popup: 'center-alert'
-          }
+          },
+          confirmButtonText: "Aceptar",
         }
       );
       }
