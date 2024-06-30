@@ -363,4 +363,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   irAlChat(){
     this.router.navigate(['home-tabs/chat']);
   }
+  irACreacionEncuesta(){
+    this.router.navigate(['home-tabs/encuesta-cliente']);
+  }
 }
