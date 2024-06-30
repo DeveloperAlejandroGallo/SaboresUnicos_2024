@@ -45,6 +45,10 @@ import { BarcodeScanningModalComponent } from './barcode-scanning-modal.componen
             path: 'juegos',
             loadChildren: () => import('../../pages/juegos/juegos.module').then( m => m.JuegosPageModule)
           },
+          {
+            path: 'resumen',
+            loadChildren: () => import('../../pages/resumen/resumen.module').then( m => m.ResumenPageModule)
+          },
           //path: otra pagina
           {
             path: '',

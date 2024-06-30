@@ -38,7 +38,8 @@ export class MenuProductosPage implements OnInit {
   public verImporte: boolean = true;
   public pedido!: Pedido;
   private idPedido: string = '';
-  total: number;
+  public total: number = 0;
+
 
 
 
@@ -54,7 +55,7 @@ export class MenuProductosPage implements OnInit {
 
     this.pedido = this.pedidoSrv.listadoPedidos.find(
       x => x.cliente.id === this.auth.usuarioActual!.id
-      && x.estadoPedido == EstadoPedido.Pendiente)!;
+      && x.estadoPedido !== EstadoPedido.Cerrado)!;
 
     this.pedidoSrv.escucharPedidoId(this.pedido.id);
 
@@ -66,26 +67,7 @@ export class MenuProductosPage implements OnInit {
     this.pedidoSrv.pedido$.subscribe(data => {
         this.pedido = data;
         this.subtotal = this.pedido.productos.length != 0 ? this.pedido.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0) : 0;
-        this.total = this.subtotal + this.pedido.propina - (this.pedido.descuentoPorJuego * this.subtotal / 100);
 
-        switch(this.pedido.estadoPedido){
-          case EstadoPedido.Pendiente:
-            this.verImporte = true;
-            break;
-          case EstadoPedido.EnPreparacion:
-            this.verImporte = false;
-            break;
-          case EstadoPedido.ListoParaServir:
-            this.verImporte = false;
-            break;
-          case EstadoPedido.Servido:
-            this.verImporte = false;
-            break;
-          case EstadoPedido.Pagado:
-            this.verImporte = false;
-            break;
-        
-        }
       }
     )
 

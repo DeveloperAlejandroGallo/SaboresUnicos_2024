@@ -1,26 +1,84 @@
 <ion-content>
-  <div class="profile-header">
-    <ion-avatar class="profile-avatar">
-      <img [src]="" alt="Profile Picture">
-    </ion-avatar>
-    <!-- <ion-icon class="edit-icon" name="create-outline"></ion-icon> -->
-    <h2 class="profile-name"></h2>
-    <p ></p>
-    <p ></p>
-
-  </div>
-
+<div class="profile-header">
+    <ion-icon
+    class="icon-volver"
+    name="arrow-back-outline"
+    (click)="volver()"
+  ></ion-icon>
+  <ion-avatar class="profile-avatar">
+    <img [src]="usuario.foto" alt="Profile Picture">
+  </ion-avatar>
+  <!-- <ion-icon class="edit-icon" name="create-outline"></ion-icon> -->
+  <h2 class="profile-name">Detalle de Pedido</h2>
+</div>
   <ion-card>
     <ion-card-content>
         <ion-item>
-          <ion-label><h1>{{pedido.estadoPedido}}</h1></ion-label>
+          <ion-avatar slot="start">
+            <img class="rounded-image bordered-image" src="../../../assets/img/alimentosRojo.png"  />
+          </ion-avatar>
+          <ion-label class="estado {{colorEstado}}"><h2>{{pedido.estadoPedido}}</h2></ion-label>
+          <ion-note *ngIf="pedido.fechaDePedidoAceptado !== null" slot="end">{{pedido.fechaDePedidoAceptado!.toDate()! | fechaToString }}</ion-note>
         </ion-item>
 
-        <!-- <ion-item >
-          <ion-icon name="at-circle" slot="start"></ion-icon>
-          <ion-label></ion-label>
+        <ion-item>
+          <ion-accordion-group expand="full" style="width: 100%;">
+            <ion-accordion>
+              <ion-item slot="header">
+                <ion-label style="font-weight: bold;">Tu Pedido</ion-label>
+              </ion-item>
+              <ion-list slot="content" class="producto-item">
+                <ion-item *ngFor="let producto of pedido.productos" lines="none">
+                  <ion-avatar slot="start" class="producto-avatar">
+                    <img class="bordered-image" src="{{producto.producto.fotos[0]}}"  />
+                  </ion-avatar>
+                  <ion-label class="producto-nombre">{{producto.producto.nombre}}</ion-label>
+                  <div class="producto-detalles" >
+                    <ion-label class="cantidad" slot="end">{{producto.cantidad}}x</ion-label>
+                    <ion-label class="importe" slot="end">{{(producto.cantidad * producto.producto.precio) | monedaPesos}}</ion-label>
+                  </div>
+                </ion-item>
+              </ion-list>
+            </ion-accordion>
+          </ion-accordion-group>
         </ion-item>
-
+        <ion-item>
+          <ion-label class="titulos" style="font-weight: bold;">Subtotal</ion-label>
+          <ion-label class="importe">{{subtotal | monedaPesos}}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-accordion-group expand="full" style="width: 100%;">
+            <ion-accordion>
+              <ion-item slot="header">
+                <ion-label style="font-weight: bold;">Tu Pago</ion-label>
+              </ion-item>
+              <ion-list slot="content" class="producto-item" lines="none">
+                <ion-item>
+                  <ion-label class="tituloImporte">Productos</ion-label>
+                  <ion-label class="importe">{{subtotal | monedaPesos}}</ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label class="tituloImporte">Descuentos</ion-label>
+                  <ion-label class="importe">{{pedido.descuentoPorJuego}}%</ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label class="tituloImporte">Propina</ion-label>
+                  <ion-label class="importe">{{pedido.propina| monedaPesos}}</ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label class="tituloImporte">Tarifa de Servicio</ion-label>
+                  <ion-label class="importe">{{tarifaServicio | monedaPesos}}</ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-accordion>
+          </ion-accordion-group>
+        </ion-item>
+        <ion-item>
+          <ion-label class="titulos">Total</ion-label>
+          <ion-label class="importe" style="font-weight: bold;">{{total | monedaPesos}}</ion-label>
+        </ion-item>
+        <ion-button [disabled]="botonDeshabilitado" expand="full" color="primary" (click)="accionPedido(pedido)">{{textoAccion}}</ion-button>
+        <!--
         <ion-item >
           <ion-icon name="id-card-outline" slot="start"></ion-icon>
           <ion-label></ion-label>

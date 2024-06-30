@@ -1,5 +1,5 @@
 export enum EstadoPedido {
-  Inicial = 'Abierto', //Estado Inicial
+  Abierto = 'Abierto', //Estado Inicial
   Pendiente = 'Pendiente', //Esta Haciendo el pedido
   Aceptado = 'Aceptado', //Acepto el Mozo
   EnPreparacion = 'En Preparación', //Esta cocinando
