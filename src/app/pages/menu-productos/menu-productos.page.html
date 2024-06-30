@@ -17,7 +17,7 @@
     </ion-segment>
 
     <ion-content class="content">
-      <div id="popover-button" class="floating-action-button" >
+      <div id="popover-button" class="floating-action-button" (click)="VerDetalle()">
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
           <div style="flex-grow: 1; text-align: center;">
             <span>{{ subtotal  | monedaPesos }}</span>
@@ -188,7 +188,7 @@
 
 
 
-
+<!--
 
 <ion-popover trigger="popover-button"
   triggerAction="click"
@@ -211,4 +211,4 @@
       </ion-list>
     </ion-content>
   </ng-template>
-</ion-popover>
+</ion-popover> -->

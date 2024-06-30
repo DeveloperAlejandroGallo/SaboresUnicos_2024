@@ -121,7 +121,7 @@ export class MenuProductosPage implements OnInit {
 
     }
   VerDetalle() {
-    this.router.navigate(['/resumen']);
+    this.router.navigate(['home-tabs/resumen']);
   }
 
 

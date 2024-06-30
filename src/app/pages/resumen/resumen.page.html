@@ -1,3 +1,4 @@
+
 <ion-content>
 <div class="profile-header">
     <ion-icon
@@ -44,7 +45,7 @@
         </ion-item>
         <ion-item>
           <ion-label class="titulos" style="font-weight: bold;">Subtotal</ion-label>
-          <ion-label class="importe">{{subtotal | monedaPesos}}</ion-label>
+          <ion-label class="importe bold" >{{subtotal | monedaPesos}}</ion-label>
         </ion-item>
         <ion-item>
           <ion-accordion-group expand="full" style="width: 100%;">
@@ -55,7 +56,7 @@
               <ion-list slot="content" class="producto-item" lines="none">
                 <ion-item>
                   <ion-label class="tituloImporte">Productos</ion-label>
-                  <ion-label class="importe">{{subtotal | monedaPesos}}</ion-label>
+                  <ion-label class="importe bold">{{subtotal | monedaPesos}}</ion-label>
                 </ion-item>
                 <ion-item>
                   <ion-label class="tituloImporte">Descuentos</ion-label>
@@ -74,8 +75,8 @@
           </ion-accordion-group>
         </ion-item>
         <ion-item>
-          <ion-label class="titulos">Total</ion-label>
-          <ion-label class="importe" style="font-weight: bold;">{{total | monedaPesos}}</ion-label>
+            <ion-label ><h1 class="titulos">Total</h1></ion-label>
+            <ion-label ><h1 class="importe bold">{{total | monedaPesos}}</h1></ion-label>
         </ion-item>
         <ion-button [disabled]="botonDeshabilitado" expand="full" color="primary" (click)="accionPedido(pedido)">{{textoAccion}}</ion-button>
         <!--

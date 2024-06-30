@@ -10,6 +10,8 @@ import { ResumenPage } from './resumen.page';
 import { FechaToStringPipe } from 'src/app/pipes/fecha-to-string.pipe';
 import { MonedaPesosPipe } from "../../pipes/moneda-pesos.pipe";
 
+import { HeaderModule } from 'src/app/components/header/header.module';
+
 @NgModule({
     declarations: [ResumenPage],
     imports: [
@@ -18,7 +20,8 @@ import { MonedaPesosPipe } from "../../pipes/moneda-pesos.pipe";
         IonicModule,
         ResumenPageRoutingModule,
         FechaToStringPipe,
-        MonedaPesosPipe
+        MonedaPesosPipe,
+        HeaderModule
     ]
 })
 export class ResumenPageModule {}

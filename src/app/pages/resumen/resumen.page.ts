@@ -104,7 +104,7 @@ throw new Error('Method not implemented.');
 
 
   volver() {
-    throw new Error('Method not implemented.');
+    this.router.navigate(['/home-tabs/menu-productos']);
   }
 
 }
