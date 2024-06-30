@@ -14,13 +14,21 @@
 </div>
   <ion-card>
     <ion-card-content>
-        <ion-item>
+      <div class="estado">
+        <ion-label class="titulo">Estado de Pedido</ion-label>
+        <ion-item class="box">
           <ion-avatar slot="start">
             <img class="rounded-image bordered-image" src="../../../assets/img/alimentosRojo.png"  />
           </ion-avatar>
-          <ion-label class="estado {{colorEstado}}"><h2>{{pedido.estadoPedido}}</h2></ion-label>
-          <ion-note *ngIf="pedido.fechaDePedidoAceptado !== null" slot="end">{{pedido.fechaDePedidoAceptado!.toDate()! | fechaToString }}</ion-note>
+          <ion-label >
+            <ion-label class="estado {{colorEstado}}"><h2>{{pedido.estadoPedido}}</h2></ion-label>
+            <ion-item  class="tiempo"  style="width: 100%; margin-left: 0; padding-left: 0;">
+              <ion-icon color="primary"  name="timer-outline"></ion-icon>
+              <ion-label>Espera de {{pedido.tiempoEstimado}} min.</ion-label>
+            </ion-item>
+          </ion-label>
         </ion-item>
+      </div>
 
         <ion-item>
           <ion-accordion-group expand="full" style="width: 100%;">
