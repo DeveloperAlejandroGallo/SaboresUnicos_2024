@@ -50,13 +50,16 @@
 
 </ion-tabs>
 
+<!-- <div class="fixed"> -->
 
-  <ion-fab *ngIf="esCliente"  slot="fixed" vertical="bottom" horizontal="center" >
+
+  <ion-fab *ngIf="esCliente && !isKeyboardOpen" slot="fixed" vertical="bottom" horizontal="center" >
     <ion-fab-button (click)="escanearQR()">
       <ion-icon name="qr-code-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
+<!-- </div> -->
   
   <div class="custom-spinner" *ngIf="isLoading" >
     <img src="../../../assets/spinner.png" alt="Spinner">

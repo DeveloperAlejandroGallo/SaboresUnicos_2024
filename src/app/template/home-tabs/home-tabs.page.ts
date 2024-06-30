@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Perfil } from 'src/app/enums/perfil';
 import { Usuario } from 'src/app/models/usuario';
@@ -15,7 +15,7 @@ import { PushNotifications } from '@capacitor/push-notifications';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { PushNotificationService } from 'src/app/services/push-notification.service';
 
-
+import { Keyboard } from '@capacitor/keyboard';
 
 const background = '#f8f8f8d7';
 @Component({
@@ -24,12 +24,14 @@ const background = '#f8f8f8d7';
   styleUrls: ['./home-tabs.page.scss'],
 })
 
-export class HomeTabsPage implements OnInit {
+export class HomeTabsPage implements OnInit, OnDestroy {
 
 
   @Input() isLoading: boolean = false;
 
-
+  public isKeyboardOpen = false;
+  private keyboardWillShowSub: any;
+  private keyboardWillHideSub: any;
 
   public usuarioLogueado!: Usuario;
   public esCliente:boolean = true;
@@ -78,6 +80,20 @@ export class HomeTabsPage implements OnInit {
   }
 
   ngOnInit() {
+    Keyboard.addListener('keyboardWillShow', () => {
+      this.isKeyboardOpen = true;
+      console.log("teclado abierto");
+    }).then(handle => {
+      this.keyboardWillShowSub = handle;
+    });
+
+    Keyboard.addListener('keyboardWillHide', () => {
+      this.isKeyboardOpen = false;
+      console.log("teclado oculto");
+      
+    }).then(handle => {
+      this.keyboardWillHideSub = handle;
+    });
 
     if(this.platform.is('capacitor')) {
       console.log("Validadndo permisos de notificaciones en plataforma:");
@@ -109,6 +125,14 @@ export class HomeTabsPage implements OnInit {
 
   }
 
+  ngOnDestroy() {
+    if (this.keyboardWillShowSub && this.keyboardWillShowSub.remove) {
+      this.keyboardWillShowSub.remove();
+    }
+    if (this.keyboardWillHideSub && this.keyboardWillHideSub.remove) {
+      this.keyboardWillHideSub.remove();
+    }
+  }
 
   private preparaCamara() {
     if (this.platform.is('capacitor')) {
