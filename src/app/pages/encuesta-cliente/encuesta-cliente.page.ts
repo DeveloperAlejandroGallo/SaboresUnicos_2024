@@ -154,6 +154,7 @@ export class EncuestaClientePage implements OnInit {
         this.selectedPhotos.push(this.imageTomadaURL);
         console.log(this.selectedPhotos);
         
+        
       })
       .catch((err) => {
         console.log(err);
