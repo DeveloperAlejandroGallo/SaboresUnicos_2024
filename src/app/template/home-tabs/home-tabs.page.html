@@ -1,5 +1,5 @@
 <ion-tabs>
-  <ion-tab-bar slot="bottom">
+  <ion-tab-bar  slot="bottom">
     <ion-tab-button tab="home">
       <ion-icon name="home"></ion-icon>
       <ion-label>Inicio</ion-label>
@@ -34,26 +34,33 @@
 
   </ion-tab-bar>
 
-  <ion-fab *ngIf="esCliente && verEncuesta" class="fab-chat fab-encuesta"  slot="fixed" vertical="top" horizontal="end">
+  <ion-fab *ngIf="esCliente"  class="fab-chat fab-encuesta"  slot="fixed" vertical="top" horizontal="end">
     <ion-fab-button color="white" class="boton-encuesta">
       <ion-icon color="primary" name="megaphone-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
-  <ion-fab *ngIf="esCliente && verChat" class="fab-chat"  slot="fixed" vertical="top" horizontal="end">
-    <ion-fab-button color="white" class="boton-chat-mozo">
+
+  <!-- PONER EL verChat ANTES DE ENTREGAR -->
+  <ion-fab *ngIf="(esCliente || esMozo) && verChat" class="fab-chat"  slot="fixed" vertical="top" horizontal="end">
+    <ion-fab-button color="white" class="boton-chat-mozo" (click)="irAlChat()">
       <ion-icon color="primary" name="chatbox-ellipses-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
 </ion-tabs>
 
-<ion-fab *ngIf="esCliente" slot="fixed" vertical="bottom" horizontal="center">
-  <ion-fab-button (click)="escanearQR()">
-    <ion-icon name="qr-code-outline"></ion-icon>
-  </ion-fab-button>
-</ion-fab>
+<!-- <div class="fixed"> -->
 
-<div class="custom-spinner" *ngIf="isLoading" >
-  <img src="../../../assets/spinner.png" alt="Spinner">
+
+  <ion-fab *ngIf="esCliente && !isKeyboardOpen" slot="fixed" vertical="bottom" horizontal="center" >
+    <ion-fab-button (click)="escanearQR()">
+      <ion-icon name="qr-code-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+<!-- </div> -->
+  
+  <div class="custom-spinner" *ngIf="isLoading" >
+    <img src="../../../assets/spinner.png" alt="Spinner">
 </div>

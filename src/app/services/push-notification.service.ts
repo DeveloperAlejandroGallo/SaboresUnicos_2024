@@ -80,4 +80,18 @@ export class PushNotificationService {
     let body = `El tiempo de espera para el pedido es de aproximadamente ${tiempoEstimado} minutos.\nGracias.`;
     return this.http.post(`${this.apiUri}/notificar`, { token, title, body }, { responseType: 'text' });
   }
+
+  notificarConsultaAMozos(mesaNumero: number, consulta: string): Observable<any> {
+    let title = `Nueva consulta de Mesa ${mesaNumero}`;
+    let body = `${consulta}`;
+    let role = TipoEmpleado.Mozo;
+    return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
+  }
+
+  notificarConsultaAMesas(cliente: Usuario,nombreMozo: string, respuestaConsulta: string): Observable<any> {
+    let token = cliente.token
+    let title = `Nuevo mensaje del mozo ${nombreMozo}`;
+    let body = `${respuestaConsulta}`;
+    return this.http.post(`${this.apiUri}/notificar`, { token, title, body }, { responseType: 'text' });
+  }
 }

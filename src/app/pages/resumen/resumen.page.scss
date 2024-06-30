@@ -1,0 +1,190 @@
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #bf0000;
+  padding: 60px 20px;
+  color: white;
+  p{
+    margin: 0px;
+  }
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border: 2px solid white;
+  border-radius: 50%;
+}
+
+// .edit-icon {
+//   position: absolute;
+//   top: 20px;
+//   right: 20px;
+//   color: white;
+//   font-size: 1.5em;
+// }
+
+.profile-name {
+  margin-top: 10px;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+ion-card {
+  margin-top: -25px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+ion-card-content {
+  padding: 5px;
+}
+
+ion-item {
+  --background: transparent;
+  --min-height: 54px;
+}
+
+ion-label {
+  color: #8a8a8a;
+}
+
+ion-content {
+  --background: url("../../../assets/img/fondo-gris.png") no-repeat center
+    center / cover;
+}
+
+ion-badge {
+  --padding-end: 20px;
+  --padding-start: 20px;
+  border-radius: 5px !important;
+}
+
+ion-toggle {
+  .native-wrapper .toggle-icon {
+    width: 60px !important;
+  }
+}
+
+
+
+
+.icon-volver {
+  position: absolute; /* Cambia a posicion absoluto */
+  top: 10px; /* Ajusta la distancia desde la parte superior */
+  left: 10px; /* Ajusta la distancia desde el borde izquierdo */
+  color: antiquewhite;
+  font-size: 30px;
+}
+
+
+.rounded-image {
+  border-radius: 50%;
+}
+
+.bordered-image {
+  border: 2px solid #bf0000;
+}
+
+
+
+.producto-avatar {
+  flex: 0 0 auto; /* No crece, no se encoge, basado en el contenido */
+}
+
+.producto-nombre {
+  flex-grow: 1; /* Ocupa todo el espacio disponible */
+  margin-left: 15px; /* Espacio entre la imagen y el nombre */
+}
+
+.producto-detalles {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: end;
+}
+
+ion-label {
+  font-size: medium;
+}
+
+.tituloImporte{
+  margin-left: 5px;
+}
+
+.importe{
+  align-items: flex-end;
+  text-align: end;
+
+  .bold{
+    font-weight: bold;
+  }
+
+}
+
+.titulos{
+  font-weight: bold;
+  margin-left: 15px;
+}
+
+
+ion-item {
+  --min-height: 0;
+}
+
+.estado {
+  text-align: center;
+  border: 2px solid;
+}
+
+.abierto{
+  background-color: #6cb6ff;
+  color: blue;
+  border-color:  #6cb6ff;
+}
+
+.pendiente{
+  background-color: #f9b36e;
+  color: orange;
+  border-color:  #f9b36e;
+}
+
+.en-preparacion { //violeta
+  background-color: #9c3afe;
+  color: purple;
+  border-color:  #9c3afe;
+}
+
+.listo{// verde
+  background-color: #76ff76;
+  color: green;
+  border-color:  #76ff76;
+}
+
+.entregado{//Amarillo
+  background-color: #ffff74;
+  color: rgb(192, 192, 0);
+  border-color:  #ffff74;
+}
+
+.confirmado { //negro
+  background-color: #656565;
+  color: black;
+  border-color:  #656565;
+}
+
+.pagado{
+  background-color: #00ff00;
+  color: green;
+  border-color:  #00ff00;
+}
+
+.cerrado{//rojo
+  background-color: rgb(255, 129, 129);
+  color: red;
+  border-color:  rgb(255, 129, 129);
+
+}

@@ -9,6 +9,7 @@ import { ProductoService } from 'src/app/services/producto.service';
 import { PedidoService } from 'src/app/services/pedido.service';
 import { Pedido } from 'src/app/models/pedido';
 import { EstadoPedido } from 'src/app/enums/estado-pedido';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu-productos',
@@ -16,6 +17,7 @@ import { EstadoPedido } from 'src/app/enums/estado-pedido';
   styleUrls: ['./menu-productos.page.scss'],
 })
 export class MenuProductosPage implements OnInit {
+
 
   @ViewChild(IonModal) modal: IonModal | undefined;
 
@@ -36,6 +38,8 @@ export class MenuProductosPage implements OnInit {
   public verImporte: boolean = true;
   public pedido!: Pedido;
   private idPedido: string = '';
+  public total: number = 0;
+
 
 
 
@@ -43,14 +47,15 @@ export class MenuProductosPage implements OnInit {
     private modalController: ModalController,
     private auth: AuthService,
     private productoService: ProductoService,
-    private pedidoSrv: PedidoService) {
+    private pedidoSrv: PedidoService,
+    private router: Router) {
 
 
     this.usuario = this.auth.usuarioActual!;
 
     this.pedido = this.pedidoSrv.listadoPedidos.find(
       x => x.cliente.id === this.auth.usuarioActual!.id
-      && x.estadoPedido == EstadoPedido.Pendiente)!;
+      && x.estadoPedido !== EstadoPedido.Cerrado)!;
 
     this.pedidoSrv.escucharPedidoId(this.pedido.id);
 
@@ -62,6 +67,7 @@ export class MenuProductosPage implements OnInit {
     this.pedidoSrv.pedido$.subscribe(data => {
         this.pedido = data;
         this.subtotal = this.pedido.productos.length != 0 ? this.pedido.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0) : 0;
+
       }
     )
 
@@ -109,6 +115,17 @@ export class MenuProductosPage implements OnInit {
   ngOnInit() {
     var a =1;
   }
+
+  //Menu:
+  PedirCuenta() {
+
+    }
+  VerDetalle() {
+    this.router.navigate(['home-tabs/resumen']);
+  }
+
+
+
 
   segmentChanged(event: any) {
     this.selectedCategory = event.detail.value;

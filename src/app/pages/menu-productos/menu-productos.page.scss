@@ -38,6 +38,7 @@ ion-segment-button.ios {
 
 
 ion-card {
+  background-color: #ffeeee;
   ion-card-content {
     .producto-imagen {
       //width: 340px;
@@ -46,6 +47,7 @@ ion-card {
       display: block;
       margin: 0 auto;
       width: -webkit-fill-available;
+
     }
 
     .producto-info {
