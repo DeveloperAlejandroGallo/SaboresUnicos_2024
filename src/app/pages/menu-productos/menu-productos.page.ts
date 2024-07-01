@@ -10,6 +10,7 @@ import { PedidoService } from 'src/app/services/pedido.service';
 import { Pedido } from 'src/app/models/pedido';
 import { EstadoPedido } from 'src/app/enums/estado-pedido';
 import { Router } from '@angular/router';
+import { MensajesService } from 'src/app/services/mensajes.service';
 
 @Component({
   selector: 'app-menu-productos',
@@ -48,7 +49,8 @@ export class MenuProductosPage implements OnInit {
     private auth: AuthService,
     private productoService: ProductoService,
     private pedidoSrv: PedidoService,
-    private router: Router) {
+    private router: Router,
+    private msgSrv: MensajesService) {
 
 
     this.usuario = this.auth.usuarioActual!;
@@ -121,7 +123,10 @@ export class MenuProductosPage implements OnInit {
 
     }
   VerDetalle() {
-    this.router.navigate(['home-tabs/resumen']);
+    if(this.subtotal > 0)
+      this.router.navigate(['home-tabs/resumen']);
+    else
+      this.msgSrv.Info("Debe elegir al menos un producto apra ver el detalle de cuenta.");
   }
 
 
@@ -179,6 +184,9 @@ export class MenuProductosPage implements OnInit {
         this.pedido.productos[index].cantidad++;
     }
 
+      if(this.pedido.tiempoEstimado < item.producto.tiempoPreparacionEnMinutos)
+        this.pedido.tiempoEstimado = item.producto.tiempoPreparacionEnMinutos;
+
      this.pedidoSrv.actualizarProducto(this.pedido);
   }
 
@@ -204,6 +212,13 @@ export class MenuProductosPage implements OnInit {
 
       if(this.pedido.productos[index].cantidad === 0)
         this.pedido.productos.splice(index,1);
+
+      //obtener el maximo tiempo de preparacion
+      let max = 0;
+      this.pedido.productos.forEach(x => {
+        if(x.producto.tiempoPreparacionEnMinutos > max)
+          max = x.producto.tiempoPreparacionEnMinutos;
+        });
 
        this.pedidoSrv.actualizarProducto(this.pedido);
 

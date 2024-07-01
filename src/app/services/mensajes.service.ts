@@ -34,7 +34,8 @@ export class MensajesService {
       heightAuto: false,
       background: background,
       confirmButtonColor: "#385ba7",
-      width: "20em"
+      width: "20em",
+      confirmButtonText: "Aceptar",
     });
   }
 
@@ -44,7 +45,8 @@ export class MensajesService {
       text: msg,
       icon: 'success',
       heightAuto: false,
-      background: background
+      background: background,
+      confirmButtonText: "Aceptar",
     });
   }
 
@@ -54,7 +56,8 @@ export class MensajesService {
       text: msg,
       icon: 'warning',
       heightAuto: false,
-      background: background
+      background: background,
+      confirmButtonText: "Aceptar",
     });
   }
 
@@ -68,10 +71,11 @@ export class MensajesService {
       heightAuto: false,
       background: background,
       confirmButtonColor: "#385ba7",
+      confirmButtonText: "Aceptar",
       width: "20em",
     });
   }
-  
+
   InfoToast(msg: string) {
     Toast.fire({
       title: 'Información',

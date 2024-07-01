@@ -67,8 +67,8 @@ toDate(fecha: number): Date {
 
 
   enviarMensaje(){
-    
-    
+
+
 
     const mensaje: Mensaje = {
       id: "",
@@ -95,12 +95,12 @@ toDate(fecha: number): Date {
           console.error(error);
         }
       });
-    } 
+    }
     this.ngmensaje = "";
 
   }
 
- 
+
 
 
 }

@@ -200,12 +200,12 @@ export class PedidoService {
   }
 
 
-  actualizarEstado(pedido: Pedido, estado: EstadoPedido) {
+  actualizarEstado(pedido: Pedido, estado: EstadoPedido): Promise<void> {
 
     const coleccion = collection(this.firestore, this.colectionName);
     const documento = doc(coleccion,pedido.id);
 
-    updateDoc(documento, {
+    return updateDoc(documento, {
 
       estadoPedido: estado,
 

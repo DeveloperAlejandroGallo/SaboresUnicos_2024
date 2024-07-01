@@ -73,6 +73,21 @@ export class PushNotificationService {
     return this.http.post(`${this.apiUri}/notificar`, { token, title, body }, { responseType: 'text' });
   }
 
+  MozoPagoRealizado(pedido: Pedido): Observable<any> {
+    let token = pedido.mozo!.token;
+    let title = `Pago realizado Mesa ${pedido.mesa.numero}.`;
+
+    let body = `${pedido.cliente.nombre} de la Mesa Nro: ${pedido.mesa.numero} realizó el pago por un total de $ ${pedido.total}.`;
+    return this.http.post(`${this.apiUri}/notificar`, { token, title, body }, { responseType: 'text' });
+  }
+
+  MozosNuevoPedido(mesaNumero: number): Observable<any> {
+    let title = `Nueva Pedido de Mesa ${mesaNumero}`;
+    let body = `Nuevo pedido de comida de Mesa ${mesaNumero}. Por favor revisar la lista de pedidos.`;
+    let role = TipoEmpleado.Mozo;
+    return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
+  }
+
   ClienteDuracionEspera(cliente: Usuario, tiempoEstimado: number): Observable<any> {
     let token = cliente.token;
     let title = `Su pedido está en preparación.`;

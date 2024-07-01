@@ -19,17 +19,19 @@ Gonzalez, Martín
 ```
 
 ## **Nuestro Logo**
-<img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Ffavicon.ico?alt=media&token=95b1f3ae-a100-4ab5-be68-c7da141c97b4" height="300">
+<img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Ffavicon.ico?alt=media&token=95b1f3ae-a100-4ab5-be68-c7da141c97b4" height="200">
 
 ## **Login**
-<img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FLogin.png?alt=media&token=3c00b62e-7db9-444b-ac45-435b27396d2c">
+<img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FLogin.png?alt=media&token=3c00b62e-7db9-444b-ac45-435b27396d2c" height="500">
 
 ## **Email de Confirmación**
-<img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FMailSaboresUnicos.png?alt=media&token=417dbc22-534d-4abe-b991-66128f16a469">
+<img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FMailSaboresUnicos.png?alt=media&token=417dbc22-534d-4abe-b991-66128f16a469" height="500">
 
 ## **El Push Notification**
-<img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Fpush.jpg?alt=media&token=fd4aa634-8b75-4df6-b422-0f4254efe651">
-<img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FIMG-20240625-WA0090.jpg?alt=media&token=4dfb9b40-e317-4131-8c4d-dbf50e9f1352 ">
+
+| Nuevo Cliente | Mesa Asignada | Consulta al Mozo |
+| ------ | ------ | ------ |
+| <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Fpush.jpg?alt=media&token=fd4aa634-8b75-4df6-b422-0f4254efe651" height="500">| <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FIMG-20240625-WA0090.jpg?alt=media&token=4dfb9b40-e317-4131-8c4d-dbf50e9f1352 " height="500"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/PushMozo.jpg"  height="500" /> |
 
 ## **Detalles de la construcción** 🛠️
 ### Semana 1: Sábado 08/06 al 15/06 💻
