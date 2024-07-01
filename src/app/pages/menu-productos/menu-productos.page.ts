@@ -184,6 +184,9 @@ export class MenuProductosPage implements OnInit {
         this.pedido.productos[index].cantidad++;
     }
 
+      if(this.pedido.tiempoEstimado < item.producto.tiempoPreparacionEnMinutos)
+        this.pedido.tiempoEstimado = item.producto.tiempoPreparacionEnMinutos;
+
      this.pedidoSrv.actualizarProducto(this.pedido);
   }
 
@@ -209,6 +212,13 @@ export class MenuProductosPage implements OnInit {
 
       if(this.pedido.productos[index].cantidad === 0)
         this.pedido.productos.splice(index,1);
+
+      //obtener el maximo tiempo de preparacion
+      let max = 0;
+      this.pedido.productos.forEach(x => {
+        if(x.producto.tiempoPreparacionEnMinutos > max)
+          max = x.producto.tiempoPreparacionEnMinutos;
+        });
 
        this.pedidoSrv.actualizarProducto(this.pedido);
 
