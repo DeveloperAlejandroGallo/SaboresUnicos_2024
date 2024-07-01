@@ -135,7 +135,7 @@ export class AuthService {
         this.messageService.Exito(
           `Usuario ${usuario.nombre} ${usuario.apellido} registrado correctamente.\nRecibirá un correo cuando su cuenta sea aprobada.`
         );
-        this.pushSrv.notificarAltaCliente(usuario, TipoEmpleado.Dueño).subscribe( {
+        this.pushSrv.AltaCliente(usuario, TipoEmpleado.Dueño).subscribe( {
           next: (data) => {
             console.log("Rta Push Alta a Dueño:  ");
             console.log(data);
@@ -146,7 +146,7 @@ export class AuthService {
           }
         });
 
-        this.pushSrv.notificarAltaCliente(usuario, TipoEmpleado.Supervisor).subscribe( {
+        this.pushSrv.AltaCliente(usuario, TipoEmpleado.Supervisor).subscribe( {
           next: (data) => {
             console.log("Rta Push Alta a Superv: ");
             console.log(data);

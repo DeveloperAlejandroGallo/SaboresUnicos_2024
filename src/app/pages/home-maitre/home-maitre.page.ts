@@ -168,7 +168,7 @@ export class HomeMaitrePage  {
 
       this.listEsperaService.delete(elementoEspera.id);
 
-      this.pushService.notificarMesaAsignada(elementoEspera.usuario, mesa.numero).subscribe( {
+      this.pushService.MesaAsignada(elementoEspera.usuario, mesa.numero).subscribe( {
         next: (data) => {
           console.log("Rta Push Mesa Asignada: ");
           console.log(data);

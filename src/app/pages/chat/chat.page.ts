@@ -85,7 +85,7 @@ toDate(fecha: number): Date {
 
 
     if (this.nombreMozo == "") {
-      this.pushService.notificarConsultaAMozos(this.numeroMesaCliente, this.ngmensaje).subscribe( {
+      this.pushService.ConsultaAMozos(this.numeroMesaCliente, this.ngmensaje).subscribe( {
         next: (data) => {
           console.log("Rta Push consulta del cliente: ");
           console.log(data);

@@ -254,7 +254,7 @@ export class HomeTabsPage implements OnInit {
             this.listaSvc.nuevo(this.usuarioLogueado).then(()=>{
               this.isLoading = false;
               this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
-              this.pushSrv.notificarMaitreNuevoEnListaEspera(this.usuarioLogueado).subscribe( {
+              this.pushSrv.MaitreNuevoEnListaEspera(this.usuarioLogueado).subscribe( {
                 next: (data) => {
                   console.log("Rta Push Lista: ");
                   console.log(data);
