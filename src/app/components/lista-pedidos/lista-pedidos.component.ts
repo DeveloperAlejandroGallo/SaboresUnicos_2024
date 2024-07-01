@@ -27,8 +27,8 @@ export class ListaPedidosComponent  implements OnInit {
   mozoActual!:Usuario;
   isLoadingList = true;
   isLoadingPush = false;
-  
-  constructor(private msgService: MensajesService,private auth: AuthService,private pedidosSvc : PedidoService, private pushNotif : PushNotificationService) { 
+
+  constructor(private msgService: MensajesService,private auth: AuthService,private pedidosSvc : PedidoService, private pushNotif : PushNotificationService) {
     console.log(auth.usuarioActual);
     this.mozoActual = this.auth.usuarioActual!;
   }
@@ -37,10 +37,10 @@ export class ListaPedidosComponent  implements OnInit {
     this.pedidosSvc.allPedidos$.subscribe(data=>{
       this.todosLosPedidos = data;
       console.log(this.todosLosPedidos);
-      
+
       this.pedidosPendientes = data.filter(pedido => pedido.estadoPedido == EstadoPedido.Pendiente);
       console.log(this.pedidosPendientes);
-      
+
       this.pedidosListos = data.filter(pedido => pedido.estadoPedido == EstadoPedido.Listo);
       console.log(this.pedidosListos);
     });
@@ -107,7 +107,7 @@ export class ListaPedidosComponent  implements OnInit {
             }
           });
           break;
-        default: 
+        default:
           console.log("error no se encontro el tipo de comida");
           this.msgService.Error("No se encontro el tipo de comida");
           break;
@@ -136,8 +136,8 @@ export class ListaPedidosComponent  implements OnInit {
         return 'Listo';
       case EstadoPedido.Listo:
         return 'Entregar';
-      case EstadoPedido.Entregado:
-        return 'Confirmar';
+      // case EstadoPedido.Entregado:
+      //   return 'Confirmar';
       case EstadoPedido.Confirmado:
         return 'Pagar';
       case EstadoPedido.Pagado:
@@ -156,8 +156,8 @@ export class ListaPedidosComponent  implements OnInit {
         return 'pizza';
       case EstadoPedido.Listo:
         return 'checkmark-done';
-      case EstadoPedido.Entregado:
-        return 'person-circle';
+      // case EstadoPedido.Entregado:
+      //   return 'person-circle';
       case EstadoPedido.Confirmado:
         return 'cash';
       case EstadoPedido.Pagado:
@@ -178,8 +178,8 @@ export class ListaPedidosComponent  implements OnInit {
         return { '--background': '#f9b36e' };
       case EstadoPedido.Listo:
         return { '--background': '#ccffcc' };
-      case EstadoPedido.Entregado:
-        return { '--background': '#d1ffd6' };
+      // case EstadoPedido.Entregado:
+      //   return { '--background': '#d1ffd6' };
       case EstadoPedido.Confirmado:
         return { '--background': '#b6fcd5' };
       case EstadoPedido.Pagado:
