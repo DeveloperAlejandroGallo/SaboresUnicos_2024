@@ -86,7 +86,9 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       x => x.cliente.id === this.auth.usuarioActual!.id
       && x.estadoPedido !== EstadoPedido.Cerrado)!;
 
-    if(this.pedido !== (null && undefined))
+      console.log(this.pedido);
+
+    if(this.pedido)
     {
       this.pedidoSrv.escucharPedidoId(this.pedido.id);
       this.pedidoSrv.pedido$.subscribe(pedido => {
