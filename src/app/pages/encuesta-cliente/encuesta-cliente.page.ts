@@ -20,6 +20,8 @@ import { Router } from '@angular/router';
 import { MensajesService } from 'src/app/services/mensajes.service';
 import { formatDate } from '@angular/common';
 
+
+
 @Component({
   selector: 'app-encuesta-cliente',
   templateUrl: './encuesta-cliente.page.html',
@@ -27,7 +29,7 @@ import { formatDate } from '@angular/common';
 })
 export class EncuestaClientePage implements OnInit {
 
-  isLoading = true;
+  isLoading = false;
   public usuario: Usuario;
   public comentario!: string;
   public cantidadEstrellas: number = 0;
@@ -185,22 +187,35 @@ export class EncuestaClientePage implements OnInit {
 
   enviarEncuesta(){
 
-    const encuesta: Encuesta = {
-      id: "",
-      cliente: this.usuario,
-      fecha: Timestamp.fromDate(new Date()),
-      fotos: this.selectedPhotos,
-      comentario: this.ngmensaje,
-      cantidadEstrellas: this.cantidadEstrellas,
-      SaborDeLaComida: this.puntajeSaborDeLaComida,
-      RecomendariasElLugar: this.valorRecomendarLugar,
-      QueCosasAgradaron: this.cosasQueAgradaronElegidas,
-      MejorComida: this.comidaFavorita
-
-    };
-
-    this.encuestasSvc.nuevo(encuesta);
-    this.encuestaForm.reset()
+    try {
+      const encuesta: Encuesta = {
+        id: "",
+        cliente: this.usuario,
+        fecha: Timestamp.fromDate(new Date()),
+        fotos: this.selectedPhotos,
+        comentario: this.ngmensaje,
+        cantidadEstrellas: this.cantidadEstrellas,
+        SaborDeLaComida: this.puntajeSaborDeLaComida,
+        RecomendariasElLugar: this.valorRecomendarLugar,
+        QueCosasAgradaron: this.cosasQueAgradaronElegidas,
+        MejorComida: this.comidaFavorita
+  
+      };
+  
+      this.encuestasSvc.nuevo(encuesta);
+      this.encuestaForm.reset()
+      this.selectedPhotos = [];
+      this.cantidadEstrellas = 0;
+      this.puntajeSaborDeLaComida = 0;
+      this.msjSrv.ExitoIonToast("¡Encuesta enviada con exito!", 3).then(()=>{
+        this.router.navigate(['/home-tabs/home']);
+      })
+    } catch (error) {
+      console.log(error);
+      
+    }
+   
+   
 
   //   const mensaje: Mensaje = {
   //     id: "",
