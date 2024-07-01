@@ -103,3 +103,11 @@ ion-card {
   ion-chip{
     font-size: 20px;
   }
+
+  swiper-container {
+    width: 100%;
+    height: 100%;
+  
+    --swiper-pagination-bullet-inactive-color: var(--ion-color-step-200, black);
+    --swiper-pagination-color: var(--ion-color-primary, #BF0000);
+  }
