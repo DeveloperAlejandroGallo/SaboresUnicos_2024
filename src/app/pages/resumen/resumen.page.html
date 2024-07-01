@@ -21,7 +21,7 @@
             <img class="rounded-image bordered-image" src="../../../assets/img/alimentosRojo.png"  />
           </ion-avatar>
           <ion-label >
-            <ion-label class="estado {{colorEstado}}"><h2>{{pedido.estadoPedido}}</h2></ion-label>
+            <ion-label class="estado {{colorEstado}}"><h2>{{estadoPedido}}</h2></ion-label>
             <ion-item  class="tiempo"  style="width: 100%; margin-left: 0; padding-left: 0;">
               <ion-icon color="primary"  name="timer-outline"></ion-icon>
               <ion-label>Espera de {{pedido.tiempoEstimado}} min.</ion-label>
@@ -53,7 +53,7 @@
         </ion-item>
         <ion-item>
           <ion-label class="titulos" style="font-weight: bold;">Subtotal</ion-label>
-          <ion-label class="importe bold" >{{subtotal | monedaPesos}}</ion-label>
+          <ion-label class="importe bold" style="font-weight: bold;">{{subtotal | monedaPesos}}</ion-label>
         </ion-item>
         <ion-item>
           <ion-accordion-group expand="full" style="width: 100%;">
@@ -86,31 +86,10 @@
             <ion-label ><h1 class="titulos">Total</h1></ion-label>
             <ion-label ><h1 class="importe bold">{{total | monedaPesos}}</h1></ion-label>
         </ion-item>
-        <ion-button [disabled]="botonDeshabilitado" expand="full" color="primary" (click)="accionPedido(pedido)">{{textoAccion}}</ion-button>
-        <!--
-        <ion-item >
-          <ion-icon name="id-card-outline" slot="start"></ion-icon>
-          <ion-label></ion-label>
+        <ion-button [disabled]="botonDeshabilitado" expand="full" color="primary" (click)="accionPedido()">{{textoAccion}}</ion-button>
+        <ion-item class="pagoQR">
+          <ion-label >Si desea agregar Propina o pagar con QR, puede volver a utilizar nuestro lector.</ion-label>
         </ion-item>
-
-        <ion-item >
-          <ion-icon name="card-outline" slot="start"></ion-icon>
-          <ion-label></ion-label>
-        </ion-item>
-
-
-        <ion-item>
-          <ion-icon name="bag-check" slot="start"></ion-icon>
-          <ion-badge slot="end"></ion-badge>
-          <ion-label>Pedidos realizados</ion-label>
-        </ion-item>
-
-        <ion-item>
-          <ion-icon name="reader" slot="start"></ion-icon>
-          <ion-badge slot="end"></ion-badge>
-          <ion-label>Encuestas realizadas</ion-label>
-        </ion-item> -->
-        <!-- <ion-button expand="full" color="primary" type="submit">Guardar</ion-button> -->
     </ion-card-content>
   </ion-card>
 </ion-content>

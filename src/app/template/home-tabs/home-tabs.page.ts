@@ -16,6 +16,10 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { PushNotificationService } from 'src/app/services/push-notification.service';
 
 import { Keyboard } from '@capacitor/keyboard';
+import { PedidoService } from 'src/app/services/pedido.service';
+import { EstadoPedido } from 'src/app/enums/estado-pedido';
+import { Pedido } from 'src/app/models/pedido';
+import { timer } from 'rxjs';
 
 const background = '#f8f8f8d7';
 @Component({
@@ -58,6 +62,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   estaEnEspera : boolean = false;
   tieneMesaAsignada : boolean = false;
   queAlta: string = '';
+  pedido: Pedido;
   //-------------------------
   constructor(
     private mesasSvc: MesaService,
@@ -68,13 +73,27 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     private router: Router,
     private auth: AuthService,
     private usrService: UsuarioService,
-  private pushSrv: PushNotificationService) {
+    private pushSrv: PushNotificationService,
+    private pedidoSrv: PedidoService) {
 
     this.url = this.router.url;
     this.usuarioLogueado = this.auth.usuarioActual!;
     this.usrService.allUsers$.subscribe(data =>{
       this.usuarioLogueado = data.filter(x => x.id === this.auth.usuarioActual?.id)[0];
     });
+
+    this.pedido = this.pedidoSrv.listadoPedidos.find(
+      x => x.cliente.id === this.auth.usuarioActual!.id
+      && x.estadoPedido !== EstadoPedido.Cerrado)!;
+
+    if(this.pedido !== (null && undefined))
+    {
+      this.pedidoSrv.escucharPedidoId(this.pedido.id);
+      this.pedidoSrv.pedido$.subscribe(pedido => {
+        this.pedido = pedido;
+      });
+    }
+
 
   // console.log(this.usuarioLogueado);
   }
@@ -90,7 +109,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     Keyboard.addListener('keyboardWillHide', () => {
       this.isKeyboardOpen = false;
       console.log("teclado oculto");
-      
+
     }).then(handle => {
       this.keyboardWillHideSub = handle;
     });
@@ -101,7 +120,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       this.addListeners();
       this.registerNotifications();
 
-     
+
     }
     this.tiposEntidades();
 
@@ -216,9 +235,43 @@ export class HomeTabsPage implements OnInit, OnDestroy {
                 this.verEncuesta = true;
               }
               break;
-            case "Propinas":
+            case "Propina":
+              if(this.esValidoParaPropina()){
+                if(this.pedido.propina != 0){
+                  this.msgService.Info("Ya dejaste propina.");
+                  return;
+                }
+                //To Do: Seleccion de Propinoa con Swal Fire
 
+
+              }
               break;
+            case "Pago":
+                if(this.esValidoParaPago()){
+                  this.isLoading = true;
+                  timer(3500).subscribe(()=>{
+                    this.isLoading = false;
+                    this.pedidoSrv.actualizarEstado(this.pedido, EstadoPedido.Pagado).then(()=>{
+                      this.msgService.Exito("Pago realizado con éxito. Gracias por su visita.");
+                      this.pushSrv.MozoPagoRealizado(this.pedido).subscribe( {
+                        next: (data) => {
+                          console.log("Rta Push Pago: ");
+                          console.log(data);
+                        },
+                        error: (error) => {
+                          console.error("Error Push Pago: ");
+                          console.error(error);
+                        }
+                      }); //Envio Push al Mozo
+
+                    },
+                    err=>{
+                      this.msgService.Error("El servicio de pagos no está disponible en este momento. Intente más tarde.");
+                    });
+
+                  }); //Simulo tiempo de espera
+                }
+                break;
           }
           break;
         default:
@@ -227,6 +280,51 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       }
 
     }
+
+  }
+  esValidoParaPropina():boolean {
+    if(this.pedido === (null || undefined)){
+      this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
+      return false;
+    }
+
+    if(this.pedido.estadoPedido == EstadoPedido.Abierto){
+      this.msgService.Info("Aun no tienes un Mozo asignado al cual dejarle la propina.\nPor favor primero has el pedido.");
+      return false;
+    }
+
+    if(this.pedido.estadoPedido == EstadoPedido.Cerrado){
+      this.msgService.Info("El pedido ya fue cerrado.");
+      return false;
+    }
+
+
+    return true;
+  }
+  esValidoParaPago():boolean {
+
+    if(this.pedido === (null || undefined)){
+      this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
+      return false;
+    }
+
+    if(this.pedido.estadoPedido == EstadoPedido.Pagado){
+      this.msgService.Info("Ya pagaste tu pedido.");
+      return false;
+    }
+
+    if(this.pedido.estadoPedido == EstadoPedido.Cerrado){
+      this.msgService.Info("El pedido ya fue cerrado.");
+      return false;
+    }
+
+    if(this.pedido.estadoPedido != EstadoPedido.CuentaSolicitada){
+      this.msgService.Info("Primero solicita la cuenta al mozo.");
+      return false;
+    }
+
+
+    return true;
 
   }
 
@@ -278,7 +376,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
             this.listaSvc.nuevo(this.usuarioLogueado).then(()=>{
               this.isLoading = false;
               this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
-              this.pushSrv.notificarMaitreNuevoEnListaEspera(this.usuarioLogueado).subscribe( {
+              this.pushSrv.MaitreNuevoEnListaEspera(this.usuarioLogueado).subscribe( {
                 next: (data) => {
                   console.log("Rta Push Lista: ");
                   console.log(data);
