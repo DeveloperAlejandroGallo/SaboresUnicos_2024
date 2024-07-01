@@ -1,0 +1,109 @@
+ion-segment {
+  margin-top: 5px;
+}
+
+ion-segment-button {
+  --indicator-color: #bf0000;
+}
+
+/* Material Design styles */
+ion-segment-button.md {
+  --color: #000;
+  --color-checked: #bf0000;
+  --indicator-height: 4px;
+}
+
+/* iOS styles */
+ion-segment-button.ios {
+  --color: #bf0000;
+  --color-checked: #fff;
+//   --border-radius: 20px;
+  font-size: large;
+  white-space: normal;
+}
+
+ion-list {
+  background-color: transparent;
+}
+.custom-ion-list {
+  --ion-background-color-opacity: 0.9 !important; /* Ajusta la opacidad según sea necesario */
+  font-weight: bolder;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  font-size: medium;
+
+  margin: 20px;
+
+  ion-list-header {
+    text-align: center;
+    font-size: large;
+    color: #bf0000;
+  }
+
+  ion-item {
+    color: black;
+    font-size: large;
+  }
+}
+
+ion-item::part(native) {
+    background: rgb(229 115 115);
+    
+}
+ion-label{
+    display: flex !important;
+    justify-content: space-between;
+}
+ion-item-sliding{
+    margin: 10px 0px;
+    border-radius: 10px;
+}
+.abierto{
+    --background-color: #6cb6ff !important;
+    --color: blue;
+    --border-color:  #6cb6ff;
+  }
+  
+  .pendiente{
+    background-color: #f9b36e;
+    color: black;
+    border-color:  #f9b36e;
+  }
+  
+  .en-preparacion { //violeta
+    background-color: #9c3afe;
+    color: purple;
+    border-color:  #9c3afe;
+  }
+  
+  .listo{// verde
+    background-color: #76ff76;
+    color: green;
+    border-color:  #76ff76;
+  }
+  
+  .entregado{//Amarillo
+    background-color: #ffff74;
+    color: rgb(192, 192, 0);
+    border-color:  #ffff74;
+  }
+  
+  .confirmado { //negro
+    background-color: #656565;
+    color: black;
+    border-color:  #656565;
+  }
+  
+  .pagado{
+    background-color: #00ff00;
+    color: green;
+    border-color:  #00ff00;
+  }
+  
+  .cerrado{//rojo
+    background-color: rgb(255, 129, 129);
+    color: red;
+    border-color:  rgb(255, 129, 129);
+  
+  }
+  

@@ -47,7 +47,7 @@ export class PedidoService {
 
   get allPedidos$(): Observable<Pedido[]> {
     const ref = collection(this.firestore, this.colectionName);
-    const queryAll = query(ref, orderBy('fecha_ingreso', 'asc'));
+    const queryAll = query(ref, orderBy('fechaIngreso', 'asc'));
     return collectionData(queryAll) as Observable<Pedido[]>;
   }
 
@@ -179,7 +179,7 @@ export class PedidoService {
   }
 
 
-  actualizarMozo(pedido: Pedido, mozo: Producto) {
+  actualizarMozo(pedido: Pedido, mozo: Usuario) {
 
     const coleccion = collection(this.firestore, this.colectionName);
     const documento = doc(coleccion,pedido.id);
@@ -194,7 +194,7 @@ export class PedidoService {
     const documento = doc(coleccion,pedido.id);
 
     updateDoc(documento, {
-      fechaDePedidoAceptado: Timestamp.now(),
+      fechaDePedidoAceptado: Timestamp.fromDate(new Date()),
     });
     this.actualizarEstado(pedido, EstadoPedido.Aceptado);
   }

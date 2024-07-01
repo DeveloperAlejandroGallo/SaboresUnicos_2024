@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { TipoEmpleado } from '../enums/tipo-empleado';
 import { Usuario } from '../models/usuario';
 import { Pedido } from '../models/pedido';
+import { Producto } from '../models/producto';
 
 @Injectable({
   providedIn: 'root'
@@ -16,20 +17,20 @@ export class PushNotificationService {
   constructor(private http: HttpClient) { }
 
 
-  notificarAltaCliente(usuario: Usuario, role: TipoEmpleado): Observable<any> {
+  AltaCliente(usuario: Usuario, role: TipoEmpleado): Observable<any> {
     let title = 'Nuevo Cliente Registrado';
     let body = `Se ha registrado el Cliente ${usuario.nombre} ${usuario.apellido} con el email: ${usuario.email}.`;
     return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
   }
 
-  notificarMaitreNuevoEnListaEspera(usuario: Usuario): Observable<any> {
+  MaitreNuevoEnListaEspera(usuario: Usuario): Observable<any> {
     let title = 'Nuevo Cliente en Lista de Espera';
     let body = `El Cliente ${usuario.nombre} ${usuario.apellido} espera por una mesa libre.`;
     let role = TipoEmpleado.Maitre;
     return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
   }
 
-  notificarMesaAsignada(usuario: Usuario, mesaNro: number): Observable<any> {
+  MesaAsignada(usuario: Usuario, mesaNro: number): Observable<any> {
     console.log("Enviando a Token:"+usuario.token);
     let token = usuario.token;
     let title = 'Mesa Asignada';
@@ -37,36 +38,34 @@ export class PushNotificationService {
     return this.http.post(`${this.apiUri}/notificar`, { token, title, body }, { responseType: 'text' });
   }
 
-  notificarChatMozos(mesaNumero: number): Observable<any> {
+  ChatMozos(mesaNumero: number): Observable<any> {
     let title = `Nuevo mensaje de Mesa ${mesaNumero}`;
     let body = `Nuevo pedido de comida de Mesa ${mesaNumero}. Por favor revisar la lista de pedidos.`;
     let role = TipoEmpleado.Mozo;
     return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
   }
 
-  notificarCocinerosNuevoPedido(mesaNumero: number): Observable<any> {
-    let title: string = 'Nuevo pedido de Comida';
-    let body = `Nuevo pedido de comida de Mesa ${mesaNumero}. Por favor revisar la lista de pedidos.`;
+  CocinerosPedido(producto: Producto, tipo: string): Observable<any> {
+    let title: string = `Nuevo pedido de ${tipo}`;
+    let body = `Debe preparar el siguiente producto: ${producto.nombre}. Por favor revise la lista de pedidos.`;
     let role = TipoEmpleado.Cocinero;
     return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
   }
-
-  notificarBartendersNuevoPedido(mesaNumero: number): Observable<any> {
+  BartendersPedido(producto: Producto): Observable<any> {
     let title = 'Nuevo pedido de Bebida';
-    let body = `Nuevo pedido de bebidas de Mesa ${mesaNumero}. Por favor revisar la lista de pedidos.`;
+    let body = `Debe preparar la siguiente bebida: ${producto.nombre}. Por favor revise la lista de pedidos.`;
     let role = TipoEmpleado.Bartender;
       return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
   }
-
-
-  notificarMozoPedidoListo(MozoDelPedido: Usuario, mesaNro: number): Observable<any> {
+  
+  MozoPedidoListo(MozoDelPedido: Usuario, mesaNro: number): Observable<any> {
     let token = MozoDelPedido.token;
     let title = `Pedido Mesa ${mesaNro} Listo`;
     let body = `El pedido de la Mesa Nro: ${mesaNro} se encuestra listo para entregar.`;
     return this.http.post(`${this.apiUri}/notificar`, { token, title, body }, { responseType: 'text' });
   }
 
-  notificarMozoPedidoCuenta(pedido: Pedido): Observable<any> {
+  MozoPedidoCuenta(pedido: Pedido): Observable<any> {
     let token = pedido.mozo!.token;
     let title = `Cierre de Cuenta Mesa ${pedido.mesa.numero}.`;
 
@@ -74,21 +73,27 @@ export class PushNotificationService {
     return this.http.post(`${this.apiUri}/notificar`, { token, title, body }, { responseType: 'text' });
   }
 
-  notificarClienteDuracionEspera(cliente: Usuario, tiempoEstimado: number): Observable<any> {
+  ClienteDuracionEspera(cliente: Usuario, tiempoEstimado: number): Observable<any> {
     let token = cliente.token;
     let title = `Su pedido está en preparación.`;
     let body = `El tiempo de espera para el pedido es de aproximadamente ${tiempoEstimado} minutos.\nGracias.`;
     return this.http.post(`${this.apiUri}/notificar`, { token, title, body }, { responseType: 'text' });
   }
+  ClienteMozoAceptoPedido(cliente: Usuario, mozoNombre: string): Observable<any> {
+    let token = cliente.token;
+    let title = 'Su pedido ha sido aceptado por el mozo.';
+    let body = `El mozo asignado a su pedido es: ${mozoNombre}.`;
+    return this.http.post(`${this.apiUri}/notificar`, { token, title, body }, { responseType: 'text' });
+  }
 
-  notificarConsultaAMozos(mesaNumero: number, consulta: string): Observable<any> {
+  ConsultaAMozos(mesaNumero: number, consulta: string): Observable<any> {
     let title = `Nueva consulta de Mesa ${mesaNumero}`;
     let body = `${consulta}`;
     let role = TipoEmpleado.Mozo;
     return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
   }
 
-  notificarConsultaAMesas(cliente: Usuario,nombreMozo: string, respuestaConsulta: string): Observable<any> {
+  ConsultaAMesas(cliente: Usuario,nombreMozo: string, respuestaConsulta: string): Observable<any> {
     let token = cliente.token
     let title = `Nuevo mensaje del mozo ${nombreMozo}`;
     let body = `${respuestaConsulta}`;

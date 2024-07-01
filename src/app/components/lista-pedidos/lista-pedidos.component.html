@@ -1,0 +1,130 @@
+<ion-segment mode="ios" (ionChange)="cambiarVista($event)" value="Todos">
+  
+  <ion-segment-button value="Pendientes">
+    Pendientes
+  </ion-segment-button>
+  <ion-segment-button value="Listos">
+    Listos
+  </ion-segment-button>
+  <!-- <ion-segment-button value="Confirmar">
+    Confirmar Pagos
+  </ion-segment-button> -->
+  <ion-segment-button value="Todos">
+    Todos
+  </ion-segment-button>
+</ion-segment>
+<ion-title>Lista de pedidos</ion-title>
+<div *ngIf="(!isLoadingList && opcionSeleccionada == 'Todos' && todosLosPedidos.length > 0); else noHayPedidos">
+  <ion-list class="custom-ion-list">
+      <ion-item-sliding *ngFor="let pedido of todosLosPedidos">
+        <ion-item>
+          <ion-avatar slot="start">
+            <img [src]="pedido.cliente.foto" />
+          </ion-avatar>
+          <ion-label>{{pedido.cliente.nombre + ' ' + pedido.cliente.apellido}} 
+
+            <ion-note style="font-size: medium; color:black" color="medium">{{formatearFecha(pedido.fechaIngreso)}}</ion-note>
+          </ion-label>
+        </ion-item>
+        <ion-item-options  side="start">
+          <ion-item-option (click)="confirmarPedido(pedido)" color="success">
+            <ion-icon slot="icon-only" name="checkmark-sharp"></ion-icon>
+            ACEPTAR
+          </ion-item-option>
+        </ion-item-options>
+    
+      </ion-item-sliding>
+  </ion-list>
+</div>
+
+<div class="custom-spinner" *ngIf="isLoadingPush" >
+  <img src="../../../assets/spinner.png" alt="Spinner">
+</div>
+
+<div *ngIf="opcionSeleccionada == 'Pendientes'">
+  <ion-list class="custom-ion-list">
+    <ion-item-sliding *ngFor="let pedido of todosLosPedidos">
+      <ion-item>
+        <ion-avatar slot="start">
+          <img [src]="pedido.cliente.foto" />
+        </ion-avatar>
+        <ion-label>{{pedido.cliente.nombre + ' ' + pedido.cliente.apellido}} 
+
+          <ion-note style="font-size: medium; color:black" color="medium">{{formatearFecha(pedido.fechaIngreso)}}</ion-note>
+        </ion-label>
+      </ion-item>
+      <ion-item-options  side="start">
+        <ion-item-option (click)="handleAction(pedido)" color="success">
+          <ion-icon slot="icon-only" [name]="getItemOptionIcon(pedido)"></ion-icon>
+          {{ getItemOptionText(pedido) }}
+        </ion-item-option>
+      </ion-item-options>
+  
+    </ion-item-sliding>
+</ion-list>
+</div>
+
+<div *ngIf="opcionSeleccionada == 'Listo'">
+  <p>LISTA DE LISTOS</p>
+  <!-- <ion-card *ngFor="let pedido of pedidosListos">
+    <ion-card-header>
+      <ion-card-title>{{ pedido.nombreCliente }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Estado: {{ pedido.estado }}</p>
+      <p>Fecha de ingreso: {{ pedido.fechaIngreso | date }}</p>
+    </ion-card-content>
+  </ion-card> -->
+</div>
+
+<div *ngIf="isLoadingList">
+  <ion-list >
+    <ion-card>
+      <ion-card-header>
+        <ion-skeleton-text
+          [animated]="true"
+          style="width: 80px"
+        ></ion-skeleton-text>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-row>
+          <ion-col>
+            <ion-thumbnail>
+              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            </ion-thumbnail>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-skeleton-text
+              [animated]="true"
+              style="width: 80%"
+            ></ion-skeleton-text>
+          </ion-col>
+          <ion-col>
+            <ion-skeleton-text
+              [animated]="true"
+              style="width: 50%"
+            ></ion-skeleton-text>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-skeleton-text
+              [animated]="true"
+              style="width: 30%"
+            ></ion-skeleton-text>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+</div>
+
+<ng-template #noHayPedidos>
+  <ion-item slot="content" *ngIf="!isLoadingList">
+    <ion-label color="medium" class="ion-text-center"
+      >Todavia no hay pedidos {{opcionSeleccionada == "Todos" ? '' : opcionSeleccionada}}.</ion-label
+    >
+  </ion-item>
+</ng-template>
