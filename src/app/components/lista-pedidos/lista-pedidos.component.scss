@@ -1,5 +1,6 @@
 ion-segment {
   margin-top: 5px;
+  padding-bottom: 5px;
 }
 
 ion-segment-button {
@@ -17,12 +18,73 @@ ion-segment-button.md {
 ion-segment-button.ios {
   --color: #bf0000;
   --color-checked: #fff;
-//   --border-radius: 20px;
+  //   --border-radius: 20px;
   font-size: large;
   white-space: normal;
 }
+.pedido-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.cliente-nombre {
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detalles-estado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  ion-icon {
+    font-size: x-large;
+  }
+}
+
+.detalles-estado ion-chip {
+  margin-left: 10px;
+}
+
+.detalles-estado a {
+  margin-right: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+.producto-info {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.producto-nombre-estado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  ion-chip {
+    font-size: 0.9em;
+    margin-right: 0px;
+    justify-content: center;
+  }
+}
+.producto-detalles {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  ion-note {
+    font-size: 0.9em;
+    color: var(--ion-color-medium);
+  }
+}
+.cantidad {
+  // font-size: 0.9em;
+  font-weight: bold;
+}
 
 ion-list {
+  padding-top: 0px;
   background-color: transparent;
 }
 .custom-ion-list {
@@ -32,7 +94,7 @@ ion-list {
     "Lucida Sans", Arial, sans-serif;
   font-size: medium;
 
-  margin: 20px;
+  margin: 0px 5px;
 
   ion-list-header {
     text-align: center;
@@ -47,63 +109,85 @@ ion-list {
 }
 
 ion-item::part(native) {
-    background: rgb(229 115 115);
-    
+  background: rgb(229 115 115);
 }
-ion-label{
-    display: flex !important;
-    justify-content: space-between;
+
+ion-item-sliding {
+  margin: 10px 0px;
+  border-radius: 10px;
 }
-ion-item-sliding{
-    margin: 10px 0px;
+.abierto {
+  background-color: #8ec6ff;
+  color: blue;
+  border-color: #8ec6ff;
+}
+
+.pendiente,
+.cuenta-solicitada {
+  background-color: #ffe9c7;
+  color: rgb(131, 72, 0);
+  border-color: #ffe9c7;
+}
+
+.en-preparacion {
+  //violeta
+  background-color: #d0a0ff;
+  color: purple;
+  border-color: #d0a0ff;
+}
+ion-modal {
+  --height: 50vh;
+  --width: 99vw;
+  --border-radius: 16px;
+  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  ion-content {
+    --background: #e0d6ad;
+    ion-card {
+      box-shadow: none;
+    }
+  }
+}
+
+// ion-modal::part(backdrop) {
+//   background: rgba(209, 213, 219);
+//   opacity: 1;
+// }
+ion-card {
+  --background: #e0d6ad;
+}
+ion-modal ion-toolbar {
+  --background: #bf0000;
+  --color: rgb(0, 0, 0);
+}
+ion-card-content {
+  padding: 0px;
+  background: #e0d6ad;
+  ion-item {
+    // margin: 5px 0px;
+    margin-bottom: 10px;
     border-radius: 10px;
+  }
 }
-.abierto{
-    --background-color: #6cb6ff !important;
-    --color: blue;
-    --border-color:  #6cb6ff;
-  }
-  
-  .pendiente{
-    background-color: #f9b36e;
-    color: black;
-    border-color:  #f9b36e;
-  }
-  
-  .en-preparacion { //violeta
-    background-color: #9c3afe;
-    color: purple;
-    border-color:  #9c3afe;
-  }
-  
-  .listo{// verde
-    background-color: #76ff76;
-    color: green;
-    border-color:  #76ff76;
-  }
-  
-  .entregado{//Amarillo
-    background-color: #ffff74;
-    color: rgb(192, 192, 0);
-    border-color:  #ffff74;
-  }
-  
-  .confirmado { //negro
-    background-color: #656565;
-    color: black;
-    border-color:  #656565;
-  }
-  
-  .pagado{
-    background-color: #00ff00;
-    color: green;
-    border-color:  #00ff00;
-  }
-  
-  .cerrado{//rojo
-    background-color: rgb(255, 129, 129);
-    color: red;
-    border-color:  rgb(255, 129, 129);
-  
-  }
-  
+.listo,
+.aceptado,
+.pagado {
+  // verde
+  background-color: #9dff9d;
+  color: green;
+  border-color: #9dff9d;
+}
+
+.servido {
+  //negro
+  background-color: #cccccc;
+  color: black;
+  border-color: #cccccc;
+}
+
+.cerrado {
+  //rojo
+  background-color: #ffc6c6;
+  color: darkred;
+  border-color: #ffc6c6;
+}

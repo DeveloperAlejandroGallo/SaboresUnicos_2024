@@ -84,12 +84,11 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
     this.pedido = this.pedidoSrv.listadoPedidos.find(
       x => x.cliente.id === this.auth.usuarioActual!.id
-      && x.estadoPedido !== EstadoPedido.Cerrado)!;
+        && x.estadoPedido !== EstadoPedido.Cerrado)!;
 
-      console.log(this.pedido);
+    console.log(this.pedido);
 
-    if(this.pedido)
-    {
+    if (this.pedido) {
       this.pedidoSrv.escucharPedidoId(this.pedido.id);
       this.pedidoSrv.pedido$.subscribe(pedido => {
         this.pedido = pedido;
@@ -97,7 +96,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     }
 
 
-  // console.log(this.usuarioLogueado);
+    // console.log(this.usuarioLogueado);
   }
 
   ngOnInit() {
@@ -118,7 +117,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       }).then(handle => {
         this.keyboardWillHideSub = handle;
       });
-      
+
       console.log("Validadndo permisos de notificaciones en plataforma:");
 
       this.addListeners();
@@ -240,8 +239,8 @@ export class HomeTabsPage implements OnInit, OnDestroy {
               }
               break;
             case "Propina":
-              if(this.esValidoParaPropina()){
-                if(this.pedido.propina != 0){
+              if (this.esValidoParaPropina()) {
+                if (this.pedido.propina != 0) {
                   this.msgService.Info("Ya dejaste propina.");
                   return;
                 }
@@ -251,31 +250,31 @@ export class HomeTabsPage implements OnInit, OnDestroy {
               }
               break;
             case "Pago":
-                if(this.esValidoParaPago()){
-                  this.isLoading = true;
-                  timer(3500).subscribe(()=>{
-                    this.isLoading = false;
-                    this.pedidoSrv.actualizarEstado(this.pedido, EstadoPedido.Pagado).then(()=>{
-                      this.msgService.Exito("Pago realizado con éxito. Gracias por su visita.");
-                      this.pushSrv.MozoPagoRealizado(this.pedido).subscribe( {
-                        next: (data) => {
-                          console.log("Rta Push Pago: ");
-                          console.log(data);
-                        },
-                        error: (error) => {
-                          console.error("Error Push Pago: ");
-                          console.error(error);
-                        }
-                      }); //Envio Push al Mozo
+              if (this.esValidoParaPago()) {
+                this.isLoading = true;
+                timer(3500).subscribe(() => {
+                  this.isLoading = false;
+                  this.pedidoSrv.actualizarEstado(this.pedido, EstadoPedido.Pagado).then(() => {
+                    this.msgService.Exito("Pago realizado con éxito. Gracias por su visita.");
+                    this.pushSrv.MozoPagoRealizado(this.pedido).subscribe({
+                      next: (data) => {
+                        console.log("Rta Push Pago: ");
+                        console.log(data);
+                      },
+                      error: (error) => {
+                        console.error("Error Push Pago: ");
+                        console.error(error);
+                      }
+                    }); //Envio Push al Mozo
 
-                    },
-                    err=>{
+                  },
+                    err => {
                       this.msgService.Error("El servicio de pagos no está disponible en este momento. Intente más tarde.");
                     });
 
-                  }); //Simulo tiempo de espera
-                }
-                break;
+                }); //Simulo tiempo de espera
+              }
+              break;
           }
           break;
         default:
@@ -286,18 +285,18 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     }
 
   }
-  esValidoParaPropina():boolean {
-    if(this.pedido === (null || undefined)){
+  esValidoParaPropina(): boolean {
+    if (this.pedido === (null || undefined)) {
       this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
       return false;
     }
 
-    if(this.pedido.estadoPedido == EstadoPedido.Abierto){
+    if (this.pedido.estadoPedido == EstadoPedido.Abierto) {
       this.msgService.Info("Aun no tienes un Mozo asignado al cual dejarle la propina.\nPor favor primero has el pedido.");
       return false;
     }
 
-    if(this.pedido.estadoPedido == EstadoPedido.Cerrado){
+    if (this.pedido.estadoPedido == EstadoPedido.Cerrado) {
       this.msgService.Info("El pedido ya fue cerrado.");
       return false;
     }
@@ -305,24 +304,24 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
     return true;
   }
-  esValidoParaPago():boolean {
+  esValidoParaPago(): boolean {
 
-    if(this.pedido === (null || undefined)){
+    if (this.pedido === (null || undefined)) {
       this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
       return false;
     }
 
-    if(this.pedido.estadoPedido == EstadoPedido.Pagado){
+    if (this.pedido.estadoPedido == EstadoPedido.Pagado) {
       this.msgService.Info("Ya pagaste tu pedido.");
       return false;
     }
 
-    if(this.pedido.estadoPedido == EstadoPedido.Cerrado){
+    if (this.pedido.estadoPedido == EstadoPedido.Cerrado) {
       this.msgService.Info("El pedido ya fue cerrado.");
       return false;
     }
 
-    if(this.pedido.estadoPedido != EstadoPedido.CuentaSolicitada){
+    if (this.pedido.estadoPedido != EstadoPedido.CuentaSolicitada) {
       this.msgService.Info("Primero solicita la cuenta al mozo.");
       return false;
     }
@@ -379,7 +378,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
             this.listaSvc.nuevo(this.usuarioLogueado).then(() => {
               this.isLoading = false;
               this.msgService.ExitoIonToast("Estas en lista de espera. Pronto se te asignará una mesa. Gracias!", 3);
-              this.pushSrv.MaitreNuevoEnListaEspera(this.usuarioLogueado).subscribe( {
+              this.pushSrv.MaitreNuevoEnListaEspera(this.usuarioLogueado).subscribe({
                 next: (data) => {
                   console.log("Rta Push Lista: ");
                   console.log(data);
@@ -464,7 +463,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   irAlChat() {
     this.router.navigate(['home-tabs/chat']);
   }
-  irACreacionEncuesta(){
+  irACreacionEncuesta() {
     this.router.navigate(['home-tabs/encuesta-cliente']);
   }
 }

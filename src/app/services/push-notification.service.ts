@@ -100,6 +100,12 @@ export class PushNotificationService {
     let body = `El mozo asignado a su pedido es: ${mozoNombre}.`;
     return this.http.post(`${this.apiUri}/notificar`, { token, title, body }, { responseType: 'text' });
   }
+  ClienteMozoPagoConfirmado(cliente: Usuario, mozoNombre: string): Observable<any> {
+    let token = cliente.token;
+    let title = 'Pago confirmado.';
+    let body = `El mozo ${mozoNombre} ha confirmado su pago. ¡Gracias por elegir a Sabores Unicos!`;
+    return this.http.post(`${this.apiUri}/notificar`, { token, title, body }, { responseType: 'text' });
+  }
 
   ConsultaAMozos(mesaNumero: number, consulta: string): Observable<any> {
     let title = `Nueva consulta de Mesa ${mesaNumero}`;

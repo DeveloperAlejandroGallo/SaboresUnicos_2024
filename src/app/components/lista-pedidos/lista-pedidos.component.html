@@ -1,90 +1,175 @@
-<ion-segment mode="ios" (ionChange)="cambiarVista($event)" value="Todos">
-  
-  <ion-segment-button value="Pendientes">
-    Pendientes
-  </ion-segment-button>
-  <ion-segment-button value="Listos">
-    Listos
-  </ion-segment-button>
-  <!-- <ion-segment-button value="Confirmar">
-    Confirmar Pagos
-  </ion-segment-button> -->
-  <ion-segment-button value="Todos">
-    Todos
-  </ion-segment-button>
+<ion-segment mode="ios" (ionChange)="cambiarVista($event)" [value]="opcionSeleccionada">
+  <ion-segment-button value="Pendientes"> Pendientes </ion-segment-button>
+  <ion-segment-button value="Mis_pedidos"> Mis Pedidos </ion-segment-button>
 </ion-segment>
-<ion-title>Lista de pedidos</ion-title>
-<div *ngIf="(!isLoadingList && opcionSeleccionada == 'Todos' && todosLosPedidos.length > 0); else noHayPedidos">
-  <ion-list class="custom-ion-list">
-      <ion-item-sliding *ngFor="let pedido of todosLosPedidos">
-        <ion-item>
-          <ion-avatar slot="start">
-            <img [src]="pedido.cliente.foto" />
-          </ion-avatar>
-          <ion-label>{{pedido.cliente.nombre + ' ' + pedido.cliente.apellido}} 
-
-            <ion-note style="font-size: medium; color:black" color="medium">{{formatearFecha(pedido.fechaIngreso)}}</ion-note>
-          </ion-label>
-        </ion-item>
-        <ion-item-options  side="start" >
-          <ion-item-option (click)="confirmarPedido(pedido)" color="success" >
-            <ion-icon slot="icon-only" name="checkmark-sharp"></ion-icon>
-            ACEPTAR
-          </ion-item-option>
-        </ion-item-options>
-    
-      </ion-item-sliding>
-  </ion-list>
-</div>
-
-<div class="custom-spinner" *ngIf="isLoadingPush" >
-  <img src="../../../assets/spinner.png" alt="Spinner">
-</div>
-
-<div *ngIf="opcionSeleccionada == 'Pendientes'">
-  <ion-list class="custom-ion-list">
-    <ion-item-sliding *ngFor="let pedido of todosLosPedidos">
+<!-- VISTA MOZO -->
+<div *ngIf="opcionSeleccionada == 'Pendientes' && empleadoActual.tipoEmpleado == 'Mozo'">
+  <ion-list *ngIf="
+  !isLoadingList &&
+    pedidosPendientes &&
+    pedidosPendientes.length > 0;
+  else noHayPedidos
+" class="custom-ion-list">
+    <ion-item-sliding *ngFor="let pedido of pedidosPendientes">
       <ion-item>
         <ion-avatar slot="start">
           <img [src]="pedido.cliente.foto" />
         </ion-avatar>
-        <ion-label>{{pedido.cliente.nombre + ' ' + pedido.cliente.apellido}} 
-
-          <ion-note style="font-size: medium; color:black" color="medium">{{formatearFecha(pedido.fechaIngreso)}}</ion-note>
+        <ion-label>
+          <div class="pedido-info">
+            <div class="cliente-nombre">
+              {{ pedido.cliente.nombre + " " + pedido.cliente.apellido }}
+              <ion-chip style="font-size: medium;">
+                {{ 'Mesa: ' + pedido.mesa.numero }}
+              </ion-chip>
+            </div>
+            <div class="detalles-estado">
+              <a id="open-modal" (click)="openModal(pedido.productos)">
+                <ion-icon name="list-circle"></ion-icon>
+                Productos
+              </a>
+              <ion-chip [ngClass]="getEstadoPedidoClass(pedido)">
+                {{pedido.estadoPedido }}
+              </ion-chip>
+            </div>
+            <ion-note style="font-size: medium; color: black" color="medium">
+              {{ formatearFecha(pedido.fechaIngreso) }}
+            </ion-note>
+          </div>
         </ion-label>
       </ion-item>
-      <ion-item-options  side="start">
-        <ion-item-option (click)="handleAction(pedido)" color="success">
-          <ion-icon slot="icon-only" [name]="getItemOptionIcon(pedido)"></ion-icon>
+      <ion-item-options side="start">
+        <ion-item-option (click)="accionPedido(pedido)" color="success">
+          <ion-icon style="font-size: x-large" slot="top" [name]="getItemOptionIcon(pedido)"></ion-icon>
           {{ getItemOptionText(pedido) }}
         </ion-item-option>
       </ion-item-options>
-  
     </ion-item-sliding>
-</ion-list>
+  </ion-list>
 </div>
 
-<div *ngIf="opcionSeleccionada == 'Listo'">
-  <p>LISTA DE LISTOS</p>
-  <!-- <ion-card *ngFor="let pedido of pedidosListos">
-    <ion-card-header>
-      <ion-card-title>{{ pedido.nombreCliente }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>Estado: {{ pedido.estado }}</p>
-      <p>Fecha de ingreso: {{ pedido.fechaIngreso | date }}</p>
-    </ion-card-content>
-  </ion-card> -->
+<div *ngIf="opcionSeleccionada == 'Mis_pedidos' && empleadoActual.tipoEmpleado == 'Mozo'">
+  <ion-list *ngIf="!isLoadingList && todosMisPedidos && todosMisPedidos.length>0; else noHayPedidos"
+    class="custom-ion-list">
+    <ion-item-sliding *ngFor="let pedido of todosMisPedidos" [disabled]="(pedido.estadoPedido != 'Pendiente'
+            && pedido.estadoPedido != 'Pagado')">
+      <ion-item>
+        <ion-avatar slot="start">
+          <img [src]="pedido.cliente.foto" />
+        </ion-avatar>
+        <ion-label>
+          <div class="pedido-info">
+            <div class="cliente-nombre">
+              {{ pedido.cliente.nombre + " " + pedido.cliente.apellido }}
+              <ion-chip style="font-size: medium;">
+                {{ 'Mesa: ' + pedido.mesa.numero }}
+              </ion-chip>
+            </div>
+            <div class="detalles-estado">
+              <a id="open-modal" (click)="openModal(pedido.productos)">
+                <ion-icon name="list-circle"></ion-icon> Productos
+              </a>
+              
+              <ion-chip [ngClass]="getEstadoPedidoClass(pedido)">
+                {{ pedido.estadoPedido }}
+              </ion-chip>
+            </div>
+            <ion-note style="font-size: medium; color: black" color="medium">
+              {{ formatearFecha(pedido.fechaIngreso) }}
+            </ion-note>
+          </div>
+        </ion-label>
+      </ion-item>
+      <ion-item-options side="start" >
+        <ion-item-option (click)="accionPedido(pedido)" color="success" >
+          <ion-icon style="font-size: x-large" slot="top" [name]="getItemOptionIcon(pedido)"></ion-icon>
+          {{ getItemOptionText(pedido) }}
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
 </div>
 
+<!------ FIN  ---- VISTA MOZO -->
+
+<!-- VISTA COCINERO , BARTENDER -->
+<div
+  *ngIf="opcionSeleccionada == 'Pendientes' && (empleadoActual.tipoEmpleado == 'Cocinero' || empleadoActual.tipoEmpleado == 'Bartender')">
+  <ion-list *ngIf="
+  !isLoadingList &&
+    productosPendientes &&
+    productosPendientes.length > 0;
+  else noHayPedidos
+" class="custom-ion-list">
+    <ion-item-sliding *ngFor="let producto of productosPendientes">
+      <ion-item>
+        <ion-avatar slot="start" class="producto-avatar">
+          <img [src]="producto.producto.fotos[0]" />
+        </ion-avatar>
+        <ion-label>
+          <div class="producto-nombre-estado">
+            <span>{{ producto.producto.nombre + ' x' + producto.cantidad}}</span>
+            <ion-chip [ngClass]="getEstadoPedidoProductoClass(producto.estadoProducto)">
+              {{ producto.estadoProducto }}
+            </ion-chip>
+          </div>
+          <div class="producto-detalles">
+            <ion-label class="cantidad" slot="start">Mesa: {{ producto.mesaNumero }}</ion-label>
+          </div>
+        </ion-label>
+      </ion-item>
+      <ion-item-options side="start">
+        <ion-item-option (click)="accionProducto(producto)" color="success">
+          <ion-icon style="font-size: x-large" slot="top" name="restaurant"></ion-icon>
+          PREPARAR
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</div>
+
+
+
+<div
+  *ngIf="opcionSeleccionada == 'Mis_pedidos' && (empleadoActual.tipoEmpleado == 'Cocinero' || empleadoActual.tipoEmpleado == 'Bartender')">
+  <ion-list *ngIf="!isLoadingList && misPedidosProductos && misPedidosProductos.length>0; else noHayPedidos"
+    class="custom-ion-list">
+    <ion-item-sliding *ngFor="let producto of misPedidosProductos">
+      <ion-item>
+        <ion-avatar slot="start" class="producto-avatar">
+          <img [src]="producto.producto.fotos[0]" />
+        </ion-avatar>
+        <ion-label>
+          <div class="producto-nombre-estado">
+            <span>{{ producto.producto.nombre + ' x' + producto.cantidad}}</span>
+            <ion-chip [ngClass]="getEstadoPedidoProductoClass(producto.estadoProducto)">
+              {{ producto.estadoProducto }}
+            </ion-chip>
+          </div>
+          <div class="producto-detalles">
+            <ion-label class="cantidad" slot="start">Mesa: {{ producto.mesaNumero }}</ion-label>
+          </div>
+        </ion-label>
+      </ion-item>
+      <ion-item-options side="start">
+        <ion-item-option (click)="accionProducto(producto)" color="success">
+          <ion-icon style="font-size: x-large" slot="top" name="checkmark-circle"></ion-icon>
+          LISTO
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</div>
+<!-- ---- FIN  VISTA COCINERO , BARTENDER -->
+
+<div class="custom-spinner" *ngIf="isLoadingPush">
+  <img src="../../../assets/spinner.png" alt="Spinner" />
+</div>
 <div *ngIf="isLoadingList">
-  <ion-list >
+  <ion-list>
     <ion-card>
       <ion-card-header>
-        <ion-skeleton-text
-          [animated]="true"
-          style="width: 80px"
-        ></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 80px"></ion-skeleton-text>
       </ion-card-header>
       <ion-card-content>
         <ion-row>
@@ -96,24 +181,15 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-skeleton-text
-              [animated]="true"
-              style="width: 80%"
-            ></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 80%"></ion-skeleton-text>
           </ion-col>
           <ion-col>
-            <ion-skeleton-text
-              [animated]="true"
-              style="width: 50%"
-            ></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 50%"></ion-skeleton-text>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-skeleton-text
-              [animated]="true"
-              style="width: 30%"
-            ></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 30%"></ion-skeleton-text>
           </ion-col>
         </ion-row>
       </ion-card-content>
@@ -122,9 +198,42 @@
 </div>
 
 <ng-template #noHayPedidos>
-  <ion-item slot="content" *ngIf="!isLoadingList">
-    <ion-label color="medium" class="ion-text-center"
-      >Todavia no hay pedidos {{opcionSeleccionada == "Todos" ? '' : opcionSeleccionada}}.</ion-label
-    >
+  <ion-item style="margin-top: 5px;" slot="content" *ngIf="!isLoadingList">
+    <ion-label color="light" class="ion-text-center">Todavia no hay pedidos{{ opcionSeleccionada == "Mis_pedidos" ? '' : (' ' + opcionSeleccionada) }}.</ion-label>
   </ion-item>
 </ng-template>
+
+<ion-modal #modal id="detalle-pedido" [isOpen]="isModalOpen" (ionModalDidDismiss)="closeModal()">
+  <ng-template>
+    <ion-header style="background-color: #bf0000">
+      <ion-toolbar style="background-color: #bf0000">
+        <ion-title>Detalle de pedido</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeModal()"><ion-icon slot="icon-only" name="close-circle"></ion-icon></ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="detalle-producto">
+      <ion-card>
+        <ion-card-content>
+          <ion-item *ngFor="let producto of pedidoProductos" lines="none">
+            <ion-avatar slot="start" class="producto-avatar">
+              <img class="bordered-image" src="{{ producto.producto.fotos[0] }}" />
+            </ion-avatar>
+            <ion-label class="producto-info">
+              <div class="producto-nombre-estado">
+                <span>{{ producto.producto.nombre }}</span>
+                <ion-chip [ngClass]="getEstadoPedidoProductoClass(producto.estadoProducto)">
+                  {{ producto.estadoProducto }}
+                </ion-chip>
+              </div>
+              <div class="producto-detalles">
+                <ion-label class="cantidad" slot="start">Cantidad: {{ producto.cantidad }}</ion-label>
+              </div>
+            </ion-label>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </ion-content>
+  </ng-template>
+</ion-modal>
