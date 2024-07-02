@@ -11,6 +11,7 @@ import { HeaderModule } from 'src/app/components/header/header.module';
 import { ListUsuariosModule } from 'src/app/components/list-usuarios/list-usuarios.module';
 import { HomeMaitrePageModule } from 'src/app/pages/home-maitre/home-maitre.module';
 import { ListaEncuestasModule } from 'src/app/components/lista-encuestas/lista-encuestas.module';
+import { ListaPedidosModule } from 'src/app/components/lista-pedidos/lista-pedidos.module';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { ListaEncuestasModule } from 'src/app/components/lista-encuestas/lista-e
     HomePageRoutingModule,
     ListUsuariosModule,
     HomeMaitrePageModule,
-    ListaEncuestasModule
+    ListaEncuestasModule,
+    ListaPedidosModule
   ],
   declarations: [HomePage]
 })

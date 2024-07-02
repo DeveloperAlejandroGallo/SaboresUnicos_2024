@@ -2,7 +2,7 @@ import { Timestamp } from "firebase/firestore";
 import { Mesa } from "./mesa";
 import { Usuario } from "./usuario";
 import { Producto } from "./producto";
-import { EstadoPedido } from "../enums/estado-pedido";
+import { EstadoPedido, EstadoPedidoProducto } from "../enums/estado-pedido";
 
 export interface Pedido {
   id: string;
@@ -12,7 +12,7 @@ export interface Pedido {
   total: number;
   subTotal: number;
   propina: number;
-  productos: Array<{producto: Producto, cantidad: number}> ;
+  productos: Array<{producto: Producto, cantidad: number, estadoProducto: EstadoPedidoProducto, empleadoId:string}> ;
   estadoPedido: EstadoPedido | null;
   descuentoPorJuego: number;
   tiempoEstimado: number;

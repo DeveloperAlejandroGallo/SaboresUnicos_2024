@@ -81,7 +81,7 @@ export class ResumenPage {
         });
         break;
       case EstadoPedido.Listo:
-        this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Confirmado)
+        this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Servido)
         .then(() => {
           this.msgSrv.ExitoToast('Esperamos que disfrutes de tu pedido!');
           this.botonDeshabilitado = true;
@@ -90,7 +90,7 @@ export class ResumenPage {
           console.error(err);
         });
         break;
-      case EstadoPedido.Confirmado:
+      case EstadoPedido.Servido:
         this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.CuentaSolicitada)
         .then(() => {
           this.msgSrv.ExitoToast('Pronto el mozo se acercará con la cuenta.');
@@ -173,7 +173,7 @@ export class ResumenPage {
           this.textoAccion = "Pedido Enviado";
           this.botonDeshabilitado = true;
           break;
-        case EstadoPedido.Confirmado:
+        case EstadoPedido.Servido:
           this.estadoPedido = "Recibido por el cliente.";
           this.colorEstado = "confirmado";
           this.textoAccion = "Solicitar Cuenta";

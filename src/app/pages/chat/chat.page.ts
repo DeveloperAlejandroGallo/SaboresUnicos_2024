@@ -1,5 +1,6 @@
-import { Component, OnInit, Output, EventEmitter, HostListener} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewChecked} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { IonContent } from '@ionic/angular';
 import { Perfil } from 'src/app/enums/perfil';
 import { TipoEmpleado } from 'src/app/enums/tipo-empleado';
 import { Mensaje } from 'src/app/models/mensaje';
@@ -15,12 +16,14 @@ import { PushNotificationService } from 'src/app/services/push-notification.serv
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
 })
-export class ChatPage implements OnInit {
+export class ChatPage implements OnInit,AfterViewChecked  {
 
 
 toDate(fecha: number): Date {
   return new Date(fecha);
 }
+// @ViewChild('content', { static: false }) content: IonContent;
+@ViewChild('chat', { static: false }) chatContainer: ElementRef | undefined;
 
   public listaDeMensajes: Array<Mensaje> = new Array<Mensaje>;
   public usuario!: Usuario;
@@ -41,7 +44,7 @@ toDate(fecha: number): Date {
       this.listaDeMensajes = mensajes
       console.log(this.listaDeMensajes);
     });
-
+    // this.content.scrollToBottom(1500);
 
     this.usuario = this.auth.usuarioActual!;
     this.idUsuarioActual = this.usuario.id;
@@ -63,8 +66,16 @@ toDate(fecha: number): Date {
 
   }
 
-
-
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+  scrollToBottom(): void {
+    try {
+      if (this.chatContainer) {
+        this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+      }
+    } catch(err) { }
+  }
 
   enviarMensaje(){
 
@@ -95,6 +106,9 @@ toDate(fecha: number): Date {
           console.error(error);
         }
       });
+    }
+    else{
+      
     }
     this.ngmensaje = "";
 

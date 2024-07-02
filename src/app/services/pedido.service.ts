@@ -19,12 +19,12 @@ import {
 import { Usuario } from '../models/usuario';
 import { map, Observable } from 'rxjs';
 import { Perfil } from '../enums/perfil';
-import {User} from '@angular/fire/auth';
+import { User } from '@angular/fire/auth';
 import { orderBy, where } from 'firebase/firestore';
 import { Pedido } from '../models/pedido';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Mesa } from '../models/mesa';
-import { EstadoPedido } from '../enums/estado-pedido';
+import { EstadoPedido, EstadoPedidoProducto } from '../enums/estado-pedido';
 import { Timestamp } from "firebase/firestore";
 import { Producto } from '../models/producto';
 
@@ -40,14 +40,14 @@ export class PedidoService {
 
   constructor(private firestore: Firestore, private angularFirestore: AngularFirestore) {
     this.coleccionPedido = collection(this.firestore, this.colectionName);
-   }
+  }
 
   public listadoPedidos!: Array<Pedido>;
 
 
   get allPedidos$(): Observable<Pedido[]> {
     const ref = collection(this.firestore, this.colectionName);
-    const queryAll = query(ref, orderBy('fecha_ingreso', 'asc'));
+    const queryAll = query(ref, orderBy('fechaIngreso', 'asc'));
     return collectionData(queryAll) as Observable<Pedido[]>;
   }
 
@@ -70,12 +70,12 @@ export class PedidoService {
     return this.pedido$ = documentoRef.valueChanges() as Observable<Pedido>;
   }
 
-//Genericos
-  traer(){
+  //Genericos
+  traer() {
     const coleccion = collection(this.firestore, this.colectionName);
     const observable = collectionData(coleccion);
 
-    observable.subscribe((respuesta)=>{
+    observable.subscribe((respuesta) => {
       this.listadoPedidos = respuesta as Array<Pedido>;
     });
 
@@ -86,14 +86,14 @@ export class PedidoService {
 
 
 
-  delete(id: string){
+  delete(id: string) {
     const coleccion = collection(this.firestore, this.colectionName);
-    const documento = doc(coleccion,id);
+    const documento = doc(coleccion, id);
     deleteDoc(documento);
   }
 
 
-//Usuario
+  //Usuario
   nuevo(cliente: Usuario, mesa: Mesa): Pedido {
     const docuNuevo = doc(this.coleccionPedido);
     const nuevoId = docuNuevo.id;
@@ -106,43 +106,73 @@ export class PedidoService {
       fechaIngreso: Timestamp.now(),
       mesa: mesa,
       mozo: null,
-      productos: new Array<{producto:Producto, cantidad: number}>(),
+      productos: new Array<{ producto: Producto, cantidad: number, estadoProducto: EstadoPedidoProducto, empleadoId: string }>(),
       propina: 0,
       subTotal: 0,
       tiempoEstimado: 0,
       total: 0
     }
-    try{
-     setDoc(docuNuevo, {
-      id: pedido.id,
-      cliente: pedido.cliente,
-      descuentoPorJuego: pedido.descuentoPorJuego,
-      estadoPedido: pedido.estadoPedido,
-      fechaDePedidoAceptado: pedido.fechaDePedidoAceptado,
-      fechaIngreso: pedido.fechaIngreso,
-      mesa: pedido.mesa,
-      mozo: pedido.mozo,
-      productos: pedido.productos,
-      propina: pedido.propina,
-      subTotal: pedido.subTotal,
-      tiempoEstimado: pedido.tiempoEstimado,
-      total: pedido.total
-    });
+    try {
+      setDoc(docuNuevo, {
+        id: pedido.id,
+        cliente: pedido.cliente,
+        descuentoPorJuego: pedido.descuentoPorJuego,
+        estadoPedido: pedido.estadoPedido,
+        fechaDePedidoAceptado: pedido.fechaDePedidoAceptado,
+        fechaIngreso: pedido.fechaIngreso,
+        mesa: pedido.mesa,
+        mozo: pedido.mozo,
+        productos: pedido.productos,
+        propina: pedido.propina,
+        subTotal: pedido.subTotal,
+        tiempoEstimado: pedido.tiempoEstimado,
+        total: pedido.total
+      });
 
-    console.log('Pedido creado');
+      console.log('Pedido creado');
 
-  }catch(ex){
-    console.error(ex);
+    } catch (ex) {
+      console.error(ex);
+    }
+    return pedido;
+
   }
-  return pedido;
-
+  async actualizarPedido(productoActualizado: { producto: Producto, cantidad: number, estadoProducto: EstadoPedidoProducto, empleadoId: string , idPedido: string}): Promise<void> {
+    const { idPedido, ...productoData } = productoActualizado;
+    const coleccion = collection(this.firestore, this.colectionName);
+    const documento = doc(coleccion, idPedido);
+    try {
+      const pedidoSnapshot = await getDoc(documento);
+      if (pedidoSnapshot.exists()) {
+        const pedido = pedidoSnapshot.data() as Pedido;
+        const productos = pedido.productos.map(p => {
+          if (p.producto.id == productoData.producto.id) {
+            return { ...p, ...productoData };
+          }
+          return p;
+        });
+        await updateDoc(documento, { productos });
+      }
+      else {
+        return Promise.reject("Pedido No encontrado");
+      }
+    } catch (error) {
+      console.error('Error actualizando producto:', error);
+      throw error;
+    }
   }
 
-
+  async traerPedidoXId(idPedido:string): Promise<Pedido> {
+    const pedidoDocRef = doc(this.firestore, `${this.colectionName}/${idPedido}`);
+    const docSnapshot = await getDoc(pedidoDocRef);
+    const data = docSnapshot.data() as Pedido;
+    data.id = docSnapshot.id;
+    return data;
+  }
   actualizarProducto(pedido: Pedido) {
 
     const coleccion = collection(this.firestore, this.colectionName);
-    const documento = doc(coleccion,pedido.id);
+    const documento = doc(coleccion, pedido.id);
 
     pedido.productos = pedido.productos;
 
@@ -159,7 +189,7 @@ export class PedidoService {
     let sum = 0;
     sum = this.sumaProductos(pedido.productos);
 
-    if(pedido.descuentoPorJuego != 0)
+    if (pedido.descuentoPorJuego != 0)
       sum -= sum * pedido.descuentoPorJuego
 
     sum += pedido.propina;
@@ -179,22 +209,22 @@ export class PedidoService {
   }
 
 
-  actualizarMozo(pedido: Pedido, mozo: Producto) {
+  actualizarMozo(pedido: Pedido, mozo: Usuario) {
 
     const coleccion = collection(this.firestore, this.colectionName);
-    const documento = doc(coleccion,pedido.id);
+    const documento = doc(coleccion, pedido.id);
 
     updateDoc(documento, {
       mozo: mozo,
     });
   }
 
-  actualizarFechaAceptado(pedido: Pedido){
+  actualizarFechaAceptado(pedido: Pedido) {
     const coleccion = collection(this.firestore, this.colectionName);
-    const documento = doc(coleccion,pedido.id);
+    const documento = doc(coleccion, pedido.id);
 
     updateDoc(documento, {
-      fechaDePedidoAceptado: Timestamp.now(),
+      fechaDePedidoAceptado: Timestamp.fromDate(new Date()),
     });
     this.actualizarEstado(pedido, EstadoPedido.Aceptado);
   }
@@ -203,7 +233,7 @@ export class PedidoService {
   actualizarEstado(pedido: Pedido, estado: EstadoPedido): Promise<void> {
 
     const coleccion = collection(this.firestore, this.colectionName);
-    const documento = doc(coleccion,pedido.id);
+    const documento = doc(coleccion, pedido.id);
 
     return updateDoc(documento, {
 
@@ -215,7 +245,7 @@ export class PedidoService {
   aplicarDescuentoPorJuego(pedido: Pedido, porcentaje: number) {
 
     const coleccion = collection(this.firestore, this.colectionName);
-    const documento = doc(coleccion,pedido.id);
+    const documento = doc(coleccion, pedido.id);
 
     updateDoc(documento, {
       descuentoPorJuego: porcentaje,
@@ -226,7 +256,7 @@ export class PedidoService {
   aplicarPropina(pedido: Pedido, propina: number) {
 
     const coleccion = collection(this.firestore, this.colectionName);
-    const documento = doc(coleccion,pedido.id);
+    const documento = doc(coleccion, pedido.id);
 
     updateDoc(documento, {
       propina: propina,

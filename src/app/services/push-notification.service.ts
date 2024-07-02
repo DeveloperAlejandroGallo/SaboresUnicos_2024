@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { TipoEmpleado } from '../enums/tipo-empleado';
 import { Usuario } from '../models/usuario';
 import { Pedido } from '../models/pedido';
+import { Producto } from '../models/producto';
 
 @Injectable({
   providedIn: 'root'
@@ -44,21 +45,19 @@ export class PushNotificationService {
     return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
   }
 
-  CocinerosNuevoPedido(mesaNumero: number): Observable<any> {
-    let title: string = 'Nuevo pedido de Comida';
-    let body = `Nuevo pedido de comida de Mesa ${mesaNumero}. Por favor revisar la lista de pedidos.`;
+  CocinerosPedido(producto: Producto, tipo: string): Observable<any> {
+    let title: string = `Nuevo pedido de ${tipo}`;
+    let body = `Debe preparar el siguiente producto: ${producto.nombre}. Por favor revise la lista de pedidos.`;
     let role = TipoEmpleado.Cocinero;
     return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
   }
-
-  BartendersNuevoPedido(mesaNumero: number): Observable<any> {
+  BartendersPedido(producto: Producto): Observable<any> {
     let title = 'Nuevo pedido de Bebida';
-    let body = `Nuevo pedido de bebidas de Mesa ${mesaNumero}. Por favor revisar la lista de pedidos.`;
+    let body = `Debe preparar la siguiente bebida: ${producto.nombre}. Por favor revise la lista de pedidos.`;
     let role = TipoEmpleado.Bartender;
       return this.http.post(`${this.apiUri}/notificar-tipoEmpleado`, { title, body, role }, { responseType: 'text' });
   }
-
-
+  
   MozoPedidoListo(MozoDelPedido: Usuario, mesaNro: number): Observable<any> {
     let token = MozoDelPedido.token;
     let title = `Pedido Mesa ${mesaNro} Listo`;
@@ -93,6 +92,18 @@ export class PushNotificationService {
     let token = cliente.token;
     let title = `Su pedido está en preparación.`;
     let body = `El tiempo de espera para el pedido es de aproximadamente ${tiempoEstimado} minutos.\nGracias.`;
+    return this.http.post(`${this.apiUri}/notificar`, { token, title, body }, { responseType: 'text' });
+  }
+  ClienteMozoAceptoPedido(cliente: Usuario, mozoNombre: string): Observable<any> {
+    let token = cliente.token;
+    let title = 'Su pedido ha sido aceptado por el mozo.';
+    let body = `El mozo asignado a su pedido es: ${mozoNombre}.`;
+    return this.http.post(`${this.apiUri}/notificar`, { token, title, body }, { responseType: 'text' });
+  }
+  ClienteMozoPagoConfirmado(cliente: Usuario, mozoNombre: string): Observable<any> {
+    let token = cliente.token;
+    let title = 'Pago confirmado.';
+    let body = `El mozo ${mozoNombre} ha confirmado su pago. ¡Gracias por elegir a Sabores Unicos!`;
     return this.http.post(`${this.apiUri}/notificar`, { token, title, body }, { responseType: 'text' });
   }
 
