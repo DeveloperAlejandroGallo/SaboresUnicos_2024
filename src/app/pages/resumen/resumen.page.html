@@ -24,7 +24,8 @@
             <ion-label class="estado {{colorEstado}}"><h2>{{estadoPedido}}</h2></ion-label>
             <ion-item  class="tiempo"  style="width: 100%; margin-left: 0; padding-left: 0;">
               <ion-icon color="primary"  name="timer-outline"></ion-icon>
-              <ion-label>Espera de {{pedido.tiempoEstimado}} min.</ion-label>
+              <ion-label *ngIf="!verCuentaRegresiva">Espera de {{pedido.tiempoEstimado}} min.</ion-label>
+              <ion-label *ngIf="verCuentaRegresiva">Su pedido llegara en {{minutosRegresivos}} min.</ion-label>
             </ion-item>
           </ion-label>
         </ion-item>

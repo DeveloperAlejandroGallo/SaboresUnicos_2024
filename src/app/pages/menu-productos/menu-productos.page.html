@@ -17,7 +17,7 @@
     </ion-segment>
 
     <ion-content class="content">
-      <div id="popover-button" class="floating-action-button" (click)="VerDetalle()">
+      <div class="floating-action-button" (click)="VerDetalle()">
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
           <div style="flex-grow: 1; text-align: center;">
             <span>{{ subtotal  | monedaPesos }}</span>
@@ -55,11 +55,11 @@
               <h2>${{itemProd.producto.precio}}   <ion-icon color="primary" name="flash" class="price-icon"></ion-icon>{{itemProd.producto.tiempoPreparacionEnMinutos}} min
               </h2>
               <div class="quantity-controls">
-                <ion-button fill="clear" size="small" (click)="decrementarCantidad(itemProd, 'Comida')">
+                <ion-button fill="clear" size="small" (click)="decrementarCantidad(itemProd, 'Comida')" [disabled]="pedido.estadoPedido !== 'Abierto'">
                   <ion-icon name="trash-bin-outline"></ion-icon>
                 </ion-button>
                 <ion-label>{{itemProd.cantidad}}</ion-label>
-                <ion-button fill="clear" size="small" (click)="incrementarCantidad(itemProd, 'Comida')">
+                <ion-button fill="clear" size="small" (click)="incrementarCantidad(itemProd, 'Comida')" [disabled]="pedido.estadoPedido !== 'Abierto'" >
                   <ion-icon name="add-outline"></ion-icon>
                 </ion-button>
               </div>
@@ -69,7 +69,6 @@
       </ion-card>
     </ng-container>
     </ion-list>
-
 
 
   <ion-list style=" overflow-y: auto; max-height: 70vh;">
@@ -99,11 +98,11 @@
           <ion-col size="12" class="item-end">
             <h2>${{itemProd.producto.precio}}   <ion-icon color="primary" name="flash" class="price-icon"></ion-icon>{{itemProd.producto.tiempoPreparacionEnMinutos}} min</h2>
             <div class="quantity-controls">
-              <ion-button fill="clear" size="small" (click)="decrementarCantidad(itemProd, 'Bebida')">
+              <ion-button fill="clear" size="small" (click)="decrementarCantidad(itemProd, 'Bebida')" [disabled]="pedido.estadoPedido !== 'Abierto'">
                 <ion-icon name="trash-bin-outline"></ion-icon>
               </ion-button>
               <ion-label>{{itemProd.cantidad}}</ion-label>
-              <ion-button fill="clear" size="small" (click)="incrementarCantidad(itemProd, 'Bebida')">
+              <ion-button fill="clear" size="small" (click)="incrementarCantidad(itemProd, 'Bebida')" [disabled]="pedido.estadoPedido !== 'Abierto'">
                 <ion-icon name="add-outline"></ion-icon>
               </ion-button>
             </div>
@@ -140,11 +139,11 @@
           <ion-col size="12" class="item-end">
             <h2>${{itemProd.producto.precio}}   <ion-icon color="primary" name="flash" class="price-icon"></ion-icon>{{itemProd.producto.tiempoPreparacionEnMinutos}} min</h2>
             <div class="quantity-controls">
-              <ion-button fill="clear" size="small" (click)="decrementarCantidad(itemProd, 'Postre')">
+              <ion-button fill="clear" size="small" (click)="decrementarCantidad(itemProd, 'Postre')" [disabled]="pedido.estadoPedido !== 'Abierto'">
                 <ion-icon name="trash-bin-outline"></ion-icon>
               </ion-button>
               <ion-label>{{itemProd.cantidad}}</ion-label>
-              <ion-button fill="clear" size="small" (click)="incrementarCantidad(itemProd, 'Postre')">
+              <ion-button fill="clear" size="small" (click)="incrementarCantidad(itemProd, 'Postre')" [disabled]="pedido.estadoPedido !== 'Abierto'">
                 <ion-icon name="add-outline"></ion-icon>
               </ion-button>
             </div>
@@ -188,27 +187,4 @@
 
 
 
-<!--
 
-<ion-popover trigger="popover-button"
-  triggerAction="click"
-  [dismissOnSelect]="true"
-  [animated]="true"
-  side="bottom"
-  alignment="end"
-  mode="ios">
-  <ng-template>
-    <ion-content >
-      <ion-list>
-        <ion-item  [button]="true" [detail]="false" (click)="VerDetalle()">
-          <ion-icon color="primary" name="newspaper"></ion-icon>
-          <ion-label style="padding: 10px;">Ver Detalle</ion-label>
-        </ion-item>
-        <ion-item *ngIf="PedirCuenta" [button]="true" [detail]="false" (click)="PedirCuenta()">
-          <ion-icon color="primary" name="wallet"></ion-icon>
-          <ion-label style="padding: 10px;">Pedir Cuenta</ion-label>
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </ng-template>
-</ion-popover> -->

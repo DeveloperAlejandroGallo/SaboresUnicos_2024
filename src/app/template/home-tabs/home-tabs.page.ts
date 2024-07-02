@@ -1,11 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Perfil } from 'src/app/enums/perfil';
 import { Usuario } from 'src/app/models/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { Barcode, BarcodeScanner, LensFacing } from '@capacitor-mlkit/barcode-scanning';
 import { MensajesService } from 'src/app/services/mensajes.service';
-import { ModalController, Platform } from '@ionic/angular';
+import { IonPopover, ModalController, Platform } from '@ionic/angular';
 import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
 import Swal from 'sweetalert2';
 import { ListaEsperaService } from 'src/app/services/lista-espera.service';
@@ -20,6 +20,9 @@ import { PedidoService } from 'src/app/services/pedido.service';
 import { EstadoPedido } from 'src/app/enums/estado-pedido';
 import { Pedido } from 'src/app/models/pedido';
 import { timer } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { EncuestaService } from 'src/app/services/encuesta.service';
+import { Timestamp } from 'firebase/firestore';
 
 const background = '#f8f8f8d7';
 @Component({
@@ -30,9 +33,10 @@ const background = '#f8f8f8d7';
 
 export class HomeTabsPage implements OnInit, OnDestroy {
 
-
+  @ViewChild('popover') popover!: IonPopover;
   @Input() isLoading: boolean = false;
 
+  public noContestoEncuesta: boolean = false;
   public isKeyboardOpen = false;
   private keyboardWillShowSub: any;
   private keyboardWillHideSub: any;
@@ -56,7 +60,6 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   //para ocultar/ver distintos TABS -->
   verJuegos : boolean = false;
   verChat : boolean = false;
-  verChatFlotante: boolean = false;
   verMiPedido : boolean = false;
   verEncuesta : boolean = false;
   estaEnEspera : boolean = false;
@@ -74,7 +77,8 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     private auth: AuthService,
     private usrService: UsuarioService,
     private pushSrv: PushNotificationService,
-    private pedidoSrv: PedidoService) {
+    private pedidoSrv: PedidoService,
+    private encuestaSrv: EncuestaService) {
 
     this.url = this.router.url;
     this.usuarioLogueado = this.auth.usuarioActual!;
@@ -86,8 +90,9 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       x => x.cliente.id === this.auth.usuarioActual!.id
       && x.estadoPedido !== EstadoPedido.Cerrado)!;
 
-    if(this.pedido !== (null && undefined))
-    {
+      console.log(this.pedido);
+
+    if(this.pedido) {
       this.pedidoSrv.escucharPedidoId(this.pedido.id);
       this.pedidoSrv.pedido$.subscribe(pedido => {
         this.pedido = pedido;
@@ -153,6 +158,11 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     }
   }
 
+  // Método para abrir el Popover
+  mostrarPopOver() {
+    this.popover.present();
+  }
+
   private preparaCamara() {
     if (this.platform.is('capacitor')) {
       try {
@@ -180,6 +190,8 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   tiposEntidades() {
 
     this.esCliente = true;
+    this.verChat = true;
+    this.verEncuesta = true;
 
     if(this.usuarioLogueado.perfil == Perfil.Empleado){
       this.esCliente = false;
@@ -189,7 +201,8 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       this.esCocinero = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Cocinero;
       this.esMozo = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Mozo;
       this.esBartender = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Bartender;
-
+      this.verChat = false;
+      this.verEncuesta = false;
     }
 
     if(this.esMaitre){
@@ -200,7 +213,69 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       this.queAlta = 'Empleado';
     }
 
+    if(this.esCliente){
+      this.verChat = this.verJuegos = this.usuarioLogueado.mesaAsignada > 0 ? true : false;
+      this.noContestoEncuesta = !this.encuestaSrv.listadoEncuesta.some(x => x.cliente.id === this.usuarioLogueado.id && this.cargoEncuestaHoy(x.fecha)  );
+    }
+
+
+
   }
+
+  private cargoEncuestaHoy(fechaEncuesta: Timestamp): boolean{
+
+
+    let fechaEncuestaDate = fechaEncuesta.toDate();
+
+    let fecha = new Date();
+    let hora = fecha.getHours();
+    let minutos = fecha.getMinutes();
+    let segundos = fecha.getSeconds();
+    let horaActual = hora + minutos/60 + segundos/3600;
+
+    let fechaInicio = new Date();
+    let fechaCierre = new Date();
+
+
+    if(environment.horaCierre >= 0){
+      //Antes de las 00
+      fechaInicio.setDate(fechaInicio.getDate());
+      fechaInicio.setHours(environment.horaApertura);
+      fechaInicio.setMinutes(environment.minutoApertura);
+
+      fechaCierre.setDate(fechaCierre.getDate() + 1);
+      fechaCierre.setHours(environment.horaCierre);
+      fechaCierre.setMinutes(environment.minutoCierre);
+
+
+      if(hora >= 0 && hora <= environment.horaCierre){
+        fechaInicio.setDate(fechaInicio.getDate() - 1);
+        fechaInicio.setHours(environment.horaApertura);
+        fechaInicio.setMinutes(environment.minutoApertura);
+
+        fechaCierre.setHours(environment.horaCierre);
+        fechaCierre.setMinutes(environment.minutoCierre);
+
+      }
+    }
+    else{ //Abre y cierra en el día.
+      fechaInicio.setDate(fechaInicio.getDate());
+      fechaInicio.setHours(environment.horaApertura);
+      fechaInicio.setMinutes(environment.minutoApertura);
+
+      fechaCierre.setDate(fechaCierre.getDate());
+      fechaCierre.setHours(environment.horaCierre);
+      fechaCierre.setMinutes(environment.minutoCierre);
+
+    }
+    if(fechaEncuestaDate >= fechaInicio && fechaEncuestaDate <= fechaCierre){
+      return true;
+    }
+    return false;
+
+  }
+
+
 
   async escanearQR() {
     const modal = await this.modalController.create({
@@ -241,7 +316,45 @@ export class HomeTabsPage implements OnInit, OnDestroy {
                   this.msgService.Info("Ya dejaste propina.");
                   return;
                 }
-                //To Do: Seleccion de Propinoa con Swal Fire
+                //To Do: Seleccion de Propina con Swal Fire con opciones 0, 5, 10, 15, 20
+                Swal.fire({
+                  title: "¿Cual fué su nivel de satisfacción?",
+                  input: 'select',
+                  inputOptions: {
+                    '0': '0% - Malo',
+                    '5':  '5% - Regular',
+                    '10': '10% - Bueno',
+                    '15': '15% - Muy Bueno',
+                    '20': '20% - Excelente'
+                  },
+                  inputPlaceholder: 'Seleccione un % de Propina',
+                  showCancelButton: true,
+                  confirmButtonColor: "#0EA06F",
+                  cancelButtonColor: "#d33",
+                  cancelButtonText: "Cancelar",
+                  confirmButtonText: "Enviar",
+                  heightAuto: false,
+                  background: background
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    this.isLoading = true;
+                    timer(3500).subscribe(()=>{
+
+                      this.pedidoSrv.aplicarPropina(this.pedido, Number(result.value)).then(()=>{
+
+                        this.msgService.Exito("Propina dejada con éxito. Gracias!!");
+
+                      },
+                      err=>{
+
+                        this.msgService.Error("El servicio de propinas no está disponible en este momento. Intente más tarde.");
+                      });
+
+                      this.isLoading = false;
+                    }); //Simulo tiempo de espera
+                  }
+                });
+
 
 
               }
@@ -463,5 +576,9 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   }
   irACreacionEncuesta(){
     this.router.navigate(['home-tabs/encuesta-cliente']);
+  }
+
+  IrAGraficosEncuestas() {
+    this.router.navigate(['graficos-encuestas']);
   }
 }

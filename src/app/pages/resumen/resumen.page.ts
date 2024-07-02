@@ -29,6 +29,9 @@ export class ResumenPage {
   public textoAccion: string = "";
   public botonDeshabilitado: boolean = false;
   public verAvisoPagoQR: boolean = false;
+  public labelTiempo: string = "";
+verCuentaRegresiva: any;
+minutosRegresivos: any;
 
 
 
@@ -81,7 +84,7 @@ export class ResumenPage {
         });
         break;
       case EstadoPedido.Listo:
-        this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Confirmado)
+        this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Servido)
         .then(() => {
           this.msgSrv.ExitoToast('Esperamos que disfrutes de tu pedido!');
           this.botonDeshabilitado = true;
@@ -90,7 +93,7 @@ export class ResumenPage {
           console.error(err);
         });
         break;
-      case EstadoPedido.Confirmado:
+      case EstadoPedido.Servido:
         this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.CuentaSolicitada)
         .then(() => {
           this.msgSrv.ExitoToast('Pronto el mozo se acercará con la cuenta.');
@@ -133,8 +136,6 @@ export class ResumenPage {
 
 
 
-
-
   private SuscribirseAlPedido() {
     this.pedidoSrv.pedido$.subscribe(data => {
       this.pedido = data;
@@ -143,17 +144,21 @@ export class ResumenPage {
 
       this.botonDeshabilitado = false;
       this.verAvisoPagoQR = false;
+      this.verCuentaRegresiva = false;
+
       switch (this.pedido.estadoPedido) {
         case EstadoPedido.Abierto:
           this.estadoPedido = "Abierto";
           this.colorEstado = "abierto";
           this.textoAccion = "Enviar Pedido";
+          this.labelTiempo = `Espera de ${this.pedido.tiempoEstimado} min.`
           break;
         case EstadoPedido.Pendiente:
           this.estadoPedido = "Pendiente de aceptar por el mozo";
           this.colorEstado = "pendiente";
           this.textoAccion = "Pedido Enviado";
           this.botonDeshabilitado = true;
+          this.labelTiempo = `Espera de ${this.pedido.tiempoEstimado} min.`
           break;
         case EstadoPedido.Aceptado:
           this.estadoPedido = "El Mozo aceptó su pedido.";
@@ -166,17 +171,21 @@ export class ResumenPage {
           this.colorEstado = "en-preparacion";
           this.textoAccion = "Pedido Enviado";
           this.botonDeshabilitado = true;
+          this.verCuentaRegresiva = true;
           break;
         case EstadoPedido.Listo:
           this.estadoPedido = "Listo para entregar al cliente.";
           this.colorEstado = "listo";
           this.textoAccion = "Pedido Enviado";
           this.botonDeshabilitado = true;
+          this.verCuentaRegresiva = true;
           break;
-        case EstadoPedido.Confirmado:
+        case EstadoPedido.Servido:
           this.estadoPedido = "Recibido por el cliente.";
-          this.colorEstado = "confirmado";
+          this.colorEstado = "servido";
           this.textoAccion = "Solicitar Cuenta";
+          this.verCuentaRegresiva = false;
+
           break;
         case EstadoPedido.CuentaSolicitada:
           this.estadoPedido = "Se solicito la cuenta al Mozo.";
@@ -197,6 +206,9 @@ export class ResumenPage {
           this.botonDeshabilitado = true;
           break;
       }
+
+
+
     }
     );
   }
