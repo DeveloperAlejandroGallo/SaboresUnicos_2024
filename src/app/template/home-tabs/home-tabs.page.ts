@@ -36,7 +36,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   @ViewChild('popover') popover!: IonPopover;
   @Input() isLoading: boolean = false;
 
-  public noContestoEncuesta: boolean = false;
+  public verLlenarEncuesta: boolean = false;
   public isKeyboardOpen = false;
   private keyboardWillShowSub: any;
   private keyboardWillHideSub: any;
@@ -65,7 +65,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   estaEnEspera : boolean = false;
   tieneMesaAsignada : boolean = false;
   queAlta: string = '';
-  pedido: Pedido;
+  pedido!: Pedido ;
   verMenu : boolean = false;
   //-------------------------
   constructor(
@@ -81,27 +81,62 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     private pedidoSrv: PedidoService,
     private encuestaSrv: EncuestaService) {
 
+    this.isLoading = true;
+
     this.url = this.router.url;
     this.usuarioLogueado = this.auth.usuarioActual!;
     this.usrService.allUsers$.subscribe(data => {
       this.usuarioLogueado = data.filter(x => x.id === this.auth.usuarioActual?.id)[0];
     });
 
-    this.pedido = this.pedidoSrv.listadoPedidos.find(
-      x => x.cliente.id === this.auth.usuarioActual!.id
-        && x.estadoPedido !== EstadoPedido.Cerrado)!;
+    this.pedidoSrv.allPedidos$.subscribe(data => {
+      this.pedido = data.find(
+        x => x.cliente.id === this.auth.usuarioActual!.id
+          && x.estadoPedido !== EstadoPedido.Cerrado)!;
+          console.log(this.pedido);
 
-      console.log(this.pedido);
+          if(this.pedido) {
+            this.pedidoSrv.escucharPedidoId(this.pedido.id);
+            this.pedidoSrv.pedido$.subscribe(pedido => {
+              this.pedido = pedido;
 
-    if(this.pedido) {
-      this.pedidoSrv.escucharPedidoId(this.pedido.id);
-      this.pedidoSrv.pedido$.subscribe(pedido => {
-        this.pedido = pedido;
-      });
-    }
+              if(this.usuarioLogueado.perfil !== Perfil.Empleado){
+
+                this.verChat = false;
+                this.verJuegos = false;
+                this.verMenu = false;
+                this.verLlenarEncuesta = false;
+
+                if(this.pedido){
+                  console.log("leyo el pedido")
+                  if(this.pedido.estadoPedido === EstadoPedido.Aceptado ||
+                    this.pedido.estadoPedido === EstadoPedido.EnPreparacion ||
+                    this.pedido.estadoPedido === EstadoPedido.Listo ||
+                    this.pedido.estadoPedido === EstadoPedido.Servido ||
+                    this.pedido.estadoPedido === EstadoPedido.CuentaSolicitada ||
+                    this.pedido.estadoPedido === EstadoPedido.Pagado){
+                      this.verLlenarEncuesta = !this.encuestaSrv.listadoEncuesta.some(x =>
+                        x.cliente.id === this.usuarioLogueado.id && this.cargoEncuestaHoy(x.fecha)) ;
+                    }
+
+                  if(this.pedido?.estadoPedido !== EstadoPedido.MesaAsignada && this.pedido?.estadoPedido !==  EstadoPedido.Cerrado){
+                    this.verChat = true;
+                    this.verJuegos = true;
+                    this.verMenu = true;
+                    // this.router.navigate(['home-tabs/menu-productos']);
+                  }
+
+                }
+
+                this.isLoading = false;
+              }
+            });
+          }
+
+    });
 
 
-    // console.log(this.usuarioLogueado);
+
   }
 
   ngOnInit() {
@@ -136,14 +171,6 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
     //Si al loguearse tiene mesa asignada, que NO es de reserva, voy directamente al menu.
 
-    if (this.esCliente && this.usuarioLogueado.mesaAsignada != 0 && !this.usuarioLogueado.tieneReserva) {
-      this.router.navigate(['home-tabs/menu-productos']);
-      this.verJuegos = true;
-      this.verChat = true;
-      this.verEncuesta = true;
-
-      return;
-    }
 
 
 
@@ -196,7 +223,8 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     this.esCliente = true;
     this.verChat = true;
     this.verEncuesta = true;
-
+    this.verLlenarEncuesta = false;
+    this.verMenu = false;
     if (this.usuarioLogueado.perfil == Perfil.Empleado) {
       this.esCliente = false;
       this.esDuenio = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Dueño;
@@ -207,6 +235,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       this.esBartender = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Bartender;
       this.verChat = false;
       this.verEncuesta = false;
+
     }
 
     if (this.esMaitre) {
@@ -217,13 +246,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       this.queAlta = 'Empleado';
     }
 
-    if(this.esCliente){
-      this.verChat = this.verJuegos = this.verMenu = this.usuarioLogueado.mesaAsignada > 0 ? true : false;
 
-      if(this.pedido)
-      this.noContestoEncuesta = (this.pedido.estadoPedido === EstadoPedido.Abierto || this.pedido.estadoPedido === EstadoPedido.Cerrado || this.pedido.estadoPedido === EstadoPedido.Pendiente)
-        ? false : !this.encuestaSrv.listadoEncuesta.some(x => x.cliente.id === this.usuarioLogueado.id && this.cargoEncuestaHoy(x.fecha));
-    }
 
 
 
@@ -311,6 +334,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
               break;
             case "Mesa":
               if (this.validacionesMesa(datos[1])) {
+                this.pedidoSrv.actualizarEstado(this.pedido, EstadoPedido.Abierto);
                 this.router.navigate(['home-tabs/menu-productos']);
                 this.verJuegos = true;
                 this.verChat = true;
