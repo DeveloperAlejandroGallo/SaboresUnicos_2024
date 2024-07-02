@@ -1,0 +1,79 @@
+<ion-content>
+  <div class="profile-header">
+      <ion-icon
+      class="icon-volver"
+      name="arrow-back-outline"
+      (click)="volver()"
+    ></ion-icon>
+    <ion-avatar class="profile-avatar">
+      <img [src]="usuario.foto" alt="Profile Picture">
+    </ion-avatar>
+    <!-- <ion-icon class="edit-icon" name="create-outline"></ion-icon> -->
+  </div>
+  <ion-grid>
+    <ion-row *ngIf="estrellas">
+      <ion-title>Estrellas recibidas</ion-title>
+      <ion-col size="12">
+      <div class="container-chart" style="width: 100%; height: 100%;">
+          <ngx-charts-pie-chart
+            scheme="forest"
+            [results]="dataCantidadEstrellas"
+            [gradient]="gradient"
+            [labels]="showLabels"
+            [doughnut]="isDoughnut"
+            (select)="onSelect($event,'linda')"
+            (activate)="onActivate($event)"
+            (deactivate)="onDeactivate($event)"
+          >
+          </ngx-charts-pie-chart>
+        </div>
+      </ion-col>
+    </ion-row> 
+
+    <!-- <ion-row *ngIf="!lindas">
+      <ion-title>Fotos Feas</ion-title>
+      <ion-col size="12">
+        <div class="container-chart" style="width: 100%; height: 100%;">
+          <ngx-charts-bar-vertical
+            scheme="fire"
+            [results]="dataFotosFeas"
+            [gradient]="gradient"
+            [xAxis]="showXAxis"
+            [yAxis]="showYAxis"
+            [legend]="showLegend"
+            [legendPosition]="legendPosition"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxisLabel]="xAxisLabel"
+            [yAxisLabel]="yAxisLabel"
+            (select)="onSelect($event, 'fea')"
+          >
+          </ngx-charts-bar-vertical>
+        </div>
+      </ion-col>
+    </ion-row> -->
+  </ion-grid>
+  
+    <!-- <ion-card>
+      <ion-card-content>
+        <ion-button expand="full" (click)="cambioGráfico()">
+          {{ gráficoActual === 'bar'? 'Ver Gráfico de Torta' : 'Ver Gráfico de Barras' }}
+        </ion-button>
+        <div style='height:50%;width:100%;'>
+          <canvas id="myChart" width="400" height="400"></canvas>
+        </div>
+        <ion-card id='card' style='display:none;'>
+          <ion-card-content>
+            <img src='' alt="" height="100%" width="100%" id='imagen'>
+          </ion-card-content>
+        </ion-card>
+      </ion-card-content>
+    </ion-card> -->
+  </ion-content>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="cambiarGrafico()" color="tertiary">
+      <img [src]="icono">
+    </ion-fab-button>
+  </ion-fab>
+  

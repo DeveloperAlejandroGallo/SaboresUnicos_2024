@@ -52,6 +52,11 @@
 
 <!-- <div class="fixed"> -->
 
+  <ion-fab  class="fab-chat"  slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="white" class="boton-chat-mozo" (click)="irAGraficoEncuestas()">
+      <ion-icon color="primary" name="chatbox-ellipses-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
   <ion-fab *ngIf="esCliente && !isKeyboardOpen" slot="fixed" vertical="bottom" horizontal="center" >
     <ion-fab-button (click)="escanearQR()">
