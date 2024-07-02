@@ -66,6 +66,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   tieneMesaAsignada : boolean = false;
   queAlta: string = '';
   pedido: Pedido;
+  verMenu : boolean = false;
   //-------------------------
   constructor(
     private mesasSvc: MesaService,
@@ -216,7 +217,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     }
 
     if(this.esCliente){
-      this.verChat = this.verJuegos = this.usuarioLogueado.mesaAsignada > 0 ? true : false;
+      this.verChat = this.verJuegos = this.verMenu = this.usuarioLogueado.mesaAsignada > 0 ? true : false;
       this.noContestoEncuesta = !this.encuestaSrv.listadoEncuesta.some(x => x.cliente.id === this.usuarioLogueado.id && this.cargoEncuestaHoy(x.fecha)  );
     }
 

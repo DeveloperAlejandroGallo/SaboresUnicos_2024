@@ -158,7 +158,7 @@ export class HomeMaitrePage  {
 
 
 
-      this.mesaService.cambiarEstadoDeNesa(EstadoMesa.ocupada, mesa.id);
+      this.mesaService.cambiarEstadoDeMesa(EstadoMesa.ocupada, mesa.id);
 
       this.usrService.asignarMesa(mesa.numero, elementoEspera.usuario.id);
 

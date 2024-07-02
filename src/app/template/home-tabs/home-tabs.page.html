@@ -5,7 +5,7 @@
       <ion-label>Inicio</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button *ngIf="esCliente"  tab="menu-productos">
+    <ion-tab-button *ngIf="verMenu"  tab="menu-productos">
       <ion-icon name="newspaper"></ion-icon>
       <ion-label>Menú</ion-label>
     </ion-tab-button>
@@ -74,7 +74,7 @@
 
 
 
-<ion-popover 
+<ion-popover
 trigger="popover-button"
 triggerAction="click"
 [dismissOnSelect]="true"

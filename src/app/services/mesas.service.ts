@@ -102,7 +102,7 @@ export class MesaService {
 
   }
 
-  cambiarEstadoDeNesa(estado: EstadoMesa, id : string){
+  cambiarEstadoDeMesa(estado: EstadoMesa, id : string){
     const coleccion = collection(this.firestore, this.colectionName);
     const documento = doc(coleccion,id);
     //console.log(cliente.nombre);
@@ -112,7 +112,7 @@ export class MesaService {
     })
   }
 
-  
+
 
 
 }
