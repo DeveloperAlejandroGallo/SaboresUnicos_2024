@@ -15,6 +15,7 @@ import { Perfil } from 'src/app/enums/perfil';
 import Swal from 'sweetalert2';
 import { MesaService } from 'src/app/services/mesas.service';
 import { EstadoMesa } from 'src/app/enums/estado-mesa';
+import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
   selector: 'app-lista-pedidos',
@@ -37,7 +38,9 @@ export class ListaPedidosComponent implements OnInit {
   productosPendientes: Array<{ producto: Producto, cantidad: number, estadoProducto:EstadoPedidoProducto, empleadoId:string, idPedido: string, mesaNumero:number}> = [];
   misPedidosProductos: Array<{ producto: Producto, cantidad: number, estadoProducto:EstadoPedidoProducto, empleadoId:string, idPedido: string, mesaNumero:number}> = [];
 
-  constructor(private mesaSvc:MesaService, private msgService: MensajesService, private auth: AuthService, private pedidosSvc: PedidoService, private pushNotif: PushNotificationService) {
+  constructor(private mesaSvc:MesaService, private msgService: MensajesService, private auth: AuthService, private pedidosSvc: PedidoService, private pushNotif: PushNotificationService,
+    private usrSrv: UsuarioService
+  ) {
     console.log(auth.usuarioActual);
     this.empleadoActual = this.auth.usuarioActual!;
   }
@@ -58,7 +61,7 @@ export class ListaPedidosComponent implements OnInit {
         const tipoProducto = this.empleadoActual.tipoEmpleado == TipoEmpleado.Cocinero ? [TipoProducto.Comida, TipoProducto.Postre] : [TipoProducto.Bebida];
         this.productosPendientes = data.flatMap(pedido=>
           pedido.productos.filter(producto=>
-            producto.estadoProducto == EstadoPedidoProducto.Pendiente && producto.empleadoId == "" 
+            producto.estadoProducto == EstadoPedidoProducto.Pendiente && producto.empleadoId == ""
             && tipoProducto.includes(producto.producto.tipo) && pedido.estadoPedido == EstadoPedido.Aceptado
           ).map(producto=>({
             ...producto,
@@ -66,10 +69,10 @@ export class ListaPedidosComponent implements OnInit {
             mesaNumero: pedido.mesa.numero
           }))
         );
-        
+
         this.misPedidosProductos = data.flatMap(pedido=>
           pedido.productos.filter(producto=>
-            producto.empleadoId == this.empleadoActual.id && 
+            producto.empleadoId == this.empleadoActual.id &&
             (producto.estadoProducto == EstadoPedidoProducto.EnPreparacion)
             && tipoProducto.includes(producto.producto.tipo)
           ).map(producto =>({
@@ -84,7 +87,7 @@ export class ListaPedidosComponent implements OnInit {
       }
     });
     setTimeout(() => {
-      
+
       this.isLoadingList = false;
 
     }, 1500);
@@ -100,6 +103,7 @@ export class ListaPedidosComponent implements OnInit {
     this.pedidosSvc.actualizarEstado(pedido, EstadoPedido.Aceptado);
     this.pedidosSvc.actualizarMozo(pedido, this.auth.usuarioActual!);
     this.pedidosSvc.actualizarFechaAceptado(pedido);
+
     this.pushNotif.ClienteMozoAceptoPedido(pedido.cliente, this.empleadoActual.nombre + ' ' + this.empleadoActual.apellido).subscribe({
       next: (data) => {
         console.log("Rta Push Notificacion Mozo: ");
@@ -243,7 +247,7 @@ export class ListaPedidosComponent implements OnInit {
         this.ConfirmarPagoPedido(pedido);
         break;
       default:
-        console.log("Error en accion");        
+        console.log("Error en accion");
         break;
     }
   }
@@ -251,7 +255,7 @@ export class ListaPedidosComponent implements OnInit {
   accionProducto(producto: { producto: Producto, cantidad: number, estadoProducto:EstadoPedidoProducto, empleadoId:string, idPedido: string , mesaNumero:number}){
     const { mesaNumero, ...productoData } = producto;
     console.log(productoData);
-    
+
     switch (producto.estadoProducto) {
       case EstadoPedidoProducto.Pendiente:
         this.prepararPedido(productoData);
@@ -260,10 +264,10 @@ export class ListaPedidosComponent implements OnInit {
         this.terminarPedido(productoData);
         break;
       default:
-        console.log("Error en accion");        
+        console.log("Error en accion");
         break;
     }
-    
+
   }
 
   ConfirmarPagoPedido(pedido: Pedido){
@@ -284,7 +288,8 @@ export class ListaPedidosComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.pedidosSvc.actualizarEstado(pedido,EstadoPedido.Cerrado);
-        this.mesaSvc.cambiarEstadoDeNesa(EstadoMesa.libre,pedido.mesa.id);
+        this.mesaSvc.cambiarEstadoDeMesa(EstadoMesa.libre,pedido.mesa.id);
+        this.usrSrv.asignarMesa(0, pedido.cliente.id);
         this.pushNotif.ClienteMozoPagoConfirmado(pedido.cliente,this.empleadoActual.nombre).subscribe({
           next: (data) => {
             console.log("Rta Push Notificacion Mozo: ");
@@ -296,7 +301,7 @@ export class ListaPedidosComponent implements OnInit {
           }
         });
         this.msgService.ExitoIonToast("Pago Confirmado.\nLa mesa ha sido liberada.",2);
-        
+
       }
     });
   }
@@ -304,11 +309,11 @@ export class ListaPedidosComponent implements OnInit {
     this.isLoadingPush = true;
     producto.estadoProducto = EstadoPedidoProducto.Listo;
     this.pedidosSvc.actualizarPedido(producto).then(()=>{
-      console.log("Se actualizo el producto del pedido");            
+      console.log("Se actualizo el producto del pedido");
       return this.pedidosSvc.traerPedidoXId(producto.idPedido);
     }).then((pedido)=>{
       if(pedido){
-        this.verificarListo(pedido);        
+        this.verificarListo(pedido);
       }
       else{
         this.msgService.Error("Pedido no encontrado");
@@ -325,7 +330,7 @@ export class ListaPedidosComponent implements OnInit {
     this.isLoadingPush = true;
     producto.estadoProducto = EstadoPedidoProducto.EnPreparacion;
     producto.empleadoId = this.empleadoActual.id;
-    this.pedidosSvc.actualizarPedido(producto).then(()=>{      
+    this.pedidosSvc.actualizarPedido(producto).then(()=>{
       console.log("Se actualizo el producto del pedido");
       return this.pedidosSvc.traerPedidoXId(producto.idPedido);
     }).then((pedido)=>{

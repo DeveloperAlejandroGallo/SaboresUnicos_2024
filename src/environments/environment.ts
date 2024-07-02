@@ -2,6 +2,8 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { min } from "rxjs";
+
 export const environment = {
   production: false,
   firebaseConfig: {
@@ -14,6 +16,10 @@ export const environment = {
     appId: "1:847994126117:web:7a02d1aadf97d5265ee4cc",
   },
   apiPushNotificationAndMail: 'https://us-central1-ajg-pps-2024.cloudfunctions.net/app',
+  horaApertura: 11,
+  minutoApertura: 0,
+  horaCierre: 2,
+  minutoCierre: 30,
 };
 
 /*

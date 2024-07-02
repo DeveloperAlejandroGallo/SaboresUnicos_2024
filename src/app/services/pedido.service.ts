@@ -34,6 +34,7 @@ import { Producto } from '../models/producto';
 export class PedidoService {
 
 
+
   private colectionName: string = 'pedidos';
   private coleccionPedido: CollectionReference<DocumentData>;
   public pedido$: Observable<Pedido> = new Observable<Pedido>();
@@ -253,12 +254,12 @@ export class PedidoService {
     });
   }
 
-  aplicarPropina(pedido: Pedido, propina: number) {
+  aplicarPropina(pedido: Pedido, propina: number):Promise<void> {
 
     const coleccion = collection(this.firestore, this.colectionName);
     const documento = doc(coleccion, pedido.id);
 
-    updateDoc(documento, {
+    return updateDoc(documento, {
       propina: propina,
       total: pedido.total + propina
     });

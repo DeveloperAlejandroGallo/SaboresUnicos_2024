@@ -11,6 +11,9 @@ import { Producto } from '../models/producto';
   providedIn: 'root'
 })
 export class PushNotificationService {
+  MozoPropinaDejada(pedido: Pedido) {
+    throw new Error('Method not implemented.');
+  }
 
   private apiUri = environment.apiPushNotificationAndMail;
 

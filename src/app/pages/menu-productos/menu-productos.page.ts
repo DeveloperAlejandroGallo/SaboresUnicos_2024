@@ -86,7 +86,7 @@ export class MenuProductosPage implements OnInit {
         x => {
           return {
             producto: x,
-            cantidad: 0
+            cantidad: this.pedido.productos.find(y => y.producto.id === x.id)?.cantidad || 0
           };
         }
 
@@ -96,7 +96,7 @@ export class MenuProductosPage implements OnInit {
       this.listaDeTipoBebida = productos.filter(x => x.tipo == 'Bebida').map(x => {
         return {
           producto: x,
-          cantidad: 0
+          cantidad: this.pedido.productos.find(y => y.producto.id === x.id)?.cantidad || 0
         };
       }
       );
@@ -106,7 +106,7 @@ export class MenuProductosPage implements OnInit {
         x => {
           return {
             producto: x,
-            cantidad: 0
+            cantidad: this.pedido.productos.find(y => y.producto.id === x.id)?.cantidad || 0
           };
         }
       );
