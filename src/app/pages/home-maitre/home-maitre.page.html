@@ -3,7 +3,7 @@
 
   <ion-grid class="grilla">
 
-    <div *ngIf="listaDeEspera === null">
+    <div *ngIf="listaDeEspera.length === 0">
 
       <ion-row>
         <ion-col size="12">
@@ -15,7 +15,7 @@
 
     </div>
 
-    <div *ngIf="listaDeEspera !== null">
+    <div *ngIf="listaDeEspera.length !== 0">
 
       <ion-row class="titulos">
         <ion-col size="3">

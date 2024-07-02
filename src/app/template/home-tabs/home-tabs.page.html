@@ -5,7 +5,7 @@
       <ion-label>Inicio</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button *ngIf="esCliente && verEncuesta"  tab="menu-productos">
+    <ion-tab-button *ngIf="verMenu"  tab="menu-productos">
       <ion-icon name="newspaper"></ion-icon>
       <ion-label>Menú</ion-label>
     </ion-tab-button>
@@ -19,9 +19,14 @@
       <ion-label>Alta {{queAlta}}</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button *ngIf="esCliente && verJuegos"  tab="juegos">
+    <ion-tab-button *ngIf="verJuegos"  tab="juegos">
       <ion-icon name="game-controller"></ion-icon>
       <ion-label>Juegos</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button *ngIf="esMozo" tab="chat">
+      <ion-icon name="chatbox-ellipses"></ion-icon>
+      <ion-label>Chat</ion-label>
     </ion-tab-button>
 
 
@@ -34,15 +39,15 @@
 
   </ion-tab-bar>
 
-  <ion-fab *ngIf="esCliente"  class="fab-chat fab-encuesta"  slot="fixed" vertical="top" horizontal="end">
-    <ion-fab-button color="white" class="boton-encuesta">
+  <ion-fab *ngIf="verEncuesta"  class="fab-chat "  slot="fixed" vertical="top" horizontal="end">
+    <ion-fab-button id="popover-button" color="white" class="boton-encuesta" >
       <ion-icon color="primary" name="megaphone-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
 
   <!-- PONER EL verChat ANTES DE ENTREGAR -->
-  <ion-fab *ngIf="(esCliente || esMozo) && verChat" class="fab-chat"  slot="fixed" vertical="top" horizontal="end">
+  <ion-fab *ngIf="verChat" class="fab-chat fab-encuesta"  slot="fixed" vertical="top" horizontal="end">
     <ion-fab-button color="white" class="boton-chat-mozo" (click)="irAlChat()">
       <ion-icon color="primary" name="chatbox-ellipses-outline"></ion-icon>
     </ion-fab-button>
@@ -60,7 +65,34 @@
   </ion-fab>
 
 <!-- </div> -->
-  
+
   <div class="custom-spinner" *ngIf="isLoading" >
     <img src="../../../assets/spinner.png" alt="Spinner">
 </div>
+
+
+
+
+
+<ion-popover
+trigger="popover-button"
+triggerAction="click"
+[dismissOnSelect]="true"
+[animated]="true"
+side="bottom"
+alignment="end">
+  <ng-template>
+    <ion-content >
+      <ion-list>
+        <ion-item  [button]="true" [detail]="false" (click)="IrAGraficosEncuestas()">
+          <ion-icon color="primary" name="bar-chart"></ion-icon>
+          <ion-label style="padding: 10px;">Gráficos Encuestas</ion-label>
+        </ion-item>
+        <ion-item *ngIf="noContestoEncuesta" [button]="true" [detail]="false" (click)="irACreacionEncuesta()">
+          <ion-icon color="primary" name="newspaper"></ion-icon>
+          <ion-label style="padding: 10px;">Llenar Encuesta</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-popover>

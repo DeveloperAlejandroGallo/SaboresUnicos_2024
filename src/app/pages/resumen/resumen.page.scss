@@ -141,51 +141,40 @@ ion-item {
 }
 
 .abierto{
-  background-color: #6cb6ff;
+  background-color: #8ec6ff;
   color: blue;
-  border-color:  #6cb6ff;
+  border-color:  #8ec6ff;
 }
 
-.pendiente{
-  background-color: #f9b36e;
-  color: orange;
-  border-color:  #f9b36e;
+.pendiente,.cuenta-solicitada{
+  background-color: #ffe9c7;
+  color: rgb(131, 72, 0);
+  border-color:  #ffe9c7;
 }
 
 .en-preparacion { //violeta
-  background-color: #9c3afe;
+  background-color: #d0a0ff;
   color: purple;
-  border-color:  #9c3afe;
+  border-color:  #d0a0ff;
 }
 
-.listo{// verde
-  background-color: #76ff76;
+.listo,.aceptado,.pagado{// verde
+  background-color: #9dff9d;
   color: green;
-  border-color:  #76ff76;
+  border-color:  #9dff9d;
 }
 
-.entregado{//Amarillo
-  background-color: #ffff74;
-  color: rgb(192, 192, 0);
-  border-color:  #ffff74;
-}
-
-.confirmado { //negro
-  background-color: #656565;
+.servido { //negro
+  background-color: #cccccc;
   color: black;
-  border-color:  #656565;
+  border-color:  #cccccc;
 }
 
-.pagado{
-  background-color: #00ff00;
-  color: green;
-  border-color:  #00ff00;
-}
 
 .cerrado{//rojo
-  background-color: rgb(255, 129, 129);
-  color: red;
-  border-color:  rgb(255, 129, 129);
+  background-color: #ffc6c6;
+  color: darkred;
+  border-color:  #ffc6c6;
 
 }
 
@@ -222,9 +211,20 @@ ion-item {
   color:#bf0000;
   box-shadow: none;
 
-  
+
 }
 
-
+.pagoQR{
+  padding: 10;
+  color: #bf0000;
+  font-weight: bold;
+  border: #bf0000 1px ;
+  border-style: dashed;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  margin-top: 5px;
+}
 
 

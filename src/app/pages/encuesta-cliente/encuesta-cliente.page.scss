@@ -1,0 +1,124 @@
+ion-content {
+  --background: url("../../../assets/img/fondo-gris.png") no-repeat center
+    center / cover;
+  padding: 16px;
+
+  ion-item {
+    margin-bottom: 16px;
+  }
+
+  ion-range {
+    --bar-background-active: #bf0000;
+    --knob-background: #bf0000;
+    --knob-size: 24px;
+    --pin-background: #bf0000;
+  }
+
+  ion-checkbox {
+    --background-checked: #bf0000;
+  }
+
+  ion-radio {
+    --background-checked: #bf0000;
+  }
+
+  input[type="file"] {
+    margin-top: 8px;
+  }
+
+  .star-rating {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+    background: #bf0000;
+    border-radius: 50px;
+  }
+
+  .star-image {
+    width: 40px;
+    height: 40px;
+    margin: 0 4px;
+    cursor: pointer;
+  }
+
+  .titulo {
+    font-size: 1.73rem;
+    display: flex;
+    justify-content: center;
+    margin: 5px 5px 5px 5px;
+  }
+
+  .labels {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+    font-size: 1.6rem;
+    color: black;
+  }
+
+  .label-mejor-comida {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+    font-size: 1.57rem;
+    color: black;
+  }
+
+  .mi-ion-card {
+    background: #ffeeee;
+    border-radius: 60px;
+  }
+
+  .label-radio-group {
+    display: block;
+    width: 100%;
+  }
+
+  .radio-item {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .radio-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 50px;
+  }
+  .item-background-color {
+    --ion-item-background:#ffeeee
+  }
+
+  .label-sabor-puntaje-comida {
+    margin-top: 8px; /* Espacio entre el rango y el label */
+    text-align: center; /* Centrar el texto */
+    color: black;
+    font-size: large;
+  }
+  /* Asegúrate de que el contenedor de la imagen tenga un tamaño definido */
+.image-container {
+  width:  130px; /* Ajusta el tamaño según sea necesario */
+  height: 130px; /* Ajusta el tamaño según sea necesario */
+  border-radius: 9999px; /* Hace que el contenedor sea circular */
+  overflow: hidden; /* Asegura que nada se muestre fuera del contenedor circular */
+}
+
+swiper-container {
+  width: 100%;
+  height: 100%;
+
+  --swiper-pagination-bullet-inactive-color: var(--ion-color-step-200, black);
+  --swiper-pagination-color: var(--ion-color-primary, #BF0000);
+}
+.producto-imagen {
+  //width: 340px;
+  height: 171px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  width: -webkit-fill-available;
+
+}
+}

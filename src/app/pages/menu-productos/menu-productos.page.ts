@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ProductoService } from 'src/app/services/producto.service';
 import { PedidoService } from 'src/app/services/pedido.service';
 import { Pedido } from 'src/app/models/pedido';
-import { EstadoPedido } from 'src/app/enums/estado-pedido';
+import { EstadoPedido, EstadoPedidoProducto } from 'src/app/enums/estado-pedido';
 import { Router } from '@angular/router';
 import { MensajesService } from 'src/app/services/mensajes.service';
 
@@ -86,7 +86,7 @@ export class MenuProductosPage implements OnInit {
         x => {
           return {
             producto: x,
-            cantidad: 0
+            cantidad: this.pedido.productos.find(y => y.producto.id === x.id)?.cantidad || 0
           };
         }
 
@@ -96,7 +96,7 @@ export class MenuProductosPage implements OnInit {
       this.listaDeTipoBebida = productos.filter(x => x.tipo == 'Bebida').map(x => {
         return {
           producto: x,
-          cantidad: 0
+          cantidad: this.pedido.productos.find(y => y.producto.id === x.id)?.cantidad || 0
         };
       }
       );
@@ -106,7 +106,7 @@ export class MenuProductosPage implements OnInit {
         x => {
           return {
             producto: x,
-            cantidad: 0
+            cantidad: this.pedido.productos.find(y => y.producto.id === x.id)?.cantidad || 0
           };
         }
       );
@@ -178,11 +178,16 @@ export class MenuProductosPage implements OnInit {
     if(index == -1){
       this.pedido.productos.push({
         producto: item.producto,
-        cantidad: 1
+        cantidad: 1,
+        estadoProducto: EstadoPedidoProducto.Pendiente,
+        empleadoId: ""
       });
     }else{
         this.pedido.productos[index].cantidad++;
     }
+
+      if(this.pedido.tiempoEstimado < item.producto.tiempoPreparacionEnMinutos)
+        this.pedido.tiempoEstimado = item.producto.tiempoPreparacionEnMinutos;
 
      this.pedidoSrv.actualizarProducto(this.pedido);
   }
@@ -209,6 +214,13 @@ export class MenuProductosPage implements OnInit {
 
       if(this.pedido.productos[index].cantidad === 0)
         this.pedido.productos.splice(index,1);
+
+      //obtener el maximo tiempo de preparacion
+      let max = 0;
+      this.pedido.productos.forEach(x => {
+        if(x.producto.tiempoPreparacionEnMinutos > max)
+          max = x.producto.tiempoPreparacionEnMinutos;
+        });
 
        this.pedidoSrv.actualizarProducto(this.pedido);
 
