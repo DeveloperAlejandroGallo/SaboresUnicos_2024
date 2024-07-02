@@ -102,7 +102,7 @@ export class PedidoService {
       id: nuevoId,
       cliente: cliente,
       descuentoPorJuego: 0,
-      estadoPedido: EstadoPedido.Pendiente,
+      estadoPedido: EstadoPedido.Abierto,
       fechaDePedidoAceptado: null,
       fechaIngreso: Timestamp.now(),
       mesa: mesa,

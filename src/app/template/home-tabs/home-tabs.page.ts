@@ -141,6 +141,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       this.verJuegos = true;
       this.verChat = true;
       this.verEncuesta = true;
+
       return;
     }
 
@@ -218,7 +219,10 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
     if(this.esCliente){
       this.verChat = this.verJuegos = this.verMenu = this.usuarioLogueado.mesaAsignada > 0 ? true : false;
-      this.noContestoEncuesta = !this.encuestaSrv.listadoEncuesta.some(x => x.cliente.id === this.usuarioLogueado.id && this.cargoEncuestaHoy(x.fecha)  );
+
+      if(this.pedido)
+      this.noContestoEncuesta = (this.pedido.estadoPedido === EstadoPedido.Abierto || this.pedido.estadoPedido === EstadoPedido.Cerrado || this.pedido.estadoPedido === EstadoPedido.Pendiente)
+        ? false : !this.encuestaSrv.listadoEncuesta.some(x => x.cliente.id === this.usuarioLogueado.id && this.cargoEncuestaHoy(x.fecha));
     }
 
 
@@ -399,7 +403,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
   }
   esValidoParaPropina(): boolean {
-    if (this.pedido === (null || undefined)) {
+    if (!this.pedido) {
       this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
       return false;
     }
