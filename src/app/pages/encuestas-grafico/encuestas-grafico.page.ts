@@ -21,6 +21,7 @@ export class EncuestasGraficoPage {
   single: any[] = [];
   view: [number, number] = [100, 100];
   public estrellas: boolean = true;
+  public mejorComida: boolean = false;
   public icono: string = '../../../assets/img/barchart.png';
   
   // options
@@ -42,6 +43,7 @@ export class EncuestasGraficoPage {
   public usuario: Usuario;
   public listaEncuestas: Array<Encuesta> = new Array<Encuesta>;
   dataCantidadEstrellas!: Array<{name: string, value: number, label: string}>;
+  dataConteoComidas!: Array<{name: string, value: number, label: string}>;
 
   constructor(
     private auth: AuthService,
@@ -56,6 +58,7 @@ export class EncuestasGraficoPage {
       console.log(this.listaEncuestas);
 
       let conteoEstrellas: Record<number, number> = {};
+      let conteoComidas: Record<string, number> = {}; // Definición explícita del tipo
 
       this.listaEncuestas.forEach(encuesta => {
         if (!conteoEstrellas[encuesta.cantidadEstrellas]) {
@@ -68,6 +71,20 @@ export class EncuestasGraficoPage {
       this.dataCantidadEstrellas = Object.entries(conteoEstrellas).map(([estrellas, cantidad]) => ({
         name: 'Cantidad estrellas' + cantidad.toString(),
         label: `${cantidad} Estrellas`,
+        value: cantidad
+      }));
+
+      this.listaEncuestas.forEach(encuesta => {
+        if (!conteoComidas[encuesta.MejorComida.nombre]) {
+          conteoComidas[encuesta.MejorComida.nombre] = 1;
+        } else {
+          conteoComidas[encuesta.MejorComida.nombre]++;
+        }
+      });
+    
+      this.dataConteoComidas = Object.entries(conteoComidas).map(([nombre, cantidad]) => ({
+        name: nombre,
+        label: nombre,
         value: cantidad
       }));
 
@@ -115,7 +132,7 @@ export class EncuestasGraficoPage {
     var posicion: number = parseInt(data.name) - 1;
 
     Swal.fire({
-       title:  this.dataCantidadEstrellas[posicion].label,
+       //title:  this.dataCantidadEstrellas[posicion].label,
       text: 'Cantidad de veces votado: ' + data.value,
       showCloseButton: true,
       heightAuto: false,
@@ -130,95 +147,22 @@ export class EncuestasGraficoPage {
     console.log('Deactivate', JSON.parse(JSON.stringify(data)));
   }
 
-  cambiarGrafico() {
-    this.estrellas = !this.estrellas;
-    this.icono = this.estrellas ? '../../../assets/img/barchart.png' : '../../../assets/img/piechart.png';
+  // cambiarGrafico() {
+  //   this.estrellas = !this.estrellas;
+  //   this.icono = this.estrellas ? '../../../assets/img/barchart.png' : '../../../assets/img/piechart.png';
+  //   }
+
+    irGraficoEstrellas(){
+      this.estrellas = !this.estrellas;
+      this.estrellas = !this.estrellas;
+      this.icono= '../../../assets/img/piechart.png';
     }
 
-  // ngAfterViewInit() { // Método ngAfterViewInit
-  //   const canvasElement = document.getElementById('myChart') as HTMLCanvasElement; // Usamos una afirmación de tipo
-  //   this.ctx = canvasElement.getContext('2d');
-  //   this.configurarGrafico();
-  // }
-
-  // configurarGrafico() {
-  //   this.myChart = new Chart(this.ctx, {
-  //     type: 'bar',
-  //     data: {
-  //       labels: this.datos.map((dato: any) => dato.label),
-  //       datasets: [{
-  //         label: '# de veces elegida como favorita',
-  //         data: this.datos.map((dato: any) => dato.value),
-  //         backgroundColor: [
-  //           'rgba(255, 99, 132, 0.2)',
-  //           'rgba(54, 162, 235, 0.2)',
-  //           'rgba(255, 206, 86, 0.2)',
-  //           'rgba(75, 192, 192, 0.2)',
-  //           'rgba(153, 102, 255, 0.2)',
-  //           'rgba(255, 159, 64, 0.2)'
-  //         ],
-  //         borderColor: [
-  //           'rgb(255, 99, 132)',
-  //           'rgb(54, 162, 235)',
-  //           'rgb(255, 206, 86)',
-  //           'rgb(75, 192, 192)',
-  //           'rgb(153, 102, 255)',
-  //           'rgb(255, 159, 64)'
-  //         ],
-  //         borderWidth: 1
-  //       }]
-  //     },
-  //     options: {
-  //       scales: {
-  //         y: {
-  //           beginAtZero: true
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
-
-  // configurarGrafico() {
-  //   this.myChart = new Chart(this.ctx, {
-  //     type: 'doughnut', // Cambia 'bar' a 'doughnut'
-  //     data: {
-  //       labels: this.datos.map((dato: any) => dato.label), // Labels para los segmentos del gráfico
-  //       datasets: [{
-  //         label: '# de veces',
-  //         data: this.datos.map((dato: any) => dato.value), // Datos para los segmentos del gráfico
-  //         backgroundColor: [
-  //           'rgba(255, 99, 132, 0.2)',
-  //           'rgba(54, 162, 235, 0.2)',
-  //           'rgba(255, 206, 86, 0.2)',
-  //           'rgba(75, 192, 192, 0.2)',
-  //           'rgba(153, 102, 255, 0.2)',
-  //           'rgba(255, 159, 64, 0.2)' // Asegúrate de tener suficientes colores para todos los posibles valores de cantidadEstrellas
-  //         ].slice(0, this.datos.length), // Usa slice para adaptar el array de colores al número de datos
-  //         borderColor: [
-  //           'rgb(255, 99, 132)',
-  //           'rgb(54, 162, 235)',
-  //           'rgb(255, 206, 86)',
-  //           'rgb(75, 192, 192)',
-  //           'rgb(153, 102, 255)',
-  //           'rgb(255, 159, 64)'
-  //         ].slice(0, this.datos.length), // Lo mismo para borderColors
-  //         borderWidth: 1
-  //       }]
-  //     },
-  //     options: {
-  //       cutout: '80%', // Opcional: ajusta el espacio entre los segmentos del gráfico
-  //       plugins: {
-  //         legend: {
-  //           position: 'top', // Posiciona la leyenda en la parte superior del gráfico
-  //         },
-  //         title: {
-  //           display: true,
-  //           text: 'Cantidad de Estrellas Por Encuesta' // Título opcional para el gráfico
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
+    irGraficoMejorComida(){
+      this.mejorComida = !this.mejorComida;
+      this.estrellas = !this.estrellas;
+      this.icono= '../../../assets/img/barchart.png';
+    }
 
 
   volver() {

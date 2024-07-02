@@ -93,17 +93,8 @@ export class EncuestaService {
   //Usuario
   async nuevo(encuesta: Encuesta): Promise<void> {
 
-     // Verificar si el usuario ha realizado una encuesta hoy
-     const doceDeLaNoche = new Date();
-     doceDeLaNoche.setDate(doceDeLaNoche.getDate() + 1); // Agrega un día a la fecha actual
-     doceDeLaNoche.setHours(0, 0, 0, 0); // Ajusta la fecha a las 00:00:00.000
-     console.log(Timestamp.fromDate(doceDeLaNoche));
-
-     if(encuesta.fecha < Timestamp.fromDate(doceDeLaNoche)){
-        this.msjService.Info('Ya has realizado una encuesta hoy.');
-        console.log('No podes hacer otra encuesta');
-     }else{
-        //Si no existe ninguna encuesta para este usuario hoy, proceder a crear una nueva
+    
+      
         const docuNuevo = doc(this.coleccionEncuesta);
         const nuevoId = docuNuevo.id;
 
@@ -123,7 +114,7 @@ export class EncuestaService {
         });
       
       
-     }
+     
   
 
     //  try {
