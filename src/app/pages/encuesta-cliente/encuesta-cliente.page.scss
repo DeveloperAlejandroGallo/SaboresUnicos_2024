@@ -45,7 +45,9 @@ ion-content {
     font-size: 1.73rem;
     display: flex;
     justify-content: center;
-    margin: 5px 5px 5px 5px;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 
   .labels {
@@ -88,37 +90,48 @@ ion-content {
     margin-left: 50px;
   }
   .item-background-color {
-    --ion-item-background:#ffeeee
+    --ion-item-background: #ffeeee;
   }
 
   .label-sabor-puntaje-comida {
     margin-top: 8px; /* Espacio entre el rango y el label */
     text-align: center; /* Centrar el texto */
     color: black;
-    font-size: large;
+    font-size: 1.25rem;
   }
   /* Asegúrate de que el contenedor de la imagen tenga un tamaño definido */
-.image-container {
-  width:  130px; /* Ajusta el tamaño según sea necesario */
-  height: 130px; /* Ajusta el tamaño según sea necesario */
-  border-radius: 9999px; /* Hace que el contenedor sea circular */
-  overflow: hidden; /* Asegura que nada se muestre fuera del contenedor circular */
-}
+  .image-container {
+    width: 130px; /* Ajusta el tamaño según sea necesario */
+    height: 130px; /* Ajusta el tamaño según sea necesario */
+    border-radius: 9999px; /* Hace que el contenedor sea circular */
+    overflow: hidden; /* Asegura que nada se muestre fuera del contenedor circular */
+  }
 
-swiper-container {
-  width: 100%;
-  height: 100%;
+  swiper-container {
+    width: 100%;
+    height: 100%;
 
-  --swiper-pagination-bullet-inactive-color: var(--ion-color-step-200, black);
-  --swiper-pagination-color: var(--ion-color-primary, #BF0000);
-}
-.producto-imagen {
-  //width: 340px;
-  height: 171px;
-  object-fit: cover;
-  display: block;
-  margin: 0 auto;
-  width: -webkit-fill-available;
+    --swiper-pagination-bullet-inactive-color: var(--ion-color-step-200, black);
+    --swiper-pagination-color: var(--ion-color-primary, #bf0000);
+  }
+  .swiper-container {
+    display: flex;
+    flex-direction: row; /* Cambia la dirección a columna */
+  }
 
-}
+  .foto-contenedor {
+    width: 100%; /* Ajusta el ancho para llenar el contenedor */
+    margin-bottom: 10px;
+  }
+
+  .producto-imagen {
+    max-width: 100px;
+    max-height: 120px; /* Ajusta esto según sea necesario */
+    object-fit: cover; /* Asegura que la imagen cubra completamente el área sin distorsionarse */
+  }
+  .boton-centrado {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }

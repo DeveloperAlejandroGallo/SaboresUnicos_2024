@@ -42,7 +42,15 @@
               </ion-col>
             </ion-row>
             <ion-row>
-              <img *ngIf="encuesta.fotos[0]" [src]="encuesta.fotos[0]" alt="Foto de la encuesta" />
+              <swiper-container
+              pager="true"
+              [loop]="true"
+              [pagination]="true">
+                <swiper-slide *ngFor="let imagen of encuesta.fotos" >
+                  <img *ngIf="encuesta.fotos[0]" [src]="imagen" alt="Foto de la encuesta"  style="object-fit: cover;"/>
+                </swiper-slide>
+              </swiper-container>
+             
             </ion-row>
           </ion-card-content>
         </ion-card>
