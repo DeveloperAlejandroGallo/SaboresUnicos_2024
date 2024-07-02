@@ -5,7 +5,7 @@ import { EstaLogueadoGuard } from './guards/esta-logueado.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'splash-animado',
     pathMatch: 'full'
   },
   {
