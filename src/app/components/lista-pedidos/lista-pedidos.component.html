@@ -33,7 +33,7 @@
               </ion-chip>
             </div>
             <ion-note style="font-size: medium; color: black" color="medium">
-              {{ formatearFecha(pedido.fechaIngreso) }}
+              {{ pedido.fechaDePedidoAceptado != null ? formatearFecha(pedido.fechaDePedidoAceptado) : ' ' }}
             </ion-note>
           </div>
         </ion-label>
@@ -75,7 +75,7 @@
               </ion-chip>
             </div>
             <ion-note style="font-size: medium; color: black" color="medium">
-              {{ formatearFecha(pedido.fechaIngreso) }}
+              {{ pedido.fechaDePedidoAceptado != null ? formatearFecha(pedido.fechaDePedidoAceptado) : ' ' }}
             </ion-note>
           </div>
         </ion-label>
