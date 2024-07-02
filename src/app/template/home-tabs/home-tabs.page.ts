@@ -81,7 +81,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     private pedidoSrv: PedidoService,
     private encuestaSrv: EncuestaService) {
 
-    this.isLoading = true;
+
 
     this.url = this.router.url;
     this.usuarioLogueado = this.auth.usuarioActual!;
@@ -89,18 +89,23 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       this.usuarioLogueado = data.filter(x => x.id === this.auth.usuarioActual?.id)[0];
     });
 
+    this.verChat = false;
+    this.verJuegos = false;
+    this.verMenu = false;
+    this.verLlenarEncuesta = false;
+
     this.pedidoSrv.allPedidos$.subscribe(data => {
+      this.isLoading = true;
       this.pedido = data.find(
-        x => x.cliente.id === this.auth.usuarioActual!.id
+        x => x.cliente.id === this.usuarioLogueado!.id
           && x.estadoPedido !== EstadoPedido.Cerrado)!;
           console.log(this.pedido);
 
           if(this.pedido) {
-            this.pedidoSrv.escucharPedidoId(this.pedido.id);
-            this.pedidoSrv.pedido$.subscribe(pedido => {
+            this.pedidoSrv.escucharPedidoId(this.pedido.id).subscribe(pedido => {
               this.pedido = pedido;
 
-              if(this.usuarioLogueado.perfil !== Perfil.Empleado){
+              if(this.usuarioLogueado!.perfil !== Perfil.Empleado){
 
                 this.verChat = false;
                 this.verJuegos = false;
@@ -116,7 +121,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
                     this.pedido.estadoPedido === EstadoPedido.CuentaSolicitada ||
                     this.pedido.estadoPedido === EstadoPedido.Pagado){
                       this.verLlenarEncuesta = !this.encuestaSrv.listadoEncuesta.some(x =>
-                        x.cliente.id === this.usuarioLogueado.id && this.cargoEncuestaHoy(x.fecha)) ;
+                        x.cliente.id === this.usuarioLogueado!.id && this.cargoEncuestaHoy(x.fecha)) ;
                     }
 
                   if(this.pedido?.estadoPedido !== EstadoPedido.MesaAsignada && this.pedido?.estadoPedido !==  EstadoPedido.Cerrado){
@@ -127,10 +132,11 @@ export class HomeTabsPage implements OnInit, OnDestroy {
                   }
 
                 }
-
                 this.isLoading = false;
               }
             });
+          } else {
+            this.isLoading = false;
           }
 
     });
@@ -221,9 +227,8 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   tiposEntidades() {
 
     this.esCliente = true;
-    this.verChat = true;
     this.verEncuesta = true;
-    this.verLlenarEncuesta = false;
+
     this.verMenu = false;
     if (this.usuarioLogueado.perfil == Perfil.Empleado) {
       this.esCliente = false;
