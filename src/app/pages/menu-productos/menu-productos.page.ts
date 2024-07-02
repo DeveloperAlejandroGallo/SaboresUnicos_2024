@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ProductoService } from 'src/app/services/producto.service';
 import { PedidoService } from 'src/app/services/pedido.service';
 import { Pedido } from 'src/app/models/pedido';
-import { EstadoPedido } from 'src/app/enums/estado-pedido';
+import { EstadoPedido, EstadoPedidoProducto } from 'src/app/enums/estado-pedido';
 import { Router } from '@angular/router';
 import { MensajesService } from 'src/app/services/mensajes.service';
 
@@ -178,7 +178,9 @@ export class MenuProductosPage implements OnInit {
     if(index == -1){
       this.pedido.productos.push({
         producto: item.producto,
-        cantidad: 1
+        cantidad: 1,
+        estadoProducto: EstadoPedidoProducto.Pendiente,
+        empleadoId: ""
       });
     }else{
         this.pedido.productos[index].cantidad++;
