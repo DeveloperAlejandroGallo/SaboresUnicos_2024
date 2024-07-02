@@ -62,7 +62,7 @@ export class ListaPedidosComponent implements OnInit {
         this.productosPendientes = data.flatMap(pedido=>
           pedido.productos.filter(producto=>
             producto.estadoProducto == EstadoPedidoProducto.Pendiente && producto.empleadoId == ""
-            && tipoProducto.includes(producto.producto.tipo) && pedido.estadoPedido == EstadoPedido.Aceptado
+            && tipoProducto.includes(producto.producto.tipo)
           ).map(producto=>({
             ...producto,
             idPedido: pedido.id,
@@ -100,10 +100,10 @@ export class ListaPedidosComponent implements OnInit {
 
   confirmarPedido(pedido: Pedido) {
     this.isLoadingPush = true;
-    this.pedidosSvc.actualizarEstado(pedido, EstadoPedido.Aceptado);
+    this.pedidosSvc.actualizarEstado(pedido, EstadoPedido.Aceptado);    
     this.pedidosSvc.actualizarMozo(pedido, this.auth.usuarioActual!);
     this.pedidosSvc.actualizarFechaAceptado(pedido);
-
+    this.pedidosSvc.actualizarEstadoProductoAPendiente(pedido);
     this.pushNotif.ClienteMozoAceptoPedido(pedido.cliente, this.empleadoActual.nombre + ' ' + this.empleadoActual.apellido).subscribe({
       next: (data) => {
         console.log("Rta Push Notificacion Mozo: ");

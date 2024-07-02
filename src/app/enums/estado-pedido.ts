@@ -12,6 +12,7 @@ export enum EstadoPedido {
 }
 
 export enum EstadoPedidoProducto {
+  Solicitado = 'Solicitado', 
   Pendiente = 'Pendiente', //Esta Haciendo el pedido
   EnPreparacion = 'En Preparación', //Esta cocinando
   Listo = 'Listo',  //Listo para entregar

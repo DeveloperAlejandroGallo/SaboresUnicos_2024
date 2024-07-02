@@ -126,7 +126,7 @@ export class MenuProductosPage implements OnInit {
     if(this.subtotal > 0)
       this.router.navigate(['home-tabs/resumen']);
     else
-      this.msgSrv.Info("Debe elegir al menos un producto apra ver el detalle de cuenta.");
+      this.msgSrv.Info("Debe elegir al menos un producto para ver el detalle de cuenta.");
   }
 
 
@@ -179,7 +179,7 @@ export class MenuProductosPage implements OnInit {
       this.pedido.productos.push({
         producto: item.producto,
         cantidad: 1,
-        estadoProducto: EstadoPedidoProducto.Pendiente,
+        estadoProducto: EstadoPedidoProducto.Solicitado,
         empleadoId: ""
       });
     }else{

@@ -170,6 +170,18 @@ export class PedidoService {
     data.id = docSnapshot.id;
     return data;
   }
+
+  async actualizarEstadoProductoAPendiente(pedido: Pedido): Promise<void> {
+    const pedidoDocRef = doc(this.firestore, `${this.colectionName}/${pedido.id}`);
+    
+    const productosActualizados = pedido.productos.map(producto => ({
+      ...producto,
+      estadoProducto: EstadoPedidoProducto.Pendiente
+    }));
+
+    await updateDoc(pedidoDocRef, { productos: productosActualizados });
+  }
+
   actualizarProducto(pedido: Pedido) {
 
     const coleccion = collection(this.firestore, this.colectionName);
