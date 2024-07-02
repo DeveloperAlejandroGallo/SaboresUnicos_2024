@@ -30,7 +30,7 @@
       </ion-col>
     </ion-row> 
 
-    <ion-row *ngIf="!estrellas">
+    <ion-row *ngIf="mejorComida">
       <ion-title>Mejores comidas más pedidas</ion-title>
       <ion-col size="12">
         <div class="container-chart" style="width: 100%; height: 100%;">
@@ -51,13 +51,13 @@
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="!estrellas">
-      <ion-title>Mejores comidas más pedidas</ion-title>
+    <ion-row *ngIf="mejorSaborComida">
+      <ion-title>Sabor de la comida recibida</ion-title>
       <ion-col size="12">
         <div class="container-chart" style="width: 100%; height: 100%;">
-          <ngx-charts-bar-vertical
+          <ngx-charts-bar-horizontal
             scheme="fire"
-            [results]="dataConteoComidas"
+            [results]="dataConteoSaborComidas"
             [gradient]="gradient"
             [xAxis]="showXAxis"
             [yAxis]="showYAxis"
@@ -67,7 +67,7 @@
             [yAxisLabel]="yAxisLabel"
             (select)="onSelect($event, 'fea')"
           >
-          </ngx-charts-bar-vertical>
+          </ngx-charts-bar-horizontal>
         </div>
       </ion-col>
     </ion-row>
@@ -96,10 +96,13 @@
     </ion-fab-button>
     <ion-fab-list side="start">
       <ion-fab-button (click)="irGraficoEstrellas()" color="tertiary">
-        <img [src]="icono">
+        <img [src]="iconoEstrellas">
       </ion-fab-button>
       <ion-fab-button (click)="irGraficoMejorComida()" color="tertiary">
-        <img [src]="icono">
+        <img [src]="iconoMejorComida">
+      </ion-fab-button>
+      <ion-fab-button (click)="irGraficoMejorSaborComida()" color="tertiary">
+        <ion-icon name="radio-button-off-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>

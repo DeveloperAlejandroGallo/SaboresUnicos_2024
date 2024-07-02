@@ -22,8 +22,10 @@ export class EncuestasGraficoPage {
   view: [number, number] = [100, 100];
   public estrellas: boolean = true;
   public mejorComida: boolean = false;
-  public icono: string = '../../../assets/img/barchart.png';
-  
+  public mejorSaborComida: boolean = false;
+
+  public iconoMejorComida: string = '../../../assets/img/barchart.png';
+  public iconoEstrellas: string = '../../../assets/img/piechart.png';
   // options
   gradient: boolean = true;
   showLegend: boolean = true;
@@ -44,6 +46,7 @@ export class EncuestasGraficoPage {
   public listaEncuestas: Array<Encuesta> = new Array<Encuesta>;
   dataCantidadEstrellas!: Array<{name: string, value: number, label: string}>;
   dataConteoComidas!: Array<{name: string, value: number, label: string}>;
+  dataConteoSaborComidas!: Array<{name: string, value: number, label: string}>;
 
   constructor(
     private auth: AuthService,
@@ -59,6 +62,8 @@ export class EncuestasGraficoPage {
 
       let conteoEstrellas: Record<number, number> = {};
       let conteoComidas: Record<string, number> = {}; // Definición explícita del tipo
+      let conteoSaborComidas: Record<number, number> = {}; // Definición explícita del tipo
+
 
       this.listaEncuestas.forEach(encuesta => {
         if (!conteoEstrellas[encuesta.cantidadEstrellas]) {
@@ -85,6 +90,20 @@ export class EncuestasGraficoPage {
       this.dataConteoComidas = Object.entries(conteoComidas).map(([nombre, cantidad]) => ({
         name: nombre,
         label: nombre,
+        value: cantidad
+      }));
+
+      this.listaEncuestas.forEach(encuesta => {
+        if (!conteoSaborComidas[encuesta.SaborDeLaComida]) {
+          conteoSaborComidas[encuesta.SaborDeLaComida] = 1;
+        } else {
+          conteoSaborComidas[encuesta.SaborDeLaComida]++;
+        }
+      });
+
+      this.dataConteoSaborComidas = Object.entries(conteoSaborComidas).map(([puntos, cantidad]) => ({
+        name: 'Cantidad puntos' + cantidad.toString(),
+        label: `${cantidad} puntos`,
         value: cantidad
       }));
 
@@ -153,15 +172,21 @@ export class EncuestasGraficoPage {
   //   }
 
     irGraficoEstrellas(){
-      this.estrellas = !this.estrellas;
-      this.estrellas = !this.estrellas;
-      this.icono= '../../../assets/img/piechart.png';
+      this.estrellas = true;
+      this.mejorComida = false;
+      this.mejorSaborComida = false;
     }
 
     irGraficoMejorComida(){
-      this.mejorComida = !this.mejorComida;
-      this.estrellas = !this.estrellas;
-      this.icono= '../../../assets/img/barchart.png';
+      this.estrellas = false;
+      this.mejorComida = true;
+      this.mejorSaborComida = false;
+    }
+
+    irGraficoMejorSaborComida(){
+      this.estrellas = false;
+      this.mejorComida = false;
+      this.mejorSaborComida = true;
     }
 
 
