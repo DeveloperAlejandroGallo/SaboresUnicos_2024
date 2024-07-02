@@ -18,6 +18,9 @@ import {
 } from '@capacitor/camera';
 import { Router } from '@angular/router';
 import { MensajesService } from 'src/app/services/mensajes.service';
+import { formatDate } from '@angular/common';
+
+
 
 @Component({
   selector: 'app-encuesta-cliente',
@@ -26,15 +29,14 @@ import { MensajesService } from 'src/app/services/mensajes.service';
 })
 export class EncuestaClientePage implements OnInit {
 
-  isLoading = true;
+  isLoading = false;
   public usuario: Usuario;
   public comentario!: string;
   public cantidadEstrellas: number = 0;
   public puntajeSaborDeLaComida: number = 1;
-  public textoSaborDeLaComida: string = "Estaba muy fea :(";
-  public recomendariasElLugar!: boolean;
+  public textoSaborDeLaComida: string = "Estaba muy fea ";
   public encuestaForm!: FormGroup;
-  public cosasQueAgradaronElegidas: string [] = [];
+  public cosasQueAgradaronElegidas!: Array<{cosa: string; si: boolean}>
   public valorRecomendarLugar: any;
   public listaDeProductos: Array<Producto> = new Array<Producto>;
   public comidaFavorita!: Producto;
@@ -48,9 +50,12 @@ export class EncuestaClientePage implements OnInit {
     { cosa: 'Precio', si: false },
     { cosa: 'Otros', si: false }
   ];
-  MejorComida: any;
   public selectedPhotos: Array<string> = new Array<string>;
+  public fotosAMostrar: Array<string> = new Array<string>;
   public stars: string[] = [];
+  public imagenSaborComida: string = '../../../assets/img/1.png';
+  ngmensaje!:string ;
+  
 
   constructor(private encuestasSvc : EncuestaService, private auth: AuthService, private fb:FormBuilder,  
     private productoService: ProductoService,private router: Router,private msjSrv: MensajesService) { 
@@ -76,7 +81,7 @@ export class EncuestaClientePage implements OnInit {
       saborDeLaComida: [1],
       recomendariasElLugar:[],
       cosasAgradaron:[],
-      mejorComida: ['']
+      mejorComida: [''],
     });
   }
 
@@ -95,14 +100,30 @@ export class EncuestaClientePage implements OnInit {
   }
 
   onRangeChange(event: any) {
+
+
+
     this.puntajeSaborDeLaComida = event.detail.value;
-    if (this.puntajeSaborDeLaComida <= 4) {
-      this.textoSaborDeLaComida = "Estaba muy fea :(";
-    } else if(this.puntajeSaborDeLaComida >= 5 && this.puntajeSaborDeLaComida <=7) {
-      this.textoSaborDeLaComida = "Estaba bien :|";
+    if (this.puntajeSaborDeLaComida <= 2) {
+      this.textoSaborDeLaComida = "Estaba muy fea ";
+      this.imagenSaborComida = '../../../assets/img/1.png';
+
+    } else if(this.puntajeSaborDeLaComida == 3) {
+      this.textoSaborDeLaComida = "Estaba fea ";
+      this.imagenSaborComida = '../../../assets/img/3.png';
+    }
+    else if(this.puntajeSaborDeLaComida > 3 && this.puntajeSaborDeLaComida <=5) {
+      this.textoSaborDeLaComida = "Estaba bien ";
+      this.imagenSaborComida = '../../../assets/img/5.png';
+      
+    }
+    else if(this.puntajeSaborDeLaComida  >= 6 &&  this.puntajeSaborDeLaComida  <= 7) {
+      this.textoSaborDeLaComida = "Estaba rica ";
+      this.imagenSaborComida = '../../../assets/img/7.png';
       
     }else{
-      this.textoSaborDeLaComida = "Estaba muy rica :)";
+      this.textoSaborDeLaComida = "Estaba muy rica ";
+      this.imagenSaborComida = '../../../assets/img/10.png';
     }
     console.log('Puntaje abor de la Comida:', this.puntajeSaborDeLaComida);
   }
@@ -110,6 +131,7 @@ export class EncuestaClientePage implements OnInit {
   getCheckBoxValuesChange(){
     let checkControls = this.listaDeCosas.filter(result=>result.si==true);
     console.log('Cosas que le agradaron al cliente:', checkControls);  
+    this.cosasQueAgradaronElegidas = checkControls;
   }
 
   checkValorRecomendarLugar(event: any){
@@ -151,6 +173,7 @@ export class EncuestaClientePage implements OnInit {
         } else {
           console.log('No se selecciono imagen');
         }
+
         this.selectedPhotos.push(this.imageTomadaURL);
         console.log(this.selectedPhotos);
         
@@ -160,6 +183,73 @@ export class EncuestaClientePage implements OnInit {
         console.log(err);
         this.router.navigate([this.router.url]);
       });
+  }
+
+  enviarEncuesta(){
+
+    try {
+      const encuesta: Encuesta = {
+        id: "",
+        cliente: this.usuario,
+        fecha: Timestamp.fromDate(new Date()),
+        fotos: this.selectedPhotos,
+        comentario: this.ngmensaje,
+        cantidadEstrellas: this.cantidadEstrellas,
+        SaborDeLaComida: this.puntajeSaborDeLaComida,
+        RecomendariasElLugar: this.valorRecomendarLugar,
+        QueCosasAgradaron: this.cosasQueAgradaronElegidas,
+        MejorComida: this.comidaFavorita
+  
+      };
+  
+      this.encuestasSvc.nuevo(encuesta);
+      this.encuestaForm.reset()
+      this.selectedPhotos = [];
+      this.cantidadEstrellas = 0;
+      this.puntajeSaborDeLaComida = 0;
+      this.msjSrv.ExitoIonToast("¡Encuesta enviada con exito!", 3).then(()=>{
+        this.router.navigate(['/home-tabs/home']);
+      })
+    } catch (error) {
+      console.log(error);
+      
+    }
+   
+   
+
+  //   const mensaje: Mensaje = {
+  //     id: "",
+  //     mensaje: this.ngmensaje,
+  //     //fecha: new Date(),
+  //     fecha: Date.now(),
+  //     nombreMozo: this.nombreMozo,
+  //     numeroDeMesa: this.numeroMesaCliente,
+  //     idDelEnviador: this.idUsuarioActual
+
+  //   };
+
+  //   this.chatSrv.nuevo(mensaje);
+
+
+  //   if (this.nombreMozo == "") {
+  //     this.pushService.notificarConsultaAMozos(this.numeroMesaCliente, this.ngmensaje).subscribe( {
+  //       next: (data) => {
+  //         console.log("Rta Push consulta del cliente: ");
+  //         console.log(data);
+  //       },
+  //       error: (error) => {
+  //         console.error("Error Push consulta del cliente: ");
+  //         console.error(error);
+  //       }
+  //     });
+  //   } 
+  //   this.ngmensaje = "";
+
+   }
+
+   formatearFecha(timestamp: any): string {
+    const fecha = new Date(timestamp.seconds * 1000);
+    return formatDate(fecha, 'HH:mm dd-MM-yyyy', 'en-US');
   }
 
 }

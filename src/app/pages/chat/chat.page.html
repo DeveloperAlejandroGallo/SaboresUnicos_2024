@@ -12,14 +12,14 @@
                 <div class="message" *ngIf="esCliente">
                   <b>Mesa  {{mje.numeroDeMesa}}</b>
                   <br />
-                  <span class="chat-time"> {{toDate(mje.fecha) | fechaToString}} </span> 
+                  <span class="chat-time"> {{toDate(mje.fecha) | fechaToString}} </span>
                   {{mje.mensaje}}
                   <br>
                 </div>
                 <div class="message" *ngIf="esMozo">
                 <b>Mozo: {{mje.nombreMozo}}</b>
                   <br />
-                  <span class="chat-time"> {{toDate(mje.fecha) | fechaToString}} </span> 
+                  <span class="chat-time"> {{toDate(mje.fecha) | fechaToString}} </span>
                   {{mje.mensaje}}
                   <br>
                 </div>
@@ -31,15 +31,15 @@
                 <div class="message other" *ngIf="esMozo">
                   <b>Mesa {{mje.numeroDeMesa}}</b>
                   <br />
-                  <span class="chat-time"> {{toDate(mje.fecha) | fechaToString}} </span> 
-                 
+                  <span class="chat-time"> {{toDate(mje.fecha) | fechaToString}} </span>
+
                   {{mje.mensaje}}
                   <br>
                 </div>
                 <div class="message other" *ngIf="esCliente">
-                  <b>Mozo: {{mje.nombreMozo}}</b>
+                  <b>{{mje.numeroDeMesa !== 0 ? 'Mesa '+mje.numeroDeMesa : 'Mozo '+mje.nombreMozo}}</b>
                   <br />
-                  <span class="chat-time"> {{toDate(mje.fecha) | fechaToString }} </span> 
+                  <span class="chat-time"> {{toDate(mje.fecha) | fechaToString }} </span>
                   {{mje.mensaje}}
                   <br>
                 </div>
@@ -57,14 +57,14 @@
               formControlName="messageCtrl"
             >
             </ion-input>
-  
-           
+
+
           </form>
           <div class="send-button">
               <ion-button type="submit" (click)="enviarMensaje()">
                 <ion-icon slot="icon-only" name="send"></ion-icon>
               </ion-button>
-              
+
           </div>
         </div>
 

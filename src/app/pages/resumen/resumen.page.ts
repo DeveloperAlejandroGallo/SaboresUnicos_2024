@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { Timestamp } from 'firebase/firestore';
 import { EstadoPedido } from 'src/app/enums/estado-pedido';
 import { Pedido } from 'src/app/models/pedido';
 import { Usuario } from 'src/app/models/usuario';
@@ -29,6 +30,10 @@ export class ResumenPage {
   public textoAccion: string = "";
   public botonDeshabilitado: boolean = false;
   public verAvisoPagoQR: boolean = false;
+  private intervalId: any;
+
+  queTiempo: string = "Estimado"; //Faltante - Entregado
+  minutosFaltantes: string = "00";
 
 
 
@@ -81,7 +86,7 @@ export class ResumenPage {
         });
         break;
       case EstadoPedido.Listo:
-        this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Confirmado)
+        this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Servido)
         .then(() => {
           this.msgSrv.ExitoToast('Esperamos que disfrutes de tu pedido!');
           this.botonDeshabilitado = true;
@@ -90,7 +95,7 @@ export class ResumenPage {
           console.error(err);
         });
         break;
-      case EstadoPedido.Confirmado:
+      case EstadoPedido.Servido:
         this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.CuentaSolicitada)
         .then(() => {
           this.msgSrv.ExitoToast('Pronto el mozo se acercará con la cuenta.');
@@ -133,8 +138,6 @@ export class ResumenPage {
 
 
 
-
-
   private SuscribirseAlPedido() {
     this.pedidoSrv.pedido$.subscribe(data => {
       this.pedido = data;
@@ -143,66 +146,130 @@ export class ResumenPage {
 
       this.botonDeshabilitado = false;
       this.verAvisoPagoQR = false;
+
       switch (this.pedido.estadoPedido) {
         case EstadoPedido.Abierto:
           this.estadoPedido = "Abierto";
           this.colorEstado = "abierto";
           this.textoAccion = "Enviar Pedido";
+          this.queTiempo = `Estimado`;
           break;
         case EstadoPedido.Pendiente:
           this.estadoPedido = "Pendiente de aceptar por el mozo";
           this.colorEstado = "pendiente";
           this.textoAccion = "Pedido Enviado";
           this.botonDeshabilitado = true;
+          this.queTiempo = `Estimado`;
           break;
         case EstadoPedido.Aceptado:
           this.estadoPedido = "El Mozo aceptó su pedido.";
           this.colorEstado = "aceptado";
           this.textoAccion = "Pedido Enviado";
           this.botonDeshabilitado = true;
+          this.queTiempo = `Restante`;
           break;
         case EstadoPedido.EnPreparacion:
           this.estadoPedido = "En preparación";
           this.colorEstado = "en-preparacion";
           this.textoAccion = "Pedido Enviado";
           this.botonDeshabilitado = true;
+          this.queTiempo = `Restante`;
           break;
         case EstadoPedido.Listo:
           this.estadoPedido = "Listo para entregar al cliente.";
           this.colorEstado = "listo";
           this.textoAccion = "Pedido Enviado";
           this.botonDeshabilitado = true;
+          this.queTiempo = `Restante`;
           break;
-        case EstadoPedido.Confirmado:
+        case EstadoPedido.Servido:
           this.estadoPedido = "Recibido por el cliente.";
-          this.colorEstado = "confirmado";
+          this.colorEstado = "servido";
           this.textoAccion = "Solicitar Cuenta";
+          this.queTiempo = `Entregado`;
+
           break;
         case EstadoPedido.CuentaSolicitada:
           this.estadoPedido = "Se solicito la cuenta al Mozo.";
           this.colorEstado = "cuenta-solicitada";
           this.textoAccion = "Pagar con Efvo. o Tarjeta";
           this.verAvisoPagoQR = true;
+          this.queTiempo = `Entregado`;
           break;
         case EstadoPedido.Pagado:
           this.estadoPedido = "Pagado.";
           this.colorEstado = "pagado";
           this.textoAccion = "Pagado";
           this.botonDeshabilitado = true;
+          this.queTiempo = `Entregado`;
           break;
         case EstadoPedido.Cerrado:
           this.estadoPedido = "Cerrado.";
           this.colorEstado = "cerrado";
           this.textoAccion = "Pagado";
           this.botonDeshabilitado = true;
+          this.queTiempo = `Entregado`;
           break;
       }
+
+
+
     }
     );
   }
 
+  iniciarContador() {
+    if(!this.pedido.fechaDePedidoAceptado)
+      return;
+
+    let diffInSeconds:  number = 0;
+    let minutesLeft: number = 0;
+    let tiempoDelPedido: number =  this.pedido.tiempoEstimado;
+    let fechaAceptado = this.pedido.fechaDePedidoAceptado.toDate();
+    let now = new Date();
 
 
+    let minAtuales = fechaAceptado.getMinutes();
+    let minASumar = minAtuales + tiempoDelPedido;
+
+    if(minASumar > 60){
+      fechaAceptado.setHours(fechaAceptado.getHours() + 1);
+      minASumar -= 60;
+    }
+
+    let horaLlegada = new Date(fechaAceptado);
+    horaLlegada.setMinutes(minASumar);
+
+
+
+    diffInSeconds = Math.floor((horaLlegada.getTime() - now.getTime()) / 1000);
+
+    if (diffInSeconds <= 0) {
+      //clearInterval(this.intervalId);
+      this.minutosFaltantes = "00";
+    } else {
+      minutesLeft = Math.floor(diffInSeconds / 60);
+      this.minutosFaltantes = `${minutesLeft < 10 ? '0'+ minutesLeft : minutesLeft}`;
+    }
+
+    setInterval(() => {
+       now = new Date();
+      diffInSeconds = Math.floor((horaLlegada.getTime() - now.getTime()) / 1000);
+      if (diffInSeconds <= 0) {
+        //clearInterval(this.intervalId);
+        this.minutosFaltantes = "00";
+      } else {
+        minutesLeft = Math.floor(diffInSeconds / 60);
+        this.minutosFaltantes = `${minutesLeft < 10 ? '0'+ minutesLeft : minutesLeft}`;
+      }
+    }, 60000);
+  }
+
+  ionViewDidEnter() {
+    if(this.pedido.fechaDePedidoAceptado){
+      this.iniciarContador();
+    }
+  }
 
   volver() {
     this.router.navigate(['/home-tabs/menu-productos']);

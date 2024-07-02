@@ -10,15 +10,18 @@
   </div>
   <div *ngIf="esBartender">
     <!-- Listado de pedidos pendientes -->
+    <app-lista-pedidos></app-lista-pedidos>
   </div>
   <div *ngIf="esCocinero">
     <!-- Listado de pedidos pendientes -->
+    <app-lista-pedidos></app-lista-pedidos>
   </div>
   <div *ngIf="esMaitre">
     <!-- Listado de Clientes y Anonimos en lista de espera -->
     <app-home-maitre></app-home-maitre>
   </div>
   <div *ngIf="esMozo">
+    <app-lista-pedidos></app-lista-pedidos>
     <!-- Listado de Pedidos a Aprobar -->
   </div>
 </body>

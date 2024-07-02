@@ -285,14 +285,14 @@ export class SignupPage implements OnInit {
         cuil: '',
         perfil: this.perfilDadoDeAlta == Perfil.Empleado ? Perfil.Empleado : Perfil.Cliente,
         tipoEmpleado: this.getTipoEmpleado!.value,
-        estado: this.perfilDadoDeAlta == Perfil.Empleado ? EstadoCliente.Pendiente : EstadoCliente.Activo,
+        estado: this.perfilDadoDeAlta == Perfil.Empleado ? EstadoCliente.Activo : EstadoCliente.Pendiente,
         mesaAsignada: 0,
         tieneReserva: false,
         token: '',
       };
 
       this.authService.registrarCuenta(usuario);
-      
+
 
       setTimeout(() => {
         this.isLoading = false;
