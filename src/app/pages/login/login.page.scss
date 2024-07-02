@@ -107,6 +107,14 @@ body.barcode-scanner-active {
 ion-fab{
   position: fixed !important;
 }
+
+ion-fab-list{
+  margin-inline-end: calc(100% + 1px) !important;
+  ion-fab-button{
+    margin-inline-start: 2px !important;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .barcode-scanner-modal {
     --background: transparent;
