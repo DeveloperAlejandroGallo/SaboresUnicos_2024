@@ -34,7 +34,7 @@ export class EncuestasGraficoPage {
   // options
   gradient: boolean = true;
   showLegend: boolean = true;
-  showLabels: boolean = false;
+  showLabels: boolean = true;
   isDoughnut: boolean = false;
   legendPosition: LegendPosition = LegendPosition.Below;
 // options
@@ -44,7 +44,9 @@ export class EncuestasGraficoPage {
   xAxisLabel = '';
   showYAxisLabel = true;
   yAxisLabel = '';
+  trimLabels = true;
   autoScale = true;
+  maxLabelLength = 10;
   public radio: number = 6;
   datos: any
   public tituloGrafico: string = 'Estrellas recibidas';
