@@ -36,7 +36,6 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   @ViewChild('popover') popover!: IonPopover;
   @Input() isLoading: boolean = false;
 
-  public verLlenarEncuesta: boolean = false;
   public isKeyboardOpen = false;
   private keyboardWillShowSub: any;
   private keyboardWillHideSub: any;
@@ -65,8 +64,9 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   estaEnEspera : boolean = false;
   tieneMesaAsignada : boolean = false;
   queAlta: string = '';
-  pedido!: Pedido ;
+  pedido: Pedido;
   verMenu : boolean = false;
+ verLlenarEncuesta: boolean = false;
   //-------------------------
   constructor(
     private mesasSvc: MesaService,
@@ -81,86 +81,39 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     private pedidoSrv: PedidoService,
     private encuestaSrv: EncuestaService) {
 
-
-
     this.url = this.router.url;
     this.usuarioLogueado = this.auth.usuarioActual!;
     this.usrService.allUsers$.subscribe(data => {
       this.usuarioLogueado = data.filter(x => x.id === this.auth.usuarioActual?.id)[0];
     });
 
-    this.verChat = false;
-    this.verJuegos = false;
-    this.verMenu = false;
-    this.verLlenarEncuesta = false;
+    this.pedido = this.pedidoSrv.listadoPedidos.find(
+      x => x.cliente.id === this.auth.usuarioActual!.id
+        && x.estadoPedido !== EstadoPedido.Cerrado)!;
 
-    if(this.usuarioLogueado!.perfil !== Perfil.Empleado && this.usuarioLogueado!.mesaAsignada !== 0){
-      this.isLoading = true;
-      this.pedidoSrv.allPedidos$.subscribe({
-        next: (data) => {
-        this.pedido = data.find(
-          x => x.cliente.id === this.usuarioLogueado!.id
-            && x.estadoPedido !== EstadoPedido.Cerrado)!;
-            console.log(this.pedido);
+      console.log(this.pedido);
 
-            if(this.pedido) {
-              this.pedidoSrv.escucharPedidoId(this.pedido.id).subscribe({
-                next: (pedido) => {
-                this.pedido = pedido;
+    if(this.pedido) {
+      this.pedidoSrv.escucharPedidoId(this.pedido.id).subscribe(pedido => {
+        this.pedido = pedido;
+        this.verLlenarEncuesta = false;
 
-                this.verChat = false;
-                this.verJuegos = false;
-                this.verMenu = false;
-                this.verLlenarEncuesta = false;
+      });
+    }
 
-
-                console.log("leyo el pedido")
-                if(this.pedido.estadoPedido === EstadoPedido.Aceptado ||
-                  this.pedido.estadoPedido === EstadoPedido.EnPreparacion ||
-                  this.pedido.estadoPedido === EstadoPedido.Listo ||
-                  this.pedido.estadoPedido === EstadoPedido.Servido ||
-                  this.pedido.estadoPedido === EstadoPedido.CuentaSolicitada ||
-                  this.pedido.estadoPedido === EstadoPedido.Pagado){
-
-                    this.encuestaSrv.allEncuestas$.subscribe({
-                      next: (data) => {
-                        this.verLlenarEncuesta = !data.some(x =>
-                          x.cliente.id === this.usuarioLogueado!.id && this.cargoEncuestaHoy(x.fecha)) ;
-                      },
-                      error: (err) => {
-                        console.error(err);
-                      }
-                    });
-                  }
-
-                if(this.pedido?.estadoPedido !== EstadoPedido.MesaAsignada && this.pedido?.estadoPedido !==  EstadoPedido.Cerrado){
-                  this.verChat = true;
-                  this.verJuegos = true;
-                  this.verMenu = true;
-                  this.router.navigate(['home-tabs/menu-productos']);
-                }
-
-                this.isLoading = false;
-              },error: (err) => {
-                console.error(err);
-                this.isLoading = false;
-              },complete: () => {
-                this.isLoading = false
-              }
-              });
-            } else {
-              this.isLoading = false;
-            }
-
-      },error: (err) => {
+    this.encuestaSrv.allEncuestas$.subscribe({
+      next: (data) => {
+        this.encuestaSrv.verLlenarEncuesta = !data.some(x =>
+          x.cliente.id === this.usuarioLogueado!.id && this.cargoEncuestaHoy(x.fecha)) ;
+      },
+      error: (err) => {
         console.error(err);
-        this.isLoading = false
       }
     });
 
-  }
 
-}
+    // console.log(this.usuarioLogueado);
+  }
 
   ngOnInit() {
 
@@ -181,7 +134,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
         this.keyboardWillHideSub = handle;
       });
 
-      console.log("Validando permisos de notificaciones en plataforma:");
+      console.log("Validadndo permisos de notificaciones en plataforma:");
 
       this.addListeners();
       this.registerNotifications();
@@ -194,6 +147,14 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
     //Si al loguearse tiene mesa asignada, que NO es de reserva, voy directamente al menu.
 
+    if (this.esCliente && this.usuarioLogueado.mesaAsignada != 0 && !this.usuarioLogueado.tieneReserva && this.pedido.estadoPedido != EstadoPedido.MesaAsignada) {
+      this.verMenu = true;
+      this.verJuegos = true;
+      this.verChat = true;
+      this.verEncuesta = true;
+      this.router.navigate(['home-tabs/menu-productos']);
+      return;
+    }
 
 
 
@@ -244,9 +205,9 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   tiposEntidades() {
 
     this.esCliente = true;
+    this.verChat = true;
     this.verEncuesta = true;
 
-    this.verMenu = false;
     if (this.usuarioLogueado.perfil == Perfil.Empleado) {
       this.esCliente = false;
       this.esDuenio = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Dueño;
@@ -257,7 +218,6 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       this.esBartender = this.usuarioLogueado.tipoEmpleado === TipoEmpleado.Bartender;
       this.verChat = false;
       this.verEncuesta = false;
-
     }
 
     if (this.esMaitre) {
@@ -268,7 +228,12 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       this.queAlta = 'Empleado';
     }
 
+    if(this.esCliente){
+      this.verChat = this.verJuegos = this.verMenu = (this.usuarioLogueado.mesaAsignada != 0 && this.pedido.estadoPedido != EstadoPedido.MesaAsignada)? true : false;
 
+
+
+    }
 
 
 
@@ -356,11 +321,22 @@ export class HomeTabsPage implements OnInit, OnDestroy {
               break;
             case "Mesa":
               if (this.validacionesMesa(datos[1])) {
-                this.pedidoSrv.actualizarEstado(this.pedido, EstadoPedido.Abierto);
-                this.router.navigate(['home-tabs/menu-productos']);
-                this.verJuegos = true;
-                this.verChat = true;
-                this.verEncuesta = true;
+                this.pedido = this.pedidoSrv.listadoPedidos.find(
+                  x => x.cliente.id === this.auth.usuarioActual!.id
+                    && x.estadoPedido == EstadoPedido.MesaAsignada)!;
+                    console.log("Pedido encontrado:");
+                    console.log(this.pedido);
+
+                    if(this.pedido){
+                      this.verJuegos = true;
+                      this.verChat = true;
+                      this.verEncuesta = true;
+                      this.verMenu = true;
+                      console.log("Actualizando a Abierto");
+                      this.pedidoSrv.actualizarEstado(this.pedido, EstadoPedido.Abierto);
+                      this.router.navigate(['home-tabs/menu-productos']);
+                    }
+
               }
               break;
             case "Propina":
@@ -449,18 +425,36 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
   }
   esValidoParaPropina(): boolean {
-    if (!this.pedido) {
+
+    this.pedido = this.pedidoSrv.listadoPedidos.find(
+      x => x.cliente.id === this.auth.usuarioActual!.id
+        && x.estadoPedido == (EstadoPedido.Servido || EstadoPedido.CuentaSolicitada))!;
+        console.log("Pedido encontrado:");
+        console.log(this.pedido);
+
+
+    if (this.pedido === (null || undefined)) {
       this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
       return false;
     }
 
-    if(this.pedido.estadoPedido == EstadoPedido.MesaAsignada){
-      this.msgService.Info(`Por favor escanee el QR de la Mesa ${this.usuarioLogueado.mesaAsignada}.`);
+    if (this.pedido.estadoPedido == EstadoPedido.MesaAsignada) {
+      this.msgService.Info(`Aun no escaneaste la mesa.\nPor favor acercate a la mesa ${this.usuarioLogueado.mesaAsignada}.`);
       return false;
     }
 
     if (this.pedido.estadoPedido == EstadoPedido.Abierto) {
       this.msgService.Info("Aun no tienes un Mozo asignado al cual dejarle la propina.\nPor favor primero has el pedido.");
+      return false;
+    }
+
+    if (this.pedido.estadoPedido == EstadoPedido.Pendiente) {
+      this.msgService.Info("El Mozo aún no aceptó tu pedido.\nPor favor espera a que lo acepte.");
+      return false;
+    }
+
+    if (this.pedido.estadoPedido == EstadoPedido.Listo) {
+      this.msgService.Info("Nos gustaría saber su valoración luego de probar nuestra comida. Por favor espere a recibirla.");
       return false;
     }
 
@@ -474,7 +468,13 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   }
   esValidoParaPago(): boolean {
 
-    if (this.pedido === (null || undefined)) {
+    this.pedido = this.pedidoSrv.listadoPedidos.find(
+      x => x.cliente.id === this.auth.usuarioActual!.id
+        && x.estadoPedido == (EstadoPedido.Servido || EstadoPedido.CuentaSolicitada))!;
+        console.log("Pedido encontrado:");
+        console.log(this.pedido);
+
+    if (this.pedido === null || this.pedido === undefined) {
       this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
       return false;
     }
@@ -489,7 +489,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       return false;
     }
 
-    if (this.pedido.estadoPedido != EstadoPedido.CuentaSolicitada) {
+    if (this.pedido.estadoPedido !== EstadoPedido.CuentaSolicitada && this.pedido.estadoPedido !== EstadoPedido.Servido) {
       this.msgService.Info("Primero solicita la cuenta al mozo.");
       return false;
     }

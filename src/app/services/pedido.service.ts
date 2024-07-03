@@ -39,6 +39,8 @@ export class PedidoService {
   private coleccionPedido: CollectionReference<DocumentData>;
   public pedido$: Observable<Pedido> = new Observable<Pedido>();
 
+  
+
   constructor(private firestore: Firestore, private angularFirestore: AngularFirestore) {
     this.coleccionPedido = collection(this.firestore, this.colectionName);
   }
@@ -173,7 +175,7 @@ export class PedidoService {
 
   async actualizarEstadoProductoAPendiente(pedido: Pedido): Promise<void> {
     const pedidoDocRef = doc(this.firestore, `${this.colectionName}/${pedido.id}`);
-    
+
     const productosActualizados = pedido.productos.map(producto => ({
       ...producto,
       estadoProducto: EstadoPedidoProducto.Pendiente

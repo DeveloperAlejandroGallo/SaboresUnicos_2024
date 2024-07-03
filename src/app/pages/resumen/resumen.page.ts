@@ -5,10 +5,12 @@ import { EstadoPedido } from 'src/app/enums/estado-pedido';
 import { Pedido } from 'src/app/models/pedido';
 import { Usuario } from 'src/app/models/usuario';
 import { AuthService } from 'src/app/services/auth.service';
+import { EncuestaService } from 'src/app/services/encuesta.service';
 import { MensajesService } from 'src/app/services/mensajes.service';
 import { PedidoService } from 'src/app/services/pedido.service';
 import { ProductoService } from 'src/app/services/producto.service';
 import { PushNotificationService } from 'src/app/services/push-notification.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-resumen',
@@ -43,7 +45,8 @@ export class ResumenPage {
     public pedidoSrv: PedidoService,
     private router: Router,
     private msgSrv: MensajesService,
-    private push: PushNotificationService) {
+    private push: PushNotificationService,
+    private encuestaSrv: EncuestaService) {
 
       this.usuario = this.auth.usuarioActual!;
       this.isLoading = true;
@@ -100,6 +103,16 @@ export class ResumenPage {
       case EstadoPedido.Listo:
         this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Servido)
         .then(() => {
+          this.encuestaSrv.verLlenarEncuesta = true;
+          this.encuestaSrv.allEncuestas$.subscribe({
+            next: (data) => {
+              this.encuestaSrv.verLlenarEncuesta = !data.some(x =>
+                x.cliente.id === this.usuario!.id && this.cargoEncuestaHoy(x.fecha)) ;
+            },
+            error: (err) => {
+              console.error(err);
+            }
+          });
           this.msgSrv.ExitoToast('Esperamos que disfrutes de tu pedido!');
           this.botonDeshabilitado = true;
         })
@@ -192,8 +205,8 @@ export class ResumenPage {
           case EstadoPedido.Listo:
             this.estadoPedido = "Listo para entregar al cliente.";
             this.colorEstado = "listo";
-            this.textoAccion = "Pedido Enviado";
-            this.botonDeshabilitado = true;
+            this.textoAccion = "Recibir Pedido";
+            this.botonDeshabilitado = false;
             this.queTiempo = `Restante`;
             break;
           case EstadoPedido.Servido:
@@ -201,7 +214,9 @@ export class ResumenPage {
             this.colorEstado = "servido";
             this.textoAccion = "Solicitar Cuenta";
             this.queTiempo = `Entregado`;
+            this.botonDeshabilitado = false;
             this.mostrarCartel = true;
+
             break;
           case EstadoPedido.CuentaSolicitada:
             this.estadoPedido = "Se solicito la cuenta al Mozo.";
@@ -209,6 +224,7 @@ export class ResumenPage {
             this.textoAccion = "Pagar con Efvo. o Tarjeta";
             this.verAvisoPagoQR = true;
             this.queTiempo = `Entregado`;
+            this.botonDeshabilitado = false;
             this.mostrarCartel = true;
             break;
           case EstadoPedido.Pagado:
@@ -292,5 +308,61 @@ export class ResumenPage {
   volver() {
     this.router.navigate(['/home-tabs/menu-productos']);
   }
+
+
+
+  private cargoEncuestaHoy(fechaEncuesta: Timestamp): boolean{
+
+
+    let fechaEncuestaDate = fechaEncuesta.toDate();
+
+    let fecha = new Date();
+    let hora = fecha.getHours();
+    let minutos = fecha.getMinutes();
+    let segundos = fecha.getSeconds();
+    let horaActual = hora + minutos/60 + segundos/3600;
+
+    let fechaInicio = new Date();
+    let fechaCierre = new Date();
+
+
+    if(environment.horaCierre >= 0){
+      //Antes de las 00
+      fechaInicio.setDate(fechaInicio.getDate());
+      fechaInicio.setHours(environment.horaApertura);
+      fechaInicio.setMinutes(environment.minutoApertura);
+
+      fechaCierre.setDate(fechaCierre.getDate() + 1);
+      fechaCierre.setHours(environment.horaCierre);
+      fechaCierre.setMinutes(environment.minutoCierre);
+
+
+      if(hora >= 0 && hora <= environment.horaCierre){
+        fechaInicio.setDate(fechaInicio.getDate() - 1);
+        fechaInicio.setHours(environment.horaApertura);
+        fechaInicio.setMinutes(environment.minutoApertura);
+
+        fechaCierre.setHours(environment.horaCierre);
+        fechaCierre.setMinutes(environment.minutoCierre);
+
+      }
+    }
+    else{ //Abre y cierra en el día.
+      fechaInicio.setDate(fechaInicio.getDate());
+      fechaInicio.setHours(environment.horaApertura);
+      fechaInicio.setMinutes(environment.minutoApertura);
+
+      fechaCierre.setDate(fechaCierre.getDate());
+      fechaCierre.setHours(environment.horaCierre);
+      fechaCierre.setMinutes(environment.minutoCierre);
+
+    }
+    if(fechaEncuestaDate >= fechaInicio && fechaEncuestaDate <= fechaCierre){
+      return true;
+    }
+    return false;
+
+  }
+
 
 }

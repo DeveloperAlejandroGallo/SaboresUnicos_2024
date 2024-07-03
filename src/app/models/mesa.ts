@@ -7,4 +7,5 @@ export interface Mesa {
   asientos: number;
   estado: EstadoMesa;
   numero: number;
+  idPedidoActual: string;
 }

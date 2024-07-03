@@ -102,13 +102,14 @@ export class MesaService {
 
   }
 
-  cambiarEstadoDeMesa(estado: EstadoMesa, id : string){
+  cambiarEstadoDeMesa(estado: EstadoMesa, id : string, pedidoId: string){
     const coleccion = collection(this.firestore, this.colectionName);
     const documento = doc(coleccion,id);
     //console.log(cliente.nombre);
     //console.log(cliente.uid);
     updateDoc(documento,{
-      estado: estado
+      estado: estado,
+      idPedidoActual: pedidoId
     })
   }
 
