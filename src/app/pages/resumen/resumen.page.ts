@@ -38,7 +38,7 @@ export class ResumenPage {
   public minutosFaltantes: string = "00";
   public mostrarCartel: boolean = false;
   public isLoading: boolean = false;
-
+  isLoadingSpinner: boolean = false;
   constructor(
     private auth: AuthService,
     private productoService: ProductoService,
@@ -123,10 +123,13 @@ export class ResumenPage {
         });
         break;
         case EstadoPedido.CuentaSolicitada:
+          this.isLoadingSpinner = true;
           this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Pagado)
           .then(() => {
+            this.isLoadingSpinner = false;
             this.msgSrv.ExitoToast('Gracias por su visita!.\nEsperamos verte pronto!');
             this.botonDeshabilitado = true;
+            
           })
           .catch(err => {
             console.error(err);

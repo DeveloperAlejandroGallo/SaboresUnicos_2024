@@ -105,8 +105,10 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
     this.encuestaSrv.allEncuestas$.subscribe({
       next: (data) => {
-        this.encuestaSrv.verLlenarEncuesta = !data.some(x =>
-          x.cliente.id === this.usuarioLogueado!.id && this.cargoEncuestaHoy(x.fecha)) ;
+        if(this.pedido && (this.pedido.estadoPedido == EstadoPedido.Servido || this.pedido.estadoPedido == EstadoPedido.CuentaSolicitada || this.pedido.estadoPedido == EstadoPedido.Pagado)){
+          this.encuestaSrv.verLlenarEncuesta = !data.some(x =>
+            x.cliente.id === this.usuarioLogueado!.id && this.cargoEncuestaHoy(x.fecha)) ;
+        }
       },
       error: (err) => {
         console.error(err);

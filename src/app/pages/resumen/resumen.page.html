@@ -74,7 +74,7 @@
                 </ion-item>
                 <ion-item>
                   <ion-label class="tituloImporte">Propina</ion-label>
-                  <ion-label class="importe">"{{!isLoading ? ((subtotal* pedido.propina / 100) | monedaPesos) : 0}} ({{pedido.propina}}%)"</ion-label>
+                  <ion-label class="importe">{{!isLoading ? ((subtotal* pedido.propina / 100) | monedaPesos) : 0}} ({{pedido.propina}}%)</ion-label>
                 </ion-item>
                 <ion-item>
                   <ion-label class="tituloImporte">Tarifa de Servicio</ion-label>
@@ -94,6 +94,9 @@
         </ion-item>
     </ion-card-content>
   </ion-card>
+  <div class="custom-spinner" *ngIf="isLoadingSpinner" >
+    <img src="../../../assets/spinner.png" alt="Spinner">
+</div>
 </ion-content>
 
 

@@ -42,7 +42,12 @@ ion-segment-button.ios {
     font-size: x-large;
   }
 }
-
+.fecha-total-pedido{
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .detalles-estado ion-chip {
   margin-left: 10px;
 }
