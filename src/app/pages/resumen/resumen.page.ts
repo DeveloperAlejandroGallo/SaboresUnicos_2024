@@ -22,7 +22,7 @@ export class ResumenPage {
 
   public tarifaServicio: number = 100;
   public usuario: Usuario;
-  public pedido: Pedido;
+  public pedido!: Pedido;
   public subtotal: number = 0;
   public total: number = 0;
   public estadoPedido: string = "Abierto";
@@ -32,32 +32,44 @@ export class ResumenPage {
   public verAvisoPagoQR: boolean = false;
   private intervalId: any;
 
-  queTiempo: string = "Estimado"; //Faltante - Entregado
-  minutosFaltantes: string = "00";
-
-
+  public queTiempo: string = "Estimado"; //Faltante - Entregado
+  public minutosFaltantes: string = "00";
+  public mostrarCartel: boolean = false;
+  public isLoading: boolean = false;
 
   constructor(
     private auth: AuthService,
     private productoService: ProductoService,
-    private pedidoSrv: PedidoService,
+    public pedidoSrv: PedidoService,
     private router: Router,
     private msgSrv: MensajesService,
     private push: PushNotificationService) {
 
+      this.usuario = this.auth.usuarioActual!;
+      this.isLoading = true;
+      this.SuscribirseAlPedido();
 
+      // this.pedidoSrv.allPedidos$.subscribe({
+      //   next: (data) => {
+      //     this.pedido = data.find(
+      //       x => x.cliente.id === this.auth.usuarioActual!.id
+      //       && x.estadoPedido !== EstadoPedido.Cerrado)!;
 
-    this.usuario = this.auth.usuarioActual!;
+      //       console.log('Id Pedido: ',this.pedido.id);
 
-    this.pedido = this.pedidoSrv.listadoPedidos.find(
-      x => x.cliente.id === this.auth.usuarioActual!.id
-      && x.estadoPedido !== EstadoPedido.Cerrado)!;
+      //       this.SuscribirseAlPedido(this.pedido.id);
 
-    this.pedidoSrv.escucharPedidoId(this.pedido.id);
-
-    console.log('Id Pedido: ',this.pedido.id);
-
-    this.SuscribirseAlPedido();
+      //       if(this.pedido.fechaDePedidoAceptado){
+      //         this.iniciarContador();
+      //       }
+      //   },
+      //   error: (err) => {
+      //     console.error(err);
+      //   },
+      //   complete: () => {
+      //     console.log('Completado');
+      //   }
+      // });
 
 
   }
@@ -139,83 +151,89 @@ export class ResumenPage {
 
 
   private SuscribirseAlPedido() {
-    this.pedidoSrv.pedido$.subscribe(data => {
-      this.pedido = data;
-      this.subtotal = data.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0);
-      this.total = this.subtotal + this.pedido.propina - (this.pedido.descuentoPorJuego * this.subtotal / 100) + this.tarifaServicio;
+    this.pedidoSrv.pedido$.subscribe({
+      next: (data)=>{
+        this.pedido = data;
+        this.subtotal = data.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0);
+        this.total = this.subtotal + this.pedido.propina - (this.pedido.descuentoPorJuego * this.subtotal / 100) + this.tarifaServicio;
 
-      this.botonDeshabilitado = false;
-      this.verAvisoPagoQR = false;
+        this.botonDeshabilitado = false;
+        this.verAvisoPagoQR = false;
+        this.mostrarCartel = false;
 
-      switch (this.pedido.estadoPedido) {
-        case EstadoPedido.Abierto:
-          this.estadoPedido = "Abierto";
-          this.colorEstado = "abierto";
-          this.textoAccion = "Enviar Pedido";
-          this.queTiempo = `Estimado`;
-          break;
-        case EstadoPedido.Pendiente:
-          this.estadoPedido = "Pendiente de aceptar por el mozo";
-          this.colorEstado = "pendiente";
-          this.textoAccion = "Pedido Enviado";
-          this.botonDeshabilitado = true;
-          this.queTiempo = `Estimado`;
-          break;
-        case EstadoPedido.Aceptado:
-          this.estadoPedido = "El Mozo aceptó su pedido.";
-          this.colorEstado = "aceptado";
-          this.textoAccion = "Pedido Enviado";
-          this.botonDeshabilitado = true;
-          this.queTiempo = `Restante`;
-          break;
-        case EstadoPedido.EnPreparacion:
-          this.estadoPedido = "En preparación";
-          this.colorEstado = "en-preparacion";
-          this.textoAccion = "Pedido Enviado";
-          this.botonDeshabilitado = true;
-          this.queTiempo = `Restante`;
-          break;
-        case EstadoPedido.Listo:
-          this.estadoPedido = "Listo para entregar al cliente.";
-          this.colorEstado = "listo";
-          this.textoAccion = "Pedido Enviado";
-          this.botonDeshabilitado = true;
-          this.queTiempo = `Restante`;
-          break;
-        case EstadoPedido.Servido:
-          this.estadoPedido = "Recibido por el cliente.";
-          this.colorEstado = "servido";
-          this.textoAccion = "Solicitar Cuenta";
-          this.queTiempo = `Entregado`;
-
-          break;
-        case EstadoPedido.CuentaSolicitada:
-          this.estadoPedido = "Se solicito la cuenta al Mozo.";
-          this.colorEstado = "cuenta-solicitada";
-          this.textoAccion = "Pagar con Efvo. o Tarjeta";
-          this.verAvisoPagoQR = true;
-          this.queTiempo = `Entregado`;
-          break;
-        case EstadoPedido.Pagado:
-          this.estadoPedido = "Pagado.";
-          this.colorEstado = "pagado";
-          this.textoAccion = "Pagado";
-          this.botonDeshabilitado = true;
-          this.queTiempo = `Entregado`;
-          break;
-        case EstadoPedido.Cerrado:
-          this.estadoPedido = "Cerrado.";
-          this.colorEstado = "cerrado";
-          this.textoAccion = "Pagado";
-          this.botonDeshabilitado = true;
-          this.queTiempo = `Entregado`;
-          break;
+        switch (this.pedido.estadoPedido) {
+          case EstadoPedido.Abierto:
+            this.estadoPedido = "Abierto";
+            this.colorEstado = "abierto";
+            this.textoAccion = "Enviar Pedido";
+            this.queTiempo = `Estimado`;
+            break;
+          case EstadoPedido.Pendiente:
+            this.estadoPedido = "Pendiente de aceptar por el mozo";
+            this.colorEstado = "pendiente";
+            this.textoAccion = "Pedido Enviado";
+            this.botonDeshabilitado = true;
+            this.queTiempo = `Estimado`;
+            break;
+          case EstadoPedido.Aceptado:
+            this.estadoPedido = "El Mozo aceptó su pedido.";
+            this.colorEstado = "aceptado";
+            this.textoAccion = "Pedido Enviado";
+            this.botonDeshabilitado = true;
+            this.queTiempo = `Restante`;
+            break;
+          case EstadoPedido.EnPreparacion:
+            this.estadoPedido = "En preparación";
+            this.colorEstado = "en-preparacion";
+            this.textoAccion = "Pedido Enviado";
+            this.botonDeshabilitado = true;
+            this.queTiempo = `Restante`;
+            break;
+          case EstadoPedido.Listo:
+            this.estadoPedido = "Listo para entregar al cliente.";
+            this.colorEstado = "listo";
+            this.textoAccion = "Pedido Enviado";
+            this.botonDeshabilitado = true;
+            this.queTiempo = `Restante`;
+            break;
+          case EstadoPedido.Servido:
+            this.estadoPedido = "Recibido por el cliente.";
+            this.colorEstado = "servido";
+            this.textoAccion = "Solicitar Cuenta";
+            this.queTiempo = `Entregado`;
+            this.mostrarCartel = true;
+            break;
+          case EstadoPedido.CuentaSolicitada:
+            this.estadoPedido = "Se solicito la cuenta al Mozo.";
+            this.colorEstado = "cuenta-solicitada";
+            this.textoAccion = "Pagar con Efvo. o Tarjeta";
+            this.verAvisoPagoQR = true;
+            this.queTiempo = `Entregado`;
+            this.mostrarCartel = true;
+            break;
+          case EstadoPedido.Pagado:
+            this.estadoPedido = "Pagado.";
+            this.colorEstado = "pagado";
+            this.textoAccion = "Pagado";
+            this.botonDeshabilitado = true;
+            this.queTiempo = `Entregado`;
+            break;
+          case EstadoPedido.Cerrado:
+            this.estadoPedido = "Cerrado.";
+            this.colorEstado = "cerrado";
+            this.textoAccion = "Pagado";
+            this.botonDeshabilitado = true;
+            this.queTiempo = `Entregado`;
+            break;
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
       }
+    });
 
-
-
-    }
-    );
   }
 
   iniciarContador() {
@@ -262,7 +280,7 @@ export class ResumenPage {
         minutesLeft = Math.floor(diffInSeconds / 60);
         this.minutosFaltantes = `${minutesLeft < 10 ? '0'+ minutesLeft : minutesLeft}`;
       }
-    }, 60000);
+    }, 6000);
   }
 
   ionViewDidEnter() {

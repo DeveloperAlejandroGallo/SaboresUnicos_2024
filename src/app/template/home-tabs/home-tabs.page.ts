@@ -94,56 +94,73 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     this.verMenu = false;
     this.verLlenarEncuesta = false;
 
-    this.pedidoSrv.allPedidos$.subscribe(data => {
+    if(this.usuarioLogueado!.perfil !== Perfil.Empleado && this.usuarioLogueado!.mesaAsignada !== 0){
       this.isLoading = true;
-      this.pedido = data.find(
-        x => x.cliente.id === this.usuarioLogueado!.id
-          && x.estadoPedido !== EstadoPedido.Cerrado)!;
-          console.log(this.pedido);
+      this.pedidoSrv.allPedidos$.subscribe({
+        next: (data) => {
+        this.pedido = data.find(
+          x => x.cliente.id === this.usuarioLogueado!.id
+            && x.estadoPedido !== EstadoPedido.Cerrado)!;
+            console.log(this.pedido);
 
-          if(this.pedido) {
-            this.pedidoSrv.escucharPedidoId(this.pedido.id).subscribe(pedido => {
-              this.pedido = pedido;
-
-              if(this.usuarioLogueado!.perfil !== Perfil.Empleado){
+            if(this.pedido) {
+              this.pedidoSrv.escucharPedidoId(this.pedido.id).subscribe({
+                next: (pedido) => {
+                this.pedido = pedido;
 
                 this.verChat = false;
                 this.verJuegos = false;
                 this.verMenu = false;
                 this.verLlenarEncuesta = false;
 
-                if(this.pedido){
-                  console.log("leyo el pedido")
-                  if(this.pedido.estadoPedido === EstadoPedido.Aceptado ||
-                    this.pedido.estadoPedido === EstadoPedido.EnPreparacion ||
-                    this.pedido.estadoPedido === EstadoPedido.Listo ||
-                    this.pedido.estadoPedido === EstadoPedido.Servido ||
-                    this.pedido.estadoPedido === EstadoPedido.CuentaSolicitada ||
-                    this.pedido.estadoPedido === EstadoPedido.Pagado){
-                      this.verLlenarEncuesta = !this.encuestaSrv.listadoEncuesta.some(x =>
-                        x.cliente.id === this.usuarioLogueado!.id && this.cargoEncuestaHoy(x.fecha)) ;
-                    }
 
-                  if(this.pedido?.estadoPedido !== EstadoPedido.MesaAsignada && this.pedido?.estadoPedido !==  EstadoPedido.Cerrado){
-                    this.verChat = true;
-                    this.verJuegos = true;
-                    this.verMenu = true;
-                    // this.router.navigate(['home-tabs/menu-productos']);
+                console.log("leyo el pedido")
+                if(this.pedido.estadoPedido === EstadoPedido.Aceptado ||
+                  this.pedido.estadoPedido === EstadoPedido.EnPreparacion ||
+                  this.pedido.estadoPedido === EstadoPedido.Listo ||
+                  this.pedido.estadoPedido === EstadoPedido.Servido ||
+                  this.pedido.estadoPedido === EstadoPedido.CuentaSolicitada ||
+                  this.pedido.estadoPedido === EstadoPedido.Pagado){
+
+                    this.encuestaSrv.allEncuestas$.subscribe({
+                      next: (data) => {
+                        this.verLlenarEncuesta = !data.some(x =>
+                          x.cliente.id === this.usuarioLogueado!.id && this.cargoEncuestaHoy(x.fecha)) ;
+                      },
+                      error: (err) => {
+                        console.error(err);
+                      }
+                    });
                   }
 
+                if(this.pedido?.estadoPedido !== EstadoPedido.MesaAsignada && this.pedido?.estadoPedido !==  EstadoPedido.Cerrado){
+                  this.verChat = true;
+                  this.verJuegos = true;
+                  this.verMenu = true;
+                  this.router.navigate(['home-tabs/menu-productos']);
                 }
-                this.isLoading = false;
-              }
-            });
-          } else {
-            this.isLoading = false;
-          }
 
+                this.isLoading = false;
+              },error: (err) => {
+                console.error(err);
+                this.isLoading = false;
+              },complete: () => {
+                this.isLoading = false
+              }
+              });
+            } else {
+              this.isLoading = false;
+            }
+
+      },error: (err) => {
+        console.error(err);
+        this.isLoading = false
+      }
     });
 
-
-
   }
+
+}
 
   ngOnInit() {
 
@@ -164,7 +181,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
         this.keyboardWillHideSub = handle;
       });
 
-      console.log("Validadndo permisos de notificaciones en plataforma:");
+      console.log("Validando permisos de notificaciones en plataforma:");
 
       this.addListeners();
       this.registerNotifications();
@@ -434,6 +451,11 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   esValidoParaPropina(): boolean {
     if (!this.pedido) {
       this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
+      return false;
+    }
+
+    if(this.pedido.estadoPedido == EstadoPedido.MesaAsignada){
+      this.msgService.Info(`Por favor escanee el QR de la Mesa ${this.usuarioLogueado.mesaAsignada}.`);
       return false;
     }
 
