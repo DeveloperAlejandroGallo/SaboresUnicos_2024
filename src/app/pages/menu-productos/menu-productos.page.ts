@@ -184,6 +184,9 @@ export class MenuProductosPage implements OnInit {
         this.pedido.productos[index].cantidad++;
     }
 
+      this.pedido.subTotal = this.pedido.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0);
+      this.pedido.total = this.pedido.subTotal + this.pedido.propina - ((this.pedido.subTotal * this.pedido.descuentoPorJuego) / 100);
+
       if(this.pedido.tiempoEstimado < item.producto.tiempoPreparacionEnMinutos)
         this.pedido.tiempoEstimado = item.producto.tiempoPreparacionEnMinutos;
 
@@ -212,6 +215,9 @@ export class MenuProductosPage implements OnInit {
 
       if(this.pedido.productos[index].cantidad === 0)
         this.pedido.productos.splice(index,1);
+
+      this.pedido.subTotal = this.pedido.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0);
+      this.pedido.total = this.pedido.subTotal + this.pedido.propina - ((this.pedido.subTotal * this.pedido.descuentoPorJuego) / 100);
 
       //obtener el maximo tiempo de preparacion
       let max = 0;

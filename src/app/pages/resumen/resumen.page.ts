@@ -38,7 +38,7 @@ export class ResumenPage {
   public minutosFaltantes: string = "00";
   public mostrarCartel: boolean = false;
   public isLoading: boolean = false;
-
+  isLoadingSpinner: boolean = false;
   constructor(
     private auth: AuthService,
     private productoService: ProductoService,
@@ -52,28 +52,6 @@ export class ResumenPage {
       this.isLoading = true;
       this.SuscribirseAlPedido();
 
-      // this.pedidoSrv.allPedidos$.subscribe({
-      //   next: (data) => {
-      //     this.pedido = data.find(
-      //       x => x.cliente.id === this.auth.usuarioActual!.id
-      //       && x.estadoPedido !== EstadoPedido.Cerrado)!;
-
-      //       console.log('Id Pedido: ',this.pedido.id);
-
-      //       this.SuscribirseAlPedido(this.pedido.id);
-
-      //       if(this.pedido.fechaDePedidoAceptado){
-      //         this.iniciarContador();
-      //       }
-      //   },
-      //   error: (err) => {
-      //     console.error(err);
-      //   },
-      //   complete: () => {
-      //     console.log('Completado');
-      //   }
-      // });
-
 
   }
 
@@ -81,6 +59,7 @@ export class ResumenPage {
     this.EnviarIsLoading.emit(true);
     switch (this.pedido.estadoPedido) {
       case EstadoPedido.Abierto:
+        this.pedidoSrv.pedidoActual.estadoPedido = EstadoPedido.Pendiente;
         this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Pendiente)
         .then(() => {
           this.botonDeshabilitado = true;
@@ -101,6 +80,7 @@ export class ResumenPage {
         });
         break;
       case EstadoPedido.Listo:
+        this.pedidoSrv.pedidoActual.estadoPedido = EstadoPedido.Servido;
         this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Servido)
         .then(() => {
           this.encuestaSrv.verLlenarEncuesta = true;
@@ -121,6 +101,7 @@ export class ResumenPage {
         });
         break;
       case EstadoPedido.Servido:
+        this.pedidoSrv.pedidoActual.estadoPedido = EstadoPedido.CuentaSolicitada;
         this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.CuentaSolicitada)
         .then(() => {
           this.msgSrv.ExitoToast('Pronto el mozo se acercará con la cuenta.');
@@ -142,10 +123,13 @@ export class ResumenPage {
         });
         break;
         case EstadoPedido.CuentaSolicitada:
+          this.isLoadingSpinner = true;
           this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Pagado)
           .then(() => {
+            this.isLoadingSpinner = false;
             this.msgSrv.ExitoToast('Gracias por su visita!.\nEsperamos verte pronto!');
-            this.botonDeshabilitado = false;
+            this.botonDeshabilitado = true;
+            
           })
           .catch(err => {
             console.error(err);
@@ -173,6 +157,9 @@ export class ResumenPage {
         this.botonDeshabilitado = false;
         this.verAvisoPagoQR = false;
         this.mostrarCartel = false;
+        this.encuestaSrv.verLlenarEncuesta = false;
+
+        this.pedidoSrv.pedidoActual.estadoPedido = this.pedido.estadoPedido;
 
         switch (this.pedido.estadoPedido) {
           case EstadoPedido.Abierto:
@@ -189,6 +176,7 @@ export class ResumenPage {
             this.queTiempo = `Estimado`;
             break;
           case EstadoPedido.Aceptado:
+            this.iniciarContador();
             this.estadoPedido = "El Mozo aceptó su pedido.";
             this.colorEstado = "aceptado";
             this.textoAccion = "Pedido Enviado";
@@ -216,7 +204,8 @@ export class ResumenPage {
             this.queTiempo = `Entregado`;
             this.botonDeshabilitado = false;
             this.mostrarCartel = true;
-
+            this.encuestaSrv.verLlenarEncuesta = !this.encuestaSrv.listadoEncuesta.some(x =>
+              x.cliente.id === this.usuario!.id && this.cargoEncuestaHoy(x.fecha)) ;
             break;
           case EstadoPedido.CuentaSolicitada:
             this.estadoPedido = "Se solicito la cuenta al Mozo.";
@@ -226,6 +215,8 @@ export class ResumenPage {
             this.queTiempo = `Entregado`;
             this.botonDeshabilitado = false;
             this.mostrarCartel = true;
+            this.encuestaSrv.verLlenarEncuesta = !this.encuestaSrv.listadoEncuesta.some(x =>
+              x.cliente.id === this.usuario!.id && this.cargoEncuestaHoy(x.fecha)) ;
             break;
           case EstadoPedido.Pagado:
             this.estadoPedido = "Pagado.";
@@ -233,6 +224,8 @@ export class ResumenPage {
             this.textoAccion = "Pagado";
             this.botonDeshabilitado = true;
             this.queTiempo = `Entregado`;
+            this.encuestaSrv.verLlenarEncuesta = !this.encuestaSrv.listadoEncuesta.some(x =>
+              x.cliente.id === this.usuario!.id && this.cargoEncuestaHoy(x.fecha)) ;
             break;
           case EstadoPedido.Cerrado:
             this.estadoPedido = "Cerrado.";
@@ -253,8 +246,11 @@ export class ResumenPage {
   }
 
   iniciarContador() {
-    if(!this.pedido.fechaDePedidoAceptado)
+    if(!this.pedido|| this.pedido.fechaDePedidoAceptado === null)
       return;
+
+    console.log('Iniciando contador');
+    console.log('Pedido: ',this.pedido);
 
     let diffInSeconds:  number = 0;
     let minutesLeft: number = 0;
@@ -296,7 +292,7 @@ export class ResumenPage {
         minutesLeft = Math.floor(diffInSeconds / 60);
         this.minutosFaltantes = `${minutesLeft < 10 ? '0'+ minutesLeft : minutesLeft}`;
       }
-    }, 6000);
+    }, 10000);
   }
 
   ionViewDidEnter() {

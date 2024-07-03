@@ -39,7 +39,10 @@ export class PedidoService {
   private coleccionPedido: CollectionReference<DocumentData>;
   public pedido$: Observable<Pedido> = new Observable<Pedido>();
 
-  
+  public pedidoActual!: Pedido;
+
+
+
 
   constructor(private firestore: Firestore, private angularFirestore: AngularFirestore) {
     this.coleccionPedido = collection(this.firestore, this.colectionName);
@@ -88,6 +91,21 @@ export class PedidoService {
   }
 
 
+  actualizarPedidoActual(idPedido: string){
+
+    this.pedidoActual = this.listadoPedidos.find(x => x.id == idPedido)!;
+
+
+    // const coleccion = collection(this.firestore, this.colectionName);
+    // const documento = doc(coleccion, idPedido);
+    // getDoc(documento).then((doc) => {
+    //   if (doc.exists()) {
+    //     this.pedidoActual = doc.data() as Pedido;
+    //     this.pedidoActual.id = doc.id;
+    //   }
+    // });
+
+  }
 
   delete(id: string) {
     const coleccion = collection(this.firestore, this.colectionName);
@@ -193,9 +211,9 @@ export class PedidoService {
 
     updateDoc(documento, {
       productos: pedido.productos,
-      subTotal: this.sumaProductos(pedido.productos),
+      subTotal: pedido.subTotal,
       tiempoEstimado: pedido.tiempoEstimado,
-      total: this.sumTotal(pedido)
+      total: pedido.total
     });
   }
 

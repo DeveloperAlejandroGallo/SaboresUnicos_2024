@@ -25,7 +25,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 export class ListaPedidosComponent implements OnInit {
 
   estadoPedido: EstadoPedido = EstadoPedido.Pendiente;
-  opcionSeleccionada = 'Mis_pedidos';
+  opcionSeleccionada = 'Pendientes';
   estaEnPreparacion = false;
   pedidosPendientes: Pedido[] = [];
   todosMisPedidos: Pedido[] = [];
@@ -53,9 +53,6 @@ export class ListaPedidosComponent implements OnInit {
 
         this.pedidosPendientes = data.filter(pedido => pedido.estadoPedido == EstadoPedido.Pendiente && pedido.mozo == null);
         console.log(this.pedidosPendientes);
-        if(this.pedidosPendientes.length>0){
-          this.opcionSeleccionada = 'Pendientes';
-        }
       }
       else if(this.empleadoActual.tipoEmpleado == TipoEmpleado.Cocinero || this.empleadoActual.tipoEmpleado == TipoEmpleado.Bartender){
         const tipoProducto = this.empleadoActual.tipoEmpleado == TipoEmpleado.Cocinero ? [TipoProducto.Comida, TipoProducto.Postre] : [TipoProducto.Bebida];
@@ -81,9 +78,7 @@ export class ListaPedidosComponent implements OnInit {
             mesaNumero: pedido.mesa.numero
           }))
         );
-        if(this.productosPendientes.length>0){
-          this.opcionSeleccionada = 'Pendientes';
-        }
+        
       }
     });
     setTimeout(() => {
@@ -281,7 +276,7 @@ export class ListaPedidosComponent implements OnInit {
       background: background,
       heightAuto: false,
       width: "20em",
-      confirmButtonColor: "#28a745",
+      confirmButtonColor: "#0EA06F",
       cancelButtonColor: "#d33",
       confirmButtonText: "Confirmar Pago",
       cancelButtonText: "Cancelar"

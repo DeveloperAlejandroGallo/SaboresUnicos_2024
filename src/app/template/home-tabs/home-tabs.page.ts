@@ -23,6 +23,7 @@ import { timer } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { EncuestaService } from 'src/app/services/encuesta.service';
 import { Timestamp } from 'firebase/firestore';
+import { Mesa } from 'src/app/models/mesa';
 
 const background = '#f8f8f8d7';
 @Component({
@@ -79,7 +80,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     private usrService: UsuarioService,
     private pushSrv: PushNotificationService,
     private pedidoSrv: PedidoService,
-    private encuestaSrv: EncuestaService) {
+    public encuestaSrv: EncuestaService) {
 
     this.url = this.router.url;
     this.usuarioLogueado = this.auth.usuarioActual!;
@@ -94,6 +95,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       console.log(this.pedido);
 
     if(this.pedido) {
+      this.pedidoSrv.actualizarPedidoActual(this.pedido.id);
       this.pedidoSrv.escucharPedidoId(this.pedido.id).subscribe(pedido => {
         this.pedido = pedido;
         this.verLlenarEncuesta = false;
@@ -103,8 +105,10 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
     this.encuestaSrv.allEncuestas$.subscribe({
       next: (data) => {
-        this.encuestaSrv.verLlenarEncuesta = !data.some(x =>
-          x.cliente.id === this.usuarioLogueado!.id && this.cargoEncuestaHoy(x.fecha)) ;
+        if(this.pedido && (this.pedido.estadoPedido == EstadoPedido.Servido || this.pedido.estadoPedido == EstadoPedido.CuentaSolicitada || this.pedido.estadoPedido == EstadoPedido.Pagado)){
+          this.encuestaSrv.verLlenarEncuesta = !data.some(x =>
+            x.cliente.id === this.usuarioLogueado!.id && this.cargoEncuestaHoy(x.fecha)) ;
+        }
       },
       error: (err) => {
         console.error(err);
@@ -321,30 +325,36 @@ export class HomeTabsPage implements OnInit, OnDestroy {
               break;
             case "Mesa":
               if (this.validacionesMesa(datos[1])) {
-                this.pedido = this.pedidoSrv.listadoPedidos.find(
-                  x => x.cliente.id === this.auth.usuarioActual!.id
-                    && x.estadoPedido == EstadoPedido.MesaAsignada)!;
-                    console.log("Pedido encontrado:");
-                    console.log(this.pedido);
+                this.auth.usuarioActual!.mesaAsignada = Number(datos[1]);
 
-                    if(this.pedido){
-                      this.verJuegos = true;
-                      this.verChat = true;
-                      this.verEncuesta = true;
-                      this.verMenu = true;
-                      console.log("Actualizando a Abierto");
-                      this.pedidoSrv.actualizarEstado(this.pedido, EstadoPedido.Abierto);
-                      this.router.navigate(['home-tabs/menu-productos']);
-                    }
+                let laMesa: Mesa = this.mesasSvc.listadoMesa.find(x => x.numero == Number(datos[1]))!;
+
+                this.pedidoSrv.actualizarPedidoActual(laMesa.idPedidoActual);
+
+                // this.pedido = this.pedidoSrv.listadoPedidos.find(
+                //   x => x.cliente.id === this.auth.usuarioActual!.id
+                //     && x.estadoPedido == EstadoPedido.MesaAsignada)!;
+                //     console.log("Pedido encontrado:");
+                //     console.log(this.pedido);
+                console.log("El Pedido actual");
+                console.log(this.pedidoSrv.pedidoActual);
+
+                if(this.pedidoSrv.pedidoActual){
+                  this.pedido = this.pedidoSrv.pedidoActual;
+                  this.verJuegos = true;
+                  this.verChat = true;
+                  this.verEncuesta = true;
+                  this.verMenu = true;
+                  console.log("Actualizando a Abierto");
+                  this.pedidoSrv.actualizarEstado(this.pedidoSrv.pedidoActual, EstadoPedido.Abierto);
+                  this.router.navigate(['home-tabs/menu-productos']);
+                }
 
               }
               break;
             case "Propina":
               if (this.esValidoParaPropina()) {
-                if (this.pedido.propina != 0) {
-                  this.msgService.Info("Ya dejaste propina.");
-                  return;
-                }
+
                 //To Do: Seleccion de Propina con Swal Fire con opciones 0, 5, 10, 15, 20
                 Swal.fire({
                   title: "¿Cual fué su nivel de satisfacción?",
@@ -369,7 +379,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
                     this.isLoading = true;
                     timer(3500).subscribe(()=>{
 
-                      this.pedidoSrv.aplicarPropina(this.pedido, Number(result.value)).then(()=>{
+                      this.pedidoSrv.aplicarPropina(this.pedidoSrv.pedidoActual, Number(result.value)).then(()=>{
 
                         this.msgService.Exito("Propina dejada con éxito. Gracias!!");
 
@@ -426,39 +436,41 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   }
   esValidoParaPropina(): boolean {
 
-    this.pedido = this.pedidoSrv.listadoPedidos.find(
-      x => x.cliente.id === this.auth.usuarioActual!.id
-        && x.estadoPedido == (EstadoPedido.Servido || EstadoPedido.CuentaSolicitada))!;
-        console.log("Pedido encontrado:");
-        console.log(this.pedido);
+    // this.pedido = this.pedidoSrv.listadoPedidos.find(
+    //   x => x.cliente.id === this.auth.usuarioActual!.id
+    //     && x.estadoPedido == (EstadoPedido.Servido || EstadoPedido.CuentaSolicitada))!;
+    //     console.log("Pedido encontrado:");
+    //     console.log(this.pedido);
 
+    console.log("Pedido actual:");
+    console.log(this.pedidoSrv.pedidoActual);
 
-    if (this.pedido === (null || undefined)) {
+    if (this.pedidoSrv.pedidoActual === null || this.pedidoSrv.pedidoActual === undefined) {
       this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
       return false;
     }
 
-    if (this.pedido.estadoPedido == EstadoPedido.MesaAsignada) {
+    if (this.pedidoSrv.pedidoActual.estadoPedido == EstadoPedido.MesaAsignada) {
       this.msgService.Info(`Aun no escaneaste la mesa.\nPor favor acercate a la mesa ${this.usuarioLogueado.mesaAsignada}.`);
       return false;
     }
 
-    if (this.pedido.estadoPedido == EstadoPedido.Abierto) {
+    if (this.pedidoSrv.pedidoActual.estadoPedido == EstadoPedido.Abierto) {
       this.msgService.Info("Aun no tienes un Mozo asignado al cual dejarle la propina.\nPor favor primero has el pedido.");
       return false;
     }
 
-    if (this.pedido.estadoPedido == EstadoPedido.Pendiente) {
+    if (this.pedidoSrv.pedidoActual.estadoPedido == EstadoPedido.Pendiente) {
       this.msgService.Info("El Mozo aún no aceptó tu pedido.\nPor favor espera a que lo acepte.");
       return false;
     }
 
-    if (this.pedido.estadoPedido == EstadoPedido.Listo) {
+    if (this.pedidoSrv.pedidoActual.estadoPedido == EstadoPedido.Listo) {
       this.msgService.Info("Nos gustaría saber su valoración luego de probar nuestra comida. Por favor espere a recibirla.");
       return false;
     }
 
-    if (this.pedido.estadoPedido == EstadoPedido.Cerrado) {
+    if (this.pedidoSrv.pedidoActual.estadoPedido == EstadoPedido.Cerrado) {
       this.msgService.Info("El pedido ya fue cerrado.");
       return false;
     }
@@ -468,28 +480,29 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   }
   esValidoParaPago(): boolean {
 
-    this.pedido = this.pedidoSrv.listadoPedidos.find(
-      x => x.cliente.id === this.auth.usuarioActual!.id
-        && x.estadoPedido == (EstadoPedido.Servido || EstadoPedido.CuentaSolicitada))!;
-        console.log("Pedido encontrado:");
-        console.log(this.pedido);
+    // this.pedido = this.pedidoSrv.listadoPedidos.find(
+    //   x => x.cliente.id === this.auth.usuarioActual!.id && (x.estadoPedido == EstadoPedido.Servido || x.estadoPedido == EstadoPedido.CuentaSolicitada))!;
+    //     console.log("Pedido encontrado:");
+    //     console.log(this.pedido);
+    console.log("Pedido actual:");
+    console.log(this.pedidoSrv.pedidoActual);
 
-    if (this.pedido === null || this.pedido === undefined) {
+    if (this.pedidoSrv.pedidoActual === null || this.pedidoSrv.pedidoActual === undefined) {
       this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
       return false;
     }
 
-    if (this.pedido.estadoPedido == EstadoPedido.Pagado) {
+    if (this.pedidoSrv.pedidoActual.estadoPedido == EstadoPedido.Pagado) {
       this.msgService.Info("Ya pagaste tu pedido.");
       return false;
     }
 
-    if (this.pedido.estadoPedido == EstadoPedido.Cerrado) {
+    if (this.pedidoSrv.pedidoActual.estadoPedido == EstadoPedido.Cerrado) {
       this.msgService.Info("El pedido ya fue cerrado.");
       return false;
     }
 
-    if (this.pedido.estadoPedido !== EstadoPedido.CuentaSolicitada && this.pedido.estadoPedido !== EstadoPedido.Servido) {
+    if (this.pedidoSrv.pedidoActual.estadoPedido !== EstadoPedido.CuentaSolicitada && this.pedidoSrv.pedidoActual.estadoPedido !== EstadoPedido.Servido) {
       this.msgService.Info("Primero solicita la cuenta al mozo.");
       return false;
     }
