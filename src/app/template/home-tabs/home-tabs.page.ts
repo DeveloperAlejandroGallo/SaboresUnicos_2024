@@ -378,7 +378,10 @@ export class HomeTabsPage implements OnInit, OnDestroy {
                   if (result.isConfirmed) {
                     this.isLoading = true;
                     timer(3500).subscribe(()=>{
-
+                      let laMesa: Mesa = this.mesasSvc.listadoMesa.find(x => x.numero == this.auth.usuarioActual!.mesaAsignada)!;      
+                      this.pedidoSrv.actualizarPedidoActual(laMesa.idPedidoActual);
+                      console.log("El Pedido actual para propina: ");
+                      console.log(this.pedidoSrv.pedidoActual);
                       this.pedidoSrv.aplicarPropina(this.pedidoSrv.pedidoActual, Number(result.value)).then(()=>{
 
                         this.msgService.Exito("Propina dejada con éxito. Gracias!!");

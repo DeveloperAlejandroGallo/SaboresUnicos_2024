@@ -27,7 +27,7 @@ export class MenuProductosPage implements OnInit {
   isModalOpen = false;
   selectedProduct: Producto | null = null;
   name: string | undefined;
-
+  public tarifaServicio: number = 100;
   public usuario!: Usuario;
   public listaDeProductos: Array<Producto> = new Array<Producto>;
   public listaDeTipoComida: Array<ItemLista> = new Array<ItemLista>;
@@ -185,7 +185,7 @@ export class MenuProductosPage implements OnInit {
     }
 
       this.pedido.subTotal = this.pedido.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0);
-      this.pedido.total = this.pedido.subTotal + this.pedido.propina - ((this.pedido.subTotal * this.pedido.descuentoPorJuego) / 100);
+      this.pedido.total = this.pedido.subTotal + this.pedido.propina - ((this.pedido.subTotal * this.pedido.descuentoPorJuego) / 100) + this.tarifaServicio;
 
       if(this.pedido.tiempoEstimado < item.producto.tiempoPreparacionEnMinutos)
         this.pedido.tiempoEstimado = item.producto.tiempoPreparacionEnMinutos;
@@ -217,7 +217,7 @@ export class MenuProductosPage implements OnInit {
         this.pedido.productos.splice(index,1);
 
       this.pedido.subTotal = this.pedido.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0);
-      this.pedido.total = this.pedido.subTotal + this.pedido.propina - ((this.pedido.subTotal * this.pedido.descuentoPorJuego) / 100);
+      this.pedido.total = this.pedido.subTotal + this.pedido.propina - ((this.pedido.subTotal * this.pedido.descuentoPorJuego) / 100) + this.tarifaServicio;
 
       //obtener el maximo tiempo de preparacion
       let max = 0;

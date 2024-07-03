@@ -80,10 +80,12 @@ export class ResumenPage {
         });
         break;
       case EstadoPedido.Listo:
+        this.isLoadingSpinner = true;
         this.pedidoSrv.pedidoActual.estadoPedido = EstadoPedido.Servido;
         this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Servido)
         .then(() => {
           this.encuestaSrv.verLlenarEncuesta = true;
+          this.isLoadingSpinner = false;
           this.encuestaSrv.allEncuestas$.subscribe({
             next: (data) => {
               this.encuestaSrv.verLlenarEncuesta = !data.some(x =>
@@ -101,9 +103,11 @@ export class ResumenPage {
         });
         break;
       case EstadoPedido.Servido:
+        this.isLoadingSpinner = true;
         this.pedidoSrv.pedidoActual.estadoPedido = EstadoPedido.CuentaSolicitada;
         this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.CuentaSolicitada)
         .then(() => {
+          this.isLoadingSpinner = false;
           this.msgSrv.ExitoToast('Pronto el mozo se acercará con la cuenta.');
           this.push.MozoPedidoCuenta(this.pedido).subscribe( {
             next: () => {
@@ -152,7 +156,8 @@ export class ResumenPage {
       next: (data)=>{
         this.pedido = data;
         this.subtotal = data.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0);
-        this.total = this.subtotal + this.pedido.propina - (this.pedido.descuentoPorJuego * this.subtotal / 100) + this.tarifaServicio;
+        
+        this.total = this.subtotal + (this.pedido.subTotal * (this.pedido.propina /100)) - (this.pedido.descuentoPorJuego * this.subtotal / 100) + this.tarifaServicio;
 
         this.botonDeshabilitado = false;
         this.verAvisoPagoQR = false;

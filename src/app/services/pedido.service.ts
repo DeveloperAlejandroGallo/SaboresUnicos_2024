@@ -287,13 +287,28 @@ export class PedidoService {
   }
 
   aplicarPropina(pedido: Pedido, propina: number):Promise<void> {
-
     const coleccion = collection(this.firestore, this.colectionName);
     const documento = doc(coleccion, pedido.id);
+    console.log("Subtotal: " + pedido.subTotal);
+    console.log("Porcentaje de propina: " + propina);
+    
+    const tarifaServicio = 100;
+    console.log("srvicio : " + tarifaServicio);
+    
+    const propinaTotal = pedido.subTotal * (propina /100);
+    console.log("propina : " + propinaTotal);
+    
+    const descuentoJuegos = pedido.descuentoPorJuego ? 0 : 0 ;
+    console.log("Juegos: " + descuentoJuegos);
+    
+    const total = pedido.subTotal + propinaTotal - ( descuentoJuegos * pedido.subTotal / 100) + tarifaServicio;
 
+    console.log("Total: " + total);
+    
+    
     return updateDoc(documento, {
       propina: propina,
-      total: pedido.total + propina
+      total: total
     });
   }
 
