@@ -95,21 +95,21 @@
   
   </ion-content>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab color="primary" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="secondary">
       <ion-icon name="chevron-back-circle-outline"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="start">
-      <ion-fab-button (click)="irGraficoEstrellas()" color="tertiary">
+      <ion-fab-button  (click)="irGraficoEstrellas()" color="primary">
         <img [src]="iconoEstrellas">
       </ion-fab-button>
-      <ion-fab-button (click)="irGraficoMejorComida()" color="tertiary">
+      <ion-fab-button (click)="irGraficoMejorComida()" color="primary">
         <img [src]="iconoMejorComida">
       </ion-fab-button>
-      <ion-fab-button (click)="irGraficoMejorSaborComida()" color="tertiary">
-        <ion-icon name="list-outline"></ion-icon>
+      <ion-fab-button (click)="irGraficoMejorSaborComida()" color="primary">
+        <ion-icon  name="list-outline"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button (click)="irGraficoCosasAgradaron()" color="tertiary">
+      <ion-fab-button (click)="irGraficoCosasAgradaron()" color="primary">
         <ion-icon name="pie-chart-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
