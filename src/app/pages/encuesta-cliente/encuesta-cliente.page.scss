@@ -4,7 +4,14 @@ ion-content {
   padding: 16px;
 
   ion-item {
-    margin-bottom: 16px;
+    margin-bottom: 10px;
+    .item-inner{
+      padding-right: 0px !important;
+
+      .input-wrapper{
+        justify-content: center !important;
+      }
+    }
   }
 
   ion-range {
@@ -48,6 +55,7 @@ ion-content {
     align-items: center;
     margin-top: 5px;
     margin-bottom: 5px;
+    text-align: center;
   }
 
   .labels {
@@ -57,6 +65,7 @@ ion-content {
     margin-bottom: 16px;
     font-size: 1.6rem;
     color: black;
+    text-align: center;
   }
 
   .label-mejor-comida {
@@ -64,6 +73,7 @@ ion-content {
     justify-content: center;
     align-items: center;
     margin-bottom: 16px;
+    text-align: center;
     font-size: 1.57rem;
     color: black;
   }
@@ -86,9 +96,30 @@ ion-content {
   .radio-group {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    margin-left: 50px;
+    
   }
+  ion-radio {
+    --border-radius: 4px;
+    --inner-border-radius: 4px;
+  
+    --color: #b3b1b1;
+    --color-checked: #bf0000;
+  }
+  
+  ion-radio.ios::part(container) {
+    width: 20px;
+    height: 20px;
+  
+    border: 2px solid #b3b1b1;
+    border-radius: 4px;
+  }
+  
+  .radio-checked.ios::part(container) {
+    border-color: #bf0000;
+  }
+
+
+
   .item-background-color {
     --ion-item-background: #ffeeee;
   }
@@ -98,6 +129,15 @@ ion-content {
     text-align: center; /* Centrar el texto */
     color: black;
     font-size: 1.25rem;
+    label {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      img{
+        margin: 0px 10px;
+      }
+    }
   }
   /* Asegúrate de que el contenedor de la imagen tenga un tamaño definido */
   .image-container {

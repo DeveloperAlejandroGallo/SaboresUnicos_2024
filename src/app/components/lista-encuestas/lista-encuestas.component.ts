@@ -17,40 +17,21 @@ export class ListaEncuestasComponent  implements OnInit {
   listaEncuestas: any[]= [];
   isLoading = true;
   public usuario: Usuario;
-  textoHome = "Escanea el QR para ingresar a la lista de espera.";
+
+  public swiperConfig = {
+    slidesPerView: 1,
+    spaceBetween: 10,
+    loop: true,
+    navigation: true,
+    pagination: { clickable: true }
+  };
+
   constructor(private encuestasSvc : EncuestaService, private auth: AuthService) { 
     this.usuario = this.auth.usuarioActual!;
     console.log(this.usuario);
   }
 
   ngOnInit() {
-    // ------Subiendo encuesta harcodeado
-    // const producto: Producto = {
-    //   id: '124',
-    //   nombre: 'Sandwich de milanesa',
-    //   descripcion: 'Sandwich completa',
-    //   precio: 10000,
-    //   tiempoPreparacionEnMinutos: 30,
-    //   fotos: ['https://www.clarin.com/img/2021/09/06/ZUZbnAZNY_720x0__1.jpg'],
-    //   tipo: TipoProducto.Comida
-    // }
-    // const nuevaEncuesta: Encuesta = {
-    //   id: '',
-    //   cliente: this.usuario,
-    //   fecha: Timestamp.fromDate(new Date()),
-    //   fotos: ['https://www.clarin.com/img/2021/09/06/ZUZbnAZNY_720x0__1.jpg'],
-    //   comentario: 'el mejor sandwich del barrio',
-    //   cantidadEstrellas: 5,
-    //   SaborDeLaComida: 5,
-    //   RecomendariasElLugar: true,
-    //   QueCosasAgradaron: [
-    //     { cosa: 'comida', si: true },
-    //     { cosa: 'bebida', si: true }
-    //   ],
-    //   MejorComida: producto
-    // }
-    // this.encuestasSvc.nuevo(nuevaEncuesta);
-
     this.encuestasSvc.allEncuestas$.subscribe(data=>{
       this.listaEncuestas = data.map(encuesta=>({
         ...encuesta,

@@ -5,7 +5,7 @@
       <div class="ion-text-wrap">¡Queremos saber tu opinión!</div></ion-title
     >
 
-    <div class="formulario" style="overflow-y: auto; max-height: 80vh">
+    <div class="formulario" style="overflow-y: auto; max-height: 72vh">
       <ion-card class="mi-ion-card">
         <!-- <form [formGroup]="" (ngSubmit)="()"></form> -->
         <ion-card-content>
@@ -62,7 +62,7 @@
               <ion-row>
                 <ion-col size="12">
                   <div class="labels">
-                    <label>Sabor de la Comida (1-10)</label>
+                    <label>Sabor de la Comida<br>(1-10)</label>
                   </div>
                   <ion-item lines="none" class="item-background-color">
                     <ion-range
@@ -121,7 +121,8 @@
                       <ion-item>
                         <label>Sí</label>
                         <ion-radio
-                          slot="start"
+                        slot="start"
+                        justify="start"
                           value="Sí"
                           aria-label="Sí"
                         ></ion-radio>
@@ -129,7 +130,8 @@
                       <ion-item>
                         <label>No</label>
                         <ion-radio
-                          slot="start"
+                        slot="start"
+                        justify="end"
                           value="No"
                           aria-label="No"
                         ></ion-radio>

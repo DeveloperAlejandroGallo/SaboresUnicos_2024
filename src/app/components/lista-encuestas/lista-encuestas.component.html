@@ -44,13 +44,18 @@
             <ion-row>
               <swiper-container
               pager="true"
-              [loop]="true"
               [pagination]="true">
-                <swiper-slide *ngFor="let imagen of encuesta.fotos" >
-                  <img *ngIf="encuesta.fotos[0]" [src]="imagen" alt="Foto de la encuesta"  style="object-fit: cover;"/>
+                <swiper-slide class="image-container" *ngFor="let imagen of encuesta.fotos" >
+                  <img *ngIf="imagen" [src]="imagen" class="image-item" alt="Foto de la encuesta"/>
                 </swiper-slide>
               </swiper-container>
-             
+              <!-- <swiper [config]="swiperConfig">
+                <ng-container *ngFor="let imagen of encuesta.fotos">
+                  <ng-template swiperSlide>
+                    <img [src]="imagen" class="carousel-image">
+                  </ng-template>
+                </ng-container>
+              </swiper> -->
             </ion-row>
           </ion-card-content>
         </ion-card>
