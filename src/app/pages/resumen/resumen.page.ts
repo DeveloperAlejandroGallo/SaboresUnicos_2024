@@ -192,8 +192,8 @@ export class ResumenPage {
           case EstadoPedido.Listo:
             this.estadoPedido = "Listo para entregar al cliente.";
             this.colorEstado = "listo";
-            this.textoAccion = "Pedido Enviado";
-            this.botonDeshabilitado = true;
+            this.textoAccion = "Recibir Pedido";
+            this.botonDeshabilitado = false;
             this.queTiempo = `Restante`;
             break;
           case EstadoPedido.Servido:

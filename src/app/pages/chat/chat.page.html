@@ -29,7 +29,7 @@
                 *ngIf="mje.idDelEnviador !== idUsuarioActual"
               >
                 <div class="message other" *ngIf="esMozo">
-                  <b>Mesa {{mje.numeroDeMesa}}</b>
+                  <b>{{mje.numeroDeMesa === 0 ? 'Mozo '+mje.nombreMozo : 'Mesa '+mje.numeroDeMesa }}</b>
                   <br />
                   <span class="chat-time"> {{toDate(mje.fecha) | fechaToString}} </span>
 
@@ -37,7 +37,7 @@
                   <br>
                 </div>
                 <div class="message other" *ngIf="esCliente">
-                  <b>{{mje.numeroDeMesa !== 0 ? 'Mesa '+mje.numeroDeMesa : 'Mozo '+mje.nombreMozo}}</b>
+                  <b>{{mje.numeroDeMesa === 0 ? 'Mozo '+mje.nombreMozo : 'Mesa '+mje.numeroDeMesa }}</b>
                   <br />
                   <span class="chat-time"> {{toDate(mje.fecha) | fechaToString }} </span>
                   {{mje.mensaje}}
