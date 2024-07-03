@@ -85,8 +85,8 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
     this.url = this.router.url;
     this.usuarioLogueado = this.auth.usuarioActual!;
-    this.usrService.allUsers$.subscribe(data => {
-      this.usuarioLogueado = data.filter(x => x.id === this.auth.usuarioActual?.id)[0];
+    this.usrService.usuario$.subscribe(data => {
+      this.usuarioLogueado = data;
     });
 
     this.verChat = false;
@@ -96,15 +96,8 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
     if(this.usuarioLogueado!.perfil !== Perfil.Empleado && this.usuarioLogueado!.mesaAsignada !== 0){
       this.isLoading = true;
-      this.pedidoSrv.allPedidos$.subscribe({
-        next: (data) => {
-        this.pedido = data.find(
-          x => x.cliente.id === this.usuarioLogueado!.id
-            && x.estadoPedido !== EstadoPedido.Cerrado)!;
-            console.log(this.pedido);
 
-            if(this.pedido) {
-              this.pedidoSrv.escucharPedidoId(this.pedido.id).subscribe({
+        this.pedidoSrv.escucharPedidoId(this.pedido.id).subscribe({
                 next: (pedido) => {
                 this.pedido = pedido;
 
@@ -152,11 +145,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
               this.isLoading = false;
             }
 
-      },error: (err) => {
-        console.error(err);
-        this.isLoading = false
-      }
-    });
+
 
   }
 

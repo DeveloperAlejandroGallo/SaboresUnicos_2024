@@ -158,7 +158,6 @@ export class HomeMaitrePage  {
 
 
 
-      this.mesaService.cambiarEstadoDeMesa(EstadoMesa.ocupada, mesa.id);
 
       this.usrService.asignarMesa(mesa.numero, elementoEspera.usuario.id);
 
@@ -168,6 +167,8 @@ export class HomeMaitrePage  {
       console.log(elementoEspera.usuario);
       let nuevoPedido = this.pedidoSrv.nuevo(elementoEspera.usuario, mesa);
 
+
+      this.mesaService.cambiarEstadoDeMesa(EstadoMesa.ocupada, mesa.id, nuevoPedido.id);
 
       this.listEsperaService.delete(elementoEspera.id);
 

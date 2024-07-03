@@ -100,7 +100,7 @@ export class ListaPedidosComponent implements OnInit {
 
   confirmarPedido(pedido: Pedido) {
     this.isLoadingPush = true;
-    this.pedidosSvc.actualizarEstado(pedido, EstadoPedido.Aceptado);    
+    this.pedidosSvc.actualizarEstado(pedido, EstadoPedido.Aceptado);
     this.pedidosSvc.actualizarMozo(pedido, this.auth.usuarioActual!);
     this.pedidosSvc.actualizarFechaAceptado(pedido);
     this.pedidosSvc.actualizarEstadoProductoAPendiente(pedido);
@@ -288,7 +288,7 @@ export class ListaPedidosComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.pedidosSvc.actualizarEstado(pedido,EstadoPedido.Cerrado);
-        this.mesaSvc.cambiarEstadoDeMesa(EstadoMesa.libre,pedido.mesa.id);
+        this.mesaSvc.cambiarEstadoDeMesa(EstadoMesa.libre,pedido.mesa.id, "");
         this.usrSrv.asignarMesa(0, pedido.cliente.id);
         this.pushNotif.ClienteMozoPagoConfirmado(pedido.cliente,this.empleadoActual.nombre).subscribe({
           next: (data) => {
