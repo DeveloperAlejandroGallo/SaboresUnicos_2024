@@ -52,28 +52,6 @@ export class ResumenPage {
       this.isLoading = true;
       this.SuscribirseAlPedido();
 
-      // this.pedidoSrv.allPedidos$.subscribe({
-      //   next: (data) => {
-      //     this.pedido = data.find(
-      //       x => x.cliente.id === this.auth.usuarioActual!.id
-      //       && x.estadoPedido !== EstadoPedido.Cerrado)!;
-
-      //       console.log('Id Pedido: ',this.pedido.id);
-
-      //       this.SuscribirseAlPedido(this.pedido.id);
-
-      //       if(this.pedido.fechaDePedidoAceptado){
-      //         this.iniciarContador();
-      //       }
-      //   },
-      //   error: (err) => {
-      //     console.error(err);
-      //   },
-      //   complete: () => {
-      //     console.log('Completado');
-      //   }
-      // });
-
 
   }
 
@@ -195,6 +173,7 @@ export class ResumenPage {
             this.queTiempo = `Estimado`;
             break;
           case EstadoPedido.Aceptado:
+            this.iniciarContador();
             this.estadoPedido = "El Mozo aceptó su pedido.";
             this.colorEstado = "aceptado";
             this.textoAccion = "Pedido Enviado";
@@ -264,8 +243,11 @@ export class ResumenPage {
   }
 
   iniciarContador() {
-    if(!this.pedido.fechaDePedidoAceptado)
+    if(!this.pedido|| this.pedido.fechaDePedidoAceptado === null)
       return;
+
+    console.log('Iniciando contador');
+    console.log('Pedido: ',this.pedido);
 
     let diffInSeconds:  number = 0;
     let minutesLeft: number = 0;
@@ -307,7 +289,7 @@ export class ResumenPage {
         minutesLeft = Math.floor(diffInSeconds / 60);
         this.minutosFaltantes = `${minutesLeft < 10 ? '0'+ minutesLeft : minutesLeft}`;
       }
-    }, 6000);
+    }, 10000);
   }
 
   ionViewDidEnter() {

@@ -281,7 +281,7 @@ export class ListaPedidosComponent implements OnInit {
       background: background,
       heightAuto: false,
       width: "20em",
-      confirmButtonColor: "#28a745",
+      confirmButtonColor: "#0EA06F",
       cancelButtonColor: "#d33",
       confirmButtonText: "Confirmar Pago",
       cancelButtonText: "Cancelar"
