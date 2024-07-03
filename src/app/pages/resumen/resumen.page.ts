@@ -81,6 +81,7 @@ export class ResumenPage {
     this.EnviarIsLoading.emit(true);
     switch (this.pedido.estadoPedido) {
       case EstadoPedido.Abierto:
+        this.pedidoSrv.pedidoActual.estadoPedido = EstadoPedido.Pendiente;
         this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Pendiente)
         .then(() => {
           this.botonDeshabilitado = true;
@@ -101,6 +102,7 @@ export class ResumenPage {
         });
         break;
       case EstadoPedido.Listo:
+        this.pedidoSrv.pedidoActual.estadoPedido = EstadoPedido.Servido;
         this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Servido)
         .then(() => {
           this.encuestaSrv.verLlenarEncuesta = true;
@@ -121,6 +123,7 @@ export class ResumenPage {
         });
         break;
       case EstadoPedido.Servido:
+        this.pedidoSrv.pedidoActual.estadoPedido = EstadoPedido.CuentaSolicitada;
         this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.CuentaSolicitada)
         .then(() => {
           this.msgSrv.ExitoToast('Pronto el mozo se acercará con la cuenta.');
@@ -145,7 +148,7 @@ export class ResumenPage {
           this.pedidoSrv.actualizarEstado(this.pedido,EstadoPedido.Pagado)
           .then(() => {
             this.msgSrv.ExitoToast('Gracias por su visita!.\nEsperamos verte pronto!');
-            this.botonDeshabilitado = false;
+            this.botonDeshabilitado = true;
           })
           .catch(err => {
             console.error(err);
@@ -173,6 +176,9 @@ export class ResumenPage {
         this.botonDeshabilitado = false;
         this.verAvisoPagoQR = false;
         this.mostrarCartel = false;
+        this.encuestaSrv.verLlenarEncuesta = false;
+
+        this.pedidoSrv.pedidoActual.estadoPedido = this.pedido.estadoPedido;
 
         switch (this.pedido.estadoPedido) {
           case EstadoPedido.Abierto:
@@ -216,7 +222,8 @@ export class ResumenPage {
             this.queTiempo = `Entregado`;
             this.botonDeshabilitado = false;
             this.mostrarCartel = true;
-
+            this.encuestaSrv.verLlenarEncuesta = !this.encuestaSrv.listadoEncuesta.some(x =>
+              x.cliente.id === this.usuario!.id && this.cargoEncuestaHoy(x.fecha)) ;
             break;
           case EstadoPedido.CuentaSolicitada:
             this.estadoPedido = "Se solicito la cuenta al Mozo.";
@@ -226,6 +233,8 @@ export class ResumenPage {
             this.queTiempo = `Entregado`;
             this.botonDeshabilitado = false;
             this.mostrarCartel = true;
+            this.encuestaSrv.verLlenarEncuesta = !this.encuestaSrv.listadoEncuesta.some(x =>
+              x.cliente.id === this.usuario!.id && this.cargoEncuestaHoy(x.fecha)) ;
             break;
           case EstadoPedido.Pagado:
             this.estadoPedido = "Pagado.";
@@ -233,6 +242,8 @@ export class ResumenPage {
             this.textoAccion = "Pagado";
             this.botonDeshabilitado = true;
             this.queTiempo = `Entregado`;
+            this.encuestaSrv.verLlenarEncuesta = !this.encuestaSrv.listadoEncuesta.some(x =>
+              x.cliente.id === this.usuario!.id && this.cargoEncuestaHoy(x.fecha)) ;
             break;
           case EstadoPedido.Cerrado:
             this.estadoPedido = "Cerrado.";

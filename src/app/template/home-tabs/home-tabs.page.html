@@ -87,7 +87,7 @@ alignment="end">
           <ion-icon color="primary" name="bar-chart"></ion-icon>
           <ion-label style="padding: 10px;">Estadísticas</ion-label>
         </ion-item>
-        <ion-item *ngIf="verLlenarEncuesta" [button]="true" [detail]="false" (click)="irACreacionEncuesta()">
+        <ion-item *ngIf="encuestaSrv.verLlenarEncuesta" [button]="true" [detail]="false" (click)="irACreacionEncuesta()">
           <ion-icon color="primary" name="newspaper"></ion-icon>
           <ion-label style="padding: 10px;">Llenar Encuesta</ion-label>
         </ion-item>
