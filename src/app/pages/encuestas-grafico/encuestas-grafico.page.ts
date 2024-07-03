@@ -162,7 +162,7 @@ export class EncuestasGraficoPage {
   ngAfterContentChecked() {
     if (this.pieChart) {
       //console.log('PieChart', this.pieChart);
-      //this.pieChart.outerRadius = 90; // Ajusta el radio externo
+      //this.pieChart.outerRadius = 75; // Ajusta el radio externo
      // this.pieChart.height = 100; // Ajusta la altura
       //this.pieChart.width = 100; // Ajusta el ancho
       //this.pieChart.margins = [10, 10, 10, 10]; // Ajusta los márgenes
