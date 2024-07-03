@@ -637,5 +637,5 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
   IrAGraficosEncuestas() {
     this.router.navigate(['graficos-encuestas']);
-  }
+    }
 }

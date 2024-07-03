@@ -1,0 +1,118 @@
+<ion-content [fullscreen]="true">
+  <div class="profile-header">
+      <ion-icon
+      class="icon-volver"
+      name="arrow-back-outline"
+      (click)="volver()"
+    ></ion-icon>
+    <ion-avatar class="profile-avatar">
+      <img [src]="usuario.foto" alt="Profile Picture">
+    </ion-avatar>
+    <!-- <ion-icon class="edit-icon" name="create-outline"></ion-icon> -->
+    <h2 class="profile-name" style="margin-top: 10px;">{{tituloGrafico}}</h2>
+  </div>
+  <ion-grid>
+    <ion-row *ngIf="estrellas">
+      <!-- <ion-title>Estrellas recibidas</ion-title> -->
+      <ion-col size="12">
+      <div class="container-chart" style="width: 100%; height: 100%;">
+          <ngx-charts-pie-chart
+            scheme="forest"
+            [results]="dataCantidadEstrellas"
+            [gradient]="gradient"
+            
+            [doughnut]="isDoughnut"
+            (select)="onSelect($event,'linda')"
+            (activate)="onActivate($event)"
+            (deactivate)="onDeactivate($event)"
+          >
+          </ngx-charts-pie-chart>
+        </div>
+      </ion-col>
+    </ion-row> 
+
+    <ion-row *ngIf="mejorComida">
+      <!-- <ion-title>Mejores comidas más pedidas</ion-title> -->
+      <ion-col size="12">
+        <div class="container-chart" style="width: 100%; height: 100%;">
+          <ngx-charts-bar-vertical
+            scheme="fire"
+            [results]="dataConteoComidas"
+            [gradient]="gradient"
+            [xAxis]="showXAxis"
+            [yAxis]="showYAxis"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            xAxisLabel="Comidas"
+            yAxisLabel="Cantidad de veces pedida"
+            (select)="onSelect($event, 'fea')"
+          >
+          </ngx-charts-bar-vertical>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="mejorSaborComida">
+      <!-- <ion-title>Sabor de la comida recibida</ion-title> -->
+      <ion-col size="12">
+        <div class="container-chart" style="width: 100%; height: 100%;">
+          <ngx-charts-bar-horizontal
+            scheme="forest"
+            [results]="dataConteoSaborComidas"
+            [gradient]="gradient"
+            [xAxis]="showXAxis"
+            [yAxis]="showYAxis"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            xAxisLabel="Cantidad"
+            yAxisLabel="Puntaje comida"
+            (select)="onSelect($event, 'fea')"
+          >
+          </ngx-charts-bar-horizontal>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="recomendaciones">
+      <!-- <ion-title>CosasAgradaron</ion-title> -->
+      <ion-col size="12">
+        <div class="container-chart" style="width: 100%; height: 100%;">
+          <ngx-charts-pie-chart
+          scheme="fire"
+          [results]="dataConteoCosasAgradaron"
+          [gradient]="gradient"
+          [labels]="showLabels"
+          [doughnut]="isDoughnut"
+          (select)="onSelect($event,'linda')"
+          (activate)="onActivate($event)"
+          (deactivate)="onDeactivate($event)"
+        >
+        </ngx-charts-pie-chart>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+  </ion-content>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="secondary">
+      <ion-icon name="chevron-back-circle-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="start">
+      <ion-fab-button (click)="irGraficoEstrellas()" color="tertiary">
+        <img [src]="iconoEstrellas">
+      </ion-fab-button>
+      <ion-fab-button (click)="irGraficoMejorComida()" color="tertiary">
+        <img [src]="iconoMejorComida">
+      </ion-fab-button>
+      <ion-fab-button (click)="irGraficoMejorSaborComida()" color="tertiary">
+        <ion-icon name="list-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="irGraficoCosasAgradaron()" color="tertiary">
+        <ion-icon name="pie-chart-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+  

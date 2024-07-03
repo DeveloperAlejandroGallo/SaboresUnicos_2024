@@ -95,7 +95,8 @@ export class EncuestaService {
   //Usuario
   async nuevo(encuesta: Encuesta): Promise<void> {
 
-
+    
+      
         const docuNuevo = doc(this.coleccionEncuesta);
         const nuevoId = docuNuevo.id;
 
@@ -116,7 +117,10 @@ export class EncuestaService {
           QueCosasAgradaron: encuesta.QueCosasAgradaron, //Checkbox - Que cosas te agradaron. [comida, tragos, atencion, lugar, precio, otros]
           MejorComida: encuesta.MejorComida, //Select - Con nombre de producto tipo comida.
         });
-
+      
+      
+     
+  
 
     //  try {
     //    // Si la última encuesta es de hoy, no permite crear una nueva
