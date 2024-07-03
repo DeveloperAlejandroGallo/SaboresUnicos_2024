@@ -7,6 +7,9 @@ import { Router } from '@angular/router';
 import { AdvancedPieChartComponent, LegendPosition, NgxChartsModule, PieChartComponent, ScaleType } from '@swimlane/ngx-charts';
 import { Platform } from '@ionic/angular';
 import Swal from 'sweetalert2';
+import { Timestamp } from "firebase/firestore";
+
+
 
 @Component({
   selector: 'app-encuestas-grafico',
@@ -14,6 +17,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./encuestas-grafico.page.scss'],
 })
 export class EncuestasGraficoPage {
+
 
   @ViewChild(PieChartComponent) pieChart!: PieChartComponent;
   
@@ -23,31 +27,37 @@ export class EncuestasGraficoPage {
   public estrellas: boolean = true;
   public mejorComida: boolean = false;
   public mejorSaborComida: boolean = false;
+  public recomendaciones: boolean = false;
 
   public iconoMejorComida: string = '../../../assets/img/barchart.png';
   public iconoEstrellas: string = '../../../assets/img/piechart.png';
   // options
   gradient: boolean = true;
   showLegend: boolean = true;
-  showLabels: boolean = true;
+  showLabels: boolean = false;
   isDoughnut: boolean = false;
   legendPosition: LegendPosition = LegendPosition.Below;
 // options
   showXAxis = true;
   showYAxis = true;
   showXAxisLabel = true;
-  xAxisLabel = 'Nombre';
+  xAxisLabel = '';
   showYAxisLabel = true;
-  yAxisLabel = 'Votos';
+  yAxisLabel = '';
+  autoScale = true;
   public radio: number = 6;
   datos: any
+  public tituloGrafico: string = 'Estrellas recibidas';
 
   public usuario: Usuario;
   public listaEncuestas: Array<Encuesta> = new Array<Encuesta>;
-  dataCantidadEstrellas!: Array<{name: string, value: number, label: string}>;
-  dataConteoComidas!: Array<{name: string, value: number, label: string}>;
-  dataConteoSaborComidas!: Array<{name: string, value: number, label: string}>;
+  public dataCantidadEstrellas!: Array<{name: string, value: number, label: string}>;
+  public dataConteoComidas!: Array<{name: string, value: number, label: string}>;
+  public dataConteoSaborComidas!: Array<{name: string, value: number, label: string}>;
+  public dataConteoCosasAgradaron!: Array<{name: string, value: number, label: string}>;
+ 
 
+ 
   constructor(
     private auth: AuthService,
     private encuestaService: EncuestaService,
@@ -62,7 +72,9 @@ export class EncuestasGraficoPage {
 
       let conteoEstrellas: Record<number, number> = {};
       let conteoComidas: Record<string, number> = {}; // Definición explícita del tipo
-      let conteoSaborComidas: Record<number, number> = {}; // Definición explícita del tipo
+      let conteoSaborComidas: Record<number, number> = {}; 
+      let conteoSaborCosasAgradaron: Record<string, number> = {}; 
+     
 
 
       this.listaEncuestas.forEach(encuesta => {
@@ -74,8 +86,8 @@ export class EncuestasGraficoPage {
       });
 
       this.dataCantidadEstrellas = Object.entries(conteoEstrellas).map(([estrellas, cantidad]) => ({
-        name: 'Cantidad estrellas' + cantidad.toString(),
-        label: `${cantidad} Estrellas`,
+        name: estrellas + ' estrellas',
+        label: ``,
         value: cantidad
       }));
 
@@ -102,10 +114,14 @@ export class EncuestasGraficoPage {
       });
 
       this.dataConteoSaborComidas = Object.entries(conteoSaborComidas).map(([puntos, cantidad]) => ({
-        name: 'Cantidad puntos' + cantidad.toString(),
+        name: puntos + ' puntos',
         label: `${cantidad} puntos`,
         value: cantidad
       }));
+
+
+      this.prepareDataCosasAgradaron();
+      
 
       // var cont = 1;
       // this.dataCantidadEstrellas = encuestas.filter(x=>x.cantidadEstrellas).map(estrella => {
@@ -121,13 +137,35 @@ export class EncuestasGraficoPage {
 
   }
 
+  prepareDataCosasAgradaron() {
+    let conteoAgradados: Record<string, number> = {};
+  
+    this.listaEncuestas.forEach(encuesta => {
+      encuesta.QueCosasAgradaron.forEach(agradado => {
+        if (!conteoAgradados[agradado.cosa]) {
+          conteoAgradados[agradado.cosa] = 1;
+        } else {
+          conteoAgradados[agradado.cosa]++;
+        }
+      });
+    });
+  
+    this.dataConteoCosasAgradaron = Object.entries(conteoAgradados).map(([cosa, cantidad]) => ({
+      name: cosa,
+      label: cosa,
+      value: cantidad
+    }));
+  }
+
   ngAfterContentChecked() {
     if (this.pieChart) {
       //console.log('PieChart', this.pieChart);
-      this.pieChart.outerRadius = 110; // Ajusta el radio externo
-      // this.pieChart.height = 100; // Ajusta la altura
-      // this.pieChart.width = 100; // Ajusta el ancho
-      this.pieChart.margins = [10, 10, 10, 10]; // Ajusta los márgenes
+      //this.pieChart.outerRadius = 90; // Ajusta el radio externo
+     // this.pieChart.height = 100; // Ajusta la altura
+      //this.pieChart.width = 100; // Ajusta el ancho
+      //this.pieChart.margins = [10, 10, 10, 10]; // Ajusta los márgenes
+      //this.pieChart.innerRadius = 100;
+      //this.showLabels = true;
     }
   }
 
@@ -150,12 +188,13 @@ export class EncuestasGraficoPage {
 
     var posicion: number = parseInt(data.name) - 1;
 
-    Swal.fire({
-       //title:  this.dataCantidadEstrellas[posicion].label,
-      text: 'Cantidad de veces votado: ' + data.value,
-      showCloseButton: true,
-      heightAuto: false,
-    });
+    // Swal.fire({
+    //   title:  this.dataCantidadEstrellas[posicion].label,
+    //   text: ': ' + data.value,
+    //   showCloseButton: true,
+    //   heightAuto: false,
+    //   confirmButtonText: 'Confirmar'
+    // });
   }
 
   onActivate(data: any): void {
@@ -175,19 +214,37 @@ export class EncuestasGraficoPage {
       this.estrellas = true;
       this.mejorComida = false;
       this.mejorSaborComida = false;
+      this.recomendaciones = false;
+      this.tituloGrafico = 'Estrellas recibidas';
     }
 
     irGraficoMejorComida(){
       this.estrellas = false;
       this.mejorComida = true;
       this.mejorSaborComida = false;
+      this.recomendaciones = false;
+      this.tituloGrafico = 'Mejor comida pedida';
     }
 
     irGraficoMejorSaborComida(){
       this.estrellas = false;
       this.mejorComida = false;
       this.mejorSaborComida = true;
+      this.recomendaciones = false;
+      this.tituloGrafico = 'Puntajes de sabores de la comida';
+
     }
+
+    irGraficoCosasAgradaron(){
+      this.estrellas = false;
+      this.mejorComida = false;
+      this.mejorSaborComida = false;
+      this.recomendaciones = true;
+      this.tituloGrafico = 'Qué cosas fueron agradables';
+
+    }
+
+   
 
 
   volver() {

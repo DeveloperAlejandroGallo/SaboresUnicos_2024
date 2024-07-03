@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content [fullscreen]="true">
   <div class="profile-header">
       <ion-icon
       class="icon-volver"
@@ -9,17 +9,18 @@
       <img [src]="usuario.foto" alt="Profile Picture">
     </ion-avatar>
     <!-- <ion-icon class="edit-icon" name="create-outline"></ion-icon> -->
+    <h2 class="profile-name" style="margin-top: 10px;">{{tituloGrafico}}</h2>
   </div>
   <ion-grid>
     <ion-row *ngIf="estrellas">
-      <ion-title>Estrellas recibidas</ion-title>
+      <!-- <ion-title>Estrellas recibidas</ion-title> -->
       <ion-col size="12">
       <div class="container-chart" style="width: 100%; height: 100%;">
           <ngx-charts-pie-chart
             scheme="forest"
             [results]="dataCantidadEstrellas"
             [gradient]="gradient"
-            [labels]="showLabels"
+            
             [doughnut]="isDoughnut"
             (select)="onSelect($event,'linda')"
             (activate)="onActivate($event)"
@@ -31,7 +32,7 @@
     </ion-row> 
 
     <ion-row *ngIf="mejorComida">
-      <ion-title>Mejores comidas más pedidas</ion-title>
+      <!-- <ion-title>Mejores comidas más pedidas</ion-title> -->
       <ion-col size="12">
         <div class="container-chart" style="width: 100%; height: 100%;">
           <ngx-charts-bar-vertical
@@ -42,8 +43,8 @@
             [yAxis]="showYAxis"
             [showXAxisLabel]="showXAxisLabel"
             [showYAxisLabel]="showYAxisLabel"
-            [xAxisLabel]="xAxisLabel"
-            [yAxisLabel]="yAxisLabel"
+            xAxisLabel="Comidas"
+            yAxisLabel="Cantidad de veces pedida"
             (select)="onSelect($event, 'fea')"
           >
           </ngx-charts-bar-vertical>
@@ -52,42 +53,46 @@
     </ion-row>
 
     <ion-row *ngIf="mejorSaborComida">
-      <ion-title>Sabor de la comida recibida</ion-title>
+      <!-- <ion-title>Sabor de la comida recibida</ion-title> -->
       <ion-col size="12">
         <div class="container-chart" style="width: 100%; height: 100%;">
           <ngx-charts-bar-horizontal
-            scheme="fire"
+            scheme="forest"
             [results]="dataConteoSaborComidas"
             [gradient]="gradient"
             [xAxis]="showXAxis"
             [yAxis]="showYAxis"
             [showXAxisLabel]="showXAxisLabel"
             [showYAxisLabel]="showYAxisLabel"
-            [xAxisLabel]="xAxisLabel"
-            [yAxisLabel]="yAxisLabel"
+            xAxisLabel="Cantidad"
+            yAxisLabel="Puntaje comida"
             (select)="onSelect($event, 'fea')"
           >
           </ngx-charts-bar-horizontal>
         </div>
       </ion-col>
     </ion-row>
+
+    <ion-row *ngIf="recomendaciones">
+      <!-- <ion-title>CosasAgradaron</ion-title> -->
+      <ion-col size="12">
+        <div class="container-chart" style="width: 100%; height: 100%;">
+          <ngx-charts-pie-chart
+          scheme="fire"
+          [results]="dataConteoCosasAgradaron"
+          [gradient]="gradient"
+          [labels]="showLabels"
+          [doughnut]="isDoughnut"
+          (select)="onSelect($event,'linda')"
+          (activate)="onActivate($event)"
+          (deactivate)="onDeactivate($event)"
+        >
+        </ngx-charts-pie-chart>
+        </div>
+      </ion-col>
+    </ion-row>
   </ion-grid>
   
-    <!-- <ion-card>
-      <ion-card-content>
-        <ion-button expand="full" (click)="cambioGráfico()">
-          {{ gráficoActual === 'bar'? 'Ver Gráfico de Torta' : 'Ver Gráfico de Barras' }}
-        </ion-button>
-        <div style='height:50%;width:100%;'>
-          <canvas id="myChart" width="400" height="400"></canvas>
-        </div>
-        <ion-card id='card' style='display:none;'>
-          <ion-card-content>
-            <img src='' alt="" height="100%" width="100%" id='imagen'>
-          </ion-card-content>
-        </ion-card>
-      </ion-card-content>
-    </ion-card> -->
   </ion-content>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
@@ -102,34 +107,12 @@
         <img [src]="iconoMejorComida">
       </ion-fab-button>
       <ion-fab-button (click)="irGraficoMejorSaborComida()" color="tertiary">
-        <ion-icon name="radio-button-off-outline"></ion-icon>
+        <ion-icon name="list-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="irGraficoCosasAgradaron()" color="tertiary">
+        <ion-icon name="pie-chart-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
 
-  <!-- <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button color="secondary">
-      <ion-icon name="mail-open"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="start">
-      <ion-fab-button (click)="loginAutomatico('duenio')">
-        <ion-icon name="glasses" color="dark"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button (click)="loginAutomatico('cliente')">
-        <ion-icon name="person-circle"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button (click)="loginAutomatico('maitre')">
-        <ion-icon name="download"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button (click)="loginAutomatico('mozo')">
-        <ion-icon name="footsteps"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button (click)="loginAutomatico('cocinero')">
-        <ion-icon name="pizza"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button (click)="loginAutomatico('barman')">
-        <ion-icon name="beer"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
-  </ion-fab>
-   -->
+  
