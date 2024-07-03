@@ -321,27 +321,43 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
               break;
             case "Mesa":
-              
               if (this.validacionesMesa(datos[1])) {
-                this.mesasSvc.allUsers$.subscribe({
-                  next: (data) => {
-                    let mesa = data.find(x => x.numero === Number(datos[1]));
-                    this.pedidoSrv.escucharPedidoId(mesa?.idPedidoActual!).subscribe({
-                      next: (data) => {
-                        this.pedido = data;
-                        this.verJuegos = true;
-                        this.verChat = true;
-                        this.verEncuesta = true;
-                        this.verMenu = true;
-                        this.pedidoSrv.actualizarEstado(this.pedido, EstadoPedido.Abierto);
-                        this.router.navigate(['home-tabs/menu-productos']);
-                      }
-                    });
-                  },
-                  error: (err) => {
-                    console.error(err);
-                  }
-                });
+                this.pedido = this.pedidoSrv.listadoPedidos.find(
+                  x => x.cliente.id === this.auth.usuarioActual!.id
+                    && x.estadoPedido == EstadoPedido.MesaAsignada)!;
+
+                    if(this.pedido){
+                      this.pedido = data;
+                      this.verJuegos = true;
+                      this.verChat = true;
+                      this.verEncuesta = true;
+                      this.verMenu = true;
+                      console.log("Actualizando a Abierto");
+                      this.pedidoSrv.actualizarEstado(this.pedido, EstadoPedido.Abierto);
+                      this.router.navigate(['home-tabs/menu-productos']);
+                    }
+
+                // this.mesasSvc.allUsers$.subscribe({
+                //   next: (data) => {
+                //     let mesa = data.find(x => x.numero === Number(datos[1]));
+                //     this.pedidoSrv.escucharPedidoId(mesa?.idPedidoActual!).subscribe({
+                //       next: (data) => {
+                //         this.pedido = data;
+                //         this.verJuegos = true;
+                //         this.verChat = true;
+                //         this.verEncuesta = true;
+                //         this.verMenu = true;
+                //         if (this.pedido.estadoPedido == EstadoPedido.MesaAsignada) {
+                //           this.pedidoSrv.actualizarEstado(this.pedido, EstadoPedido.Abierto);
+                //         }
+                //         this.router.navigate(['home-tabs/menu-productos']);
+                //       }
+                //     });
+                //   },
+                //   error: (err) => {
+                //     console.error(err);
+                //   }
+                // });
 
               }
               break;
