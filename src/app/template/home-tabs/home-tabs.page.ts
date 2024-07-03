@@ -94,23 +94,22 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       console.log(this.pedido);
 
     if(this.pedido) {
-      this.pedidoSrv.escucharPedidoId(this.pedido.id);
-      this.pedidoSrv.pedido$.subscribe(pedido => {
+      this.pedidoSrv.escucharPedidoId(this.pedido.id).subscribe(pedido => {
         this.pedido = pedido;
         this.verLlenarEncuesta = false;
-        if(this.pedido.estadoPedido == EstadoPedido.Servido || this.pedido.estadoPedido == EstadoPedido.CuentaSolicitada || this.pedido.estadoPedido == EstadoPedido.Pagado){
-          this.encuestaSrv.allEncuestas$.subscribe({
-            next: (data) => {
-              this.verLlenarEncuesta = !data.some(x =>
-                x.cliente.id === this.usuarioLogueado!.id && this.cargoEncuestaHoy(x.fecha)) ;
-            },
-            error: (err) => {
-              console.error(err);
-            }
-          });
-        }
+
       });
     }
+
+    this.encuestaSrv.allEncuestas$.subscribe({
+      next: (data) => {
+        this.encuestaSrv.verLlenarEncuesta = !data.some(x =>
+          x.cliente.id === this.usuarioLogueado!.id && this.cargoEncuestaHoy(x.fecha)) ;
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
 
 
     // console.log(this.usuarioLogueado);
@@ -325,9 +324,10 @@ export class HomeTabsPage implements OnInit, OnDestroy {
                 this.pedido = this.pedidoSrv.listadoPedidos.find(
                   x => x.cliente.id === this.auth.usuarioActual!.id
                     && x.estadoPedido == EstadoPedido.MesaAsignada)!;
+                    console.log("Pedido encontrado:");
+                    console.log(this.pedido);
 
                     if(this.pedido){
-                      this.pedido = data;
                       this.verJuegos = true;
                       this.verChat = true;
                       this.verEncuesta = true;
@@ -336,28 +336,6 @@ export class HomeTabsPage implements OnInit, OnDestroy {
                       this.pedidoSrv.actualizarEstado(this.pedido, EstadoPedido.Abierto);
                       this.router.navigate(['home-tabs/menu-productos']);
                     }
-
-                // this.mesasSvc.allUsers$.subscribe({
-                //   next: (data) => {
-                //     let mesa = data.find(x => x.numero === Number(datos[1]));
-                //     this.pedidoSrv.escucharPedidoId(mesa?.idPedidoActual!).subscribe({
-                //       next: (data) => {
-                //         this.pedido = data;
-                //         this.verJuegos = true;
-                //         this.verChat = true;
-                //         this.verEncuesta = true;
-                //         this.verMenu = true;
-                //         if (this.pedido.estadoPedido == EstadoPedido.MesaAsignada) {
-                //           this.pedidoSrv.actualizarEstado(this.pedido, EstadoPedido.Abierto);
-                //         }
-                //         this.router.navigate(['home-tabs/menu-productos']);
-                //       }
-                //     });
-                //   },
-                //   error: (err) => {
-                //     console.error(err);
-                //   }
-                // });
 
               }
               break;
@@ -448,6 +426,13 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   }
   esValidoParaPropina(): boolean {
 
+    this.pedido = this.pedidoSrv.listadoPedidos.find(
+      x => x.cliente.id === this.auth.usuarioActual!.id
+        && x.estadoPedido == (EstadoPedido.Servido || EstadoPedido.CuentaSolicitada))!;
+        console.log("Pedido encontrado:");
+        console.log(this.pedido);
+
+
     if (this.pedido === (null || undefined)) {
       this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
       return false;
@@ -483,7 +468,13 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   }
   esValidoParaPago(): boolean {
 
-    if (this.pedido === (null || undefined)) {
+    this.pedido = this.pedidoSrv.listadoPedidos.find(
+      x => x.cliente.id === this.auth.usuarioActual!.id
+        && x.estadoPedido == (EstadoPedido.Servido || EstadoPedido.CuentaSolicitada))!;
+        console.log("Pedido encontrado:");
+        console.log(this.pedido);
+
+    if (this.pedido === null || this.pedido === undefined) {
       this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
       return false;
     }
@@ -498,7 +489,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       return false;
     }
 
-    if (this.pedido.estadoPedido != EstadoPedido.CuentaSolicitada) {
+    if (this.pedido.estadoPedido !== EstadoPedido.CuentaSolicitada && this.pedido.estadoPedido !== EstadoPedido.Servido) {
       this.msgService.Info("Primero solicita la cuenta al mozo.");
       return false;
     }

@@ -65,11 +65,9 @@ export class MenuProductosPage implements OnInit {
 
     this.LlenarListasDeProductos();
 
-
     this.pedidoSrv.pedido$.subscribe(data => {
         this.pedido = data;
         this.subtotal = this.pedido.productos.length != 0 ? this.pedido.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0) : 0;
-
       }
     )
 

@@ -204,6 +204,7 @@ export class EncuestaClientePage implements OnInit {
 
       this.encuestasSvc.nuevo(encuesta).then(() => {
         console.log("Encuesta Guardada");
+          this.encuestasSvc.verLlenarEncuesta = false;
         }, (error) => {
           console.error(error);
         });

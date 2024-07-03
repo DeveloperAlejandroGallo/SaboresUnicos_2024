@@ -47,6 +47,8 @@ export class EncuestaService {
 
   public listadoEncuesta!: Array<Encuesta>;
 
+  public verLlenarEncuesta: boolean = false;
+
 
   get allEncuestas$(): Observable<Encuesta[]> {
     const ref = collection(this.firestore, 'encuestas');
