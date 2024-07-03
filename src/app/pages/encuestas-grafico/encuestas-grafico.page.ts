@@ -231,7 +231,7 @@ export class EncuestasGraficoPage {
       this.mejorComida = false;
       this.mejorSaborComida = true;
       this.recomendaciones = false;
-      this.tituloGrafico = 'Puntajes de sabores de la comida';
+      this.tituloGrafico = 'Puntuaciones de Sabor';
 
     }
 
