@@ -55,12 +55,12 @@ export class EncuestaClientePage implements OnInit {
   public stars: string[] = [];
   public imagenSaborComida: string = '../../../assets/img/1.png';
   ngmensaje!:string ;
-  
 
-  constructor(private encuestasSvc : EncuestaService, private auth: AuthService, private fb:FormBuilder,  
-    private productoService: ProductoService,private router: Router,private msjSrv: MensajesService) { 
+
+  constructor(private encuestasSvc : EncuestaService, private auth: AuthService, private fb:FormBuilder,
+    private productoService: ProductoService,private router: Router,private msjSrv: MensajesService) {
     this.usuario = this.auth.usuarioActual!;
-    console.log(this.usuario); 
+    console.log(this.usuario);
     this.updateStarRating();
     this.LlenarListasDeProductos();
   }
@@ -73,7 +73,7 @@ export class EncuestaClientePage implements OnInit {
     });
   }
 
-  
+
 
   ngOnInit() {
     this.encuestaForm = this.fb.group({
@@ -89,7 +89,7 @@ export class EncuestaClientePage implements OnInit {
     this.cantidadEstrellas = rating;
     this.updateStarRating();
     console.log("Cantidad las estrellas: "+ this.cantidadEstrellas);
-    
+
   }
 
   updateStarRating() {
@@ -115,12 +115,12 @@ export class EncuestaClientePage implements OnInit {
     else if(this.puntajeSaborDeLaComida > 3 && this.puntajeSaborDeLaComida <=5) {
       this.textoSaborDeLaComida = "Estaba bien ";
       this.imagenSaborComida = '../../../assets/img/5.png';
-      
+
     }
     else if(this.puntajeSaborDeLaComida  >= 6 &&  this.puntajeSaborDeLaComida  <= 7) {
       this.textoSaborDeLaComida = "Estaba rica ";
       this.imagenSaborComida = '../../../assets/img/7.png';
-      
+
     }else{
       this.textoSaborDeLaComida = "Estaba muy rica ";
       this.imagenSaborComida = '../../../assets/img/10.png';
@@ -130,20 +130,20 @@ export class EncuestaClientePage implements OnInit {
 
   getCheckBoxValuesChange(){
     let checkControls = this.listaDeCosas.filter(result=>result.si==true);
-    console.log('Cosas que le agradaron al cliente:', checkControls);  
+    console.log('Cosas que le agradaron al cliente:', checkControls);
     this.cosasQueAgradaronElegidas = checkControls;
   }
 
   checkValorRecomendarLugar(event: any){
     this.valorRecomendarLugar = event.detail.value;
     console.log(this.valorRecomendarLugar);
-    
+
   }
 
   getSelectValuesChange(){
     this.comidaFavorita = this.encuestaForm.get('mejorComida')!.value;
     console.log(this.comidaFavorita);
-    
+
   }
 
   tomarFoto() {
@@ -176,8 +176,8 @@ export class EncuestaClientePage implements OnInit {
 
         this.selectedPhotos.push(this.imageTomadaURL);
         console.log(this.selectedPhotos);
-        
-        
+
+
       })
       .catch((err) => {
         console.log(err);
@@ -199,10 +199,15 @@ export class EncuestaClientePage implements OnInit {
         RecomendariasElLugar: this.valorRecomendarLugar,
         QueCosasAgradaron: this.cosasQueAgradaronElegidas,
         MejorComida: this.comidaFavorita
-  
+
       };
-  
-      this.encuestasSvc.nuevo(encuesta);
+
+      this.encuestasSvc.nuevo(encuesta).then(() => {
+        console.log("Encuesta Guardada");
+        }, (error) => {
+          console.error(error);
+        });
+
       this.encuestaForm.reset()
       this.selectedPhotos = [];
       this.cantidadEstrellas = 0;
@@ -212,10 +217,10 @@ export class EncuestaClientePage implements OnInit {
       })
     } catch (error) {
       console.log(error);
-      
+
     }
-   
-   
+
+
 
   //   const mensaje: Mensaje = {
   //     id: "",
@@ -242,7 +247,7 @@ export class EncuestaClientePage implements OnInit {
   //         console.error(error);
   //       }
   //     });
-  //   } 
+  //   }
   //   this.ngmensaje = "";
 
    }

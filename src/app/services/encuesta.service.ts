@@ -42,7 +42,7 @@ export class EncuestaService {
 
   constructor(private firestore: Firestore, private msjService:MensajesService) {
     this.coleccionEncuesta = collection(this.firestore, this.colectionName);
-    
+
   }
 
   public listadoEncuesta!: Array<Encuesta>;
@@ -93,11 +93,14 @@ export class EncuestaService {
   //Usuario
   async nuevo(encuesta: Encuesta): Promise<void> {
 
-    
+
         const docuNuevo = doc(this.coleccionEncuesta);
         const nuevoId = docuNuevo.id;
 
         encuesta.id = nuevoId;
+
+        console.log('Encuesta: Guardando');
+        console.log(encuesta);
 
         return setDoc(docuNuevo, {
           id: nuevoId,
@@ -111,10 +114,7 @@ export class EncuestaService {
           QueCosasAgradaron: encuesta.QueCosasAgradaron, //Checkbox - Que cosas te agradaron. [comida, tragos, atencion, lugar, precio, otros]
           MejorComida: encuesta.MejorComida, //Select - Con nombre de producto tipo comida.
         });
-      
-      
-     
-  
+
 
     //  try {
     //    // Si la última encuesta es de hoy, no permite crear una nueva
@@ -122,8 +122,8 @@ export class EncuestaService {
     //         this.msjService.Info('Ya has realizado una encuesta hoy.');
     //      }else{
 
-         
-      
+
+
     //     // Si no existe ninguna encuesta para este usuario hoy, proceder a crear una nueva
     //     const docuNuevo = doc(this.coleccionEncuesta);
     //     const nuevoId = docuNuevo.id;
@@ -142,13 +142,13 @@ export class EncuestaService {
     //       QueCosasAgradaron: encuesta.QueCosasAgradaron, //Checkbox - Que cosas te agradaron. [comida, tragos, atencion, lugar, precio, otros]
     //       MejorComida: encuesta.MejorComida, //Select - Con nombre de producto tipo comida.
     //     });
-      
+
     //   }
     // } catch (error) {
     //   console.error('Error al verificar la existencia de una encuesta para hoy:', error);
     //   throw error;
     // }
-  
+
 
 
     // const docuNuevo = doc(this.coleccionEncuesta);
@@ -158,7 +158,7 @@ export class EncuestaService {
     // encuesta.id = nuevoId;
 
     // return setDoc(docuNuevo, {
-      
+
     //   id: nuevoId,
     //   cliente: encuesta.cliente,
     //   fecha: encuesta.fecha, // solo 1 por dia
