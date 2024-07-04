@@ -92,7 +92,7 @@ Gonzalez, Martín
 <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Cerrado.jpg" height="500">
 
 
-## **BITACORA DE APROBACIÓN** 🛠️
+## **BITACORA DE APROBACIÓN** 🎓🎓🎓
 
 <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Aprobacion%201%20a%203.png" height="800">
 
