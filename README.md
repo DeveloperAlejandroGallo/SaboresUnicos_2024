@@ -62,34 +62,34 @@ Gonzalez, Martín
 **Aceptar Pedido:**
 > _Acción llevada por el Mozo, el cual al aceptarlo deja el pedido en estado **ACEPTADO** y le llega a cada Empleado sea Cocinero o Bartender,
 > el producto que debe preprar._
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Aceptado.png" height="500">
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Aceptado.jpg" height="500">
 
 **Preparando el Pedido:**
 > _Acción llevada por el Cocinero o Bartender. El cual se activa y deja el pedido en estado **EN PREPARACION**, en el momento en el que el
 > primer Empleado comienza a preparar alguno de los productos._
 > _En este momento el Cliente comienza a ver un reloj en cuenta regresiva de llegada de supedido._
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/EnPreparacion.png" height="500">
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/EnPreparacion.jpg" height="500">
 
 **Pedido Listo:**
 > _Cuando se termina de prepara el último producto, el estado del pedido cambia a **LISTO**, estado que avisa al mozo que ya puede llevar el pedido._
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Listo.png" height="500">
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Listo.jpg" height="500">
 
 **Pedido Confirmado**
 > _Acción llevada por el Cliente para confirmar la llegada del pedido a la mesa. El cual deja el pedido en estado **CONFIRMADO**, dando opcion al clinete de
 > poder cargar una Encuesta, Ingresar Propina por QR o Solicitar la Cuenta_
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Confirmado.png" height="500">
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Confirmado.jpg" height="500">
 
 **Cuenta Solicitada**
 > _Acción llevada por el Cliente el cual genera un aviso al Mozo informando los tatales, dejando el pedido en estado **CUENTA SOLICITADA** y dando la opcion a Pagar con QR o Confirmar que se pagó con Efectivo o Tarjeta_
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/CuentaSolicitada.png" height="500">
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/CuentaSolicitada.jpg" height="500">
 
 **Pagando**
 > _Una vez pago con QR o Presionando el Boton, el estado cambia a **PAGADO** avisando al Mozo y dandole la opción al mismo de confirmar el pago_
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Pagado.png" height="500">
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Pagado.jpg" height="500">
 
 **Confirmando Pago**
 > _Una vez que el Mozo confirma el pago, el estado del pedido queda **CERRADO**, dando fin al flujo de uso._
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Cerrado.png" height="500">
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Cerrado.jpg" height="500">
 
 
 ## **BITACORA DE APROBACIÓN** 🛠️
