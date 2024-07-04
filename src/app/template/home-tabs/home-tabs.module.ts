@@ -53,6 +53,10 @@ import { BarcodeScanningModalComponent } from './barcode-scanning-modal.componen
             path: 'encuesta-cliente',
             loadChildren: () => import('../../pages/encuesta-cliente/encuesta-cliente.module').then( m => m.EncuestaClientePageModule)
           },
+          {
+            path: 'encuestas-grafico',
+            loadChildren: () => import('../../pages/encuestas-grafico/encuestas-grafico.module').then( m => m.EncuestasGraficoPageModule)
+          },
           //path: otra pagina
           {
             path: '',

@@ -1,11 +1,11 @@
 <body>
   <ion-header><app-header></app-header> </ion-header>
   <ion-content>
-    <ion-title class="titulo" color="primary"
-      >¡Queremos saber tu opinión!</ion-title
+    <ion-title class="titulo" color="primary">
+      <div class="ion-text-wrap">¡Queremos saber tu opinión!</div></ion-title
     >
 
-    <div class="formulario">
+    <div class="formulario" style="overflow-y: auto; max-height: 72vh">
       <ion-card class="mi-ion-card">
         <!-- <form [formGroup]="" (ngSubmit)="()"></form> -->
         <ion-card-content>
@@ -13,26 +13,28 @@
             <ion-grid>
               <ion-row>
                 <ion-col size="12">
-                  <div >
-                    <swiper-container
-                      pager="true"
-                     [loop]="true"
-                      [pagination]="true"
-                      enable="false"
-                    >
-                      <swiper-slide *ngFor="let imagen of selectedPhotos">
-                        <img [src]="imagen" class="producto-imagen" loading="lazy"/>
-                      </swiper-slide>
-                    </swiper-container>
+                  <div class="swiper-container">
+                    <swiper-slide *ngFor="let imagen of selectedPhotos">
+                      <div class="foto-contenedor">
+                        <img [src]="imagen" class="producto-imagen" />
+                      </div>
+                    </swiper-slide>
                   </div>
-                  <ion-button (click)="tomarFoto()"> Tomar Foto</ion-button>
-                
+                  <div class="boton-centrado">
+                    <ion-button (click)="tomarFoto()"> Tomar Foto</ion-button>
+                  </div>
                 </ion-col>
               </ion-row>
 
               <!-- Calificaicon del servicio -->
               <ion-row>
-                <ion-col size="12">
+                <ion-col
+                  size="12"
+                  size-sm="6"
+                  size-md="4"
+                  size-lg="3"
+                  size-xl="2"
+                >
                   <div class="labels">
                     <label>Calificación del Servicio</label>
                   </div>
@@ -60,7 +62,7 @@
               <ion-row>
                 <ion-col size="12">
                   <div class="labels">
-                    <label>Sabor de la Comida (1-10)</label>
+                    <label>Sabor de la Comida<br>(1-10)</label>
                   </div>
                   <ion-item lines="none" class="item-background-color">
                     <ion-range
@@ -81,6 +83,12 @@
                   <div class="label-sabor-puntaje-comida">
                     <label
                       >{{textoSaborDeLaComida}}
+                      <img
+                        [src]="imagenSaborComida"
+                        alt=""
+                        width="25"
+                        height="25"
+                      />
                       ({{puntajeSaborDeLaComida}})</label
                     >
                   </div>
@@ -113,7 +121,8 @@
                       <ion-item>
                         <label>Sí</label>
                         <ion-radio
-                          slot="start"
+                        slot="start"
+                        justify="start"
                           value="Sí"
                           aria-label="Sí"
                         ></ion-radio>
@@ -121,7 +130,8 @@
                       <ion-item>
                         <label>No</label>
                         <ion-radio
-                          slot="start"
+                        slot="start"
+                        justify="end"
                           value="No"
                           aria-label="No"
                         ></ion-radio>
@@ -154,6 +164,7 @@
                   >
                     <ion-checkbox
                       slot="start"
+                      labelPlacement="end"
                       formControlName="cosasAgradaron"
                       [(ngModel)]="cosa.si"
                       (ionChange)="getCheckBoxValuesChange()"
@@ -174,7 +185,7 @@
               <!-- Mejor comida -->
               <ion-row>
                 <ion-col size="12">
-                  <ion-item lines="none" class="item-background-color">
+                  <ion-item class="item-background-color">
                     <div class="label-mejor-comida">
                       <label>¿Cuál fue la mejor comida?</label>
                     </div>
@@ -190,7 +201,7 @@
                         *ngFor="let producto of listaDeProductos"
                         [value]="producto"
                       >
-                        Nombre: {{producto.nombre}} - Tipo: {{producto.tipo}}
+                        {{producto.nombre}} - Tipo: {{producto.tipo}}
                       </ion-select-option>
                     </ion-select>
                   </ion-item>
@@ -219,16 +230,34 @@
               <!-- Comentarios -->
               <ion-row>
                 <ion-col size="12">
+                  <div class="labels">
+                    <label>¡Déjanos un comentario!</label>
+                  </div>
                   <ion-item>
                     <!-- <ion-label position="floating">Comentario</ion-label> -->
-                    <ion-textarea label="Comentarios"></ion-textarea>
+                    <ion-input
+                      type="text"
+                      value="incomplete"
+                      id="floatingInput"
+                      placeholder="Escriba aquí su mensaje"
+                      [(ngModel)]="ngmensaje"
+                      formControlName="messageCtrl"
+                    >
+                    </ion-input>
                   </ion-item>
                 </ion-col>
               </ion-row>
             </ion-grid>
           </form>
+          <div class="boton-centrado">
+            <ion-button (click)="enviarEncuesta()">Enviar encuesta</ion-button>
+          </div>
         </ion-card-content>
       </ion-card>
     </div>
   </ion-content>
+
+  <div class="custom-spinner" *ngIf="isLoading" >
+    <img src="../../../assets/spinner.png" alt="Spinner">
+</div>
 </body>

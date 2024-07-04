@@ -202,15 +202,15 @@ ion-item {
 
 .tiempo{
   background-color: transparent !important;
-  // border-color: var(--ion-color-primary) ;
-  // border-width: 1px;
-  // border: #bf0000;
   text-align: center;
   width: 100%;
   padding: 0;
   color:#bf0000;
   box-shadow: none;
-
+  --padding-start: 0px;
+  ion-icon{
+    margin: 0px 15px;
+  }
 
 }
 

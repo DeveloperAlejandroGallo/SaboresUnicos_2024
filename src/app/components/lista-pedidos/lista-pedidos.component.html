@@ -32,9 +32,14 @@
                 {{pedido.estadoPedido }}
               </ion-chip>
             </div>
-            <ion-note style="font-size: medium; color: black" color="medium">
-              {{ formatearFecha(pedido.fechaIngreso) }}
-            </ion-note>
+            <div class="fecha-total-pedido">
+              <ion-note style="font-size: medium; color: black" color="medium">
+                {{ pedido.fechaIngreso != null ? formatearFecha(pedido.fechaIngreso) : ' ' }}
+              </ion-note>
+              <ion-note style="font-size: medium; color: black ; margin: 2px 5px; font-weight: bold;">
+                {{ 'Total: ' + (pedido.total | monedaPesos) }}
+              </ion-note>
+            </div>
           </div>
         </ion-label>
       </ion-item>
@@ -69,19 +74,25 @@
               <a id="open-modal" (click)="openModal(pedido.productos)">
                 <ion-icon name="list-circle"></ion-icon> Productos
               </a>
-              
+
               <ion-chip [ngClass]="getEstadoPedidoClass(pedido)">
                 {{ pedido.estadoPedido }}
               </ion-chip>
             </div>
-            <ion-note style="font-size: medium; color: black" color="medium">
-              {{ formatearFecha(pedido.fechaIngreso) }}
-            </ion-note>
+            <div class="fecha-total-pedido">
+              <ion-note style="font-size: medium; color: black;" color="medium">
+                {{ pedido.fechaDePedidoAceptado != null ? formatearFecha(pedido.fechaDePedidoAceptado) : ' ' }}
+              </ion-note>
+              <ion-note style="font-size: medium; color: black ; margin: 2px 5px; font-weight: bold;">
+                {{ 'Total: ' + (pedido.total | monedaPesos) }}
+              </ion-note>
+            </div>
+
           </div>
         </ion-label>
       </ion-item>
-      <ion-item-options side="start" >
-        <ion-item-option (click)="accionPedido(pedido)" color="success" >
+      <ion-item-options side="start">
+        <ion-item-option (click)="accionPedido(pedido)" color="success">
           <ion-icon style="font-size: x-large" slot="top" [name]="getItemOptionIcon(pedido)"></ion-icon>
           {{ getItemOptionText(pedido) }}
         </ion-item-option>
@@ -199,7 +210,8 @@
 
 <ng-template #noHayPedidos>
   <ion-item style="margin-top: 5px;" slot="content" *ngIf="!isLoadingList">
-    <ion-label color="light" class="ion-text-center">Todavia no hay pedidos{{ opcionSeleccionada == "Mis_pedidos" ? '' : (' ' + opcionSeleccionada) }}.</ion-label>
+    <ion-label color="light" class="ion-text-center">Todavia no hay pedidos{{ opcionSeleccionada == "Mis_pedidos" ? '' :
+      (' ' + opcionSeleccionada) }}.</ion-label>
   </ion-item>
 </ng-template>
 

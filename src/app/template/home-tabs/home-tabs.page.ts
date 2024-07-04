@@ -23,6 +23,7 @@ import { timer } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { EncuestaService } from 'src/app/services/encuesta.service';
 import { Timestamp } from 'firebase/firestore';
+import { Mesa } from 'src/app/models/mesa';
 
 const background = '#f8f8f8d7';
 @Component({
@@ -36,7 +37,6 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   @ViewChild('popover') popover!: IonPopover;
   @Input() isLoading: boolean = false;
 
-  public noContestoEncuesta: boolean = false;
   public isKeyboardOpen = false;
   private keyboardWillShowSub: any;
   private keyboardWillHideSub: any;
@@ -67,6 +67,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   queAlta: string = '';
   pedido: Pedido;
   verMenu : boolean = false;
+ verLlenarEncuesta: boolean = false;
   //-------------------------
   constructor(
     private mesasSvc: MesaService,
@@ -79,7 +80,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     private usrService: UsuarioService,
     private pushSrv: PushNotificationService,
     private pedidoSrv: PedidoService,
-    private encuestaSrv: EncuestaService) {
+    public encuestaSrv: EncuestaService) {
 
     this.url = this.router.url;
     this.usuarioLogueado = this.auth.usuarioActual!;
@@ -94,11 +95,25 @@ export class HomeTabsPage implements OnInit, OnDestroy {
       console.log(this.pedido);
 
     if(this.pedido) {
-      this.pedidoSrv.escucharPedidoId(this.pedido.id);
-      this.pedidoSrv.pedido$.subscribe(pedido => {
+      this.pedidoSrv.actualizarPedidoActual(this.pedido.id);
+      this.pedidoSrv.escucharPedidoId(this.pedido.id).subscribe(pedido => {
         this.pedido = pedido;
+        this.verLlenarEncuesta = false;
+
       });
     }
+
+    this.encuestaSrv.allEncuestas$.subscribe({
+      next: (data) => {
+        if(this.pedido && (this.pedido.estadoPedido == EstadoPedido.Servido || this.pedido.estadoPedido == EstadoPedido.CuentaSolicitada || this.pedido.estadoPedido == EstadoPedido.Pagado)){
+          this.encuestaSrv.verLlenarEncuesta = !data.some(x =>
+            x.cliente.id === this.usuarioLogueado!.id && this.cargoEncuestaHoy(x.fecha)) ;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
 
 
     // console.log(this.usuarioLogueado);
@@ -136,11 +151,12 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
     //Si al loguearse tiene mesa asignada, que NO es de reserva, voy directamente al menu.
 
-    if (this.esCliente && this.usuarioLogueado.mesaAsignada != 0 && !this.usuarioLogueado.tieneReserva) {
-      this.router.navigate(['home-tabs/menu-productos']);
+    if (this.esCliente && this.usuarioLogueado.mesaAsignada != 0 && !this.usuarioLogueado.tieneReserva && this.pedido.estadoPedido != EstadoPedido.MesaAsignada) {
+      this.verMenu = true;
       this.verJuegos = true;
       this.verChat = true;
       this.verEncuesta = true;
+      this.router.navigate(['home-tabs/menu-productos']);
       return;
     }
 
@@ -217,8 +233,10 @@ export class HomeTabsPage implements OnInit, OnDestroy {
     }
 
     if(this.esCliente){
-      this.verChat = this.verJuegos = this.verMenu = this.usuarioLogueado.mesaAsignada > 0 ? true : false;
-      this.noContestoEncuesta = !this.encuestaSrv.listadoEncuesta.some(x => x.cliente.id === this.usuarioLogueado.id && this.cargoEncuestaHoy(x.fecha)  );
+      this.verChat = this.verJuegos = this.verMenu = (this.usuarioLogueado.mesaAsignada != 0 && this.pedido.estadoPedido != EstadoPedido.MesaAsignada)? true : false;
+
+
+
     }
 
 
@@ -307,18 +325,40 @@ export class HomeTabsPage implements OnInit, OnDestroy {
               break;
             case "Mesa":
               if (this.validacionesMesa(datos[1])) {
-                this.router.navigate(['home-tabs/menu-productos']);
-                this.verJuegos = true;
-                this.verChat = true;
-                this.verEncuesta = true;
+                this.auth.usuarioActual!.mesaAsignada = Number(datos[1]);
+
+                let laMesa: Mesa = this.mesasSvc.listadoMesa.find(x => x.numero == Number(datos[1]))!;
+
+                this.pedidoSrv.actualizarPedidoActual(laMesa.idPedidoActual);
+
+                // this.pedido = this.pedidoSrv.listadoPedidos.find(
+                //   x => x.cliente.id === this.auth.usuarioActual!.id
+                //     && x.estadoPedido == EstadoPedido.MesaAsignada)!;
+                //     console.log("Pedido encontrado:");
+                //     console.log(this.pedido);
+                console.log("El Pedido actual");
+                console.log(this.pedidoSrv.pedidoActual);
+
+                if(this.pedidoSrv.pedidoActual){
+                  this.pedido = this.pedidoSrv.pedidoActual;
+                  this.verJuegos = true;
+                  this.verChat = true;
+                  this.verEncuesta = true;
+                  this.verMenu = true;
+                  console.log("Actualizando a Abierto");
+                  this.pedidoSrv.actualizarEstado(this.pedidoSrv.pedidoActual, EstadoPedido.Abierto);
+                  this.router.navigate(['home-tabs/menu-productos']);
+                }
+
+              }else{
+                this.verJuegos = false;
+                this.verChat = false;
+                this.verMenu = false;
               }
               break;
             case "Propina":
               if (this.esValidoParaPropina()) {
-                if (this.pedido.propina != 0) {
-                  this.msgService.Info("Ya dejaste propina.");
-                  return;
-                }
+
                 //To Do: Seleccion de Propina con Swal Fire con opciones 0, 5, 10, 15, 20
                 Swal.fire({
                   title: "¿Cual fué su nivel de satisfacción?",
@@ -330,7 +370,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
                     '15': '15% - Muy Bueno',
                     '20': '20% - Excelente'
                   },
-                  inputPlaceholder: 'Seleccione un % de Propina',
+                  inputPlaceholder: 'Seleccione propina',
                   showCancelButton: true,
                   confirmButtonColor: "#0EA06F",
                   cancelButtonColor: "#d33",
@@ -342,8 +382,11 @@ export class HomeTabsPage implements OnInit, OnDestroy {
                   if (result.isConfirmed) {
                     this.isLoading = true;
                     timer(3500).subscribe(()=>{
-
-                      this.pedidoSrv.aplicarPropina(this.pedido, Number(result.value)).then(()=>{
+                      let laMesa: Mesa = this.mesasSvc.listadoMesa.find(x => x.numero == this.auth.usuarioActual!.mesaAsignada)!;
+                      this.pedidoSrv.actualizarPedidoActual(laMesa.idPedidoActual);
+                      console.log("El Pedido actual para propina: ");
+                      console.log(this.pedidoSrv.pedidoActual);
+                      this.pedidoSrv.aplicarPropina(this.pedidoSrv.pedidoActual, Number(result.value)).then(()=>{
 
                         this.msgService.Exito("Propina dejada con éxito. Gracias!!");
 
@@ -399,17 +442,42 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
   }
   esValidoParaPropina(): boolean {
-    if (this.pedido === (null || undefined)) {
+
+    // this.pedido = this.pedidoSrv.listadoPedidos.find(
+    //   x => x.cliente.id === this.auth.usuarioActual!.id
+    //     && x.estadoPedido == (EstadoPedido.Servido || EstadoPedido.CuentaSolicitada))!;
+    //     console.log("Pedido encontrado:");
+    //     console.log(this.pedido);
+
+    console.log("Pedido actual:");
+    console.log(this.pedidoSrv.pedidoActual);
+
+    if (this.pedidoSrv.pedidoActual === null || this.pedidoSrv.pedidoActual === undefined) {
       this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
       return false;
     }
 
-    if (this.pedido.estadoPedido == EstadoPedido.Abierto) {
+    if (this.pedidoSrv.pedidoActual.estadoPedido == EstadoPedido.MesaAsignada) {
+      this.msgService.Info(`Aun no escaneaste la mesa.\nPor favor acercate a la mesa ${this.usuarioLogueado.mesaAsignada}.`);
+      return false;
+    }
+
+    if (this.pedidoSrv.pedidoActual.estadoPedido == EstadoPedido.Abierto) {
       this.msgService.Info("Aun no tienes un Mozo asignado al cual dejarle la propina.\nPor favor primero has el pedido.");
       return false;
     }
 
-    if (this.pedido.estadoPedido == EstadoPedido.Cerrado) {
+    if (this.pedidoSrv.pedidoActual.estadoPedido == EstadoPedido.Pendiente) {
+      this.msgService.Info("El Mozo aún no aceptó tu pedido.\nPor favor espera a que lo acepte.");
+      return false;
+    }
+
+    if (this.pedidoSrv.pedidoActual.estadoPedido == EstadoPedido.Listo) {
+      this.msgService.Info("Nos gustaría saber su valoración luego de probar nuestra comida. Por favor espere a recibirla.");
+      return false;
+    }
+
+    if (this.pedidoSrv.pedidoActual.estadoPedido == EstadoPedido.Cerrado) {
       this.msgService.Info("El pedido ya fue cerrado.");
       return false;
     }
@@ -419,22 +487,29 @@ export class HomeTabsPage implements OnInit, OnDestroy {
   }
   esValidoParaPago(): boolean {
 
-    if (this.pedido === (null || undefined)) {
+    // this.pedido = this.pedidoSrv.listadoPedidos.find(
+    //   x => x.cliente.id === this.auth.usuarioActual!.id && (x.estadoPedido == EstadoPedido.Servido || x.estadoPedido == EstadoPedido.CuentaSolicitada))!;
+    //     console.log("Pedido encontrado:");
+    //     console.log(this.pedido);
+    console.log("Pedido actual:");
+    console.log(this.pedidoSrv.pedidoActual);
+
+    if (this.pedidoSrv.pedidoActual === null || this.pedidoSrv.pedidoActual === undefined) {
       this.msgService.Info("No tienes mesa asignada.\nPor favor escanee el QR de la entrada para estar en lista de espera.");
       return false;
     }
 
-    if (this.pedido.estadoPedido == EstadoPedido.Pagado) {
+    if (this.pedidoSrv.pedidoActual.estadoPedido == EstadoPedido.Pagado) {
       this.msgService.Info("Ya pagaste tu pedido.");
       return false;
     }
 
-    if (this.pedido.estadoPedido == EstadoPedido.Cerrado) {
+    if (this.pedidoSrv.pedidoActual.estadoPedido == EstadoPedido.Cerrado) {
       this.msgService.Info("El pedido ya fue cerrado.");
       return false;
     }
 
-    if (this.pedido.estadoPedido != EstadoPedido.CuentaSolicitada) {
+    if (this.pedidoSrv.pedidoActual.estadoPedido !== EstadoPedido.CuentaSolicitada && this.pedidoSrv.pedidoActual.estadoPedido !== EstadoPedido.Servido) {
       this.msgService.Info("Primero solicita la cuenta al mozo.");
       return false;
     }
@@ -582,5 +657,5 @@ export class HomeTabsPage implements OnInit, OnDestroy {
 
   IrAGraficosEncuestas() {
     this.router.navigate(['graficos-encuestas']);
-  }
+    }
 }

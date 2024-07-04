@@ -20,13 +20,13 @@
           <ion-avatar slot="start">
             <img class="rounded-image bordered-image" src="../../../assets/img/alimentosRojo.png"  />
           </ion-avatar>
-          <ion-label >
+          <ion-label *ngIf="!isLoading && pedido">
             <ion-label class="estado {{colorEstado}}"><h2>{{estadoPedido}}</h2></ion-label>
             <ion-item  class="tiempo"  style="width: 100%; margin-left: 0; padding-left: 0;">
               <ion-icon color="primary"  name="timer-outline"></ion-icon>
               <ion-label *ngIf="queTiempo === 'Estimado'">Espera de {{pedido.tiempoEstimado}} min.</ion-label>
               <ion-label *ngIf="queTiempo === 'Restante'">Su pedido llegará en {{minutosFaltantes}} min.</ion-label>
-              <ion-label *ngIf="queTiempo === 'Entregado'">Su ha sido entregado.</ion-label>
+              <ion-label *ngIf="queTiempo === 'Entregado'">Su pedido ha sido entregado.</ion-label>
             </ion-item>
           </ion-label>
         </ion-item>
@@ -38,8 +38,8 @@
               <ion-item slot="header">
                 <ion-label style="font-weight: bold;">Tu Pedido</ion-label>
               </ion-item>
-              <ion-list slot="content" class="producto-item">
-                <ion-item *ngFor="let producto of pedido.productos" lines="none">
+              <ion-list slot="content" class="producto-item" *ngIf="!isLoading && pedido && pedido.productos.length > 0; else listaVacia;">
+                <ion-item *ngFor="let producto of pedido.productos " lines="none">
                   <ion-avatar slot="start" class="producto-avatar">
                     <img class="bordered-image" src="{{producto.producto.fotos[0]}}"  />
                   </ion-avatar>
@@ -57,7 +57,7 @@
           <ion-label class="titulos" style="font-weight: bold;">Subtotal</ion-label>
           <ion-label class="importe bold" style="font-weight: bold;">{{subtotal | monedaPesos}}</ion-label>
         </ion-item>
-        <ion-item>
+        <ion-item *ngIf="!isLoading && pedido">
           <ion-accordion-group expand="full" style="width: 100%;">
             <ion-accordion>
               <ion-item slot="header">
@@ -70,11 +70,11 @@
                 </ion-item>
                 <ion-item>
                   <ion-label class="tituloImporte">Descuentos</ion-label>
-                  <ion-label class="importe">{{pedido.descuentoPorJuego}}%</ion-label>
+                  <ion-label class="importe">{{!isLoading ? pedido.descuentoPorJuego ? pedido.descuentoPorJuego : 0 : 0}}%</ion-label>
                 </ion-item>
                 <ion-item>
                   <ion-label class="tituloImporte">Propina</ion-label>
-                  <ion-label class="importe">{{pedido.propina| monedaPesos}}</ion-label>
+                  <ion-label class="importe">{{!isLoading ? ((subtotal* pedido.propina / 100) | monedaPesos) : 0}} ({{pedido.propina}}%)</ion-label>
                 </ion-item>
                 <ion-item>
                   <ion-label class="tituloImporte">Tarifa de Servicio</ion-label>
@@ -89,9 +89,17 @@
             <ion-label ><h1 class="importe bold">{{total | monedaPesos}}</h1></ion-label>
         </ion-item>
         <ion-button [disabled]="botonDeshabilitado" expand="full" color="primary" (click)="accionPedido()">{{textoAccion}}</ion-button>
-        <ion-item class="pagoQR">
+        <ion-item *ngIf="mostrarCartel" class="pagoQR">
           <ion-label >Si desea agregar Propina o pagar con QR, puede volver a utilizar nuestro lector.</ion-label>
         </ion-item>
     </ion-card-content>
   </ion-card>
+  <div class="custom-spinner" *ngIf="isLoadingSpinner" >
+    <img src="../../../assets/spinner.png" alt="Spinner">
+</div>
 </ion-content>
+
+
+<ng-template #listaVacia>
+  <ion-label>No hay productos disponibles.</ion-label>
+</ng-template>

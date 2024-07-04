@@ -25,7 +25,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 export class ListaPedidosComponent implements OnInit {
 
   estadoPedido: EstadoPedido = EstadoPedido.Pendiente;
-  opcionSeleccionada = 'Mis_pedidos';
+  opcionSeleccionada = 'Pendientes';
   estaEnPreparacion = false;
   pedidosPendientes: Pedido[] = [];
   todosMisPedidos: Pedido[] = [];
@@ -53,16 +53,13 @@ export class ListaPedidosComponent implements OnInit {
 
         this.pedidosPendientes = data.filter(pedido => pedido.estadoPedido == EstadoPedido.Pendiente && pedido.mozo == null);
         console.log(this.pedidosPendientes);
-        if(this.pedidosPendientes.length>0){
-          this.opcionSeleccionada = 'Pendientes';
-        }
       }
       else if(this.empleadoActual.tipoEmpleado == TipoEmpleado.Cocinero || this.empleadoActual.tipoEmpleado == TipoEmpleado.Bartender){
         const tipoProducto = this.empleadoActual.tipoEmpleado == TipoEmpleado.Cocinero ? [TipoProducto.Comida, TipoProducto.Postre] : [TipoProducto.Bebida];
         this.productosPendientes = data.flatMap(pedido=>
           pedido.productos.filter(producto=>
             producto.estadoProducto == EstadoPedidoProducto.Pendiente && producto.empleadoId == ""
-            && tipoProducto.includes(producto.producto.tipo) && pedido.estadoPedido == EstadoPedido.Aceptado
+            && tipoProducto.includes(producto.producto.tipo)
           ).map(producto=>({
             ...producto,
             idPedido: pedido.id,
@@ -81,9 +78,7 @@ export class ListaPedidosComponent implements OnInit {
             mesaNumero: pedido.mesa.numero
           }))
         );
-        if(this.productosPendientes.length>0){
-          this.opcionSeleccionada = 'Pendientes';
-        }
+        
       }
     });
     setTimeout(() => {
@@ -103,7 +98,7 @@ export class ListaPedidosComponent implements OnInit {
     this.pedidosSvc.actualizarEstado(pedido, EstadoPedido.Aceptado);
     this.pedidosSvc.actualizarMozo(pedido, this.auth.usuarioActual!);
     this.pedidosSvc.actualizarFechaAceptado(pedido);
-
+    this.pedidosSvc.actualizarEstadoProductoAPendiente(pedido);
     this.pushNotif.ClienteMozoAceptoPedido(pedido.cliente, this.empleadoActual.nombre + ' ' + this.empleadoActual.apellido).subscribe({
       next: (data) => {
         console.log("Rta Push Notificacion Mozo: ");
@@ -281,14 +276,14 @@ export class ListaPedidosComponent implements OnInit {
       background: background,
       heightAuto: false,
       width: "20em",
-      confirmButtonColor: "#28a745",
+      confirmButtonColor: "#0EA06F",
       cancelButtonColor: "#d33",
       confirmButtonText: "Confirmar Pago",
       cancelButtonText: "Cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
         this.pedidosSvc.actualizarEstado(pedido,EstadoPedido.Cerrado);
-        this.mesaSvc.cambiarEstadoDeMesa(EstadoMesa.libre,pedido.mesa.id);
+        this.mesaSvc.cambiarEstadoDeMesa(EstadoMesa.libre,pedido.mesa.id, "");
         this.usrSrv.asignarMesa(0, pedido.cliente.id);
         this.pushNotif.ClienteMozoPagoConfirmado(pedido.cliente,this.empleadoActual.nombre).subscribe({
           next: (data) => {

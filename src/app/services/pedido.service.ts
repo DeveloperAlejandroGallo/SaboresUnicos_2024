@@ -39,6 +39,11 @@ export class PedidoService {
   private coleccionPedido: CollectionReference<DocumentData>;
   public pedido$: Observable<Pedido> = new Observable<Pedido>();
 
+  public pedidoActual!: Pedido;
+
+
+
+
   constructor(private firestore: Firestore, private angularFirestore: AngularFirestore) {
     this.coleccionPedido = collection(this.firestore, this.colectionName);
   }
@@ -86,6 +91,21 @@ export class PedidoService {
   }
 
 
+  actualizarPedidoActual(idPedido: string){
+
+    this.pedidoActual = this.listadoPedidos.find(x => x.id == idPedido)!;
+
+
+    // const coleccion = collection(this.firestore, this.colectionName);
+    // const documento = doc(coleccion, idPedido);
+    // getDoc(documento).then((doc) => {
+    //   if (doc.exists()) {
+    //     this.pedidoActual = doc.data() as Pedido;
+    //     this.pedidoActual.id = doc.id;
+    //   }
+    // });
+
+  }
 
   delete(id: string) {
     const coleccion = collection(this.firestore, this.colectionName);
@@ -102,7 +122,7 @@ export class PedidoService {
       id: nuevoId,
       cliente: cliente,
       descuentoPorJuego: 0,
-      estadoPedido: EstadoPedido.Pendiente,
+      estadoPedido: EstadoPedido.MesaAsignada,
       fechaDePedidoAceptado: null,
       fechaIngreso: Timestamp.now(),
       mesa: mesa,
@@ -170,6 +190,18 @@ export class PedidoService {
     data.id = docSnapshot.id;
     return data;
   }
+
+  async actualizarEstadoProductoAPendiente(pedido: Pedido): Promise<void> {
+    const pedidoDocRef = doc(this.firestore, `${this.colectionName}/${pedido.id}`);
+
+    const productosActualizados = pedido.productos.map(producto => ({
+      ...producto,
+      estadoProducto: EstadoPedidoProducto.Pendiente
+    }));
+
+    await updateDoc(pedidoDocRef, { productos: productosActualizados });
+  }
+
   actualizarProducto(pedido: Pedido) {
 
     const coleccion = collection(this.firestore, this.colectionName);
@@ -179,9 +211,9 @@ export class PedidoService {
 
     updateDoc(documento, {
       productos: pedido.productos,
-      subTotal: this.sumaProductos(pedido.productos),
+      subTotal: pedido.subTotal,
       tiempoEstimado: pedido.tiempoEstimado,
-      total: this.sumTotal(pedido)
+      total: pedido.total
     });
   }
 
@@ -255,13 +287,28 @@ export class PedidoService {
   }
 
   aplicarPropina(pedido: Pedido, propina: number):Promise<void> {
-
     const coleccion = collection(this.firestore, this.colectionName);
     const documento = doc(coleccion, pedido.id);
+    console.log("Subtotal: " + pedido.subTotal);
+    console.log("Porcentaje de propina: " + propina);
+    
+    const tarifaServicio = 100;
+    console.log("srvicio : " + tarifaServicio);
+    
+    const propinaTotal = pedido.subTotal * (propina /100);
+    console.log("propina : " + propinaTotal);
+    
+    const descuentoJuegos = pedido.descuentoPorJuego ? 0 : 0 ;
+    console.log("Juegos: " + descuentoJuegos);
+    
+    const total = pedido.subTotal + propinaTotal - ( descuentoJuegos * pedido.subTotal / 100) + tarifaServicio;
 
+    console.log("Total: " + total);
+    
+    
     return updateDoc(documento, {
       propina: propina,
-      total: pedido.total + propina
+      total: total
     });
   }
 

@@ -117,8 +117,8 @@ export class UsuarioService {
       dni: usuario.dni,
       cuil: usuario.cuil,
       perfil: usuario.perfil,
-      tipoEmpleado: usuario.perfil !== (Perfil.Anonimo && Perfil.Cliente) ? usuario.tipoEmpleado : null,
-      estado: usuario.perfil == Perfil.Anonimo ? EstadoCliente.Activo : EstadoCliente.Pendiente,
+      tipoEmpleado: usuario.tipoEmpleado,
+      estado: usuario.estado,
       mesaAsignada: 0,
       tieneReserva: false,
       //estaEnListaEspera: false

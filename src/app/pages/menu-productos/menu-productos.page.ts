@@ -27,7 +27,7 @@ export class MenuProductosPage implements OnInit {
   isModalOpen = false;
   selectedProduct: Producto | null = null;
   name: string | undefined;
-
+  public tarifaServicio: number = 100;
   public usuario!: Usuario;
   public listaDeProductos: Array<Producto> = new Array<Producto>;
   public listaDeTipoComida: Array<ItemLista> = new Array<ItemLista>;
@@ -65,11 +65,9 @@ export class MenuProductosPage implements OnInit {
 
     this.LlenarListasDeProductos();
 
-
     this.pedidoSrv.pedido$.subscribe(data => {
         this.pedido = data;
         this.subtotal = this.pedido.productos.length != 0 ? this.pedido.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0) : 0;
-
       }
     )
 
@@ -126,7 +124,7 @@ export class MenuProductosPage implements OnInit {
     if(this.subtotal > 0)
       this.router.navigate(['home-tabs/resumen']);
     else
-      this.msgSrv.Info("Debe elegir al menos un producto apra ver el detalle de cuenta.");
+      this.msgSrv.Info("Debe elegir al menos un producto para ver el detalle de cuenta.");
   }
 
 
@@ -179,12 +177,15 @@ export class MenuProductosPage implements OnInit {
       this.pedido.productos.push({
         producto: item.producto,
         cantidad: 1,
-        estadoProducto: EstadoPedidoProducto.Pendiente,
+        estadoProducto: EstadoPedidoProducto.Solicitado,
         empleadoId: ""
       });
     }else{
         this.pedido.productos[index].cantidad++;
     }
+
+      this.pedido.subTotal = this.pedido.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0);
+      this.pedido.total = this.pedido.subTotal + this.pedido.propina - ((this.pedido.subTotal * this.pedido.descuentoPorJuego) / 100) + this.tarifaServicio;
 
       if(this.pedido.tiempoEstimado < item.producto.tiempoPreparacionEnMinutos)
         this.pedido.tiempoEstimado = item.producto.tiempoPreparacionEnMinutos;
@@ -214,6 +215,9 @@ export class MenuProductosPage implements OnInit {
 
       if(this.pedido.productos[index].cantidad === 0)
         this.pedido.productos.splice(index,1);
+
+      this.pedido.subTotal = this.pedido.productos.reduce((acc, x) => acc + x.producto.precio * x.cantidad, 0);
+      this.pedido.total = this.pedido.subTotal + this.pedido.propina - ((this.pedido.subTotal * this.pedido.descuentoPorJuego) / 100) + this.tarifaServicio;
 
       //obtener el maximo tiempo de preparacion
       let max = 0;
