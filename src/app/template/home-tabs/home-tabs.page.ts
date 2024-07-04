@@ -350,6 +350,10 @@ export class HomeTabsPage implements OnInit, OnDestroy {
                   this.router.navigate(['home-tabs/menu-productos']);
                 }
 
+              }else{
+                this.verJuegos = false;
+                this.verChat = false;
+                this.verMenu = false;
               }
               break;
             case "Propina":
@@ -366,7 +370,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
                     '15': '15% - Muy Bueno',
                     '20': '20% - Excelente'
                   },
-                  inputPlaceholder: 'Seleccione un % de Propina',
+                  inputPlaceholder: 'Seleccione propina',
                   showCancelButton: true,
                   confirmButtonColor: "#0EA06F",
                   cancelButtonColor: "#d33",
@@ -378,7 +382,7 @@ export class HomeTabsPage implements OnInit, OnDestroy {
                   if (result.isConfirmed) {
                     this.isLoading = true;
                     timer(3500).subscribe(()=>{
-                      let laMesa: Mesa = this.mesasSvc.listadoMesa.find(x => x.numero == this.auth.usuarioActual!.mesaAsignada)!;      
+                      let laMesa: Mesa = this.mesasSvc.listadoMesa.find(x => x.numero == this.auth.usuarioActual!.mesaAsignada)!;
                       this.pedidoSrv.actualizarPedidoActual(laMesa.idPedidoActual);
                       console.log("El Pedido actual para propina: ");
                       console.log(this.pedidoSrv.pedidoActual);

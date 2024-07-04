@@ -109,8 +109,8 @@ export class ProductoService {
     comida = ['Hamburguesa', 'Pizza', 'Milanesa', 'Empanadas', 'Papas Fritas', 'Ensalada', 'Sushi', 'Tacos', 'Burritos', 'Parrilla', 'Pastas', 'Pollo', 'Pescado', 'Sopa', 'Sandwich', 'Tarta', 'Wok', 'Otro'];
     bebida = ['Agua', 'Gaseosa', 'Cerveza', 'Vino', 'Jugo', 'Cafe', 'Te', 'Licuado', 'Coctel', 'Otro'];
     postre = ['Helado', 'Torta', 'Fruta', 'Tiramisu', 'Flan', 'Churros', 'Brownie', 'Cheesecake', 'Mousse', 'Alfajor', 'Otro'];
+
+
     
-
-
 
 }

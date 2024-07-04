@@ -9,7 +9,7 @@
       <img [src]="usuario.foto" alt="Profile Picture">
     </ion-avatar>
     <!-- <ion-icon class="edit-icon" name="create-outline"></ion-icon> -->
-    <h2 class="profile-name" style="margin-top: 10px;">{{tituloGrafico}}</h2>
+    <h2 class="profile-name" style="margin-top: 10px; text-align: center;">{{tituloGrafico}}</h2>
   </div>
   <ion-grid>
     <ion-row *ngIf="estrellas">
@@ -33,7 +33,7 @@
           </ngx-charts-pie-chart>
         </div>
       </ion-col>
-    </ion-row> 
+    </ion-row>
 
     <ion-row *ngIf="mejorComida">
       <!-- <ion-title>Mejores comidas más pedidas</ion-title> -->
@@ -98,7 +98,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  
+
   </ion-content>
 
   <ion-fab color="primary" vertical="bottom" horizontal="end" slot="fixed">
@@ -121,4 +121,3 @@
     </ion-fab-list>
   </ion-fab>
 
-  
