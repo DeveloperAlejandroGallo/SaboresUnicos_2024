@@ -1,5 +1,6 @@
 ion-card {
     margin: 15px 10px;
+    --background: #b42222bf;
   }
   
   ion-card-header {
@@ -7,15 +8,17 @@ ion-card {
   }
   
   .fecha-texto {
-    color: grey;
+    color: rgb(255, 255, 255);
     font-style: italic;
     margin: 0;
     text-align: end;
+    font-size: medium;
   }
   
   .opinion {
     margin: 0;
-    font-size: 16px;
+    color: rgb(255, 255, 255);
+    font-size: 18px;
   }
   .ion-text-center {
     text-align: center;
@@ -115,6 +118,8 @@ ion-card {
 
   ion-chip{
     font-size: 20px;
+    background-color: #c7c7c7;
+    border-radius: 20px;
   }
 
   swiper-container {
