@@ -35,12 +35,66 @@ Gonzalez, Martín
 
 ## **Alta Registrada**
 
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/AltaRegistrada.gif" height="500">
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/AltaRegistrada.gif" height="600">
 
 
 ## **Ingreso Anónimo**
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/IngresoAnonimo.gif" height="600">
 
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/IngresoAnonimo.gif" height="500">
+
+## **Flujo de la Aplicación**
+> _Decidimos tomar algunas decisiones de diseño dado que queríamos hacer una aplicación acorde a un uso diario._
+> _Por tal razón desarrollamos un flujo de estados y colores en el cual se mueve un pedido en la aplición de Sabores Únicos._
+
+**Ingreso a la lista de Espera:**
+> _El cliente quedo en lista de espera, una vez que el Maitre Acepta su ingreso, el Pedido queda en estado **MESA ASIGNADA**_
+
+**Escanea Mesa:**
+> _Una vez que la mesa correcta es escaneada, el pedido queda en estado **ABIERTO** listo para recibir los pruductos que desea consumir.
+> Desde el resumen se puede acceder al detalle del pedido y las diferentes acciones estarán en el boton principal._
+
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Abierto.png" height="500">
+
+**Envía Pedido:**
+> _Al presionar **ENVIAR PEDIDO** el pedido es recibido por el Mozo y su estado cambia a **PENDIENTE**_
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Pendiente.png" height="500">
+
+**Aceptar Pedido:**
+> _Acción llevada por el Mozo, el cual al aceptarlo deja el pedido en estado **ACEPTADO** y le llega a cada Empleado sea Cocinero o Bartender,
+> el producto que debe preprar._
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Aceptado.png" height="500">
+
+**Preparando el Pedido:**
+> _Acción llevada por el Cocinero o Bartender. El cual se activa y deja el pedido en estado **EN PREPARACION**, en el momento en el que el
+> primer Empleado comienza a preparar alguno de los productos._
+> _En este momento el Cliente comienza a ver un reloj en cuenta regresiva de llegada de supedido._
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/EnPreparacion.png" height="500">
+
+**Pedido Listo:**
+> _Cuando se termina de prepara el último producto, el estado del pedido cambia a **LISTO**, estado que avisa al mozo que ya puede llevar el pedido._
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Listo.png" height="500">
+
+**Pedido Confirmado**
+> _Acción llevada por el Cliente para confirmar la llegada del pedido a la mesa. El cual deja el pedido en estado **CONFIRMADO**, dando opcion al clinete de
+> poder cargar una Encuesta, Ingresar Propina por QR o Solicitar la Cuenta_
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Confirmado.png" height="500">
+
+**Cuenta Solicitada**
+> _Acción llevada por el Cliente el cual genera un aviso al Mozo informando los tatales, dejando el pedido en estado **CUENTA SOLICITADA** y dando la opcion a Pagar con QR o Confirmar que se pagó con Efectivo o Tarjeta_
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/CuentaSolicitada.png" height="500">
+
+**Pagando**
+> _Una vez pago con QR o Presionando el Boton, el estado cambia a **PAGADO** avisando al Mozo y dandole la opción al mismo de confirmar el pago_
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Pagado.png" height="500">
+
+**Confirmando Pago**
+> _Una vez que el Mozo confirma el pago, el estado del pedido queda **CERRADO**, dando fin al flujo de uso._
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Cerrado.png" height="500">
+
+
+## **BITACORA DE APROBACIÓN** 🛠️
+
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Aprobacion%201%20a%203.png" height="800">
 
 
 ## **Detalles de la construcción** 🛠️
@@ -118,3 +172,32 @@ Gonzalez, Martín
 - [x] Grabado de Video Segunda Entrega.
 - [ ] Frontend de Chat y Logica.
 
+  ### Semana 4: Sábado 29/06 al 3/07 💻
+>**Calani, Romina**
+- [x] Diseño de pantallas del Mozo, Cocinero y Bartender
+- [x] Diseño de lista de productos asociados al Pedido del cliente
+- [x] Desarrollo de confirmación del pedido por parte del Mozo
+- [x] Desarrollo de realización de pedidos por parte del Cocinero/bartender
+- [x] Lógica para mantener el pedido actualizado en las listas del Mozo
+- [x] Desarrollo de confirmación de Pago por parte del Mozo
+- [x] Desarrollo de liberación de Mesa y cierre del Pedido
+- [x] Modificación de lógica en las Propinas
+- [x] Modificación de altas Encuestas
+
+
+>**Gallo, Alejandro**
+- [x] Mantención de Readme.md.
+- [x] Manejo de todos los merge y Pull Request
+- [x] Manejo de Proyect y delegacion de tareas.
+- [x] Desarrollo de Logica de Pedido completa, manteniendo estados
+- [x] Desarrollo de pantalla de detalle de cuenta
+- [x] Desarrollo de Pago con QR
+- [x] Desarrollo Propina
+- [x] Logica de Encuesta
+- [x] Pipes para mejor visualización
+
+>**Gonzalez, Martín**
+- [x] Finalización del frontend de chat y logica
+- [x] Grabación de video de la tercera entrega.
+- [x] Desarrollo de la pantalla y lógica de creación de la encuesta.
+- [x] Creación de la pantalla y lógica de los gráficos de las encuestas.
