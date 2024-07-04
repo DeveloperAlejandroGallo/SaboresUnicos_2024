@@ -56,11 +56,11 @@
               </h2>
               <div class="quantity-controls">
                 <ion-button fill="clear" size="small" (click)="decrementarCantidad(itemProd, 'Comida')" [disabled]="pedido.estadoPedido !== 'Abierto'">
-                  <ion-icon name="trash-bin-outline"></ion-icon>
+                  <ion-icon color="light" name="trash-bin-outline"></ion-icon>
                 </ion-button>
                 <ion-label>{{itemProd.cantidad}}</ion-label>
                 <ion-button fill="clear" size="small" (click)="incrementarCantidad(itemProd, 'Comida')" [disabled]="pedido.estadoPedido !== 'Abierto'" >
-                  <ion-icon name="add-outline"></ion-icon>
+                  <ion-icon color="light" name="add-outline"></ion-icon>
                 </ion-button>
               </div>
             </ion-col>

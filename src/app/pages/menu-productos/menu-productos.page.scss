@@ -38,7 +38,7 @@ ion-segment-button.ios {
 
 
 ion-card {
-  background-color: #ffeeee;
+  --background: #b42222bf;
   ion-card-content {
     .producto-imagen {
       //width: 340px;
@@ -67,7 +67,9 @@ ion-card {
 
           a {
             text-decoration: underline;
-            color: var(--ion-color-primary);
+            color: rgb(56, 56, 255);
+            font-weight: bold;
+            font-size: 17px;
           }
         }
       }
@@ -77,15 +79,17 @@ ion-card {
       text-align: center;
       padding: 7px 0;
 
+
       h2 {
         font-size: 18px;
         margin: 0 0 10px 0;
+        color: #ffffff
       }
 
       .quantity-controls {
         display: inline-flex;
         align-items: center;
-        border: black solid 1px;
+        border: #ffffff solid 1px;
         border-radius: 5%;
         height: 35px;
         padding: 0 5px;
@@ -102,6 +106,7 @@ ion-card {
           width: auto;
           text-align: center;
           padding: 0 5px;
+          color: #ffffff
         }
       }
     }
