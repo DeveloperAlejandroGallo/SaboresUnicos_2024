@@ -33,6 +33,16 @@ Gonzalez, Martín
 | ------ | ------ | ------ |
 | <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Fpush.jpg?alt=media&token=fd4aa634-8b75-4df6-b422-0f4254efe651" height="500">| <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FIMG-20240625-WA0090.jpg?alt=media&token=4dfb9b40-e317-4131-8c4d-dbf50e9f1352 " height="500"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/PushMozo.jpg"  height="500" /> |
 
+## **Alta Registrada**
+
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/AltaRegistrada.gif" height="500">
+
+
+## **Ingreso Anónimo**
+
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/IngresoAnonimo.gif" height="500">
+
+
 ## **Detalles de la construcción** 🛠️
 ### Semana 1: Sábado 08/06 al 15/06 💻
 >**Calani, Romina**
