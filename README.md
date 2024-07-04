@@ -35,11 +35,15 @@ Gonzalez, Martín
 
 ## **Alta Registrada**
 
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/AltaRegistrada.gif" height="500">
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/AltaRegistrada.gif" height="600">
 
 
 ## **Ingreso Anónimo**
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/IngresoAnonimo.gif" height="500">
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/IngresoAnonimo.gif" height="600">
+
+## **BITACORA DE APROBACIÓN** 🛠️
+
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Aprobacion%201%20a%203.png" height="800">
 
 
 ## **Detalles de la construcción** 🛠️
