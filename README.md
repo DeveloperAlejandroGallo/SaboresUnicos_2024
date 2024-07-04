@@ -77,11 +77,11 @@ Gonzalez, Martín
 **Pedido Confirmado**
 > _Acción llevada por el Cliente para confirmar la llegada del pedido a la mesa. El cual deja el pedido en estado **CONFIRMADO**, dando opcion al clinete de
 > poder cargar una Encuesta, Ingresar Propina por QR o Solicitar la Cuenta_
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Confirmado.jpg" height="500">
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Recibido.jpg" height="500">
 
 **Cuenta Solicitada**
 > _Acción llevada por el Cliente el cual genera un aviso al Mozo informando los tatales, dejando el pedido en estado **CUENTA SOLICITADA** y dando la opcion a Pagar con QR o Confirmar que se pagó con Efectivo o Tarjeta_
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/CuentaSolicitada.jpg" height="500">
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/SolicitarCuenta.jpg" height="500">
 
 **Pagando**
 > _Una vez pago con QR o Presionando el Boton, el estado cambia a **PAGADO** avisando al Mozo y dandole la opción al mismo de confirmar el pago_
