@@ -39,7 +39,6 @@ Gonzalez, Martín
 
 
 ## **Ingreso Anónimo**
-
 <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/IngresoAnonimo.gif" height="500">
 
 
@@ -118,3 +117,32 @@ Gonzalez, Martín
 - [x] Grabado de Video Segunda Entrega.
 - [ ] Frontend de Chat y Logica.
 
+  ### Semana 4: Sábado 29/06 al 3/07 💻
+>**Calani, Romina**
+- [x] Diseño de pantallas del Mozo, Cocinero y Bartender
+- [x] Diseño de lista de productos asociados al Pedido del cliente
+- [x] Desarrollo de confirmación del pedido por parte del Mozo
+- [x] Desarrollo de realización de pedidos por parte del Cocinero/bartender
+- [x] Lógica para mantener el pedido actualizado en las listas del Mozo
+- [x] Desarrollo de confirmación de Pago por parte del Mozo
+- [x] Desarrollo de liberación de Mesa y cierre del Pedido
+- [x] Modificación de lógica en las Propinas
+- [x] Modificación de altas Encuestas
+
+
+>**Gallo, Alejandro**
+- [x] Mantención de Readme.md.
+- [x] Manejo de todos los merge y Pull Request
+- [x] Manejo de Proyect y delegacion de tareas.
+- [x] Desarrollo de Logica de Pedido completa, manteniendo estados
+- [x] Desarrollo de pantalla de detalle de cuenta
+- [x] Desarrollo de Pago con QR
+- [x] Desarrollo Propina
+- [x] Logica de Encuesta
+- [x] Pipes para mejor visualización
+
+>**Gonzalez, Martín**
+- [x] Finalización del frontend de chat y logica
+- [x] Grabación de video de la tercera entrega.
+- [x] Desarrollo de la pantalla y lógica de creación de la encuesta.
+- [x] Creación de la pantalla y lógica de los gráficos de las encuestas.
