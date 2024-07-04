@@ -53,7 +53,7 @@
               <ion-row>
                 <ion-col size="12">
                   <ion-item-divider
-                    style="background: #ffeeee"
+                    style="background: #b4222200"
                   ></ion-item-divider>
                 </ion-col>
               </ion-row>
@@ -64,24 +64,25 @@
                   <div class="labels">
                     <label>Sabor de la Comida<br>(1-10)</label>
                   </div>
-                  <ion-item lines="none" class="item-background-color">
+                  <ion-item lines="none" class="item-background-color" >
                     <ion-range
                       min="1"
                       max="10"
                       step="1"
                       formControlName="saborDeLaComida"
                       (ionChange)="onRangeChange($event)"
-                      style="background: #ffeeee"
+                      style="background: #b4222200"
                     >
                       <ion-icon
                         slot="start"
                         name="restaurant-outline"
+                        color="light"
                       ></ion-icon>
-                      <ion-icon slot="end" name="restaurant"></ion-icon>
+                      <ion-icon slot="end" name="restaurant" color="light"></ion-icon>
                     </ion-range>
                   </ion-item>
                   <div class="label-sabor-puntaje-comida">
-                    <label
+                    <label style="color: aliceblue;"
                       >{{textoSaborDeLaComida}}
                       <img
                         [src]="imagenSaborComida"
@@ -98,7 +99,7 @@
               <ion-row>
                 <ion-col size="12">
                   <ion-item-divider
-                    style="background: #ffeeee"
+                    style="background: #b4222200"
                   ></ion-item-divider>
                 </ion-col>
               </ion-row>
@@ -119,16 +120,17 @@
                       class="radio-group"
                     >
                       <ion-item>
-                        <label>Sí</label>
+                        <label >Sí</label>
                         <ion-radio
                         slot="start"
                         justify="start"
                           value="Sí"
                           aria-label="Sí"
+                          color=""
                         ></ion-radio>
                       </ion-item>
                       <ion-item>
-                        <label>No</label>
+                        <label color="light">No</label>
                         <ion-radio
                         slot="start"
                         justify="end"
@@ -161,6 +163,7 @@
                     *ngFor="let cosa of listaDeCosas"
                     class="item-background-color"
                     lines="none"
+                    
                   >
                     <ion-checkbox
                       slot="start"
@@ -168,6 +171,8 @@
                       formControlName="cosasAgradaron"
                       [(ngModel)]="cosa.si"
                       (ionChange)="getCheckBoxValuesChange()"
+                      class="custom-checkbox"
+                      style="color: aliceblue; font-size:20px"
                       >{{cosa.cosa}}</ion-checkbox
                     >
                   </ion-item>
@@ -177,7 +182,7 @@
               <ion-row>
                 <ion-col size="12">
                   <ion-item-divider
-                    style="background: #ffeeee"
+                    style="background: #b4222200"
                   ></ion-item-divider>
                 </ion-col>
               </ion-row>

@@ -15,8 +15,8 @@ ion-content {
   }
 
   ion-range {
-    --bar-background-active: #bf0000;
-    --knob-background: #bf0000;
+    --bar-background-active: white;
+    --knob-background: #ffffff;
     --knob-size: 24px;
     --pin-background: #bf0000;
   }
@@ -79,7 +79,7 @@ ion-content {
   }
 
   .mi-ion-card {
-    background: #ffeeee;
+    background: #b42222bf;
     border-radius: 60px;
   }
 
@@ -102,8 +102,8 @@ ion-content {
     --border-radius: 4px;
     --inner-border-radius: 4px;
   
-    --color: #b3b1b1;
-    --color-checked: #bf0000;
+    --color: #ffffff;
+    --color-checked: #e7d4d4;
   }
   
   ion-radio.ios::part(container) {
@@ -115,13 +115,13 @@ ion-content {
   }
   
   .radio-checked.ios::part(container) {
-    border-color: #bf0000;
+    border-color: white;
   }
 
 
 
   .item-background-color {
-    --ion-item-background: #ffeeee;
+    --ion-item-background: #b4222200;
   }
 
   .label-sabor-puntaje-comida {
@@ -174,4 +174,13 @@ ion-content {
     justify-content: center;
     align-items: center;
   }
+
+
+  ion-checkbox.custom-checkbox {
+    --background-checked: white !important;
+    --border-color-checked: #ffffff !important;
+  }
+ 
+
+ 
 }
