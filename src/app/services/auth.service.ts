@@ -23,6 +23,7 @@ import { AudioService } from './audio.service';
 import { EstadoCliente } from '../enums/estado-cliente';
 import { TipoEmpleado } from '../enums/tipo-empleado';
 import { PushNotificationService } from './push-notification.service';
+import { Perfil } from '../enums/perfil';
 
 @Injectable({
   providedIn: 'root',
@@ -131,6 +132,14 @@ export class AuthService {
         //Lo guardo en la coleccion:
 
         this.usrService.nuevo(usuario);
+
+        if(usuario.perfil == Perfil.Empleado){
+          this.messageService.Exito(
+            `Empleado ${usuario.nombre} ${usuario.apellido} registrado correctamente.\n Ya puede utiliar su cuenta.`
+          );
+          return;
+        }
+
 
         this.messageService.Exito(
           `Usuario ${usuario.nombre} ${usuario.apellido} registrado correctamente.\nRecibirá un correo cuando su cuenta sea aprobada.`

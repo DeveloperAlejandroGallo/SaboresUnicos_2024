@@ -518,7 +518,7 @@ export class SignupPage implements OnInit {
         this.signupForm.patchValue({ nombre: dni[2] });
         // this.signupForm.setValue({sexo: dni[3] == 'M' ? 'Masculino' : 'Femenino' });
         this.signupForm.patchValue({ dni: dni[4] });
-        this.signupForm.setValue({dni: dni[8] != null ? dni[8].substring(0, 2) + dni[4] + dni[8].substring(-1) : this.calcularCUIT(dni[3])});
+        this.signupForm.setValue({cuil: dni[8] != null ? dni[8].substring(0, 2) + dni[4] + dni[8].substring(-1) : this.calcularCUIT(dni[3])});
       } else {
         this.signupForm.patchValue({ apellido: dni[4] });
         this.signupForm.patchValue({ nombre: dni[5] });
