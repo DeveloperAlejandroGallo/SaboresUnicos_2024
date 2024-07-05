@@ -28,14 +28,22 @@ Gonzalez, Martín
 
 ## **Los Push Notification**
 
-| Nuevo Cliente | Mesa Asignada | Consulta al Mozo | Nuevo Pedido | Pedido Aceptado |
-| ------ | ------ | ------ | ------ | ------ |
-| <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Fpush.jpg?alt=media&token=fd4aa634-8b75-4df6-b422-0f4254efe651" height="500">| <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FIMG-20240625-WA0090.jpg?alt=media&token=4dfb9b40-e317-4131-8c4d-dbf50e9f1352 " height="500"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMozo.jpg"  height="500" /> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMozoPedido.jpg" height="500"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMesaAceptado.jpg" height="500"> |
+| Nuevo Cliente | Mesa Asignada | Consulta al Mozo | 
+| ------ | ------ | ------ |
+| <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Fpush.jpg?alt=media&token=fd4aa634-8b75-4df6-b422-0f4254efe651" height="600"> | <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FIMG-20240625-WA0090.jpg?alt=media&token=4dfb9b40-e317-4131-8c4d-dbf50e9f1352" height="600"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMozo.jpg"  height="600" /> 
 
-| Cocinero Pedido | Barman Pedido | Mozo Listo | Mozo Cuenta | Mesa Pago Cnfirmado |
-| ------ | ------ | ------ | ------ | ------ |
-| <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushCocineroPedido.jpg" height="500"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushBarmanPedido.jpg" height="500"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PusMozoListo.jpg"  height="500" /> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMozoCuenta.jpg" height="500"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMesaPagoConfirmado.jpg" height="500"> |
 
+| Nuevo Pedido | Pedido Aceptado | Cocinero Pedido |
+| ------ | ------ | ------ |
+| <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMozoPedido.jpeg" height="600"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMesaAceptado.jpeg" height="600"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushCocineroPedido.jpeg" height="600"> |
+
+| Barman Pedido | Mozo Listo | Mozo Cuenta | 
+| ------ | ------ | ------ |
+| <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushBarmanPedido.jpeg" height="600"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMozoListo.jpeg"  height="600" /> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMozoCuenta.jpeg" height="600"> |
+
+| Mesa Pago Confirmado |
+| ------ |
+| <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMesaPagoConfirmado.jpeg" height="600"> |
 
 ## **Alta Registrada**
 
