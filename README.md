@@ -45,6 +45,21 @@ Gonzalez, Martín
 | ------ |
 | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMesaPagoConfirmado.jpeg" height="600"> |
 
+## **QR utilizados en el desarrollo**
+
+| Título | Imágen |
+| ---- | ---- |
+| Ingreso al Local | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/src/assets/codigoQR/IngresoLocal.png" height="450"> | 
+| Mesa 1 | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/src/assets/codigoQR/Mesa_1.png" height="450"> 
+| Mesa 2 | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/src/assets/codigoQR/Mesa_2.png" height="450">
+| Mesa 3 | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/src/assets/codigoQR/Mesa_3.png" height="450">
+| Mesa 4 | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/src/assets/codigoQR/Mesa_4.png" height="450">
+| Mesa 5 | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/src/assets/codigoQR/Mesa_5.png" height="450">
+| Pago | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/src/assets/codigoQR/Pago.png" height="450">
+| Propina | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/src/assets/codigoQR/Propina.png" height="450">
+
+
+
 ## **Alta Registrada**
 
 <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/AltaRegistrada.gif" height="600">
