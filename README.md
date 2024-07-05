@@ -47,55 +47,35 @@ Gonzalez, Martín
 > _Por tal razón desarrollamos un flujo de estados y colores en el cual se mueve un pedido en la aplición de Sabores Únicos._
 
 **Ingreso a la lista de Espera:**
-> _El cliente quedo en lista de espera, una vez que el Maitre Acepta su ingreso, el Pedido queda en estado **MESA ASIGNADA**_
+> _El cliente quedo en lista de espera, una vez que el Maitre Acepta su ingreso, el Pedido queda en estado **MESA ASIGNADA** y comienza el flujo del Pedido con el Cliente_
 
-**Escanea Mesa:**
-> _Una vez que la mesa correcta es escaneada, el pedido queda en estado **ABIERTO** listo para recibir los pruductos que desea consumir.
-> Desde el resumen se puede acceder al detalle del pedido y las diferentes acciones estarán en el boton principal._
-
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Abierto.png" height="500">
-
-**Envía Pedido:**
-> _Al presionar **ENVIAR PEDIDO** el pedido es recibido por el Mozo y su estado cambia a **PENDIENTE**_
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Pendiente.png" height="500">
-
-**Aceptar Pedido:**
-> _Acción llevada por el Mozo, el cual al aceptarlo deja el pedido en estado **ACEPTADO** y le llega a cada Empleado sea Cocinero o Bartender,
-> el producto que debe preprar._
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Aceptado.jpg" height="500">
-
-**Preparando el Pedido:**
-> _Acción llevada por el Cocinero o Bartender. El cual se activa y deja el pedido en estado **EN PREPARACION**, en el momento en el que el
-> primer Empleado comienza a preparar alguno de los productos._
-> _En este momento el Cliente comienza a ver un reloj en cuenta regresiva de llegada de supedido._
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/EnPreparacion.jpg" height="500">
-
-**Pedido Listo:**
-> _Cuando se termina de prepara el último producto, el estado del pedido cambia a **LISTO**, estado que avisa al mozo que ya puede llevar el pedido._
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Listo.jpg" height="500">
-
-**Pedido Confirmado**
-> _Acción llevada por el Cliente para confirmar la llegada del pedido a la mesa. El cual deja el pedido en estado **CONFIRMADO**, dando opcion al clinete de
-> poder cargar una Encuesta, Ingresar Propina por QR o Solicitar la Cuenta_
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Recibido.jpg" height="500">
-
-**Cuenta Solicitada**
-> _Acción llevada por el Cliente el cual genera un aviso al Mozo informando los tatales, dejando el pedido en estado **CUENTA SOLICITADA** y dando la opcion a Pagar con QR o Confirmar que se pagó con Efectivo o Tarjeta_
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/SolicitarCuenta.jpg" height="500">
-
-**Pagando**
-> _Una vez pago con QR o Presionando el Boton, el estado cambia a **PAGADO** avisando al Mozo y dandole la opción al mismo de confirmar el pago_
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Pagado.jpg" height="500">
-
-**Confirmando Pago**
-> _Una vez que el Mozo confirma el pago, el estado del pedido queda **CERRADO**, dando fin al flujo de uso._
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Cerrado.jpg" height="500">
+| **Acción**           | **Estado**          | **Imagen**                                                                                       | **Detalle**                                                                                                                                                     |
+|----------------------|---------------------|--------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Escanear Mesa        | ABIERTO             | ![Abierto](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Abierto.png)         | Una vez que la mesa correcta es escaneada, el pedido queda en estado **ABIERTO** listo para recibir los productos que desea consumir. Desde el resumen se puede acceder al detalle del pedido y las diferentes acciones estarán en el botón principal. |
+| Envíar Pedido        | PENDIENTE           | ![Pendiente](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Pendiente.png)   | Al presionar **ENVIAR PEDIDO** el pedido es recibido por el Mozo y su estado cambia a **PENDIENTE**.                                                             |
+| Aceptar Pedido       | ACEPTADO            | ![Aceptado](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Aceptado.jpg)     | Acción llevada por el Mozo, el cual al aceptarlo deja el pedido en estado **ACEPTADO** y le llega a cada Empleado, sea Cocinero o Bartender, el producto que debe preparar. |
+| Preparar Pedido      | EN PREPARACION      | ![En Preparacion](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/EnPreparacion.jpg) | Acción llevada por el Cocinero o Bartender. El cual se activa y deja el pedido en estado **EN PREPARACION**, en el momento en el que el primer Empleado comienza a preparar alguno de los productos. En este momento el Cliente comienza a ver un reloj en cuenta de llegada de su pedido. |
+| Pedido Listo         | LISTO               | ![Listo](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Listo.jpg)           | Cuando se termina de preparar el último producto, el estado del pedido cambia a **LISTO**, estado que avisa al Mozo que ya puede llevar el pedido.               |
+| Recibir Pedido       | SERVIDO             | ![Servido](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Recibido.jpg)     | Acción llevada por el Cliente para confirmar la llegada del pedido a la mesa. El cual deja el pedido en estado **SERVIDO**, dando opción al cliente de poder cargar una Encuesta, Ingresar Propina por QR o Solicitar la Cuenta. |
+| Solicitar Cuenta     | CUENTA SOLICITADA   | ![Solicitar Cuenta](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/SolicitarCuenta.jpg) | Acción llevada por el Cliente el cual genera un aviso al Mozo informando los totales, dejando el pedido en estado **CUENTA SOLICITADA** y dando la opción de Pagar con QR o Confirmar que se pagó con Efectivo o Tarjeta. |
+| Pagar                | PAGADO              | ![Pagado](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Pagado.jpg)       | Una vez pagado con QR o presionando el botón, el estado cambia a **PAGADO** avisando al Mozo y dándole la opción de confirmar el pago.                           |
+| Confirmar Pago       | CERRADO             | ![Cerrado](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Cerrado.jpg)     | Una vez que el Mozo confirma el pago, el estado del pedido queda **CERRADO**, dando fin al flujo de uso.                                                        |
 
 
-## **BITACORA DE APROBACIÓN** 🎓🎓🎓
 
-<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Aprobacion%201%20a%203.png" height="800">
+## **BITÁCORA DE APROBACIÓN** 🎓🎓🎓
 
+### *Pre entrega 2*
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Aprobacion%201%20a%203.png" height="700">
+
+### *Pre entrega 3*
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Aprobacion1a13.png" height="700">
+
+### *Nota Tentativa* 🎉
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/PreEntrega.png" height="250">
+
+### *Aclaraciones para la última entrega* 📝
+<img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/AclaracionesEntrega.png" height="400">
 
 ## **Detalles de la construcción** 🛠️
 ### Semana 1: Sábado 08/06 al 15/06 💻
@@ -184,7 +164,6 @@ Gonzalez, Martín
 - [x] Modificación de lógica en las Propinas
 - [x] Modificación de altas Encuestas
 
-
 >**Gallo, Alejandro**
 - [x] Mantención de Readme.md.
 - [x] Manejo de todos los merge y Pull Request
@@ -195,6 +174,7 @@ Gonzalez, Martín
 - [x] Desarrollo Propina
 - [x] Logica de Encuesta
 - [x] Pipes para mejor visualización
+- [x] Mejora de Readme
 
 >**Gonzalez, Martín**
 - [x] Finalización del frontend de chat y logica
