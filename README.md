@@ -26,11 +26,16 @@ Gonzalez, Martín
 ## **Email de Confirmación**
 <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FMailSaboresUnicos.png?alt=media&token=417dbc22-534d-4abe-b991-66128f16a469" height="500">
 
-## **El Push Notification**
+## **Los Push Notification**
 
-| Nuevo Cliente | Mesa Asignada | Consulta al Mozo |
-| ------ | ------ | ------ |
-| <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Fpush.jpg?alt=media&token=fd4aa634-8b75-4df6-b422-0f4254efe651" height="500">| <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FIMG-20240625-WA0090.jpg?alt=media&token=4dfb9b40-e317-4131-8c4d-dbf50e9f1352 " height="500"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/PushMozo.jpg"  height="500" /> |
+| Nuevo Cliente | Mesa Asignada | Consulta al Mozo | Nuevo Pedido | Pedido Aceptado |
+| ------ | ------ | ------ | ------ | ------ |
+| <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2Fpush.jpg?alt=media&token=fd4aa634-8b75-4df6-b422-0f4254efe651" height="500">| <img src="https://firebasestorage.googleapis.com/v0/b/ajg-pps-2024.appspot.com/o/Readme%2FIMG-20240625-WA0090.jpg?alt=media&token=4dfb9b40-e317-4131-8c4d-dbf50e9f1352 " height="500"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMozo.jpg"  height="500" /> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMozoPedido.jpg" height="500"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMesaAceptado.jpg" height="500"> |
+
+| Cocinero Pedido | Barman Pedido | Mozo Listo | Mozo Cuenta | Mesa Pago Cnfirmado |
+| ------ | ------ | ------ | ------ | ------ |
+| <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushCocineroPedido.jpg" height="500"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushBarmanPedido.jpg" height="500"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PusMozoListo.jpg"  height="500" /> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMozoCuenta.jpg" height="500"> | <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/push/PushMesaPagoConfirmado.jpg" height="500"> |
+
 
 ## **Alta Registrada**
 
@@ -50,8 +55,8 @@ Gonzalez, Martín
 
 | **Acción**           | **Estado**          | **Imagen**                                                                                       | **Detalle**                                                                                                                                                     |
 |----------------------|---------------------|--------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Escanear Mesa        | ABIERTO             | ![Abierto](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Abierto.png)         | Una vez que la mesa correcta es escaneada, el pedido queda en estado **ABIERTO** listo para recibir los productos que desea consumir. Desde el resumen se puede acceder al detalle del pedido y las diferentes acciones estarán en el botón principal. |
-| Envíar Pedido        | PENDIENTE           | ![Pendiente](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Pendiente.png)   | Al presionar **ENVIAR PEDIDO** el pedido es recibido por el Mozo y su estado cambia a **PENDIENTE**.                                                             |
+| Escanear Mesa        | ABIERTO             | ![Abierto](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Abierto.jpg)         | Una vez que la mesa correcta es escaneada, el pedido queda en estado **ABIERTO** listo para recibir los productos que desea consumir. Desde el resumen se puede acceder al detalle del pedido y las diferentes acciones estarán en el botón principal. |
+| Envíar Pedido        | PENDIENTE           | ![Pendiente](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Pendiente.jpg)   | Al presionar **ENVIAR PEDIDO** el pedido es recibido por el Mozo y su estado cambia a **PENDIENTE**.                                                             |
 | Aceptar Pedido       | ACEPTADO            | ![Aceptado](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Aceptado.jpg)     | Acción llevada por el Mozo, el cual al aceptarlo deja el pedido en estado **ACEPTADO** y le llega a cada Empleado, sea Cocinero o Bartender, el producto que debe preparar. |
 | Preparar Pedido      | EN PREPARACION      | ![En Preparacion](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/EnPreparacion.jpg) | Acción llevada por el Cocinero o Bartender. El cual se activa y deja el pedido en estado **EN PREPARACION**, en el momento en el que el primer Empleado comienza a preparar alguno de los productos. En este momento el Cliente comienza a ver un reloj en cuenta de llegada de su pedido. |
 | Pedido Listo         | LISTO               | ![Listo](https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/Estados/Listo.jpg)           | Cuando se termina de preparar el último producto, el estado del pedido cambia a **LISTO**, estado que avisa al Mozo que ya puede llevar el pedido.               |
