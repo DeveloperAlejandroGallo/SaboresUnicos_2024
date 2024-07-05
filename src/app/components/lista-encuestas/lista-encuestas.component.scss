@@ -24,7 +24,7 @@ ion-card {
     text-align: center;
   }
   ion-list{
-    margin-top: -20px;
+    padding: 0px;
     background: transparent;
   }
 
@@ -111,9 +111,19 @@ ion-card {
     text-align: center;
   }
   ion-title{
+    height: auto;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin-bottom: 5px;
+    background-color: #e1e1e1;
+    color: #bf0000;
+    width: fit-content;
     text-align: center;
-    margin: 10px 0;
-    padding-bottom: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    border: 2px solid #bf0000;
   }
 
   ion-chip{
