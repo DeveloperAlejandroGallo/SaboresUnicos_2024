@@ -1,5 +1,5 @@
 # La Comanda: Práctica Profesional Supervisada 2024
-_La Comanda es una aplicación de gestión de para Restaurantes que deseen automatizar muchas de las acciones diarias en el local._
+_La Comanda es una aplicación de gestión para Restaurantes que deseen automatizar muchas de las acciones diarias en el local._
 
 ## **Instalación del Proyecto** 📋
 ```bash
@@ -61,7 +61,6 @@ Gonzalez, Martín
 
 
 ## **Alta Registrada**
-
 <img src="https://github.com/DeveloperAlejandroGallo/SaboresUnicos_2024/blob/master/archivosReadme/AltaRegistrada.gif" height="600">
 
 
